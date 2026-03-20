@@ -1,0 +1,26 @@
+Create a pixel art sprite in the style of classic 16-bit RPGs like Ultima VII and Ultima VIII.
+
+STYLE REQUIREMENTS:
+- Pure pixel art with clean, crisp edges
+- NO anti-aliasing or smoothing
+- Limited color palette (max 32 colors)
+- Warm tropical color scheme: terracotta, gold, cream, forest green, ocean blue, deep brown
+- Subtle dithering for shading gradients
+- Portuguese colonial Melaka setting (1580)
+- Southeast Asian tropical atmosphere
+
+
+SPRITE SPECIFICATIONS:
+- Dimensions: 16x16 pixels
+- Name: spice-pile-pepper
+- Category: objects
+
+DESCRIPTION:
+Small pile of black peppercorns in wooden bowl, dark spherical spices, isometric view, transparent background
+
+OUTPUT REQUIREMENTS:
+- Exact pixel dimensions as specified
+- Transparent background (PNG with alpha)
+- No text, labels, or watermarks
+- No border or frame around sprite
+- Center the sprite in the canvas

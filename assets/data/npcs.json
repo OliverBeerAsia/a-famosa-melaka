@@ -1,0 +1,301 @@
+{
+  "fernao-gomes": {
+    "id": "fernao-gomes",
+    "name": "Fernão Gomes",
+    "sprite": "fernao-gomes",
+    "title": "Portuguese Spice Merchant",
+    "culture": "portuguese",
+    "description": "A wealthy Portuguese trader who deals in exotic spices. He's lost his trading seal.",
+    "location": "rua-direita",
+    "position": { "x": 200, "y": 180 },
+    "schedule": [
+      {
+        "startHour": 8,
+        "endHour": 18,
+        "activity": "Working at market stall",
+        "location": "rua-direita",
+        "available": true
+      },
+      {
+        "startHour": 18,
+        "endHour": 24,
+        "activity": "At home",
+        "location": "home",
+        "available": false
+      },
+      {
+        "startHour": 0,
+        "endHour": 8,
+        "activity": "Sleeping",
+        "location": "home",
+        "available": false
+      }
+    ],
+    "dialogue": {
+      "greeting": "Ah, a visitor! Welcome to my humble stall. I am Fernão Gomes, purveyor of the finest spices from the Moluccas.",
+      "topics": {
+        "seal": {
+          "text": "My trading seal! It's gone missing. Without it, I cannot authorize shipments. A disaster! I last saw it three days ago...",
+          "unlocks": ["investigate"]
+        },
+        "spices": {
+          "text": "Cloves, nutmeg, cinnamon - treasures worth more than gold! The Dutch and English would kill for these trade routes."
+        },
+        "melaka": {
+          "text": "This city is the crossroads of the world. Arabs, Chinese, Malays, Indians - all come here to trade. But Portuguese law keeps order."
+        },
+        "pirates": {
+          "text": "Pirates? Bah! They are a menace to honest trade. My last shipment was delayed a month because of their attacks on the shipping lanes."
+        }
+      },
+      "farewell": "May São Tomé protect you on your journey."
+    },
+    "questGiver": true,
+    "questId": "merchants-seal"
+  },
+  "capitao-rodrigues": {
+    "id": "capitao-rodrigues",
+    "name": "Capitão Rodrigues",
+    "sprite": "capitao-rodrigues",
+    "title": "Fortress Guard Captain",
+    "culture": "portuguese",
+    "description": "The stern captain of A Famosa's garrison. He takes his duty seriously.",
+    "location": "a-famosa-gate",
+    "position": { "x": 200, "y": 200 },
+    "schedule": [
+      {
+        "startHour": 6,
+        "endHour": 22,
+        "activity": "On duty at fortress gate",
+        "location": "a-famosa-gate",
+        "available": true
+      },
+      {
+        "startHour": 22,
+        "endHour": 6,
+        "activity": "Resting in barracks",
+        "location": "barracks",
+        "available": false
+      }
+    ],
+    "dialogue": {
+      "greeting": "State your business. This is A Famosa, the pride of Portuguese Melaka.",
+      "topics": {
+        "seal": {
+          "text": "Gomes' seal? Security matter. I've heard nothing of thieves, but I keep watch. Perhaps check with the Chinese - they notice everything."
+        },
+        "fortress": {
+          "text": "Built in 1511 by Afonso de Albuquerque himself. These walls have never fallen. They never will, not while I command."
+        },
+        "duty": {
+          "text": "A soldier's duty is clear: protect Portugal's interests, maintain order, and keep the trade flowing. Everything else is noise."
+        },
+        "pirates": {
+          "text": "Pirates? Yes, we've had reports. Bring me specifics - where they were sighted, what ships - and I'll dispatch patrols. We cannot have lawlessness in Portuguese waters."
+        }
+      },
+      "farewell": "Stay vigilant."
+    }
+  },
+  "padre-tomas": {
+    "id": "padre-tomas",
+    "name": "Padre Tomás",
+    "sprite": "padre-tomas",
+    "title": "Jesuit Priest",
+    "culture": "portuguese",
+    "description": "A kind Jesuit missionary who ministers to Portuguese settlers and seeks converts.",
+    "location": "st-pauls-church",
+    "position": { "x": 200, "y": 180 },
+    "schedule": [
+      {
+        "startHour": 5,
+        "endHour": 7,
+        "activity": "Morning prayers",
+        "location": "st-pauls-church",
+        "available": false
+      },
+      {
+        "startHour": 7,
+        "endHour": 12,
+        "activity": "Receiving visitors",
+        "location": "st-pauls-church",
+        "available": true
+      },
+      {
+        "startHour": 12,
+        "endHour": 14,
+        "activity": "Midday rest",
+        "location": "st-pauls-church",
+        "available": false
+      },
+      {
+        "startHour": 14,
+        "endHour": 20,
+        "activity": "Receiving visitors",
+        "location": "st-pauls-church",
+        "available": true
+      },
+      {
+        "startHour": 20,
+        "endHour": 5,
+        "activity": "Evening prayers and rest",
+        "location": "st-pauls-church",
+        "available": false
+      }
+    ],
+    "dialogue": {
+      "greeting": "Peace be with you, my child. What brings you to St. Paul's?",
+      "topics": {
+        "seal": {
+          "text": "Theft is a grave sin. I heard Gomes mention his troubles after Mass last Sunday. He seemed... distracted. Perhaps guilt weighs on someone?"
+        },
+        "faith": {
+          "text": "We bring the light of Christ to these distant shores. Many souls have been saved, though the work is never complete."
+        },
+        "melaka": {
+          "text": "This city is a testament to God's providence. So many peoples, so many faiths. Yet we must all seek truth."
+        },
+        "pirates": {
+          "text": "Even pirates have souls, my child. Though their actions are sinful, we must pray for their redemption. Violence begets only more violence."
+        }
+      },
+      "farewell": "Go with God."
+    }
+  },
+  "aminah": {
+    "id": "aminah",
+    "name": "Aminah",
+    "sprite": "aminah",
+    "title": "Malay Market Vendor",
+    "culture": "malay",
+    "description": "A sharp-eyed Malay woman who sells produce and knows all the market gossip.",
+    "location": "rua-direita",
+    "position": { "x": 160, "y": 160 },
+    "schedule": [
+      {
+        "startHour": 6,
+        "endHour": 19,
+        "activity": "Selling at market",
+        "location": "rua-direita",
+        "available": true
+      },
+      {
+        "startHour": 19,
+        "endHour": 6,
+        "activity": "At home in kampung",
+        "location": "kampung",
+        "available": false
+      }
+    ],
+    "dialogue": {
+      "greeting": "Selamat datang! Fresh mangoes today - best in Melaka!",
+      "topics": {
+        "seal": {
+          "text": "Ah yes, Senhor Gomes is very worried. I saw a Chinese man near his stall that day - well-dressed, from the merchant guild perhaps?"
+        },
+        "market": {
+          "text": "This market has been here longer than the Portuguese. My grandmother sold here, and her grandmother before that."
+        },
+        "gossip": {
+          "text": "People talk to fruit sellers. We hear everything! Just yesterday, I heard about the Capitão's new boots - very expensive!"
+        },
+        "pirates": {
+          "text": "The fishermen from kampung have been talking. They say they saw a strange ship anchored in a hidden cove to the south. Maybe you should ask there?"
+        }
+      },
+      "farewell": "Terima kasih! Come again!"
+    }
+  },
+  "chen-wei": {
+    "id": "chen-wei",
+    "name": "Chen Wei",
+    "sprite": "chen-wei",
+    "title": "Chinese Guild Representative",
+    "culture": "chinese",
+    "description": "A dignified Chinese merchant who represents the interests of the Chinese trading community.",
+    "location": "waterfront",
+    "position": { "x": 180, "y": 190 },
+    "schedule": [
+      {
+        "startHour": 9,
+        "endHour": 17,
+        "activity": "At guild counting house",
+        "location": "waterfront",
+        "available": true
+      },
+      {
+        "startHour": 17,
+        "endHour": 9,
+        "activity": "Private affairs",
+        "location": "elsewhere",
+        "available": false
+      }
+    ],
+    "dialogue": {
+      "greeting": "你好. Welcome. How may the guild be of service?",
+      "topics": {
+        "seal": {
+          "text": "Yes, I know of Gomes' seal. A... misunderstanding. The seal was taken as collateral for a debt. 50 cruzados. Pay this, and it shall be returned."
+        },
+        "guild": {
+          "text": "We Chinese have traded in Melaka for centuries. The Portuguese are new here. We... accommodate each other."
+        },
+        "debt": {
+          "text": "Business is business. Gomes borrowed for a spice venture that failed. The seal ensures payment. This is proper."
+        },
+        "pirates": {
+          "text": "The guild has lost two junks this season to pirates. We would pay handsomely for information leading to their capture. Perhaps... 100 cruzados?"
+        }
+      },
+      "farewell": "再见. Safe travels."
+    },
+    "hasItem": "trading-seal",
+    "requiresPayment": 50
+  },
+  "rashid": {
+    "id": "rashid",
+    "name": "Rashid",
+    "sprite": "rashid",
+    "title": "Arab Sailor",
+    "culture": "arab",
+    "description": "A jovial Arab sailor with wild stories and a quick laugh.",
+    "location": "waterfront",
+    "position": { "x": 240, "y": 220 },
+    "schedule": [
+      {
+        "startHour": 10,
+        "endHour": 22,
+        "activity": "Lounging at docks",
+        "location": "waterfront",
+        "available": true
+      },
+      {
+        "startHour": 22,
+        "endHour": 10,
+        "activity": "Sleeping on dhow",
+        "location": "ship",
+        "available": false
+      }
+    ],
+    "dialogue": {
+      "greeting": "As-salamu alaykum, friend! Care to hear a tale? I have sailed from Aden to Canton!",
+      "topics": {
+        "seal": {
+          "text": "Ha! The Portuguese merchant? I saw him arguing with Chen Wei last week. Voices raised, very heated! Something about money and honor."
+        },
+        "stories": {
+          "text": "Once, off the coast of Sumatra, we fought a Chinese pirate junk! Twenty men against fifty! We prevailed through cunning and prayer!"
+        },
+        "travels": {
+          "text": "I have seen wonders - the markets of Calicut, the pearl divers of Bahrain, the silk factories of Canton. But Melaka? Melaka is special."
+        },
+        "pirates": {
+          "text": "Pirates! Yes, friend, I have seen them! Three days ago, sailing past the southern islands. A black-sailed junk with red flags. They watched us but did not attack - our dhow is too fast, alhamdulillah!"
+        }
+      },
+      "farewell": "Ma'a salama! May fair winds find you!"
+    },
+    "questGiver": true,
+    "questId": "pirates-rumor"
+  }
+}

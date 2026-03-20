@@ -1,0 +1,253 @@
+{
+  "description": "Decorative environment object clusters for each location. These objects add visual richness and historical atmosphere beyond the interactive lore hotspots.",
+
+  "locations": {
+    "a-famosa-gate": {
+      "clusters": [
+        {
+          "id": "guardhouse-corner",
+          "centerTile": { "x": 4, "y": 12 },
+          "objects": [
+            { "sprite": "barrel", "offsetX": 0, "offsetY": 0 },
+            { "sprite": "barrel", "offsetX": 20, "offsetY": -4 },
+            { "sprite": "crate", "offsetX": 40, "offsetY": 8 },
+            { "sprite": "lantern", "offsetX": 16, "offsetY": -32 }
+          ]
+        },
+        {
+          "id": "cannon-battery",
+          "centerTile": { "x": 14, "y": 8 },
+          "objects": [
+            { "sprite": "cannon", "offsetX": 0, "offsetY": 0 },
+            { "sprite": "crate", "offsetX": -24, "offsetY": 16 },
+            { "sprite": "crate", "offsetX": -24, "offsetY": 32 }
+          ]
+        },
+        {
+          "id": "gateway-passage",
+          "centerTile": { "x": 10, "y": 16 },
+          "objects": [
+            { "sprite": "palm-tree", "offsetX": -48, "offsetY": -48 },
+            { "sprite": "palm-tree", "offsetX": 64, "offsetY": -48 }
+          ]
+        },
+        {
+          "id": "coat-of-arms-wall",
+          "centerTile": { "x": 18, "y": 6 },
+          "objects": [
+            { "sprite": "lantern", "offsetX": -16, "offsetY": 0 },
+            { "sprite": "lantern", "offsetX": 24, "offsetY": 0 }
+          ]
+        }
+      ]
+    },
+
+    "rua-direita": {
+      "clusters": [
+        {
+          "id": "fernaos-spice-stall",
+          "centerTile": { "x": 8, "y": 14 },
+          "objects": [
+            { "sprite": "market-stall", "offsetX": 0, "offsetY": 0 },
+            { "sprite": "spice-pile", "offsetX": 40, "offsetY": -8 },
+            { "sprite": "spice-pile-pepper", "offsetX": 56, "offsetY": -4, "examineText": "Black peppercorns — Melaka's most valuable export. Wars have been fought over piles smaller than this." },
+            { "sprite": "balance-scale", "offsetX": -16, "offsetY": 4 }
+          ]
+        },
+        {
+          "id": "aminahs-fruit-corner",
+          "centerTile": { "x": 16, "y": 12 },
+          "objects": [
+            { "sprite": "market-stall-1", "offsetX": 0, "offsetY": 0 },
+            { "sprite": "fruit-basket", "offsetX": 36, "offsetY": -8 },
+            { "sprite": "fruit-basket", "offsetX": 52, "offsetY": -4 },
+            { "sprite": "pottery", "offsetX": -16, "offsetY": 8 },
+            { "sprite": "coconut-water-stand", "offsetX": 68, "offsetY": 0 }
+          ]
+        },
+        {
+          "id": "tavern-frontage",
+          "centerTile": { "x": 22, "y": 10 },
+          "objects": [
+            { "sprite": "tavern-sign", "offsetX": 0, "offsetY": -32 },
+            { "sprite": "barrel", "offsetX": -16, "offsetY": 16 },
+            { "sprite": "barrel", "offsetX": 0, "offsetY": 20 },
+            { "sprite": "bench", "offsetX": 24, "offsetY": 16 },
+            { "sprite": "wine-jug", "offsetX": 40, "offsetY": 12 }
+          ]
+        },
+        {
+          "id": "alvares-sugar-area",
+          "centerTile": { "x": 12, "y": 18 },
+          "objects": [
+            { "sprite": "crate", "offsetX": 0, "offsetY": 0 },
+            { "sprite": "crate", "offsetX": 18, "offsetY": -4 },
+            { "sprite": "sugar-cone", "offsetX": -8, "offsetY": -16 },
+            { "sprite": "sugar-cone", "offsetX": 8, "offsetY": -20 }
+          ]
+        },
+        {
+          "id": "street-scatter",
+          "centerTile": { "x": 14, "y": 16 },
+          "objects": [
+            { "sprite": "lantern", "offsetX": -48, "offsetY": -24 },
+            { "sprite": "hanging-cloth", "offsetX": 0, "offsetY": -40 },
+            { "sprite": "handcart", "offsetX": 48, "offsetY": 8 },
+            { "sprite": "pelourinho", "offsetX": -32, "offsetY": 16, "examineText": "The pelourinho — symbol of Portuguese municipal authority. Iron shackles hang from its sides." }
+          ]
+        }
+      ]
+    },
+
+    "st-pauls-church": {
+      "clusters": [
+        {
+          "id": "church-interior",
+          "centerTile": { "x": 10, "y": 8 },
+          "objects": [
+            { "sprite": "wooden-pew", "offsetX": -24, "offsetY": 0 },
+            { "sprite": "wooden-pew", "offsetX": -24, "offsetY": 20 },
+            { "sprite": "wooden-pew", "offsetX": 24, "offsetY": 0 },
+            { "sprite": "wooden-pew", "offsetX": 24, "offsetY": 20 },
+            { "sprite": "altar", "offsetX": 0, "offsetY": -32 },
+            { "sprite": "candelabra", "offsetX": -12, "offsetY": -40 },
+            { "sprite": "candelabra", "offsetX": 12, "offsetY": -40 }
+          ]
+        },
+        {
+          "id": "graveyard",
+          "centerTile": { "x": 18, "y": 14 },
+          "objects": [
+            { "sprite": "gravestone", "offsetX": 0, "offsetY": 0 },
+            { "sprite": "gravestone", "offsetX": 24, "offsetY": -8 },
+            { "sprite": "stone-cross", "offsetX": -16, "offsetY": -16 },
+            { "sprite": "flowers", "offsetX": 8, "offsetY": 4 },
+            { "sprite": "iron-fence", "offsetX": -32, "offsetY": 16 },
+            { "sprite": "iron-fence", "offsetX": -16, "offsetY": 16 },
+            { "sprite": "iron-fence", "offsetX": 0, "offsetY": 16 },
+            { "sprite": "iron-fence", "offsetX": 16, "offsetY": 16 }
+          ]
+        },
+        {
+          "id": "hilltop-overlook",
+          "centerTile": { "x": 6, "y": 16 },
+          "objects": [
+            { "sprite": "palm-tree", "offsetX": 0, "offsetY": -48 },
+            { "sprite": "bush", "offsetX": 24, "offsetY": 0 },
+            { "sprite": "bush", "offsetX": -20, "offsetY": 4 }
+          ]
+        },
+        {
+          "id": "sitis-sanctuary",
+          "centerTile": { "x": 4, "y": 10 },
+          "objects": [
+            { "sprite": "woven-mat", "offsetX": 0, "offsetY": 0 },
+            { "sprite": "pottery", "offsetX": 20, "offsetY": -4 },
+            { "sprite": "sack", "offsetX": -12, "offsetY": 8 }
+          ]
+        }
+      ]
+    },
+
+    "waterfront": {
+      "clusters": [
+        {
+          "id": "counting-house",
+          "centerTile": { "x": 8, "y": 10 },
+          "objects": [
+            { "sprite": "cargo-crate", "offsetX": 0, "offsetY": 0 },
+            { "sprite": "cargo-crate", "offsetX": 20, "offsetY": -4 },
+            { "sprite": "scroll-rack", "offsetX": -20, "offsetY": -8 },
+            { "sprite": "lantern", "offsetX": 32, "offsetY": -24 }
+          ]
+        },
+        {
+          "id": "rashids-dhow",
+          "centerTile": { "x": 18, "y": 8 },
+          "objects": [
+            { "sprite": "dhow-sail", "offsetX": 0, "offsetY": -32 },
+            { "sprite": "rope-coil", "offsetX": -20, "offsetY": 16 },
+            { "sprite": "anchor", "offsetX": 24, "offsetY": 12 },
+            { "sprite": "barrel", "offsetX": -8, "offsetY": 20 }
+          ]
+        },
+        {
+          "id": "loading-dock",
+          "centerTile": { "x": 14, "y": 16 },
+          "objects": [
+            { "sprite": "cargo-crate", "offsetX": 0, "offsetY": 0 },
+            { "sprite": "cargo-crate", "offsetX": 18, "offsetY": 4 },
+            { "sprite": "cargo-crate", "offsetX": 8, "offsetY": -16 },
+            { "sprite": "barrel", "offsetX": 36, "offsetY": -4 },
+            { "sprite": "rope-coil", "offsetX": -16, "offsetY": 12 }
+          ]
+        },
+        {
+          "id": "fish-market",
+          "centerTile": { "x": 22, "y": 12 },
+          "objects": [
+            { "sprite": "drying-fish-rack", "offsetX": 0, "offsetY": -8 },
+            { "sprite": "fish-basket", "offsetX": -20, "offsetY": 8 },
+            { "sprite": "fish-basket", "offsetX": 24, "offsetY": 4 },
+            { "sprite": "fishing-net", "offsetX": 0, "offsetY": 16 }
+          ]
+        }
+      ]
+    },
+
+    "kampung": {
+      "clusters": [
+        {
+          "id": "healers-corner",
+          "centerTile": { "x": 6, "y": 10 },
+          "objects": [
+            { "sprite": "woven-mat", "offsetX": 0, "offsetY": 0 },
+            { "sprite": "pottery", "offsetX": 20, "offsetY": -8 },
+            { "sprite": "cooking-fire", "offsetX": -16, "offsetY": 8, "particles": "smoke" },
+            { "sprite": "herb-drying-rack", "offsetX": 32, "offsetY": -12 }
+          ]
+        },
+        {
+          "id": "community-cooking",
+          "centerTile": { "x": 14, "y": 14 },
+          "objects": [
+            { "sprite": "cooking-fire", "offsetX": 0, "offsetY": 0, "particles": "smoke" },
+            { "sprite": "rice-mortar", "offsetX": -24, "offsetY": 8 },
+            { "sprite": "rice-pot", "offsetX": 20, "offsetY": -4, "particles": "steam" },
+            { "sprite": "coconut", "offsetX": -8, "offsetY": 16 }
+          ]
+        },
+        {
+          "id": "fishing-area",
+          "centerTile": { "x": 20, "y": 12 },
+          "objects": [
+            { "sprite": "fish-trap", "offsetX": 0, "offsetY": 0 },
+            { "sprite": "fishing-net", "offsetX": 20, "offsetY": -8 },
+            { "sprite": "moored-sampan", "offsetX": -24, "offsetY": 16 }
+          ]
+        },
+        {
+          "id": "prayer-area",
+          "centerTile": { "x": 10, "y": 8 },
+          "objects": [
+            { "sprite": "prayer-mat", "offsetX": 0, "offsetY": 0 },
+            { "sprite": "bamboo-fence", "offsetX": -24, "offsetY": -8 },
+            { "sprite": "bamboo-fence", "offsetX": -8, "offsetY": -8 }
+          ]
+        },
+        {
+          "id": "village-entrance",
+          "centerTile": { "x": 2, "y": 16 },
+          "objects": [
+            { "sprite": "bamboo-fence", "offsetX": 0, "offsetY": 0 },
+            { "sprite": "bamboo-fence", "offsetX": 16, "offsetY": 0 },
+            { "sprite": "banana-tree", "offsetX": -16, "offsetY": -48 },
+            { "sprite": "laundry-line", "offsetX": 32, "offsetY": -16 },
+            { "sprite": "water-well", "offsetX": 48, "offsetY": 8 },
+            { "sprite": "wayang-kulit-puppet", "offsetX": 72, "offsetY": -8, "examineText": "A wayang kulit shadow puppet — the premiere entertainment of Malay culture. This one depicts Seri Rama." }
+          ]
+        }
+      ]
+    }
+  }
+}

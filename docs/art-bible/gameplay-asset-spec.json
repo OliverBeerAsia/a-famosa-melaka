@@ -1,0 +1,165 @@
+{
+  "version": 2,
+  "targetLook": "Ultima VIII-leaning historical isometric RPG",
+  "projectionMode": "isometric-2:1",
+  "projection": {
+    "nativeCanvas": {
+      "width": 320,
+      "height": 180
+    },
+    "displayScale": 3,
+    "groundTile": {
+      "width": 32,
+      "height": 16
+    },
+    "macroTile": {
+      "width": 64,
+      "height": 32
+    },
+    "shadowDirection": "south-east",
+    "anchor": "bottom-center"
+  },
+  "assetClasses": {
+    "gameplay": {
+      "directories": [
+        "assets/sprites/characters",
+        "assets/sprites/tiles",
+        "assets/sprites/objects",
+        "assets/sprites/crowd",
+        "assets/sprites/particles"
+      ],
+      "filenamePatterns": {
+        "characterSheet": "^[a-z0-9]+(?:-[a-z0-9]+)*-sheet\\.png$",
+        "sprite": "^[a-z0-9]+(?:-[a-z0-9]+)*\\.png$"
+      },
+      "rules": {
+        "nativePixelArtOnly": true,
+        "antiAliasingAllowed": false,
+        "textureFiltering": "nearest",
+        "maxSourceDimension": 256,
+        "strictPaletteRequired": true,
+        "standaloneCharacterSpritesAllowed": false
+      }
+    },
+    "cinematic": {
+      "directories": [
+        "assets/scenes",
+        "assets/sprites/portraits"
+      ],
+      "filenamePatterns": {
+        "scene": "^(opening-screen|scene-[a-z0-9-]+)(-(dawn|dusk|night))?\\.png$",
+        "portrait": "^[a-z0-9]+(?:-[a-z0-9]+)*\\.png$"
+      },
+      "rules": {
+        "sceneSize": {
+          "width": 960,
+          "height": 540
+        },
+        "portraitMinSize": {
+          "width": 512,
+          "height": 512
+        },
+        "portraitSquareRequired": true,
+        "allowHighResSourceArt": true,
+        "gameplayUIForbidden": true
+      }
+    },
+    "concept": {
+      "directories": [
+        "assets/sprites/ai-objects",
+        "assets/sprites/ui",
+        "docs/art-bible",
+        "tools/ai-prompts"
+      ],
+      "rules": {
+        "shippingAllowed": false
+      }
+    }
+  },
+  "modules": {
+    "groundTile": [
+      { "width": 32, "height": 16 },
+      { "width": 64, "height": 32 }
+    ],
+    "characterSheetFrame": [
+      { "width": 16, "height": 32 },
+      { "width": 24, "height": 48 }
+    ],
+    "crowdSilhouette": [
+      { "width": 8, "height": 16 }
+    ],
+    "particleSprite": [
+      { "width": 4, "height": 4 },
+      { "width": 4, "height": 8 },
+      { "width": 8, "height": 8 },
+      { "width": 32, "height": 8 }
+    ],
+    "sceneBackdrop": [
+      { "width": 960, "height": 540 }
+    ]
+  },
+  "allowedDirectories": {
+    "gameplay": [
+      "assets/sprites/characters",
+      "assets/sprites/tiles",
+      "assets/sprites/objects",
+      "assets/sprites/crowd",
+      "assets/sprites/particles"
+    ],
+    "cinematic": [
+      "assets/scenes",
+      "assets/sprites/portraits"
+    ],
+    "concept": [
+      "assets/sprites/ai-objects",
+      "assets/sprites/ui",
+      "docs/art-bible",
+      "tools/ai-prompts"
+    ]
+  },
+  "gameplayRules": {
+    "nativePixelArtOnly": true,
+    "antiAliasingAllowed": false,
+    "textureFiltering": "nearest",
+    "maxSourceDimension": 256,
+    "strictPaletteRequired": true,
+    "standaloneCharacterSpritesAllowed": false
+  },
+  "cinematicRules": {
+    "sceneSize": {
+      "width": 960,
+      "height": 540
+    },
+    "portraitMinSize": {
+      "width": 512,
+      "height": 512
+    },
+    "portraitSquareRequired": true,
+    "allowHighResSourceArt": true,
+    "gameplayUIForbidden": true
+  },
+  "checklists": {
+    "gameplay": [
+      "File is in an approved gameplay directory.",
+      "File name matches the repo naming pattern.",
+      "Frame size or footprint matches the spec.",
+      "The asset reads clearly on the 320x180 native canvas.",
+      "A historical reference exists and was checked."
+    ],
+    "cinematic": [
+      "Scene is 960x540 or portrait is square and large enough.",
+      "It does not contain gameplay UI or debug text.",
+      "It is tagged as cinematic, not gameplay."
+    ],
+    "promotion": [
+      "Move exploratory work into concept/staging paths.",
+      "Fix warnings before promoting player-facing assets.",
+      "Promote only after the audit is clean for that asset class."
+    ]
+  },
+  "audit": {
+    "reportFormat": "markdown",
+    "defaultReportPath": "docs/art-bible/art-audit.md",
+    "strictOnWarnings": false
+  }
+}

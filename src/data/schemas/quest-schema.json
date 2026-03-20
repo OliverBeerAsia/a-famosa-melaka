@@ -1,0 +1,91 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Quest Definition",
+  "description": "Schema for defining quests in A Famosa: Streets of Golden Melaka",
+  "type": "object",
+  "required": ["id", "name", "description", "giver", "stages"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for the quest (kebab-case)"
+    },
+    "name": {
+      "type": "string",
+      "description": "Display name of the quest"
+    },
+    "description": {
+      "type": "string",
+      "description": "Brief description shown in journal"
+    },
+    "giver": {
+      "type": "string",
+      "description": "NPC ID who gives this quest"
+    },
+    "triggerTopic": {
+      "type": "string",
+      "description": "Dialogue topic that triggers quest start"
+    },
+    "prerequisites": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Quest IDs that must be completed first"
+    },
+    "locations": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Locations relevant to this quest"
+    },
+    "stages": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "description", "objectives"],
+        "properties": {
+          "id": { "type": "string" },
+          "description": { "type": "string" },
+          "objectives": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["type", "description"],
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": ["talk", "give", "pay", "explore", "collect", "obtain", "find", "go", "location", "search", "stealth", "escort", "wait", "use"]
+                },
+                "target": { "type": "string" },
+                "topic": { "type": "string" },
+                "item": { "type": "string" },
+                "amount": { "type": "integer" },
+                "destination": { "type": "string" },
+                "time": { "type": "string", "enum": ["dawn", "day", "dusk", "night"] },
+                "days": { "type": "integer", "minimum": 1 },
+                "optional": { "type": "boolean", "default": false },
+                "description": { "type": "string" }
+              }
+            }
+          },
+          "alternateObjectives": {
+            "type": "array",
+            "description": "Alternative ways to complete this stage"
+          },
+          "journalEntry": { "type": "string" },
+          "nextStage": { "type": "string" },
+          "reward": {
+            "type": "object",
+            "properties": {
+              "items": { "type": "array", "items": { "type": "string" } },
+              "money": { "type": "integer" },
+              "reputation": { "type": "object" }
+            }
+          }
+        }
+      }
+    },
+    "dialogueModifications": {
+      "type": "object",
+      "description": "NPC dialogue changes per quest stage"
+    }
+  }
+}
+

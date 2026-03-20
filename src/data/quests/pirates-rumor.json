@@ -1,0 +1,107 @@
+{
+  "id": "pirates-rumor",
+  "name": "Pirates on the Horizon",
+  "description": "Investigate rumors of pirate activity threatening Melaka's shipping lanes.",
+  "giver": "rashid",
+  "triggerTopic": "pirates",
+  "prerequisites": [],
+  "locations": ["waterfront", "a-famosa-gate", "kampung"],
+  "stages": [
+    {
+      "id": "start",
+      "description": "Learn about the pirate threat from Rashid.",
+      "objectives": [
+        { 
+          "type": "talk", 
+          "target": "rashid", 
+          "topic": "pirates",
+          "description": "Hear Rashid's tale of pirates"
+        }
+      ],
+      "journalEntry": "Rashid speaks of pirates spotted near the straits. Ships have gone missing. The authorities should be informed.",
+      "nextStage": "report"
+    },
+    {
+      "id": "report",
+      "description": "Report the pirate sightings to Capitão Rodrigues.",
+      "objectives": [
+        { 
+          "type": "talk", 
+          "target": "capitao-rodrigues", 
+          "topic": "pirates",
+          "description": "Report to Capitão Rodrigues"
+        }
+      ],
+      "journalEntry": "I should inform the fortress garrison about the pirate threat. Capitão Rodrigues will want to know.",
+      "nextStage": "gather-info"
+    },
+    {
+      "id": "gather-info",
+      "description": "Gather more information about the pirates.",
+      "objectives": [
+        { 
+          "type": "talk", 
+          "target": "chen-wei", 
+          "topic": "pirates",
+          "optional": true,
+          "description": "Ask Chen Wei about Chinese shipping losses"
+        },
+        { 
+          "type": "talk", 
+          "target": "aminah", 
+          "topic": "pirates",
+          "description": "Ask Aminah what the fishermen say"
+        }
+      ],
+      "journalEntry": "The Capitão wants more details before he can act. The merchants and fishermen may have useful information.",
+      "nextStage": "village-lead"
+    },
+    {
+      "id": "village-lead",
+      "description": "Follow up on the lead in Kampung Quarter.",
+      "objectives": [
+        { 
+          "type": "explore", 
+          "target": "kampung",
+          "description": "Visit the Kampung Quarter"
+        }
+      ],
+      "journalEntry": "Aminah mentioned that fishermen from the kampung saw a suspicious ship anchored in a hidden cove. I should investigate.",
+      "nextStage": "complete"
+    },
+    {
+      "id": "complete",
+      "description": "Quest complete - investigation concluded.",
+      "objectives": [],
+      "journalEntry": "I've gathered enough information for the garrison. The pirates seem to be using a cove south of the city. Capitão Rodrigues will send patrols. Perhaps there's more to discover another time...",
+      "reward": {
+        "items": ["coin-pouch"],
+        "money": 15,
+        "reputation": { "portuguese": 5, "malay": 5 }
+      }
+    }
+  ],
+  "dialogueModifications": {
+    "rashid": {
+      "report": {
+        "greeting": "Friend! Have you told the Portuguese about the pirates? They need to know!",
+        "topics": {
+          "pirates": {
+            "text": "Hurry! Every day more ships are at risk. The Capitão commands the garrison - he can send patrols!"
+          }
+        }
+      }
+    },
+    "capitao-rodrigues": {
+      "gather-info": {
+        "topics": {
+          "pirates": {
+            "text": "Pirates, you say? I need more than sailor's tales to mobilize the garrison. Get me details - where were they seen? What ships? Bring me facts!"
+          }
+        }
+      }
+    }
+  }
+}
+
+

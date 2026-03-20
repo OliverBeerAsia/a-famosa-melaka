@@ -1,0 +1,30 @@
+{
+  "locations": {
+    "a-famosa-gate": {
+      "name": "A Famosa Fortress Gate",
+      "description": "The iconic entrance to the Portuguese fortress",
+      "mapKey": "a-famosa-gate"
+    },
+    "rua-direita": {
+      "name": "Rua Direita",
+      "description": "The bustling market street of Melaka",
+      "mapKey": "rua-direita"
+    },
+    "st-pauls-church": {
+      "name": "St. Paul's Church",
+      "description": "The stone church overlooking the strait",
+      "mapKey": "st-pauls-church"
+    },
+    "waterfront": {
+      "name": "The Waterfront",
+      "description": "The busy harbor with ships from across Asia",
+      "mapKey": "waterfront"
+    },
+    "kampung": {
+      "name": "Kampung Quarter",
+      "description": "The local Malay village area",
+      "mapKey": "kampung"
+    }
+  }
+}
+

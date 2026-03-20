@@ -1,0 +1,117 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "NPC Definition",
+  "description": "Schema for defining NPCs in A Famosa: Streets of Golden Melaka",
+  "type": "object",
+  "required": ["id", "name", "sprite", "location", "position", "dialogue"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for the NPC (kebab-case)"
+    },
+    "name": {
+      "type": "string",
+      "description": "Display name of the NPC"
+    },
+    "sprite": {
+      "type": "string",
+      "description": "Sprite key for the NPC's appearance"
+    },
+    "title": {
+      "type": "string",
+      "description": "NPC's title/occupation"
+    },
+    "description": {
+      "type": "string",
+      "description": "Brief description of the NPC for player reference"
+    },
+    "culture": {
+      "type": "string",
+      "enum": ["portuguese", "malay", "chinese", "arab", "indian", "mixed"],
+      "description": "Cultural background of the NPC"
+    },
+    "location": {
+      "type": "string",
+      "description": "Default location where NPC is found"
+    },
+    "position": {
+      "type": "object",
+      "properties": {
+        "x": { "type": "number" },
+        "y": { "type": "number" }
+      },
+      "required": ["x", "y"]
+    },
+    "schedule": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "startHour": { "type": "integer", "minimum": 0, "maximum": 23 },
+          "endHour": { "type": "integer", "minimum": 0, "maximum": 24 },
+          "activity": { "type": "string" },
+          "location": { "type": "string" },
+          "available": { "type": "boolean" }
+        },
+        "required": ["startHour", "endHour", "available"]
+      }
+    },
+    "dialogue": {
+      "type": "object",
+      "properties": {
+        "greeting": { "type": "string" },
+        "topics": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "text": { "type": "string" },
+              "unlocks": { 
+                "type": "array",
+                "items": { "type": "string" }
+              },
+              "requires": {
+                "type": "object",
+                "properties": {
+                  "quest": { "type": "string" },
+                  "stage": { "type": "string" },
+                  "item": { "type": "string" }
+                }
+              }
+            },
+            "required": ["text"]
+          }
+        },
+        "farewell": { "type": "string" }
+      },
+      "required": ["greeting", "topics", "farewell"]
+    },
+    "questGiver": {
+      "type": "boolean",
+      "default": false
+    },
+    "questId": {
+      "type": "string",
+      "description": "ID of quest this NPC gives"
+    },
+    "vendor": {
+      "type": "boolean",
+      "default": false
+    },
+    "inventory": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Items available if NPC is a vendor"
+    },
+    "hasItem": {
+      "type": "string",
+      "description": "Item held by this NPC (for quests)"
+    },
+    "requiresPayment": {
+      "type": "integer",
+      "description": "Payment required to get item from NPC"
+    }
+  }
+}
+
+

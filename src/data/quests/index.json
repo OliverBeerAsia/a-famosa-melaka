@@ -1,0 +1,49 @@
+{
+  "version": "2.0",
+  "description": "Quest index for A Famosa: Streets of Golden Melaka",
+  "quests": [
+    "merchants-seal",
+    "padres-dilemma",
+    "pirates-rumor",
+    "rashids-cargo"
+  ],
+  "questInfo": {
+    "merchants-seal": {
+      "name": "The Merchant's Seal",
+      "type": "main",
+      "giver": "fernao-gomes",
+      "location": "rua-direita",
+      "description": "Help Fernão Gomes recover his trading seal from Chen Wei.",
+      "themes": ["colonialism", "debt", "honor"],
+      "paths": ["payment", "diplomatic", "investigate-truth", "theft"]
+    },
+    "padres-dilemma": {
+      "name": "The Padre's Dilemma",
+      "type": "side",
+      "giver": "padre-tomas",
+      "location": "st-pauls-church",
+      "description": "Help Padre Tomás decide whether to shelter a Malay woman accused of theft.",
+      "themes": ["faith", "sanctuary", "justice", "colonialism"],
+      "paths": ["sanctuary", "justice", "escape", "surrender"],
+      "prerequisite": "merchants-seal"
+    },
+    "pirates-rumor": {
+      "name": "Pirates on the Horizon",
+      "type": "side",
+      "giver": "rashid",
+      "location": "waterfront",
+      "description": "Investigate pirate sightings in the straits and report the threat.",
+      "themes": ["security", "trade", "rumors"],
+      "paths": ["report", "investigate"]
+    },
+    "rashids-cargo": {
+      "name": "Rashid's Cargo",
+      "type": "side",
+      "giver": "rashid",
+      "location": "waterfront",
+      "description": "Help Rashid with a smuggling job - but what exactly are you smuggling?",
+      "themes": ["smuggling", "morality", "medicine", "colonialism"],
+      "paths": ["complete-job", "report", "theft", "blackmail"]
+    }
+  }
+}

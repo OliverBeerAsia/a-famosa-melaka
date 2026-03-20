@@ -1,0 +1,238 @@
+{
+  "a-famosa-gate": {
+    "background": "scene-a-famosa",
+    "mapFile": "maps/a-famosa-gate.json",
+    "isoMapKey": "a-famosa-gate-iso",
+    "music": "music-fortress",
+    "nightMusic": "music-night",
+    "ambientSounds": ["base-tropical", "fortress-ambience", "distant-city"],
+    "nightAmbientSounds": ["fortress-ambience", "distant-city", "night-insects"],
+    "footstepSurface": "stone",
+    "projection": {
+      "runtimeMode": "isometric-2:1",
+      "targetMode": "isometric-2:1",
+      "authoringBasis": "isometric-grid",
+      "tileWidth": 64,
+      "tileHeight": 32,
+      "anchor": "bottom-center",
+      "depthStrategy": "screen-y"
+    },
+    "variants": {
+      "dawn": "scene-a-famosa-dawn",
+      "dusk": "scene-a-famosa-dusk",
+      "night": "scene-a-famosa-night"
+    },
+    "playerStart": { "x": 20, "y": 20 },
+    "collisionRects": [
+      { "x": 0, "y": 0, "width": 960, "height": 250 },
+      { "x": 0, "y": 0, "width": 120, "height": 540 },
+      { "x": 840, "y": 0, "width": 120, "height": 540 },
+      { "x": 0, "y": 500, "width": 960, "height": 40 }
+    ],
+    "transitions": [
+      {
+        "targetLocation": "rua-direita",
+        "label": "To Rua Direita",
+        "triggerArea": { "x": 2080, "y": 560, "width": 120, "height": 60 },
+        "spawnAt": { "x": 200, "y": 380 }
+      }
+    ],
+    "npcPositions": {
+      "capitao-rodrigues": { "x": 20, "y": 14 }
+    }
+  },
+  "rua-direita": {
+    "background": "scene-rua-direita",
+    "mapFile": "maps/rua-direita.json",
+    "isoMapKey": "rua-direita-iso",
+    "music": "music-market",
+    "nightMusic": "music-night",
+    "ambientSounds": ["base-tropical", "market-crowd", "street-life"],
+    "nightAmbientSounds": ["street-life", "distant-city", "cricket-chorus"],
+    "footstepSurface": "stone",
+    "projection": {
+      "runtimeMode": "isometric-2:1",
+      "targetMode": "isometric-2:1",
+      "authoringBasis": "isometric-grid",
+      "tileWidth": 64,
+      "tileHeight": 32,
+      "anchor": "bottom-center",
+      "depthStrategy": "screen-y"
+    },
+    "variants": {
+      "dawn": "scene-rua-direita-dawn",
+      "dusk": "scene-rua-direita-dusk",
+      "night": "scene-rua-direita-night"
+    },
+    "playerStart": { "x": 20, "y": 20 },
+    "collisionRects": [
+      { "x": 0, "y": 0, "width": 960, "height": 190 },
+      { "x": 0, "y": 480, "width": 960, "height": 60 },
+      { "x": 0, "y": 0, "width": 140, "height": 540 },
+      { "x": 820, "y": 0, "width": 140, "height": 540 },
+      { "x": 360, "y": 240, "width": 240, "height": 120 }
+    ],
+    "transitions": [
+      {
+        "targetLocation": "a-famosa-gate",
+        "label": "To A Famosa Gate",
+        "triggerArea": { "x": 300, "y": 560, "width": 120, "height": 60 },
+        "spawnAt": { "x": 2000, "y": 540 }
+      },
+      {
+        "targetLocation": "waterfront",
+        "label": "To The Waterfront",
+        "triggerArea": { "x": 2080, "y": 560, "width": 120, "height": 60 },
+        "spawnAt": { "x": 400, "y": 500 }
+      },
+      {
+        "targetLocation": "st-pauls-church",
+        "label": "Climb to St. Paul's",
+        "triggerArea": { "x": 1500, "y": 400, "width": 120, "height": 60 },
+        "spawnAt": { "x": 1200, "y": 700 }
+      }
+    ],
+    "npcPositions": {
+      "fernao-gomes": { "x": 14, "y": 18 },
+      "aminah": { "x": 28, "y": 18 },
+      "alvares": { "x": 22, "y": 14 }
+    }
+  },
+  "st-pauls-church": {
+    "background": "scene-st-pauls",
+    "mapFile": "maps/st-pauls-church.json",
+    "isoMapKey": "st-pauls-church-iso",
+    "music": "music-church",
+    "nightMusic": "music-church",
+    "ambientSounds": ["base-tropical", "church-bells", "sacred-calm"],
+    "nightAmbientSounds": ["church-bells", "sacred-calm", "night-insects"],
+    "footstepSurface": "stone",
+    "projection": {
+      "runtimeMode": "isometric-2:1",
+      "targetMode": "isometric-2:1",
+      "authoringBasis": "isometric-grid",
+      "tileWidth": 64,
+      "tileHeight": 32,
+      "anchor": "bottom-center",
+      "depthStrategy": "screen-y"
+    },
+    "variants": {
+      "dawn": "scene-st-pauls-dawn",
+      "dusk": "scene-st-pauls-dusk",
+      "night": "scene-st-pauls-night"
+    },
+    "playerStart": { "x": 20, "y": 20 },
+    "collisionRects": [
+      { "x": 0, "y": 0, "width": 960, "height": 200 },
+      { "x": 0, "y": 500, "width": 960, "height": 40 },
+      { "x": 0, "y": 200, "width": 150, "height": 340 },
+      { "x": 810, "y": 200, "width": 150, "height": 340 },
+      { "x": 380, "y": 230, "width": 220, "height": 150 }
+    ],
+    "transitions": [
+      {
+        "targetLocation": "rua-direita",
+        "label": "Descend to Rua Direita",
+        "triggerArea": { "x": 1200, "y": 680, "width": 180, "height": 80 },
+        "spawnAt": { "x": 1400, "y": 400 }
+      }
+    ],
+    "npcPositions": {
+      "padre-tomas": { "x": 20, "y": 16 },
+      "siti": { "x": 24, "y": 12 }
+    }
+  },
+  "waterfront": {
+    "background": "scene-waterfront",
+    "mapFile": "maps/waterfront.json",
+    "isoMapKey": "waterfront-iso",
+    "music": "music-waterfront",
+    "nightMusic": "music-night",
+    "ambientSounds": ["base-tropical", "water-lapping", "harbor-activity", "seagulls"],
+    "nightAmbientSounds": ["water-lapping", "harbor-activity", "night-insects"],
+    "footstepSurface": "wood",
+    "projection": {
+      "runtimeMode": "isometric-2:1",
+      "targetMode": "isometric-2:1",
+      "authoringBasis": "isometric-grid",
+      "tileWidth": 64,
+      "tileHeight": 32,
+      "anchor": "bottom-center",
+      "depthStrategy": "screen-y"
+    },
+    "variants": {
+      "dawn": "scene-waterfront-dawn",
+      "dusk": "scene-waterfront-dusk",
+      "night": "scene-waterfront-night"
+    },
+    "playerStart": { "x": 20, "y": 18 },
+    "collisionRects": [
+      { "x": 0, "y": 0, "width": 960, "height": 170 },
+      { "x": 0, "y": 360, "width": 960, "height": 180 },
+      { "x": 0, "y": 0, "width": 140, "height": 360 },
+      { "x": 820, "y": 0, "width": 140, "height": 360 },
+      { "x": 420, "y": 210, "width": 140, "height": 120 }
+    ],
+    "transitions": [
+      {
+        "targetLocation": "rua-direita",
+        "label": "To Rua Direita",
+        "triggerArea": { "x": 300, "y": 480, "width": 120, "height": 60 },
+        "spawnAt": { "x": 2000, "y": 540 }
+      },
+      {
+        "targetLocation": "kampung",
+        "label": "To Kampung Quarter",
+        "triggerArea": { "x": 2080, "y": 480, "width": 120, "height": 60 },
+        "spawnAt": { "x": 400, "y": 540 }
+      }
+    ],
+    "npcPositions": {
+      "chen-wei": { "x": 26, "y": 16 },
+      "rashid": { "x": 14, "y": 18 }
+    }
+  },
+  "kampung": {
+    "background": "scene-kampung",
+    "mapFile": "maps/kampung.json",
+    "isoMapKey": "kampung-iso",
+    "music": "music-main",
+    "nightMusic": "music-night",
+    "ambientSounds": ["base-tropical", "village-life", "jungle-sounds"],
+    "nightAmbientSounds": ["village-life", "jungle-sounds", "cricket-chorus", "night-insects"],
+    "footstepSurface": "dirt",
+    "projection": {
+      "runtimeMode": "isometric-2:1",
+      "targetMode": "isometric-2:1",
+      "authoringBasis": "isometric-grid",
+      "tileWidth": 64,
+      "tileHeight": 32,
+      "anchor": "bottom-center",
+      "depthStrategy": "screen-y"
+    },
+    "variants": {
+      "dawn": "scene-kampung-dawn",
+      "dusk": "scene-kampung-dusk",
+      "night": "scene-kampung-night"
+    },
+    "playerStart": { "x": 20, "y": 20 },
+    "collisionRects": [
+      { "x": 0, "y": 0, "width": 960, "height": 200 },
+      { "x": 0, "y": 500, "width": 960, "height": 40 },
+      { "x": 0, "y": 0, "width": 140, "height": 540 },
+      { "x": 820, "y": 0, "width": 140, "height": 540 },
+      { "x": 380, "y": 230, "width": 220, "height": 150 }
+    ],
+    "transitions": [
+      {
+        "targetLocation": "waterfront",
+        "label": "To The Waterfront",
+        "triggerArea": { "x": 300, "y": 480, "width": 120, "height": 60 },
+        "spawnAt": { "x": 2000, "y": 480 }
+      }
+    ],
+    "npcPositions": {
+      "mak-enang": { "x": 24, "y": 16 }
+    }
+  }
+}

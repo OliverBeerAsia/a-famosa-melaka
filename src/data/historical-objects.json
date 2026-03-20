@@ -1,0 +1,452 @@
+{
+  "description": "Historical and cultural objects that can be examined throughout Melaka. Each provides lore and atmosphere.",
+
+  "objects": {
+    "portuguese-coat-of-arms": {
+      "id": "portuguese-coat-of-arms",
+      "name": "Portuguese Coat of Arms",
+      "type": "decoration",
+      "location": "a-famosa-gate",
+      "position": { "x": 300, "y": 80 },
+      "sprite": "coat-of-arms",
+      "interaction": "examine",
+      "description": "The royal arms of Portugal carved in stone above the fortress gate.",
+      "examineText": "The five blue shields of the Quinas - symbols of the five Moorish kings defeated at Ourique in 1139. Christ's wounds, they say. Around them, seven golden castles representing the Algarve. This coat of arms marks Portuguese sovereignty over Melaka since 1511.\n\n*The stone is weathered by tropical rain, but the pride it represents remains sharp.*",
+      "historicalNote": "The Portuguese coat of arms was displayed prominently on A Famosa to assert colonial authority. The original fortress gate bore this symbol until its destruction in 1807."
+    },
+
+    "albuquerque-plaque": {
+      "id": "albuquerque-plaque",
+      "name": "Memorial Plaque",
+      "type": "decoration",
+      "location": "a-famosa-gate",
+      "position": { "x": 250, "y": 150 },
+      "sprite": "stone-plaque",
+      "interaction": "examine",
+      "description": "A stone plaque commemorating the conquest of Melaka.",
+      "examineText": "AFONSO DE ALBUQUERQUE\nConqueror of Melaka\nA.D. 1511\n\n'A Famosa' - The Famous One\n\nBuilt to defend the faith and the trade of Portugal.\n\n*The letters are worn but legible. Below, in smaller script, a list of Portuguese soldiers who died in the conquest. Many names. Many sons who never returned to Lisbon.*",
+      "historicalNote": "Albuquerque conquered Melaka with approximately 1,200 men, including 800 Portuguese soldiers and Malabar auxiliaries. The fortress was constructed immediately after using stones from local mosques and tombs."
+    },
+
+    "cannon-bronze": {
+      "id": "cannon-bronze",
+      "name": "Bronze Cannon",
+      "type": "weapon",
+      "location": "a-famosa-gate",
+      "position": { "x": 400, "y": 200 },
+      "sprite": "cannon",
+      "interaction": "examine",
+      "description": "A heavy bronze cannon pointing toward the strait.",
+      "examineText": "A culverin, cast in Goa. The bronze is green with age but the barrel remains sound. Portuguese foundry marks are visible near the breech. This weapon could fire a 10-pound iron ball nearly a mile.\n\n*It points toward the sea - toward any enemy who might dare approach. The Acehnese have learned to fear these guns. The Dutch, perhaps, have not yet.*",
+      "historicalNote": "Portuguese artillery was a key advantage in Asian conquests. Cannons like this helped defend Melaka against multiple sieges by Acehnese and Johor forces throughout the 16th century."
+    },
+
+    "keris-display": {
+      "id": "keris-display",
+      "name": "Malay Keris",
+      "type": "artifact",
+      "location": "kampung",
+      "position": { "x": 180, "y": 220 },
+      "sprite": "keris",
+      "interaction": "examine",
+      "description": "A wavy-bladed Malay dagger mounted on a wooden stand.",
+      "examineText": "The keris - a blade with a soul. This one has seven waves in its blade, called 'lok.' The hilt is carved sandalwood in the shape of a demon's head. The blade itself is forged from layered iron and nickel, creating the distinctive wavy pattern called 'pamor.'\n\n*The Malays believe each keris has its own spirit. A keris that doesn't suit its owner can bring misfortune. This one has been in the family for generations, they say.*",
+      "historicalNote": "The keris is both weapon and spiritual object in Malay culture. The number of waves (lok) and the pattern of the metal (pamor) carried symbolic meaning. Keris were often passed down through generations as heirlooms."
+    },
+
+    "spice-pile-nutmeg": {
+      "id": "spice-pile-nutmeg",
+      "name": "Pile of Nutmeg",
+      "type": "trade-goods",
+      "location": "rua-direita",
+      "position": { "x": 350, "y": 180 },
+      "sprite": "spice-pile",
+      "interaction": "examine",
+      "description": "A pile of whole nutmegs from the Banda Islands.",
+      "examineText": "Nutmeg - 'the gold of the Indies.' These wrinkled brown seeds traveled thousands of miles from tiny islands in the Banda Sea. Wars have been fought over them. Men have died for them.\n\n*The scent is intoxicating - warm, sweet, slightly bitter. In Europe, a handful of these could buy a house. Here in Melaka, they pile them in baskets like ordinary nuts.*\n\nThe Portuguese guard the source jealously, but the Dutch are coming...",
+      "historicalNote": "Nutmeg was worth more than gold by weight in 16th century Europe. The Banda Islands, source of all the world's nutmeg, would later be the site of Dutch massacres as the VOC established monopoly control."
+    },
+
+    "spice-pile-cloves": {
+      "id": "spice-pile-cloves",
+      "name": "Pile of Cloves",
+      "type": "trade-goods",
+      "location": "rua-direita",
+      "position": { "x": 380, "y": 200 },
+      "sprite": "spice-pile",
+      "interaction": "examine",
+      "description": "Dried cloves from Ternate and Tidore.",
+      "examineText": "Cloves - the dried flower buds of a tree that grows only on a few volcanic islands in the Moluccas. The Portuguese call them 'cravo.' The scent carries across the market.\n\n*A Chinese courtier is said to have held cloves in his mouth when addressing the Emperor, to sweeten his breath. Here, merchants weigh them on delicate scales, gram by gram. Each gram worth a day's labor.*",
+      "historicalNote": "Cloves were used medicinally, as preservatives, and as luxury goods. The Portuguese established a fortress on Ternate in 1522 to control the clove trade."
+    },
+
+    "portuguese-carrack-model": {
+      "id": "portuguese-carrack-model",
+      "name": "Ship Model",
+      "type": "decoration",
+      "location": "waterfront",
+      "position": { "x": 200, "y": 150 },
+      "sprite": "ship-model",
+      "interaction": "examine",
+      "description": "A detailed wooden model of a Portuguese carrack.",
+      "examineText": "A nau - the great ship that connects Portugal to its empire. Four masts: foremast and mainmast square-rigged for the monsoon winds, mizzen and bonaventure lateen-rigged for maneuvering. The high stern castle holds the captain's quarters.\n\n*Ships like this sail from Lisbon to Goa to Melaka to Macau to Nagasaki - a journey of years. Many never return. Some lose half their crew to scurvy, storms, and disease. Yet still they sail, chasing pepper and profit.*",
+      "historicalNote": "The Portuguese carrack (nau) was the workhorse of the Estado da India. These ships, typically 400-1000 tons, carried the spice trade and connected Portugal's far-flung empire."
+    },
+
+    "chinese-abacus": {
+      "id": "chinese-abacus",
+      "name": "Chinese Abacus",
+      "type": "tool",
+      "location": "waterfront",
+      "position": { "x": 150, "y": 180 },
+      "sprite": "abacus",
+      "interaction": "examine",
+      "description": "A wooden counting frame with bamboo rods and beads.",
+      "examineText": "The suanpan - the Chinese counting board. Two beads above the divider, five below. In skilled hands, calculations flow like water.\n\n*The Chinese have used this tool for over a thousand years. While Portuguese merchants struggle with quill and paper, a Chinese accountant clicks through complex sums in heartbeats. No wonder they dominate the trade.*",
+      "historicalNote": "The Chinese abacus was an essential tool of commerce. Skilled operators could perform calculations faster than written arithmetic, giving Chinese merchants a practical advantage in trade negotiations."
+    },
+
+    "jesuit-crucifix": {
+      "id": "jesuit-crucifix",
+      "name": "Wooden Crucifix",
+      "type": "religious",
+      "location": "st-pauls-church",
+      "position": { "x": 300, "y": 100 },
+      "sprite": "crucifix",
+      "interaction": "examine",
+      "description": "A large wooden crucifix above the church altar.",
+      "examineText": "Christ on the cross, carved from teak by local craftsmen under Jesuit direction. The features are strange - not quite European, not quite Asian. A melding of traditions.\n\n*Saint Francis Xavier preached beneath a crucifix like this. He dreamed of converting all of Asia. The dream remains unfulfilled, but the Jesuits persist. They learn languages, study cultures, adapt. Some say they adapt too much.*",
+      "historicalNote": "The Jesuits were known for their policy of 'accommodation' - adapting Christianity to local cultures. This made them effective missionaries but drew criticism from other Catholic orders."
+    },
+
+    "francis-xavier-tomb": {
+      "id": "francis-xavier-tomb",
+      "name": "Empty Tomb",
+      "type": "religious",
+      "location": "st-pauls-church",
+      "position": { "x": 280, "y": 250 },
+      "sprite": "stone-tomb",
+      "interaction": "examine",
+      "description": "A stone tomb where Saint Francis Xavier once lay.",
+      "examineText": "Here rested the body of Francis Xavier, Apostle of the Indies, from 1553 to 1554. The stone still bears the outline of where his coffin lay.\n\n*They say his body did not decay - a miracle that proved his sanctity. When they opened the coffin after nine months, he looked as if he merely slept. Now his remains lie in Goa, but pilgrims still come here, to this empty tomb, to pray.*",
+      "historicalNote": "Francis Xavier died in 1552 on Shangchuan Island, China. His body was temporarily interred in Melaka before being moved to Goa, where it remains today in the Basilica of Bom Jesus."
+    },
+
+    "grave-portuguese": {
+      "id": "grave-portuguese",
+      "name": "Portuguese Gravestone",
+      "type": "memorial",
+      "location": "st-pauls-church",
+      "position": { "x": 150, "y": 300 },
+      "sprite": "gravestone",
+      "interaction": "examine",
+      "description": "A weathered gravestone with Portuguese inscription.",
+      "examineText": "AQUI JAZ\nJOÃO DIAS DA SILVA\nSoldado de Cristo e Portugal\nFaleceu A.D. 1567\nQue Deus tenha sua alma\n\n*Here lies João Dias da Silva. Soldier of Christ and Portugal. Died 1567. May God keep his soul.*\n\n*He was 23 years old. The stone doesn't say what killed him - fever, battle, or simply the weight of being so far from home. So many stones like this. So many young men who never saw Lisbon again.*",
+      "historicalNote": "Disease killed far more Portuguese in Asia than combat. Malaria, dysentery, and other tropical diseases were devastating to European populations unused to the climate."
+    },
+
+    "sultan-palace-ruins": {
+      "id": "sultan-palace-ruins",
+      "name": "Ruined Foundation",
+      "type": "ruins",
+      "location": "st-pauls-church",
+      "position": { "x": 350, "y": 280 },
+      "sprite": "stone-ruins",
+      "interaction": "examine",
+      "description": "Crumbling stone foundations of an older structure.",
+      "examineText": "Before the church, before the Portuguese, this hilltop held the Sultan's palace. These stones are what remain - foundations repurposed, walls torn down, a history deliberately erased.\n\n*The Portuguese built their church on the highest point, where the Sultan once ruled. A message in architecture: the old powers are gone. Christ reigns now.*\n\n*But the Malays remember. In the kampung, they still tell stories of the old Sultanate. Memories are harder to demolish than palaces.*",
+      "historicalNote": "The Portuguese systematically destroyed mosques and palaces after the conquest, using the materials to build churches and fortifications. St. Paul's Church was built on the site of the Sultan's compound."
+    },
+
+    "chinese-junk-anchor": {
+      "id": "chinese-junk-anchor",
+      "name": "Massive Anchor",
+      "type": "artifact",
+      "location": "waterfront",
+      "position": { "x": 350, "y": 280 },
+      "sprite": "anchor",
+      "interaction": "examine",
+      "description": "An enormous iron anchor from a Chinese treasure ship.",
+      "examineText": "This anchor is old - far older than the Portuguese presence here. The iron is thick, the design unlike European anchors. Local legend says it came from one of Zheng He's treasure ships, the great fleet that visited Melaka a century before Albuquerque.\n\n*The treasure ships were said to be 400 feet long - four times the size of Portuguese carracks. They carried giraffes, silk, and the mandate of the Ming Emperor. Then China turned inward, and the seas were left to others.*\n\n*The anchor remains. A reminder that empires rise and fall, but Melaka endures.*",
+      "historicalNote": "Admiral Zheng He's treasure voyages (1405-1433) brought enormous Chinese fleets to Melaka and throughout Southeast Asia. The sudden end of these voyages left a power vacuum that the Portuguese would later fill."
+    },
+
+    "gamelan-gong": {
+      "id": "gamelan-gong",
+      "name": "Bronze Gong",
+      "type": "instrument",
+      "location": "kampung",
+      "position": { "x": 250, "y": 180 },
+      "sprite": "gong",
+      "interaction": "examine",
+      "description": "A large bronze gong hung in a wooden frame.",
+      "examineText": "The heart of the gamelan - a great bronze gong that marks the beginning and end of each musical cycle. The metal is dark with age, but when struck, it sings with a voice that seems to come from the earth itself.\n\n*The Portuguese bring church bells. The Chinese bring gongs for temples. But this sound - this deep, resonant tone - is Malay. It has sounded over this land since before any foreigner came.*",
+      "historicalNote": "The gamelan is a traditional Indonesian/Malay ensemble of percussion instruments. The music follows complex interlocking patterns and was performed for court ceremonies, rituals, and entertainment."
+    },
+
+    "malay-manuscript": {
+      "id": "malay-manuscript",
+      "name": "Old Manuscript",
+      "type": "document",
+      "location": "kampung",
+      "position": { "x": 300, "y": 200 },
+      "sprite": "scroll",
+      "interaction": "examine",
+      "description": "A fragile palm-leaf manuscript in Jawi script.",
+      "examineText": "The Sejarah Melayu - the Malay Annals. Written in Jawi, the Arabic script adapted for Malay language. This copy is hand-written, passed down through a family that remembers the old court.\n\n*It tells of Parameswara, the prince who founded Melaka. Of the great Sultanate. Of the day the Portuguese ships appeared on the horizon. The Portuguese burned many copies, but this one survived, hidden in the kampung.*\n\n*History lives in those who remember it.*",
+      "historicalNote": "The Sejarah Melayu (Malay Annals) is a literary and historical work tracing the Malay kings. Multiple versions exist, some compiled after the Portuguese conquest, preserving Malay history and identity."
+    },
+
+    "porcelain-vase": {
+      "id": "porcelain-vase",
+      "name": "Ming Porcelain Vase",
+      "type": "trade-goods",
+      "location": "waterfront",
+      "position": { "x": 180, "y": 160 },
+      "sprite": "vase",
+      "interaction": "examine",
+      "description": "A blue and white porcelain vase from China.",
+      "examineText": "Blue and white - the colors of Ming dynasty porcelain. This vase traveled from Jingdezhen, the porcelain capital, through Canton, across the South China Sea to Melaka. From here it might go to Goa, then Lisbon, then perhaps to the table of some European noble.\n\n*The Chinese have perfected the art of porcelain. Europeans try to imitate it and fail. This single vase is worth more than a laborer earns in a year. So delicate - and yet it has survived a journey of ten thousand miles.*",
+      "historicalNote": "Chinese porcelain was highly prized in Europe and the Middle East. The Portuguese trade brought vast quantities of 'blue and white' ware to European markets, where it inspired local imitation attempts."
+    },
+
+    "incense-burner": {
+      "id": "incense-burner",
+      "name": "Incense Burner",
+      "type": "religious",
+      "location": "waterfront",
+      "position": { "x": 160, "y": 200 },
+      "sprite": "incense-burner",
+      "interaction": "examine",
+      "description": "A bronze incense burner outside the Chinese guild house.",
+      "examineText": "Smoke rises from burning joss sticks, carrying prayers to ancestors and gods. The burner is shaped like a dragon-turtle - a symbol of longevity and protection.\n\n*The Chinese honor their ancestors every day. They believe the dead watch over the living, that family extends across the boundary of death. The Portuguese find this strange, perhaps heretical. But who is to say which faith is true?*",
+      "historicalNote": "Ancestor veneration was central to Chinese religious practice. The Chinese community in Melaka maintained temples and rituals that connected them to their homeland and heritage."
+    },
+
+    "dhow-sail": {
+      "id": "dhow-sail",
+      "name": "Lateen Sail",
+      "type": "equipment",
+      "location": "waterfront",
+      "position": { "x": 280, "y": 320 },
+      "sprite": "dhow-sail",
+      "interaction": "examine",
+      "description": "A triangular sail drying on the dock.",
+      "examineText": "The lateen sail - the secret of Arab navigation. This triangular canvas can catch winds from almost any direction, allowing dhows to sail into the wind. Before the Portuguese learned this from Arab sailors, European ships could only run before the wind.\n\n*The Arabs have sailed these waters for centuries. They brought Islam to these shores long before the Portuguese brought Christianity. Their dhows are smaller than carracks, but faster and more nimble. Trade, not conquest, was their method.*",
+      "historicalNote": "Arab traders established trading networks throughout the Indian Ocean centuries before European arrival. They introduced Islam to Southeast Asia and developed sophisticated navigation techniques using monsoon winds."
+    },
+
+    "trade-ledger": {
+      "id": "trade-ledger",
+      "name": "Trade Ledger",
+      "type": "document",
+      "location": "rua-direita",
+      "position": { "x": 220, "y": 200 },
+      "sprite": "book",
+      "interaction": "examine",
+      "description": "A leather-bound ledger filled with columns of figures.",
+      "examineText": "Pages covered in careful script - Portuguese, with numbers in the new Hindu-Arabic notation. Credits and debits. Pepper bought, silk sold, debts owed, interest accumulated.\n\n*This is the true language of Melaka. Not Portuguese, not Malay, not Chinese. Numbers. Profit and loss. The universal tongue of trade.*\n\nSome entries are crossed out, debts paid. Others remain open, stretching back years. A man's fortune - or ruin - captured in ink.",
+      "historicalNote": "Double-entry bookkeeping, developed in Italy, spread through Portuguese trade networks. The Hindu-Arabic numeral system (the numbers we use today) was adopted by European merchants for its practicality."
+    },
+
+    "medicine-chest": {
+      "id": "medicine-chest",
+      "name": "Medicine Chest",
+      "type": "container",
+      "location": "kampung",
+      "position": { "x": 200, "y": 300 },
+      "sprite": "chest",
+      "interaction": "examine",
+      "description": "A wooden chest filled with dried herbs and remedies.",
+      "examineText": "The toolkit of a dukun - a traditional Malay healer. Dried leaves, powdered roots, small bottles of oils. Some items are familiar: ginger, turmeric, betel. Others are mysterious.\n\n*The Portuguese bring their doctors and their bleeding. The Chinese bring their needles and their herbs. But when the village children fall ill, their mothers still come to the dukun. Some knowledge survives every conquest.*",
+      "historicalNote": "Traditional Malay medicine (perubatan Melayu) combined herbalism, spiritual practices, and Islamic prayer. Dukun served as healers, midwives, and spiritual advisors in Malay communities."
+    },
+
+    "betel-nut-tray": {
+      "id": "betel-nut-tray",
+      "name": "Betel Nut Tray",
+      "type": "artifact",
+      "location": "rua-direita",
+      "position": { "x": 280, "y": 190 },
+      "sprite": "brass-tray",
+      "interaction": "examine",
+      "description": "A brass tray holding areca nut, betel leaf, and lime paste — the universal social offering across all Melaka cultures.",
+      "examineText": "A polished brass tray with small compartments: sliced areca nut, fresh betel leaves, a pot of slaked lime paste, and a twist of gambir. Every household has one. Every negotiation begins with one.\n\n*Malay, Chinese, Indian, Arab — even the Portuguese have taken to the habit. The red-stained lips and teeth mark everyone here. Refusing a betel offering is an insult; accepting it is the first step of any conversation.*",
+      "historicalNote": "Betel chewing was ubiquitous in 16th-century Southeast Asia, cutting across all ethnic and social boundaries. The practice was a fundamental social ritual — offering betel was the expected gesture of hospitality and the customary opening to trade negotiations, diplomatic meetings, and casual visits alike."
+    },
+
+    "tin-ingots": {
+      "id": "tin-ingots",
+      "name": "Tin Ingots",
+      "type": "trade-goods",
+      "location": "waterfront",
+      "position": { "x": 320, "y": 250 },
+      "sprite": "metal-bars",
+      "interaction": "examine",
+      "description": "Stacked bars of Straits tin stamped with Portuguese royal marks — Melaka's primary export alongside spices.",
+      "examineText": "Heavy grey bars, each stamped with the Portuguese crown and a weight mark. Straits tin — mined upriver and smelted in the hinterlands, then brought downriver to Melaka for export. The metal is soft enough to scratch with a fingernail.\n\n*Spices get the glory, but tin is Melaka's steady trade. It flows to China for bronze-casting, to India for pewter, to Europe for a hundred uses. The mines have made sultans rich for centuries. Now they make the Portuguese rich instead.*",
+      "historicalNote": "Melaka was one of the world's most important tin trading centers in the 16th century. Tin mined in the Malay Peninsula interior was a major export commodity, second only to spices in economic importance. The Portuguese imposed royal monopolies on the tin trade to control revenue."
+    },
+
+    "balance-scale": {
+      "id": "balance-scale",
+      "name": "Balance Scale",
+      "type": "tool",
+      "location": "rua-direita",
+      "position": { "x": 310, "y": 210 },
+      "sprite": "scale",
+      "interaction": "examine",
+      "description": "A Portuguese quintal balance scale with standardized brass weights for measuring spice trades.",
+      "examineText": "A fine balance, the beam of polished brass, the pans of hammered copper. Beside it, a set of nested brass weights — each stamped with the Portuguese royal mark and a value in arráteis.\n\n*In Melaka, trust begins with the scale. Every merchant watches the weighing with hawk's eyes. A thumb on the pan, a shaved weight, a distraction at the crucial moment — the tricks are as old as trade itself. The Portuguese imposed their quintal system to standardize measures, but everyone still argues.*",
+      "historicalNote": "The Portuguese introduced standardized weights and measures to Melaka's trade, using the quintal system. Accurate weighing was essential for the spice trade, where goods were valued by weight and small discrepancies meant significant profit or loss."
+    },
+
+    "rice-mortar": {
+      "id": "rice-mortar",
+      "name": "Rice Mortar",
+      "type": "artifact",
+      "location": "kampung",
+      "position": { "x": 220, "y": 260 },
+      "sprite": "mortar",
+      "interaction": "examine",
+      "description": "A carved wooden lesung for pounding rice — the rhythmic thudding fills the kampung at dawn and dusk.",
+      "examineText": "A heavy wooden mortar, the interior worn smooth by generations of use. Beside it, two long wooden pestles polished by countless hands. The lesung is the heartbeat of the kampung.\n\n*At dawn and dusk, women gather to pound rice — not alone, but together, two or three pestles rising and falling in rhythm. Thud-thud-thud. The sound carries across the village like a drum. It is music, it is work, it is community. The Portuguese have their church bells; the kampung has the lesung.*",
+      "historicalNote": "Rice pounding with a lesung (wooden mortar) was a communal activity central to kampung life. The rhythmic, interlocking strokes of multiple pestles created distinctive patterns that functioned as a form of social bonding and timekeeping in Malay villages."
+    },
+
+    "fish-trap": {
+      "id": "fish-trap",
+      "name": "Fish Trap",
+      "type": "tool",
+      "location": "kampung",
+      "position": { "x": 270, "y": 310 },
+      "sprite": "fish-trap",
+      "interaction": "examine",
+      "description": "A woven bamboo bubu fish trap, conical in shape — hung to dry between uses near the shoreline.",
+      "examineText": "A cone of woven bamboo strips, narrow at one end, wide at the other, with an inward-facing funnel that lets fish enter but not escape. Simple, elegant, effective. This bubu has been repaired many times — newer bamboo strips woven in among the old.\n\n*The fishermen set these in the shallows at dusk and collect them at dawn. The strait provides. It always has. Empires come and go, but the fish remain.*",
+      "historicalNote": "The bubu (conical bamboo fish trap) was a widespread fishing technology throughout maritime Southeast Asia. Fishing was a primary livelihood for coastal Malay communities and continued largely unchanged regardless of which power controlled the port."
+    },
+
+    "prayer-mat": {
+      "id": "prayer-mat",
+      "name": "Prayer Mat",
+      "type": "religious",
+      "location": "kampung",
+      "position": { "x": 240, "y": 280 },
+      "sprite": "prayer-mat",
+      "interaction": "examine",
+      "description": "A woven prayer mat oriented toward Mecca, laid on the bamboo floor of the surau.",
+      "examineText": "A rectangular mat of finely woven pandanus leaf, its geometric patterns worn soft by daily use. It lies oriented northwest — toward Mecca, thousands of miles away across the Indian Ocean.\n\n*Five times a day, the faithful kneel here. The Portuguese burned the great mosque and forbade the public call to prayer, but faith is not so easily conquered. In the kampung, in the surau, behind closed doors, the prayers continue. They have continued for a hundred years before the Portuguese came, and they will continue long after.*",
+      "historicalNote": "Islam was the dominant religion of Melaka before the Portuguese conquest. The Portuguese suppressed public Islamic worship and destroyed mosques, but the Malay population maintained their faith in private surau (prayer houses) within the kampung. The Islamic community persisted throughout the Portuguese period."
+    },
+
+    "pelourinho": {
+      "id": "pelourinho",
+      "name": "Pelourinho (Pillory)",
+      "type": "decoration",
+      "location": "rua-direita",
+      "position": { "x": 520, "y": 350 },
+      "sprite": "pelourinho",
+      "interaction": "examine",
+      "description": "A stone pillory column standing in the town square.",
+      "examineText": "The pelourinho — a pillory, the mark of Portuguese municipal authority planted in every colonial settlement from Brazil to Macau. This one stands in Rua Direita as a symbol that this is, legally and spiritually, Portuguese soil.\n\nCriminals are shackled here for public humiliation. But its true purpose is symbolic: it declares that Portuguese law — not the Sultan's adat — governs this street.\n\n*The iron shackles are rusted but functional. Fresh scratches on the stone suggest recent use.*",
+      "historicalNote": "The pelourinho was a standard feature of Portuguese colonial towns, serving both as an instrument of punishment and a symbol of the sovereign authority of the Portuguese crown over the settlement."
+    },
+
+    "pepper-pile": {
+      "id": "pepper-pile",
+      "name": "Black Pepper Pile",
+      "type": "trade-good",
+      "location": "rua-direita",
+      "position": { "x": 450, "y": 400 },
+      "sprite": "spice-pile-pepper",
+      "interaction": "examine",
+      "description": "A carefully measured pile of black peppercorns.",
+      "examineText": "Black gold. Piper nigrum. The reason the Portuguese crossed ten thousand miles of ocean.\n\n'Whoever is lord of Malacca has his hand on the throat of Venice' — so Tomé Pires wrote, and he was right. This pile of dried berries, no bigger than a man's hat, is worth more than a year's wages for a Lisbon dockworker.\n\n*The sharp, almost burning fragrance fills your nose. Each grain has traveled from the Malabar Coast to this table. Wars have been fought over less.*",
+      "historicalNote": "Black pepper was the single most valuable commodity in the Portuguese spice trade. Melaka was critical because it was the collection point where pepper from across Southeast Asia was consolidated before shipment to Goa and then Lisbon."
+    },
+
+    "wayang-kulit-puppet": {
+      "id": "wayang-kulit-puppet",
+      "name": "Wayang Kulit Puppet",
+      "type": "artifact",
+      "location": "kampung",
+      "position": { "x": 600, "y": 300 },
+      "sprite": "wayang-kulit-puppet",
+      "interaction": "examine",
+      "description": "An intricately cut leather shadow puppet mounted on bamboo sticks.",
+      "examineText": "A wayang kulit — a shadow puppet carved from buffalo hide, painted in brilliant colors, and mounted on bamboo sticks. This one depicts Seri Rama, hero-prince of the Malay shadow play.\n\nWayang kulit performances are the premiere entertainment of Malay culture — epic stories told through flickering shadows on a white screen, accompanied by the hypnotic rhythms of the gamelan. They can last from dusk until dawn.\n\n*The leather is thin enough to be translucent, yet covered in the most intricate perforations and painted detail. It must have taken weeks to carve.*",
+      "historicalNote": "Wayang kulit (shadow puppet theater) was deeply embedded in Malay culture, adapted from the Hindu-Buddhist traditions of Java and given distinctly Malay narratives. Portuguese observers documented these performances with a mixture of fascination and disapproval."
+    },
+
+    "surau-prayer-niche": {
+      "id": "surau-prayer-niche",
+      "name": "Surau Prayer Niche",
+      "type": "decoration",
+      "location": "kampung",
+      "position": { "x": 350, "y": 250 },
+      "sprite": "prayer-mat",
+      "interaction": "examine",
+      "description": "A small recessed area with a woven prayer mat facing west.",
+      "examineText": "A surau — a small prayer niche tucked between houses. A woven mat faces qiblah, toward Mecca. A clay water vessel sits beside it for ablutions.\n\nWhen the Portuguese conquered Melaka in 1511, they destroyed the great mosque and built churches on its foundations. But faith does not need grand buildings. In every kampung, in every home, the Malays continue to pray as they always have.\n\n*The mat shows the wear of many knees. Someone prays here regularly, quietly, persistently.*",
+      "historicalNote": "The Portuguese destroyed Melaka's grand mosque after conquest, but Islam persisted strongly in the Malay community through private and communal prayer in homes and small surau structures."
+    },
+
+    "carrack-rigging": {
+      "id": "carrack-rigging",
+      "name": "Carrack Rigging Detail",
+      "type": "decoration",
+      "location": "waterfront",
+      "position": { "x": 700, "y": 200 },
+      "sprite": "rope-coil",
+      "interaction": "examine",
+      "description": "Thick hempen ropes and pulleys for the rigging of a Portuguese carrack.",
+      "examineText": "The rigging of a Portuguese carrack — a web of hempen rope, wooden blocks, and iron fittings that would take a hundred men to operate. The nau carried square sails on the foremast and mainmast, lateen sails on the mizzen.\n\nThese ships are the largest vessels in Asian waters. A carrack can carry 500 tons of cargo — enough pepper and spices to make a dozen men wealthy — across the most dangerous ocean crossing in the world.\n\n*The ropes are thick as a man's arm and stiff with salt and tar. The blocks are worn smooth by constant hauling.*",
+      "historicalNote": "Portuguese carracks (naus) were the workhorses of the Estado da Índia trade network. They were significantly larger than most Asian trading vessels and represented a key technological advantage in Portuguese naval dominance."
+    }
+  },
+
+  "objectsByLocation": {
+    "a-famosa-gate": [
+      "portuguese-coat-of-arms",
+      "albuquerque-plaque",
+      "cannon-bronze"
+    ],
+    "rua-direita": [
+      "spice-pile-nutmeg",
+      "spice-pile-cloves",
+      "trade-ledger",
+      "betel-nut-tray",
+      "balance-scale",
+      "pelourinho",
+      "pepper-pile"
+    ],
+    "st-pauls-church": [
+      "jesuit-crucifix",
+      "francis-xavier-tomb",
+      "grave-portuguese",
+      "sultan-palace-ruins"
+    ],
+    "waterfront": [
+      "portuguese-carrack-model",
+      "chinese-abacus",
+      "chinese-junk-anchor",
+      "porcelain-vase",
+      "incense-burner",
+      "dhow-sail",
+      "tin-ingots",
+      "carrack-rigging"
+    ],
+    "kampung": [
+      "keris-display",
+      "gamelan-gong",
+      "malay-manuscript",
+      "medicine-chest",
+      "rice-mortar",
+      "fish-trap",
+      "prayer-mat",
+      "wayang-kulit-puppet",
+      "surau-prayer-niche"
+    ]
+  }
+}

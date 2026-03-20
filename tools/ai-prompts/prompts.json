@@ -1,0 +1,191 @@
+{
+  "style": "Create a pixel art sprite in the style of classic 16-bit RPGs like Ultima VII and Ultima VIII.\n\nSTYLE REQUIREMENTS:\n- Pure pixel art with clean, crisp edges\n- NO anti-aliasing or smoothing\n- Limited color palette (max 32 colors)\n- Warm tropical color scheme: terracotta, gold, cream, forest green, ocean blue, deep brown\n- Subtle dithering for shading gradients\n- Portuguese colonial Melaka setting (1580)\n- Southeast Asian tropical atmosphere\n",
+  "sprites": {
+    "tiles": [
+      {
+        "name": "cobblestone",
+        "size": "16x16",
+        "prompt": "Top-down cobblestone street tile, gray-brown stones with dark mortar gaps, worn Portuguese colonial style, seamless tileable pattern",
+        "category": "tiles"
+      },
+      {
+        "name": "grass-tropical",
+        "size": "16x16",
+        "prompt": "Top-down lush tropical grass tile, vibrant greens with small yellow flowers, Southeast Asian jungle floor, seamless tileable",
+        "category": "tiles"
+      },
+      {
+        "name": "water-harbor",
+        "size": "16x16",
+        "prompt": "Top-down calm harbor water tile, blue-green with subtle light ripples, reflective surface, seamless tileable",
+        "category": "tiles"
+      },
+      {
+        "name": "wood-dock",
+        "size": "16x16",
+        "prompt": "Top-down weathered wooden dock planks, gray-brown wood with gaps between boards, salt-stained nautical, seamless tileable",
+        "category": "tiles"
+      },
+      {
+        "name": "sand-beach",
+        "size": "16x16",
+        "prompt": "Top-down golden beach sand tile, warm tan color with tiny shell fragments and pebbles, seamless tileable",
+        "category": "tiles"
+      },
+      {
+        "name": "terracotta",
+        "size": "16x16",
+        "prompt": "Top-down terracotta clay floor tile, orange-red square tiles in grid pattern, Portuguese Mediterranean style, seamless tileable",
+        "category": "tiles"
+      },
+      {
+        "name": "white-wall",
+        "size": "16x32",
+        "prompt": "Front-facing whitewashed wall section, Portuguese colonial architecture, slight weathering and cracks, clean plaster",
+        "category": "tiles"
+      },
+      {
+        "name": "roof-tile",
+        "size": "16x16",
+        "prompt": "Top-down terracotta roof tiles, overlapping curved clay tiles in red-orange, Portuguese style, seamless tileable",
+        "category": "tiles"
+      }
+    ],
+    "characters": [
+      {
+        "name": "player",
+        "size": "24x32",
+        "prompt": "Full body character sprite facing forward, young Portuguese merchant agent, clean-shaven with brown hair, wearing red/burgundy doublet with gold buttons, white collar visible, blue breeches, brown leather boots, standing pose, transparent background",
+        "category": "characters"
+      },
+      {
+        "name": "fernao-gomes",
+        "size": "24x32",
+        "prompt": "Full body character sprite facing forward, wealthy older Portuguese merchant, gray beard, fine red velvet doublet with ornate gold trim, white ruff collar at neck, heavy gold chain of office, dark breeches, distinguished worried expression, transparent background",
+        "category": "characters"
+      },
+      {
+        "name": "capitao-rodrigues",
+        "size": "24x32",
+        "prompt": "Full body character sprite facing forward, Portuguese military guard captain, wearing morion helmet (Spanish/Portuguese style), metal breastplate armor, red officer sash across chest, stern suspicious expression, hand resting on sword hilt, transparent background",
+        "category": "characters"
+      },
+      {
+        "name": "padre-tomas",
+        "size": "24x32",
+        "prompt": "Full body character sprite facing forward, Jesuit Catholic priest, wearing long black cassock robe, white clerical collar, gold crucifix pendant on chain, tonsured head (bald crown with gray hair ring), gentle kind expression, hands clasped, transparent background",
+        "category": "characters"
+      },
+      {
+        "name": "aminah",
+        "size": "24x32",
+        "prompt": "Full body character sprite facing forward, Malay woman market vendor, purple/pink tudung (headscarf), gold necklace, colorful silk baju kurung (traditional blouse), blue batik sarong with geometric patterns, warm friendly smile, transparent background",
+        "category": "characters"
+      },
+      {
+        "name": "chen-wei",
+        "size": "24x32",
+        "prompt": "Full body character sprite facing forward, Chinese guild merchant representative, traditional black silk cap, long purple/magenta silk changshan robe with gold embroidery at edges, thin black mustache and short goatee, reserved dignified expression, hands hidden in sleeves, transparent background",
+        "category": "characters"
+      },
+      {
+        "name": "rashid",
+        "size": "24x32",
+        "prompt": "Full body character sprite facing forward, Arab sailor from dhow ship, white keffiyeh headscarf with black agal rope, thick curly black beard, loose white cotton sailors shirt, blue cloth sash at waist, baggy sirwal pants, bare feet, jovial laughing expression, transparent background",
+        "category": "characters"
+      }
+    ],
+    "objects": [
+      {
+        "name": "market-stall",
+        "size": "32x32",
+        "prompt": "Market vendor stall, wooden frame structure with striped canvas awning (red and white stripes), goods displayed on counter, isometric 3/4 view, Portuguese colonial market style, transparent background",
+        "category": "objects"
+      },
+      {
+        "name": "spice-pile-turmeric",
+        "size": "16x16",
+        "prompt": "Small pile of golden turmeric spice powder in terracotta ceramic bowl, rich yellow-orange color, isometric view, transparent background",
+        "category": "objects"
+      },
+      {
+        "name": "spice-pile-pepper",
+        "size": "16x16",
+        "prompt": "Small pile of black peppercorns in wooden bowl, dark spherical spices, isometric view, transparent background",
+        "category": "objects"
+      },
+      {
+        "name": "barrel",
+        "size": "16x24",
+        "prompt": "Wooden storage barrel, dark brown oak wood staves with black iron bands, slightly weathered, isometric 3/4 view, transparent background",
+        "category": "objects"
+      },
+      {
+        "name": "crate",
+        "size": "16x16",
+        "prompt": "Wooden cargo shipping crate, rough planks with visible nails, stamped merchant mark on side, isometric view, transparent background",
+        "category": "objects"
+      },
+      {
+        "name": "palm-tree",
+        "size": "32x48",
+        "prompt": "Tall coconut palm tree, brown textured trunk, large green tropical fronds at top with coconuts, Southeast Asian style, slight side view, transparent background",
+        "category": "objects"
+      },
+      {
+        "name": "banana-tree",
+        "size": "24x32",
+        "prompt": "Banana plant with large green leaves and bunch of yellow bananas, tropical style, transparent background",
+        "category": "objects"
+      },
+      {
+        "name": "lantern-brass",
+        "size": "16x16",
+        "prompt": "Hanging brass oil lantern, glass panels with warm orange glow, Portuguese colonial style, transparent background",
+        "category": "objects"
+      },
+      {
+        "name": "anchor",
+        "size": "24x24",
+        "prompt": "Heavy iron ship anchor, dark gray metal with ring at top, nautical style, lying flat, transparent background",
+        "category": "objects"
+      },
+      {
+        "name": "cannon",
+        "size": "32x16",
+        "prompt": "Bronze naval cannon on wooden wheeled carriage, Portuguese fortress artillery style, side view, transparent background",
+        "category": "objects"
+      },
+      {
+        "name": "stone-cross",
+        "size": "16x32",
+        "prompt": "Stone religious cross monument, weathered gray limestone, Portuguese Catholic style with decorative base, front view, transparent background",
+        "category": "objects"
+      },
+      {
+        "name": "fishing-net",
+        "size": "24x24",
+        "prompt": "Fishing net made of brown rope, mesh pattern, draped or hanging, transparent background",
+        "category": "objects"
+      },
+      {
+        "name": "ceramic-vase",
+        "size": "16x24",
+        "prompt": "Blue and white Chinese porcelain vase, Ming dynasty style with floral patterns, transparent background",
+        "category": "objects"
+      },
+      {
+        "name": "silk-bolt",
+        "size": "16x16",
+        "prompt": "Rolled bolt of colorful silk fabric, rich red or purple color with sheen, trade goods, transparent background",
+        "category": "objects"
+      },
+      {
+        "name": "coin-pile",
+        "size": "16x16",
+        "prompt": "Small pile of gold coins (Portuguese cruzados), shiny metallic gold, scattered arrangement, transparent background",
+        "category": "objects"
+      }
+    ]
+  }
+}

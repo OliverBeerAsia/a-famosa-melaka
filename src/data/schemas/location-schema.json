@@ -1,0 +1,104 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Location Definition",
+  "description": "Schema for defining locations in A Famosa: Streets of Golden Melaka",
+  "type": "object",
+  "required": ["id", "name", "zone", "mapFile"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for the location (kebab-case)"
+    },
+    "name": {
+      "type": "string",
+      "description": "Display name of the location"
+    },
+    "zone": {
+      "type": "string",
+      "description": "Zone this location belongs to"
+    },
+    "mapFile": {
+      "type": "string",
+      "description": "Path to Tiled JSON map file"
+    },
+    "description": {
+      "type": "string",
+      "description": "Atmospheric description for loading screen"
+    },
+    "projection": {
+      "type": "object",
+      "description": "Projection metadata for the location rendering target",
+      "properties": {
+        "mode": {
+          "type": "string",
+          "enum": ["isometric-2:1"]
+        },
+        "anchor": {
+          "type": "string",
+          "enum": ["bottom-center"]
+        }
+      }
+    },
+    "ambientSounds": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Ambient sound keys for this location"
+    },
+    "music": {
+      "type": "string",
+      "description": "Music track key for this location"
+    },
+    "nightMusic": {
+      "type": "string",
+      "description": "Alternative music for nighttime"
+    },
+    "spawnPoint": {
+      "type": "object",
+      "properties": {
+        "x": { "type": "number" },
+        "y": { "type": "number" }
+      },
+      "description": "Default player spawn position"
+    },
+    "transitions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "targetLocation": { "type": "string" },
+          "triggerArea": {
+            "type": "object",
+            "properties": {
+              "x": { "type": "number" },
+              "y": { "type": "number" },
+              "width": { "type": "number" },
+              "height": { "type": "number" }
+            }
+          },
+          "spawnAt": {
+            "type": "object",
+            "properties": {
+              "x": { "type": "number" },
+              "y": { "type": "number" }
+            }
+          },
+          "direction": {
+            "type": "string",
+            "enum": ["north", "south", "east", "west"]
+          }
+        },
+        "required": ["targetLocation", "triggerArea"]
+      }
+    },
+    "npcs": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "NPC IDs present at this location"
+    },
+    "worldItems": {
+      "type": "array",
+      "description": "Items that can be found at this location"
+    }
+  }
+}
+

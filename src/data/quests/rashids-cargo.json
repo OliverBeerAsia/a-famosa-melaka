@@ -1,0 +1,292 @@
+{
+  "id": "rashids-cargo",
+  "name": "Rashid's Cargo",
+  "description": "Rashid has a 'special cargo' that needs to reach a buyer without Portuguese customs noticing. A simple smuggling job - or is it?",
+  "startLocation": "waterfront",
+  "questGiver": "rashid",
+  "giver": "rashid",
+  "triggerTopic": "special-cargo",
+  "summary": "A morally ambiguous quest about smuggling. The player discovers that Rashid's cargo isn't spices but medicine from the western seas - and must decide how to proceed.",
+  "themes": ["smuggling", "morality", "colonialism", "freedom"],
+
+  "stages": [
+    {
+      "id": "start",
+      "description": "Rashid has a proposition for you.",
+      "objectives": [
+        { "type": "talk", "target": "rashid", "topic": "special-cargo", "completed": false },
+        { "type": "obtain", "item": "wrapped-bundle", "completed": false }
+      ],
+      "journalEntry": "Rashid mentioned he has some 'special cargo' that needs discreet handling.",
+      "npcDialogueOverrides": {
+        "rashid": {
+          "special-cargo": {
+          "text": "*looks around, lowers voice* My friend! I have a... business opportunity. A simple thing, really. I have cargo that must reach a buyer in the kampung. Nothing illegal! Well... not very illegal. *grins* The Portuguese customs tax everything. Sometimes goods must... avoid the tax. You help me, I pay you well. Twenty cruzados. What say you?",
+            "unlocks": ["what-cargo", "accept-job", "refuse-job"]
+          },
+          "what-cargo": {
+          "text": "*waves hand* Ah, you want details? Spices, friend. Pepper, perhaps some cinnamon. Things the Portuguese tax at criminal rates. My buyer pays fair price, I pay you, everyone happy except the Portuguese treasury. *laughs* And who weeps for their treasury?",
+            "requires": ["special-cargo"]
+          },
+          "accept-job": {
+            "text": "Excellent! I knew you were a practical soul. Here - *hands over wrapped bundle* - take this to the kampung. Find an old woman named Mak Enang near the well. Give her this, she gives you payment, you bring payment to me. Simple! Just... avoid the main streets. Guards ask questions.",
+            "requires": ["special-cargo"],
+            "givesItem": "wrapped-bundle"
+          },
+          "refuse-job": {
+            "text": "*shrugs* As you wish, friend. If you change mind, I am here. The cargo waits. But not forever - my ship sails in three days.",
+            "requires": ["special-cargo"]
+          }
+        }
+      },
+      "nextStage": "delivery"
+    },
+
+    {
+      "id": "delivery",
+      "description": "Deliver Rashid's cargo to Mak Enang in the kampung.",
+      "objectives": [
+        { "type": "location", "target": "kampung", "completed": false },
+        { "type": "talk", "target": "mak-enang", "topic": "delivery", "completed": false }
+      ],
+      "journalEntry": "I need to deliver Rashid's bundle to Mak Enang in the kampung. He suggested avoiding main streets where guards patrol.",
+      "npcDialogueOverrides": {
+        "mak-enang": {
+          "delivery": {
+            "text": "*old woman peers at you* You are from Rashid? Good, good. Give me the bundle. *takes it, weighs in hands, then unwraps corner to check* Yes, this is right. *presses coins into your hand* Tell Rashid, next month, double the order. *pauses, looks at you carefully* You do not ask what you carried?",
+            "takesItem": "wrapped-bundle",
+            "givesItem": "delivery-payment",
+            "unlocks": ["ask-contents"]
+          },
+          "ask-contents": {
+          "text": "*sad smile* You are curious? It is not spices, young one. It is medicine. Opium, yes - but also herbs that only grow in Persia. My grandson has the shaking sickness. Portuguese doctors cannot help. The remedies of the western physicians sometimes work. *holds bundle protectively* The Portuguese would confiscate this. Call it contraband. To them, it is smuggling. To me, it is my grandson's life.",
+            "requires": ["delivery"]
+          }
+        }
+      },
+      "nextStage": "return-choice"
+    },
+
+    {
+      "id": "return-choice",
+      "description": "Return to Rashid with the payment.",
+      "isBranching": true,
+      "journalEntry": "I've learned the cargo was medicine for a sick child, not just contraband spices. Now I must decide what to do with this knowledge.",
+      "availablePaths": [
+        {
+          "id": "complete-job",
+          "name": "Complete the Job",
+          "description": "Return the payment to Rashid as agreed. A deal is a deal.",
+          "nextStage": "return-payment"
+        },
+        {
+          "id": "report-smuggling",
+          "name": "Report to Authorities",
+          "description": "Report the smuggling operation to Capitão Rodrigues.",
+          "nextStage": "report-path"
+        },
+        {
+          "id": "keep-payment",
+          "name": "Keep the Payment",
+          "description": "Take the money and don't return to Rashid.",
+          "nextStage": "theft-path"
+        },
+        {
+          "id": "demand-more",
+          "name": "Demand a Larger Cut",
+          "description": "You know Rashid's secret now. Use it for leverage.",
+          "nextStage": "blackmail-path"
+        }
+      ]
+    },
+
+    {
+      "id": "return-payment",
+      "path": "complete-job",
+      "description": "Return the payment to Rashid.",
+      "objectives": [
+        { "type": "give", "target": "rashid", "item": "delivery-payment", "completed": false }
+      ],
+      "journalEntry": "I'll complete the job as agreed. Whatever the cargo was, I gave my word.",
+      "npcDialogueOverrides": {
+        "rashid": {
+          "job-complete": {
+          "text": "*counts coins, nods satisfied* Excellent! As promised - *hands over coins* - twenty cruzados. You are reliable, friend. This is rare. *studies you* You did not ask what you carried, did you? Smart. In this business, sometimes it is better not to know. *grins* If you want more work, I have more work. The dhow sails soon, but there is always another voyage.",
+            "takesItem": "delivery-payment",
+            "givesItem": "job-payment"
+          }
+        }
+      },
+      "nextStage": "complete-job-ending",
+      "consequences": {
+        "reputation": { "arab": 10 },
+        "worldChanges": ["rashid-trusts-player"]
+      }
+    },
+
+    {
+      "id": "report-path",
+      "path": "report-smuggling",
+      "description": "Report the smuggling to Capitão Rodrigues.",
+      "objectives": [
+        { "type": "talk", "target": "capitao-rodrigues", "topic": "smuggling-report", "completed": false }
+      ],
+      "journalEntry": "I should report this smuggling operation to the authorities. It's the lawful thing to do.",
+      "npcDialogueOverrides": {
+        "capitao-rodrigues": {
+          "smuggling-report": {
+          "text": "*listens intently* Smuggling through the kampung? This is useful intelligence. *pauses* You delivered the cargo before reporting? Hmm. I will not charge you - you are cooperating now. But Rashid and this woman Mak Enang... they will be questioned. *grimly* Smuggling undermines crown authority. It cannot be tolerated.",
+            "unlocks": ["report-consequences"]
+          },
+          "report-consequences": {
+            "text": "You have done your duty. Here - *hands over coins* - a reward for loyal citizens who report lawbreaking. The garrison appreciates those who put order above personal gain.",
+            "requires": ["smuggling-report"],
+            "givesItem": "informant-reward"
+          }
+        }
+      },
+      "nextStage": "report-aftermath"
+    },
+
+    {
+      "id": "report-aftermath",
+      "path": "report-smuggling",
+      "description": "Witness the consequences of your report.",
+      "objectives": [
+        { "type": "wait", "days": 1, "completed": false }
+      ],
+      "journalEntry": "The Capitão will act on my information. I should see what happens.",
+      "nextStage": "complete-report-ending",
+      "consequenceText": "Guards raid the kampung. Mak Enang is arrested, her medicine confiscated. Her grandson dies within the week. Rashid's dhow is impounded, though he himself escapes. In the market, Aminah looks at you with cold eyes. The waterfront remembers who informed.",
+      "consequences": {
+        "reputation": { "portuguese": 10, "arab": -30, "malay": -20 },
+        "worldChanges": ["rashid-fled", "mak-enang-arrested"],
+        "flags": ["informer"]
+      }
+    },
+
+    {
+      "id": "theft-path",
+      "path": "keep-payment",
+      "description": "Keep the payment for yourself.",
+      "objectives": [],
+      "journalEntry": "I could just keep this money. Rashid will be angry, but he's leaving soon anyway.",
+      "nextStage": "complete-theft-ending",
+      "consequenceText": "You keep the coins. Easy money. But word travels fast on the waterfront. Within days, every merchant on the quay knows you cheated Rashid. Your name is poison in the coffee houses. And Rashid, before he sails, leaves a message: 'Thieves find the sea unforgiving.'",
+      "consequences": {
+        "reputation": { "arab": -40 },
+        "worldChanges": ["rashid-enemy"],
+        "flags": ["cheated-rashid"]
+      }
+    },
+
+    {
+      "id": "blackmail-path",
+      "path": "demand-more",
+      "description": "Demand more money from Rashid.",
+      "objectives": [
+        { "type": "talk", "target": "rashid", "topic": "demand-more", "completed": false }
+      ],
+      "journalEntry": "Rashid's operation is worth more than twenty cruzados. I should negotiate a larger share.",
+      "npcDialogueOverrides": {
+        "rashid": {
+          "demand-more": {
+          "text": "*smile fades* Ah. So this is who you are. *quiet, dangerous* You think because you know my business, you can squeeze me? *leans close* I have sailed from Aden to Canton. I have fought pirates, bribed officials, survived storms that swallowed ships. You think you frighten me? *steps back* Take your twenty cruzados and go. If you speak of my business to anyone... *meaningful pause* ...the sea is very deep, friend. Very dark. Very forgiving of accidents.",
+            "takesItem": "delivery-payment",
+            "givesItem": "job-payment"
+          }
+        }
+      },
+      "nextStage": "complete-blackmail-ending",
+      "consequences": {
+        "reputation": { "arab": -25 },
+        "worldChanges": ["rashid-wary"],
+        "flags": ["threatened-rashid"]
+      }
+    },
+
+    {
+      "id": "complete-job-ending",
+      "path": "complete-job",
+      "description": "Quest complete - Job done.",
+      "objectives": [],
+      "isEnding": true,
+      "journalEntry": "I completed the smuggling job for Rashid. Whatever he was moving - medicine, it turns out, for a sick child - it reached its destination. Sometimes the law and the right thing are not the same.",
+      "reward": {
+        "money": 20,
+        "reputation": { "arab": 10 }
+      },
+      "endingType": "job-complete"
+    },
+
+    {
+      "id": "complete-report-ending",
+      "path": "report-smuggling",
+      "description": "Quest complete - Smugglers reported.",
+      "objectives": [],
+      "isEnding": true,
+      "journalEntry": "I reported Rashid's smuggling operation. The law was upheld. A child died without his medicine, and the kampung sees me as an informer. Justice? Order? I'm no longer sure what I served.",
+      "reward": {
+        "money": 15,
+        "reputation": { "portuguese": 10, "arab": -30, "malay": -20 }
+      },
+      "endingType": "reported"
+    },
+
+    {
+      "id": "complete-theft-ending",
+      "path": "keep-payment",
+      "description": "Quest complete - Payment stolen.",
+      "objectives": [],
+      "isEnding": true,
+      "journalEntry": "I kept Rashid's money and betrayed his trust. The maritime trading circle will not forget. Perhaps I gained thirty silver pieces. What did I lose?",
+      "reward": {
+        "money": 30,
+        "reputation": { "arab": -40 }
+      },
+      "endingType": "theft"
+    },
+
+    {
+      "id": "complete-blackmail-ending",
+      "path": "demand-more",
+      "description": "Quest complete - Blackmail failed.",
+      "objectives": [],
+      "isEnding": true,
+      "journalEntry": "I tried to squeeze Rashid for more money. He paid what he owed - no more - and made clear that threatening him was unwise. I have made an enemy of a man who seems quite capable of making enemies disappear.",
+      "reward": {
+        "money": 20,
+        "reputation": { "arab": -25 }
+      },
+      "endingType": "blackmail"
+    }
+  ],
+
+  "items": {
+    "wrapped-bundle": {
+      "id": "wrapped-bundle",
+      "name": "Wrapped Bundle",
+      "description": "A tightly wrapped bundle from Rashid. It's heavier than it looks and smells faintly of unfamiliar spices.",
+      "questItem": true
+    },
+    "delivery-payment": {
+      "id": "delivery-payment",
+      "name": "Mak Enang's Payment",
+      "description": "Thirty cruzados in worn coins. Payment for Rashid's cargo.",
+      "questItem": true,
+      "value": 30
+    },
+    "job-payment": {
+      "id": "job-payment",
+      "name": "Rashid's Payment",
+      "description": "Twenty cruzados - your cut of the smuggling job.",
+      "value": 20
+    },
+    "informant-reward": {
+      "id": "informant-reward",
+      "name": "Informant's Reward",
+      "description": "Fifteen cruzados from the garrison treasury. Blood money, some would say.",
+      "value": 15
+    }
+  }
+}

@@ -1,0 +1,26 @@
+Create a pixel art sprite in the style of classic 16-bit RPGs like Ultima VII and Ultima VIII.
+
+STYLE REQUIREMENTS:
+- Pure pixel art with clean, crisp edges
+- NO anti-aliasing or smoothing
+- Limited color palette (max 32 colors)
+- Warm tropical color scheme: terracotta, gold, cream, forest green, ocean blue, deep brown
+- Subtle dithering for shading gradients
+- Portuguese colonial Melaka setting (1580)
+- Southeast Asian tropical atmosphere
+
+
+SPRITE SPECIFICATIONS:
+- Dimensions: 24x32 pixels
+- Name: aminah
+- Category: characters
+
+DESCRIPTION:
+Full body character sprite facing forward, Malay woman market vendor, purple/pink tudung (headscarf), gold necklace, colorful silk baju kurung (traditional blouse), blue batik sarong with geometric patterns, warm friendly smile, transparent background
+
+OUTPUT REQUIREMENTS:
+- Exact pixel dimensions as specified
+- Transparent background (PNG with alpha)
+- No text, labels, or watermarks
+- No border or frame around sprite
+- Center the sprite in the canvas

@@ -1,0 +1,48 @@
+{
+  "world-items": {
+    "rua-direita": [
+      {
+        "id": "coin-pouch-1",
+        "itemId": "coin-pouch",
+        "x": 250,
+        "y": 200,
+        "description": "A leather pouch containing 50 cruzados."
+      },
+      {
+        "id": "spice-sample-1",
+        "itemId": "spice-sample",
+        "x": 180,
+        "y": 150,
+        "description": "A small sample of exotic spices from the Moluccas."
+      }
+    ],
+    "waterfront": [
+      {
+        "id": "coin-pouch-2",
+        "itemId": "coin-pouch",
+        "x": 200,
+        "y": 250,
+        "description": "A leather pouch containing 50 cruzados."
+      }
+    ],
+    "st-pauls-church": [
+      {
+        "id": "rosary-1",
+        "itemId": "rosary",
+        "x": 180,
+        "y": 160,
+        "description": "Blessed rosary beads left at the altar."
+      }
+    ],
+    "a-famosa-gate": [],
+    "kampung": [
+      {
+        "id": "herbs-1",
+        "itemId": "medicinal-herbs",
+        "x": 150,
+        "y": 180,
+        "description": "Local Malay medicinal herbs."
+      }
+    ]
+  }
+}

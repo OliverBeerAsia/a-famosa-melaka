@@ -1,0 +1,109 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Base typography */
+@layer base {
+  body {
+    @apply font-crimson text-parchment-300;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-cinzel;
+  }
+}
+
+/* Game UI Components */
+@layer components {
+  /* Parchment panel style */
+  .panel-parchment {
+    @apply bg-parchment-200 border-2 border-gold rounded shadow-parchment;
+  }
+
+  /* Leather panel style */
+  .panel-leather {
+    @apply bg-leather-200 border-2 border-gold rounded shadow-parchment;
+  }
+
+  /* Gold text */
+  .text-golden {
+    @apply text-gold font-cinzel;
+  }
+
+  /* Wax seal */
+  .wax-seal {
+    @apply w-14 h-14 rounded-full bg-crimson border-2 border-crimson-dark flex items-center justify-center;
+    @apply font-cinzel text-gold-light text-xl font-bold;
+  }
+
+  /* Topic button */
+  .topic-btn {
+    @apply px-3 py-1 bg-parchment-300/50 hover:bg-parchment-400/50 rounded;
+    @apply text-leather-200 hover:text-crimson transition-colors cursor-pointer;
+  }
+
+  /* Inventory slot */
+  .inv-slot {
+    @apply w-12 h-12 bg-leather-300 border-2 border-leather-50 rounded;
+    @apply flex items-center justify-center;
+  }
+
+  .inv-slot-selected {
+    @apply ring-2 ring-gold ring-offset-1 ring-offset-leather-200;
+  }
+
+  /* Journal tabs */
+  .journal-tab {
+    @apply px-4 py-2 font-cinzel cursor-pointer transition-colors;
+  }
+
+  .journal-tab-active {
+    @apply text-crimson font-bold;
+  }
+
+  .journal-tab-inactive {
+    @apply text-sepia hover:text-leather-200;
+  }
+
+  /* Menu button */
+  .menu-btn {
+    @apply px-6 py-3 bg-leather-200/80 hover:bg-leather-100 border border-gold/50 hover:border-gold;
+    @apply font-cinzel text-parchment-200 hover:text-gold transition-all cursor-pointer;
+    @apply shadow-md hover:shadow-gold-glow;
+  }
+
+  /* Volume slider */
+  .volume-slider {
+    @apply w-full h-2 bg-leather-200 rounded-full appearance-none cursor-pointer;
+  }
+
+  .volume-slider::-webkit-slider-thumb {
+    @apply appearance-none w-4 h-4 bg-gold rounded-full cursor-pointer;
+    @apply hover:bg-gold-light transition-colors;
+  }
+}
+
+/* Typewriter effect cursor */
+.typewriter-cursor::after {
+  content: '▌';
+  @apply text-leather-200 animate-typing;
+}
+
+/* Fade transitions */
+.fade-enter {
+  opacity: 0;
+}
+
+.fade-enter-active {
+  opacity: 1;
+  transition: opacity 200ms ease-out;
+}
+
+.fade-exit {
+  opacity: 1;
+}
+
+.fade-exit-active {
+  opacity: 0;
+  transition: opacity 150ms ease-in;
+}

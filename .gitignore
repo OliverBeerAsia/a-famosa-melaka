@@ -1,0 +1,15 @@
+node_modules/
+dist/
+build/
+release/
+.DS_Store
+**/.DS_Store
+*.log
+.vscode/
+.idea/
+*.bak
+*~
+.env
+.env.local
+.playwright-cli/
+*.code-workspace

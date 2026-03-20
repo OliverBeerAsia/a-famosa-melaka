@@ -1,0 +1,108 @@
+# Changelog
+
+All notable changes to A Famosa: Streets of Golden Melaka.
+
+## [0.4.0] - 2026-03-20
+
+### Art Elevation Pass: Ultima 8 Quality
+
+A focused art elevation pass across the entire procedural graphics pipeline, touching every sprite category with higher fidelity rendering and historically accurate content.
+
+#### Phase 1: Character Sprite Enhancement
+- **Dithered shading** on all 10 characters — smooth palette gradients replacing hard shade steps via `setDitheredPixel()` using Bayer matrix dithering
+- **Shadow outlines** (right/bottom edge) and **ground shadow ellipses** on every character for depth and ground contact
+- **Specular highlights** on metal (Capitao's armor), gold (buttons, buckles, chains), and silk (Chen Wei, Aminah garments)
+- **Hair texture** with seeded noise for strand detail, plus highlight streaks for volume
+- **Facial details**: Fernao's crow's feet, Capitao's diagonal scar, Mak Enang's forehead wrinkles, Alvares' sneer lines
+- **Headscarf fringe** on Aminah, Siti, and Mak Enang with alternating dark/light edge pixels
+- **Improved profile views**: 72% head compression (up from 65%), ear bump, 2px nose protrusion with bridge shading, jawline shadow
+
+#### Phase 2: Tile Enrichment
+- **Tile variant system** with `drawWithVariant()` weathering post-processor (stain/crack darkening, moss tinting)
+- **12 new tile variants** (2 each for grass, fortress-stone, whitewash-wall, dirt-path, dock-wood, church-floor)
+- **8 new edge transition tiles** (grass-to-sand, dirt-to-grass, cobblestone-to-water, fortress-to-cobblestone, H+V each)
+- **Enhanced water animation**: caustic light patterns with `specular[2]` pixels, depth gradient, expanded to 4-frame cycle
+- **Isometric perspective correction**: top-half brightened 5%, bottom-half darkened 8% for 3/4 view lighting
+
+#### Phase 3: Object Detail Pass
+- **Ambient occlusion system** (`addAmbientOcclusion()`) replacing flat shadows on all objects with graded elliptical shadows
+- **Detail density increase**: wood grain lines, stone pitting (~5%), metal rivet dots on existing sprites
+- **15 new object sprites**: fruit basket, coconut water stand, bench, wine jug, sugar cone, handcart, pelourinho, candelabra, iron fence, scroll rack, fish basket, herb drying rack, rice pot, wayang kulit puppet, spice pile pepper
+
+#### Phase 4: Historical Accuracy Corrections
+- **Chen Wei costume fix**: Replaced Qing-era queue/changshan with Ming-era sifangjin cap, topknot, and cross-collar zhiduo (historically correct for 1580)
+- **4 new palette entries**: indigo (batik/Indian textiles), turmeric yellow (ceremonial), lacquer red (Chinese temple), Indian skin tones (Tamil/Dravidian)
+- **Indian merchant crowd sprite** (`drawCrowdIndian`): Dravidian skin, jama coat, pagri turban, dhoti — replacing the incorrect Arab sprite reuse
+- **5 new lore objects**: pelourinho (Portuguese pillory), black pepper pile, wayang kulit puppet, surau prayer niche, carrack rigging detail
+
+#### Phase 5: Environment Object Placement System
+- **`environment-objects.json`**: Decorative object cluster definitions for all 5 locations (17 clusters total)
+- **`EnvironmentObjectSystem.ts`**: New system that renders decorative objects with depth sorting, interactive examine hotspots, and particle emitters (smoke, steam, dust)
+- **Animated objects**: Torch flicker, seagull flight loops, flag wave, palm frond sway, awning flutter, smoke columns
+- **Quality-tier aware**: Low quality skips decorative objects entirely for performance
+- **GameScene integration**: Full lifecycle management (create, update, time-of-day, cleanup)
+
+### Changed
+- `generate-all.cjs` now generates 48 tiles (+21 new), 61 objects (+15 new), 12 characters (+3), 5 crowd sprites (+1)
+- All existing character sprite sheets regenerated with enhanced dithering and shadow effects
+- `BootScene.ts` now loads Indian crowd sprite alongside existing crowd types
+
+---
+
+## [Unreleased]
+
+### Added
+- **Cinematic Visual Pass** (2026-02-18): Added location-aware cinematic rendering layers for stronger atmosphere:
+  - Color grading overlays tuned by dawn/day/dusk/night
+  - Film grain overlay with animated drift
+  - Data-driven sun shafts and canopy shadows per location
+  - Improved objective marker readability with diegetic light beam
+  - Enhanced world item pickup glows
+
+### Changed
+- **Visual Quality Profiles** now scale cinematic effects (grain, shafts, color grade strength, canopy density) in `high`, `balanced`, and `low` modes.
+- **Character Lighting & Shadows** now react to time of day with directional cast shadows and warm/cool sprite tinting for stronger scene cohesion.
+- Pause menu now displays the active resolved runtime quality profile when adaptive mode is enabled.
+
+### Fixed
+- **Character Scaling** (2026-01-27): Fixed characters appearing extremely small relative to scene backgrounds. Characters are now scaled 3× to match the 960×540 resolution environment. See PROJECT_STATUS.md for technical details.
+
+### Changed
+- Player movement speed increased from 100 to 180 pixels/second (feels more natural with larger characters)
+- Interaction radius increased from 48 to 100 pixels (accounts for scaled character size)
+- NPC indicator positions adjusted for scaled character height
+
+### Added
+- `CHARACTER_SCALE` constant in `src/phaser/game.ts` for maintainable sprite scaling
+- Documentation in CLAUDE.md about the resolution/scaling architecture
+
+---
+
+## [0.2.0] - 2026-01-27
+
+### Added
+- React + Phaser hybrid architecture
+- Vite build system replacing Webpack
+- Full TypeScript migration
+- Zustand state management
+- Tailwind CSS styling
+- Save/load system with 4 slots
+- Credits screen
+- Settings menu with volume controls
+
+### Changed
+- UI migrated from Phaser DOM to React components
+- Event bridge for Phaser-React communication
+
+---
+
+## [0.1.0] - 2026-01-26
+
+### Added
+- Initial Phaser 3 implementation
+- 5 location scenes with hand-painted backgrounds
+- 6 NPCs with comprehensive dialogue systems
+- 3 fully scripted quests with branching paths
+- Day/night cycle with atmospheric effects
+- Inventory and journal systems
+- Time-based NPC schedules
