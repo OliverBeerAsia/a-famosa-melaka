@@ -2,9 +2,13 @@
 
 const fs = require('fs');
 const path = require('path');
+const { createCanvas, loadImage } = require('canvas');
+const { getAllPaletteColors } = require('./ultima8-graphics/palette.cjs');
 
 const repoRoot = path.join(__dirname, '..');
 const specPath = path.join(repoRoot, 'docs', 'art-bible', 'gameplay-asset-spec.json');
+const runtimeManifestPath = path.join(repoRoot, 'src', 'data', 'runtime-asset-manifest.json');
+const environmentDataPath = path.join(repoRoot, 'src', 'data', 'environment-objects.json');
 
 function parseArgs(argv) {
   const args = {
@@ -34,18 +38,6 @@ function normalizeRelPath(filePath) {
   return path.relative(repoRoot, filePath).split(path.sep).join('/');
 }
 
-function readPngSize(filePath) {
-  const buffer = fs.readFileSync(filePath);
-  if (buffer.length < 24 || buffer.toString('ascii', 1, 4) !== 'PNG') {
-    throw new Error(`Unsupported PNG: ${filePath}`);
-  }
-
-  return {
-    width: buffer.readUInt32BE(16),
-    height: buffer.readUInt32BE(20),
-  };
-}
-
 function walkPngs(rootDir) {
   const files = [];
 
@@ -67,6 +59,19 @@ function walkPngs(rootDir) {
 
   walk(rootDir);
   return files;
+}
+
+async function inspectPng(filePath) {
+  const image = await loadImage(filePath);
+  const canvas = createCanvas(image.width, image.height);
+  const ctx = canvas.getContext('2d');
+  ctx.imageSmoothingEnabled = false;
+  ctx.drawImage(image, 0, 0);
+  return {
+    width: image.width,
+    height: image.height,
+    imageData: ctx.getImageData(0, 0, image.width, image.height),
+  };
 }
 
 function escapeCell(value) {
@@ -96,7 +101,7 @@ function getSpecLists(spec) {
     cinematicRules: cinematic.rules || spec.cinematicRules || {},
     gameplayPatterns: gameplay.filenamePatterns || {},
     cinematicPatterns: cinematic.filenamePatterns || {},
-    sheetFrames: spec.modules?.characterSheetFrame || [],
+    namedCharacterSheet: spec.modules?.namedCharacterSheet?.[0] || null,
     crowdSilhouettes: spec.modules?.crowdSilhouette || [],
     sceneBackdrops: spec.modules?.sceneBackdrop || [],
   };
@@ -125,7 +130,190 @@ function matchesAnyPattern(fileName, patterns) {
     .some((pattern) => new RegExp(pattern).test(fileName));
 }
 
-function validate(spec) {
+function rgbToHex(r, g, b) {
+  return `#${[r, g, b].map((value) => value.toString(16).padStart(2, '0')).join('').toUpperCase()}`;
+}
+
+function analyzeGameplayPixels(imageData, paletteSet, allowPartialAlpha) {
+  const { data } = imageData;
+  let nonPalettePixels = 0;
+  let partialAlphaPixels = 0;
+
+  for (let index = 0; index < data.length; index += 4) {
+    const alpha = data[index + 3];
+    if (alpha === 0) continue;
+
+    if (alpha !== 255) {
+      partialAlphaPixels += 1;
+      if (allowPartialAlpha) continue;
+    }
+
+    const hex = rgbToHex(data[index], data[index + 1], data[index + 2]);
+    if (!paletteSet.has(hex)) {
+      nonPalettePixels += 1;
+    }
+  }
+
+  return { nonPalettePixels, partialAlphaPixels };
+}
+
+function fileExists(relPath) {
+  return fs.existsSync(path.join(repoRoot, relPath));
+}
+
+function validateRuntimeManifest(manifest, spec, findings) {
+  const namedSheet = spec.modules?.namedCharacterSheet?.[0];
+  const manifestSheet = manifest.characters?.sheet || {};
+
+  if (
+    namedSheet
+    && (
+      namedSheet.frameWidth !== manifestSheet.frameWidth
+      || namedSheet.frameHeight !== manifestSheet.frameHeight
+      || namedSheet.columns !== manifestSheet.columns
+      || namedSheet.rows !== manifestSheet.rows
+    )
+  ) {
+    addFinding(
+      findings,
+      'error',
+      normalizeRelPath(runtimeManifestPath),
+      'runtime manifest character sheet contract does not match the art spec',
+      'Keep the live runtime manifest and gameplay-asset-spec.json in sync.',
+      'runtime'
+    );
+  }
+
+  (manifest.characters?.named || []).forEach((id) => {
+    const relPath = `assets/sprites/characters/${id}-sheet.png`;
+    if (!fileExists(relPath)) {
+      addFinding(
+        findings,
+        'error',
+        relPath,
+        'runtime character sheet is missing',
+        'Generate the shipping sheet before promotion.',
+        'runtime'
+      );
+    }
+  });
+
+  (manifest.crowd?.sprites || []).forEach((id) => {
+    const relPath = `assets/sprites/crowd/${id}.png`;
+    if (!fileExists(relPath)) {
+      addFinding(
+        findings,
+        'error',
+        relPath,
+        'runtime crowd sprite is missing',
+        'Generate the crowd silhouette before promotion.',
+        'runtime'
+      );
+    }
+  });
+
+  (manifest.tiles?.base || []).forEach((id) => {
+    const relPath = `assets/sprites/tiles/${id}.png`;
+    if (!fileExists(relPath)) {
+      addFinding(findings, 'error', relPath, 'runtime tile is missing', 'Restore the tile or remove it from the runtime manifest.', 'runtime');
+    }
+  });
+
+  (manifest.tiles?.isometric || []).forEach((id) => {
+    const relPath = `assets/sprites/tiles/iso/${id}-iso.png`;
+    if (!fileExists(relPath)) {
+      addFinding(findings, 'error', relPath, 'runtime isometric tile is missing', 'Regenerate the iso tile before promotion.', 'runtime');
+    }
+  });
+
+  (manifest.objects?.static || []).forEach((id) => {
+    const relPath = `assets/sprites/objects/${id}.png`;
+    if (!fileExists(relPath)) {
+      addFinding(findings, 'error', relPath, 'runtime object sprite is missing', 'Restore the object sprite or remove it from the runtime manifest.', 'runtime');
+    }
+  });
+
+  (manifest.maps?.base || []).forEach((id) => {
+    const relPath = `assets/maps/${id}.json`;
+    if (!fileExists(relPath)) {
+      addFinding(findings, 'error', relPath, 'runtime map JSON is missing', 'Restore the map or remove it from the runtime manifest.', 'runtime');
+    }
+  });
+
+  (manifest.maps?.isometric || []).forEach((id) => {
+    const relPath = `assets/maps/${id}-iso.json`;
+    if (!fileExists(relPath)) {
+      addFinding(findings, 'error', relPath, 'runtime isometric map JSON is missing', 'Restore the map or remove it from the runtime manifest.', 'runtime');
+    }
+  });
+}
+
+function validateMapParity(manifest, findings) {
+  const validObjectNames = new Set(manifest.objects?.static || []);
+  const validLayerNames = new Set(['Objects', 'Props', 'Overhang', 'Canopy', 'Highlights']);
+
+  (manifest.maps?.isometric || []).forEach((mapId) => {
+    const relPath = `assets/maps/${mapId}-iso.json`;
+    const absolutePath = path.join(repoRoot, relPath);
+    if (!fs.existsSync(absolutePath)) return;
+
+    const map = JSON.parse(fs.readFileSync(absolutePath, 'utf8'));
+    (map.layers || [])
+      .filter((layer) => layer.type === 'objectgroup')
+      .forEach((layer) => {
+        if (!validLayerNames.has(layer.name)) {
+          addFinding(
+            findings,
+            'warn',
+            relPath,
+            `object layer "${layer.name}" is outside the supported runtime layer contract`,
+            'Use Objects, Props, Overhang, Canopy, or Highlights for live rendering.',
+            'runtime'
+          );
+        }
+
+        (layer.objects || []).forEach((objectDef) => {
+          if (!objectDef.name) return;
+          if (!validObjectNames.has(objectDef.name)) {
+            addFinding(
+              findings,
+              'error',
+              relPath,
+              `map object "${objectDef.name}" has no runtime-loaded sprite`,
+              'Add the object sprite to the runtime manifest or rename the map object to a loaded texture key.',
+              'runtime'
+            );
+          }
+        });
+      });
+  });
+}
+
+function validateEnvironmentObjectParity(manifest, findings) {
+  const validObjectNames = new Set(manifest.objects?.static || []);
+  const environmentData = JSON.parse(fs.readFileSync(environmentDataPath, 'utf8'));
+  const locations = environmentData.locations || {};
+
+  Object.entries(locations).forEach(([locationId, locationDef]) => {
+    (locationDef.clusters || []).forEach((cluster) => {
+      (cluster.objects || []).forEach((objectDef) => {
+        if (!validObjectNames.has(objectDef.sprite)) {
+          addFinding(
+            findings,
+            'error',
+            normalizeRelPath(environmentDataPath),
+            `environment object "${objectDef.sprite}" in ${locationId}/${cluster.id} is not in the runtime manifest`,
+            'Only reference object textures that the live loader brings into the isometric runtime.',
+            'runtime'
+          );
+        }
+      });
+    });
+  });
+}
+
+async function validate(spec) {
+  const runtimeManifest = JSON.parse(fs.readFileSync(runtimeManifestPath, 'utf8'));
   const {
     gameplayDirs,
     cinematicDirs,
@@ -134,7 +322,7 @@ function validate(spec) {
     cinematicRules,
     gameplayPatterns,
     cinematicPatterns,
-    sheetFrames,
+    namedCharacterSheet,
     crowdSilhouettes,
     sceneBackdrops,
   } = getSpecLists(spec);
@@ -145,11 +333,13 @@ function validate(spec) {
     cinematic: 0,
     concept: 0,
     unclassified: 0,
+    runtime: 0,
   };
 
   const pngFiles = walkPngs(path.join(repoRoot, 'assets'));
+  const paletteSet = new Set(getAllPaletteColors().map((color) => color.hex.toUpperCase()));
 
-  pngFiles.forEach((filePath) => {
+  for (const filePath of pngFiles) {
     const relPath = normalizeRelPath(filePath);
     const assetClass = classifyAsset(relPath, gameplayDirs, cinematicDirs, conceptDirs);
     const fileName = path.basename(filePath);
@@ -158,7 +348,8 @@ function validate(spec) {
     counts[assetClass] = (counts[assetClass] || 0) + 1;
 
     try {
-      const size = readPngSize(filePath);
+      const inspected = await inspectPng(filePath);
+      const { width, height, imageData } = inspected;
 
       if (assetClass === 'unclassified') {
         addFinding(
@@ -169,70 +360,99 @@ function validate(spec) {
           'Move it into a shipping class or mark it as staging-only reference art.',
           assetClass
         );
-        return;
+        continue;
       }
 
       if (assetClass === 'gameplay' && parentDir === 'assets/sprites/characters') {
         if (!fileName.endsWith('-sheet.png')) {
           addFinding(
             findings,
-            'warn',
+            'error',
             relPath,
-            `legacy standalone character sprite (${size.width}x${size.height})`,
-            'Promote it to a sheet or move it out of gameplay shipping paths.',
+            `forbidden standalone gameplay character sprite (${width}x${height})`,
+            'Move standalone sprites out of shipping gameplay paths or regenerate them as sheets only.',
             assetClass
           );
-          return;
+          continue;
         }
 
-        const matchingFrame = sheetFrames.find((frame) => size.width % frame.width === 0 && size.height % frame.height === 0);
-        if (!matchingFrame) {
+        if (namedCharacterSheet && (width !== namedCharacterSheet.width || height !== namedCharacterSheet.height)) {
           addFinding(
             findings,
-            'warn',
+            'error',
             relPath,
-            `sheet size ${size.width}x${size.height} does not divide cleanly into an approved character frame`,
-            'Rebuild the sheet around 16x32 or 24x48 frames and keep the sheet grid consistent.',
+            `named character sheet is ${width}x${height}, expected ${namedCharacterSheet.width}x${namedCharacterSheet.height}`,
+            'Regenerate the sheet with the approved 4x6 live runtime contract.',
             assetClass
           );
-        } else {
-          const columns = size.width / matchingFrame.width;
-          const rows = size.height / matchingFrame.height;
-          if (columns !== 4 || rows !== 4) {
-            addFinding(
-              findings,
-              'warn',
-              relPath,
-              `character sheet grid is ${columns}x${rows}, expected 4x4`,
-              'Keep the frame grid stable so import, collision, and animation timing stay predictable.',
-              assetClass
-            );
-          }
         }
-      }
 
-      if (assetClass === 'gameplay' && (parentDir === 'assets/sprites/tiles' || parentDir === 'assets/sprites/objects' || parentDir === 'assets/sprites/particles')) {
-        if (size.width > gameplayRules.maxSourceDimension || size.height > gameplayRules.maxSourceDimension) {
+        if (!matchesAnyPattern(fileName, { characterSheet: gameplayPatterns.characterSheet })) {
           addFinding(
             findings,
-            'warn',
+            'error',
             relPath,
-            `source art ${size.width}x${size.height} exceeds gameplay max ${gameplayRules.maxSourceDimension}px`,
-            'Downscale, split, or reclassify the asset before promotion.',
+            'character sheet filename does not match the gameplay naming pattern',
+            'Use <name>-sheet.png for shipping character sheets.',
             assetClass
           );
         }
       }
 
       if (assetClass === 'gameplay' && parentDir === 'assets/sprites/crowd') {
-        const crowdMatch = crowdSilhouettes.find((frame) => frame.width === size.width && frame.height === size.height);
+        const crowdMatch = crowdSilhouettes.find((frame) => frame.width === width && frame.height === height);
         if (!crowdMatch) {
+          addFinding(
+            findings,
+            'error',
+            relPath,
+            `crowd silhouette ${width}x${height} does not match the spec`,
+            'Keep crowd silhouettes at 8x16 so they remain cheap and readable.',
+            assetClass
+          );
+        }
+      }
+
+      if (assetClass === 'gameplay' && (
+        parentDir === 'assets/sprites/tiles'
+        || parentDir === 'assets/sprites/objects'
+        || parentDir === 'assets/sprites/particles'
+      )) {
+        if (width > gameplayRules.maxSourceDimension || height > gameplayRules.maxSourceDimension) {
           addFinding(
             findings,
             'warn',
             relPath,
-            `crowd silhouette ${size.width}x${size.height} does not match the spec`,
-            'Keep crowd silhouettes at 8x16 so they stay readable as low-cost background support.',
+            `source art ${width}x${height} exceeds gameplay max ${gameplayRules.maxSourceDimension}px`,
+            'Downscale, split, or reclassify the asset before promotion.',
+            assetClass
+          );
+        }
+      }
+
+      if (assetClass === 'gameplay') {
+        const allowPartialAlpha = parentDir === 'assets/sprites/particles'
+          || (parentDir === 'assets/sprites/objects' && fileName.endsWith('-sheet.png'));
+        const { nonPalettePixels, partialAlphaPixels } = analyzeGameplayPixels(imageData, paletteSet, allowPartialAlpha);
+
+        if (nonPalettePixels > 0) {
+          addFinding(
+            findings,
+            'error',
+            relPath,
+            `${nonPalettePixels} opaque pixels fall outside the approved indexed ramp palette`,
+            'Quantize the gameplay art back to the shipping palette canon.',
+            assetClass
+          );
+        }
+
+        if (!allowPartialAlpha && partialAlphaPixels > 0) {
+          addFinding(
+            findings,
+            'error',
+            relPath,
+            `${partialAlphaPixels} gameplay pixels use partial alpha`,
+            'Gameplay pixel art should use clean opaque edges; move soft transparency into particles or animated FX sheets only.',
             assetClass
           );
         }
@@ -240,12 +460,12 @@ function validate(spec) {
 
       if (assetClass === 'cinematic' && parentDir === 'assets/scenes') {
         const sceneRule = cinematicRules.sceneSize || sceneBackdrops[0];
-        if (sceneRule && (size.width !== sceneRule.width || size.height !== sceneRule.height)) {
+        if (sceneRule && (width !== sceneRule.width || height !== sceneRule.height)) {
           addFinding(
             findings,
             'warn',
             relPath,
-            `scene backdrop is ${size.width}x${size.height}, expected ${sceneRule.width}x${sceneRule.height}`,
+            `scene backdrop is ${width}x${height}, expected ${sceneRule.width}x${sceneRule.height}`,
             'Keep interstitials locked to the approved 16:9 target so they do not need special-case cropping.',
             assetClass
           );
@@ -264,12 +484,16 @@ function validate(spec) {
       }
 
       if (assetClass === 'cinematic' && parentDir === 'assets/sprites/portraits') {
-        if (size.width !== size.height || size.width < cinematicRules.portraitMinSize.width || size.height < cinematicRules.portraitMinSize.height) {
+        if (
+          width !== height
+          || width < cinematicRules.portraitMinSize.width
+          || height < cinematicRules.portraitMinSize.height
+        ) {
           addFinding(
             findings,
             'warn',
             relPath,
-            `portrait is ${size.width}x${size.height} but must be square and at least ${cinematicRules.portraitMinSize.width}x${cinematicRules.portraitMinSize.height}`,
+            `portrait is ${width}x${height} but must be square and at least ${cinematicRules.portraitMinSize.width}x${cinematicRules.portraitMinSize.height}`,
             'Keep portraits square so they crop cleanly in dialogue and codex layouts.',
             assetClass
           );
@@ -286,19 +510,6 @@ function validate(spec) {
           );
         }
       }
-
-      if (assetClass === 'gameplay' && parentDir === 'assets/sprites/characters') {
-        if (!matchesAnyPattern(fileName, { characterSheet: gameplayPatterns.characterSheet })) {
-          addFinding(
-            findings,
-            'warn',
-            relPath,
-            'character sheet filename does not match the gameplay naming pattern',
-            'Use <name>-sheet.png for shipping character sheets.',
-            assetClass
-          );
-        }
-      }
     } catch (error) {
       addFinding(
         findings,
@@ -309,7 +520,11 @@ function validate(spec) {
         assetClass
       );
     }
-  });
+  }
+
+  validateRuntimeManifest(runtimeManifest, spec, findings);
+  validateMapParity(runtimeManifest, findings);
+  validateEnvironmentObjectParity(runtimeManifest, findings);
 
   return {
     spec,
@@ -368,7 +583,7 @@ function renderMarkdownReport(result) {
   return `${lines.join('\n')}\n`;
 }
 
-function main() {
+async function main() {
   const args = parseArgs(process.argv.slice(2));
 
   if (args.help) {
@@ -378,7 +593,7 @@ function main() {
   }
 
   const spec = JSON.parse(fs.readFileSync(specPath, 'utf8'));
-  const result = validate(spec);
+  const result = await validate(spec);
   const findings = result.findings;
   const reportPath = args.reportPath;
   const hasErrors = findings.some((finding) => finding.severity === 'error');
@@ -392,13 +607,13 @@ function main() {
   if (findings.length === 0) {
     console.log('No non-compliant art assets found.');
   } else {
-    findings.slice(0, 50).forEach((finding) => {
+    findings.slice(0, 80).forEach((finding) => {
       const hint = finding.hint ? ` | ${finding.hint}` : '';
       console.log(`[${finding.severity}] ${finding.assetClass} ${finding.file} - ${finding.issue}${hint}`);
     });
 
-    if (findings.length > 50) {
-      console.log(`... ${findings.length - 50} additional findings omitted`);
+    if (findings.length > 80) {
+      console.log(`... ${findings.length - 80} additional findings omitted`);
     }
   }
 
@@ -415,4 +630,7 @@ function main() {
   }
 }
 
-main();
+main().catch((error) => {
+  console.error(error);
+  process.exit(1);
+});

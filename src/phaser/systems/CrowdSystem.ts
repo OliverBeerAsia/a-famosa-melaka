@@ -49,14 +49,19 @@ interface CrowdMember {
 function getSpriteKey(typeName: string): string {
   switch (typeName) {
     case 'portuguese_merchant':
-    case 'portuguese_soldier':
-    case 'dock_worker':
-    case 'priest':
       return 'crowd-portuguese';
+    case 'portuguese_soldier':
+      return 'crowd-portuguese-guard';
+    case 'dock_worker':
+      return 'crowd-portuguese-worker';
+    case 'priest':
+      return 'crowd-portuguese-priest';
     case 'malay_local':
-    case 'malay_woman':
-    case 'child':
       return 'crowd-malay';
+    case 'malay_woman':
+      return 'crowd-malay-woman';
+    case 'child':
+      return 'crowd-malay-child';
     case 'chinese_merchant':
       return 'crowd-chinese';
     case 'arab_trader':
@@ -76,7 +81,7 @@ const CROWD_TYPES: Record<string, CrowdTypeConfig> = {
     locations: ['rua-direita', 'waterfront', 'a-famosa-gate'],
   },
   portuguese_soldier: {
-    spriteKey: 'crowd-portuguese',
+    spriteKey: 'crowd-portuguese-guard',
     speed: 105,  // 35 * 3
     locations: ['a-famosa-gate', 'rua-direita'],
   },
@@ -86,7 +91,7 @@ const CROWD_TYPES: Record<string, CrowdTypeConfig> = {
     locations: ['rua-direita', 'kampung', 'waterfront'],
   },
   malay_woman: {
-    spriteKey: 'crowd-malay',
+    spriteKey: 'crowd-malay-woman',
     speed: 75,   // 25 * 3
     locations: ['rua-direita', 'kampung'],
   },
@@ -106,17 +111,17 @@ const CROWD_TYPES: Record<string, CrowdTypeConfig> = {
     locations: ['rua-direita', 'waterfront'],
   },
   dock_worker: {
-    spriteKey: 'crowd-portuguese',
+    spriteKey: 'crowd-portuguese-worker',
     speed: 105,
     locations: ['waterfront'],
   },
   priest: {
-    spriteKey: 'crowd-portuguese',
+    spriteKey: 'crowd-portuguese-priest',
     speed: 60,   // 20 * 3
     locations: ['st-pauls-church', 'rua-direita'],
   },
   child: {
-    spriteKey: 'crowd-malay',
+    spriteKey: 'crowd-malay-child',
     speed: 135,  // 45 * 3
     locations: ['kampung', 'rua-direita'],
   },

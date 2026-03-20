@@ -2,6 +2,38 @@
 
 All notable changes to A Famosa: Streets of Golden Melaka.
 
+## [0.5.0] - 2026-03-20
+
+### Gameplay Art Runtime Contract
+
+This release standardizes the live gameplay-art pipeline around one shipping contract for the TypeScript Phaser runtime and removes the legacy mismatch between generated assets, runtime loading, and documentation.
+
+### Added
+- `src/data/runtime-asset-manifest.json` as the shipping gameplay asset source of truth for named characters, crowd sprites, maps, tiles, and prop sheets
+- Dedicated `8×16` crowd role silhouettes for Portuguese guard/worker/priest and Malay woman/child variants
+- Manifest-aware art validation for palette compliance, runtime reachability, map object parity, and forbidden legacy gameplay sprites
+
+### Changed
+- Named gameplay characters now ship only as `64×192` sheets with `4×6` rows for walk, idle, and talk states
+- `BootScene.ts` now loads gameplay assets from the runtime manifest instead of relying on legacy standalone named sprites
+- `IsometricRenderer.ts` now renders authored Tiled object layers in the live runtime scene
+- `GameScene.ts` now uses physical prop sprites for world items and lore objects, with markers as overlays instead of the only world representation
+- `CrowdSystem.ts` now maps runtime crowd roles to differentiated sprite silhouettes instead of broader placeholder reuse
+- `generate-character-sheets-v2.cjs` now emits the new named-character sheet contract, and `generate-crowd-silhouettes.cjs` generates the supported crowd set
+- Gameplay sprite assets were re-quantized to the indexed ramp canon enforced by the validator
+
+### Removed
+- Standalone named gameplay character PNGs from `assets/sprites/characters/`
+- The legacy generic gameplay fallback sprite `assets/sprites/characters/npc.png`
+- The deprecated `crowd-indian-sheet.png` gameplay asset
+
+### Documentation
+- Updated the README, quick start, testing guide, project status, and art pipeline docs to describe the sheet-only, manifest-driven gameplay runtime
+
+### Verification
+- `npm run validate:art -- --strict`
+- `npm run build`
+
 ## [0.4.0] - 2026-03-20
 
 ### Art Elevation Pass: Ultima 8 Quality

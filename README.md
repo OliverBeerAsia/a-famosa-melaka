@@ -1,14 +1,15 @@
 # A Famosa: Streets of Golden Melaka
 
-A pixel-art adventure RPG set in Portuguese Melaka circa 1580, inspired by Ultima VII.
+A pixel-art adventure RPG set in Portuguese Melaka circa 1580, with a pure Ultima VIII-first gameplay art direction.
 
 ## Overview
 
-Explore the fortified downtown of Portuguese-controlled Melaka at the height of its power as the "Venice of the East." Interact with merchants, sailors, missionaries, and locals in a richly detailed world that captures the unique cultural collision of 16th-century maritime Southeast Asia.
+Explore the fortified downtown of Portuguese-controlled Melaka at the height of its power as the "Venice of the East." Interact with merchants, sailors, missionaries, and locals in a historically grounded world that now ships against one gameplay-art contract: 2:1 isometric traversal, manifest-driven asset loading, and strict runtime validation for characters, crowd, tiles, maps, and props.
 
 **Game Resolution**: 960×540 canvas (3x scale over 320×180 art target)
-**Perspective**: ¾ top-down isometric
+**Perspective**: 2:1 isometric gameplay traversal
 **Engine**: Phaser 3
+**Current Release**: `v0.5.0`
 
 ## Quick Start
 
@@ -35,16 +36,21 @@ npm run dev      # Start development server with hot reload
 npm run build    # Create production build in dist/
 npm run preview  # Preview production build
 npm test         # Run unit tests
+npm run validate:art -- --strict  # Enforce gameplay art/runtime contract
 npm run generate:character-sheets  # Rebuild character sprite sheets
+npm run generate:crowd             # Rebuild crowd role silhouettes
 npm run generate:scene-variants    # Rebuild dawn/dusk/night scene variants
 npm run generate:graphics          # Regenerate all graphics variants
 ```
 
 ### Graphics Pipeline
 
-- Character sheets are generated into `assets/sprites/characters/` as 16×32 singles and 64×128 directional sheets.
+- Named gameplay characters are generated into `assets/sprites/characters/` as `64×192` sheet-only assets (`16×32` frames, `4×6` rows for walk/idle/talk).
+- Crowd gameplay sprites are generated into `assets/sprites/crowd/` as `8×16` role silhouettes.
 - Scene variants are generated into `assets/scenes/` as `scene-*-dawn|dusk|night.png`.
-- Runtime loads the generated assets directly via Phaser `BootScene`.
+- The live runtime asset contract is defined in `src/data/runtime-asset-manifest.json`.
+- `npm run validate:art -- --strict` checks palette compliance, sheet layout, crowd dimensions, manifest coverage, map parity, and forbidden legacy gameplay sprites.
+- Phaser `BootScene` loads the manifest-defined gameplay assets directly.
 
 ## Controls
 
@@ -61,7 +67,8 @@ npm run generate:graphics          # Regenerate all graphics variants
 ```text
 melaka-rpg/
 ├── assets/
-│   ├── sprites/characters/   # Player + NPC sprites and animation sheets
+│   ├── sprites/characters/   # Named character sheets
+│   ├── sprites/crowd/        # Crowd role silhouettes
 │   ├── sprites/portraits/    # Dialogue portraits
 │   ├── sprites/tiles/        # Tile textures
 │   ├── sprites/objects/      # Prop textures
@@ -82,16 +89,14 @@ melaka-rpg/
 
 - ✅ Multi-scene overworld with location transitions
 - ✅ Time-of-day cycle with dawn/day/dusk/night lighting and scene variants
-- ✅ Player + named NPC directional animation sheets
+- ✅ Player + named NPC sheet-only animation contract (`64×192`, idle and talk rows included)
 - ✅ Dialogue, inventory, quest journal, and pause/save/load UI
 - ✅ Save slots with metadata and restore/hydration across core stores
 - ✅ Electron packaging support and browser-first development flow
-- ✅ **Ultima 8-quality art pipeline** with dithered shading, ambient occlusion, specular highlights
-- ✅ **Environment Object System** with 17 decoration clusters across 5 locations
-- ✅ **Animated atmosphere objects** (torches, seagulls, flags, palm sway, smoke)
-- ✅ **Historical accuracy corrections** (Ming-era Chen Wei, Indian merchant sprite, 5 new lore objects)
-- ✅ **48 tile sprites** including 12 weathering variants and 8 surface transitions
-- ✅ **61 object sprites** with culturally-authentic items (pelourinho, wayang kulit, pepper pile)
+- ✅ **Manifest-driven gameplay art runtime** covering 10 named characters, 10 crowd roles, 5 isometric maps, 62 static props, and 6 animated object sheets
+- ✅ **Strict gameplay art validation** for palette, dimensions, dead assets, map object parity, and runtime reachability
+- ✅ **Authored isometric object layers** rendered in the live Phaser runtime
+- ✅ **Ultima VIII-first art pipeline** with indexed ramps, dithered shading, ambient occlusion, and role-specific crowd silhouettes
 
 ## In Progress
 
@@ -105,18 +110,19 @@ melaka-rpg/
 Maps are created using [Tiled Map Editor](https://www.mapeditor.org/):
 
 1. Open Tiled and create a new map
-2. Set tile size to 16×16
-3. Import tilesets from `assets/sprites/tiles/`
-4. Create layers: Ground, Collision, Objects
-5. Export as JSON to `assets/maps/`
+2. For shipping gameplay maps, use an isometric map with `64×32` tiles
+3. Import tilesets from `assets/sprites/tiles/iso/`
+4. Author the runtime layers `Ground`, `Walls`, and object groups such as `Objects`, `Props`, `Overhang`, `Canopy`, and `Highlights` as needed
+5. Export JSON to `assets/maps/` and register the map and object sprite usage in `src/data/runtime-asset-manifest.json`
 
-**Note**: The collision layer should have tiles with a custom property `collides: true`
+**Note**: The live TypeScript Phaser runtime is the shipping source of truth. Orthogonal maps and cinematic scene PNGs remain as legacy/cinematic support, but gameplay traversal is standardized on the isometric contract.
 
 ### Adding Sprites
 
 1. Place sprite files in `assets/sprites/`
-2. Load them in `src/phaser/scenes/BootScene.ts`
-3. Reference them in your game code
+2. Register new gameplay-facing assets in `src/data/runtime-asset-manifest.json`
+3. Ensure `src/phaser/scenes/BootScene.ts` or the relevant runtime system loads the manifest-defined asset class
+4. Reference the registered key from map/object data or gameplay code
 
 ### Project Guidelines
 
@@ -141,7 +147,8 @@ All game sprites are generated procedurally via Node.js canvas scripts in `tools
 
 ```bash
 node tools/ultima8-graphics/generate-all.cjs   # All tiles, objects, characters
-node tools/generate-character-sheets-v2.cjs     # Directional sprite sheets
+node tools/generate-character-sheets-v2.cjs     # Named character sheets (64x192)
+node tools/generate-crowd-silhouettes.cjs       # Crowd role silhouettes (8x16)
 node tools/generate-iso-tiles.cjs               # Isometric tile transforms
 ```
 
@@ -151,7 +158,8 @@ The pipeline produces pixel-art sprites with Ultima 8-quality rendering:
 - **Specular highlights** on metal, gold, and silk surfaces
 - **Seeded random** for deterministic textures (wood grain, stone pitting, hair strands)
 - **Tile variant system** for weathering and damage
-- **Isometric perspective correction** for 3/4 view lighting
+- **Isometric perspective correction** for 2:1 traversal lighting
+- **Indexed ramp canon** enforced by the gameplay art validator
 
 ## Technology Stack
 

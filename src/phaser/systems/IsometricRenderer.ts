@@ -24,6 +24,7 @@ export class IsometricRenderer {
   private map!: Phaser.Tilemaps.Tilemap;
   private groundLayer: Phaser.Tilemaps.TilemapLayer | null = null;
   private wallsLayer: Phaser.Tilemaps.TilemapLayer | null = null;
+  private objectSprites: Phaser.GameObjects.Image[] = [];
   private mapKey: string;
   private tilesetMappings: TilesetMapping[];
 
@@ -76,6 +77,34 @@ export class IsometricRenderer {
       wallsLayer.setCollisionByExclusion([-1, 0]);
       this.wallsLayer = wallsLayer;
     }
+
+    this.createObjectGroups();
+  }
+
+  private createObjectGroups(): void {
+    const layerNames = ['Objects', 'Props', 'Overhang', 'Canopy', 'Highlights'];
+
+    layerNames.forEach((layerName) => {
+      const objectLayer = this.map.getObjectLayer(layerName);
+      if (!objectLayer) return;
+
+      objectLayer.objects.forEach((obj) => {
+        const textureKey = this.scene.textures.exists(obj.name) ? obj.name : 'debug-prop-missing';
+        const x = (obj.x || 0) + ((obj.width || 0) / 2);
+        const y = obj.y || 0;
+        const image = this.scene.add.image(x, y, textureKey);
+        image.setOrigin(0.5, 1);
+        image.setScale(3);
+        image.setDepth(this.getObjectDepth(layerName, y));
+        this.objectSprites.push(image);
+      });
+    });
+  }
+
+  private getObjectDepth(layerName: string, y: number): number {
+    if (layerName === 'Highlights') return y + 3000;
+    if (layerName === 'Overhang' || layerName === 'Canopy') return y + 2000;
+    return y;
   }
 
   /** Convert world pixel coordinates to tile coordinates */
@@ -118,6 +147,8 @@ export class IsometricRenderer {
   }
 
   destroy(): void {
+    this.objectSprites.forEach((sprite) => sprite.destroy());
+    this.objectSprites = [];
     if (this.groundLayer) {
       this.groundLayer.destroy();
       this.groundLayer = null;

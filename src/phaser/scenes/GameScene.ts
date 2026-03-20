@@ -199,6 +199,9 @@ interface WorldItemInstance {
   id: string;
   itemId: string;
   description: string;
+  sprite: Phaser.GameObjects.Image;
+  anchorX: number;
+  anchorY: number;
   glow: Phaser.GameObjects.Ellipse;
   marker: Phaser.GameObjects.Arc;
   label: Phaser.GameObjects.Text;
@@ -208,6 +211,9 @@ interface LoreObjectInstance {
   id: string;
   name: string;
   description: string;
+  sprite: Phaser.GameObjects.Image;
+  anchorX: number;
+  anchorY: number;
   glow: Phaser.GameObjects.Ellipse;
   marker: Phaser.GameObjects.Arc;
   label: Phaser.GameObjects.Text;
@@ -276,6 +282,27 @@ const TIME_RANGES = {
   dusk: { start: 17, end: 20 },
   night: { start: 20, end: 5 },
 } as const;
+
+const WORLD_ITEM_SPRITES: Record<string, string> = {
+  'coin-pouch': 'sack',
+  'spice-sample': 'spice-pile',
+  'medicinal-herbs': 'flowers',
+  'rosary': 'pottery',
+};
+
+const LORE_SPRITE_ALIASES: Record<string, string> = {
+  'coat-of-arms': 'tavern-sign',
+  'stone-plaque': 'gravestone',
+  keris: 'wayang-kulit-puppet',
+  'ship-model': 'ship-mast',
+  abacus: 'balance-scale',
+  book: 'scroll-rack',
+  scroll: 'scroll-rack',
+  vase: 'ceramic-vase',
+  'incense-burner': 'candelabra',
+  gong: 'bell',
+  chest: 'cargo-crate',
+};
 
 export class GameScene extends Phaser.Scene {
   private currentMap: string = 'rua-direita';
@@ -971,10 +998,7 @@ export class GameScene extends Phaser.Scene {
       }
 
       const sheetKey = `${data.sprite || data.id}-sheet`;
-      const fallbackTexture = data.sprite || data.id;
-      const npcTexture = this.textures.exists(sheetKey)
-        ? sheetKey
-        : (this.textures.exists(fallbackTexture) ? fallbackTexture : 'npc');
+      const npcTexture = this.textures.exists(sheetKey) ? sheetKey : 'debug-character-missing';
       const npc = this.physics.add.sprite(x, y, npcTexture);
 
       // Scale up NPC to match scene backgrounds (same as player)
@@ -1042,29 +1066,39 @@ export class GameScene extends Phaser.Scene {
     this.worldItems = [];
 
     worldItems.forEach((item) => {
-      const glow = this.add.ellipse(item.x, item.y, 28, 16, 0xF4B41A, 0.18);
+      const spriteKey = this.resolveGameplaySpriteKey(WORLD_ITEM_SPRITES[item.itemId]);
+      const sprite = this.add.image(item.x, item.y, spriteKey);
+      sprite.setOrigin(0.5, 1);
+      sprite.setScale(3);
+      sprite.setDepth(item.y + 1);
+
+      const markerY = item.y - Math.max(22, sprite.displayHeight) - 8;
+      const glow = this.add.ellipse(item.x, item.y - 4, 34, 18, 0xF4B41A, 0.18);
       glow.setDepth(979);
       glow.setBlendMode(Phaser.BlendModes.ADD);
 
-      const marker = this.add.circle(item.x, item.y, 7, 0xF4B41A, 0.9);
+      const marker = this.add.circle(item.x, markerY, 7, 0xF4B41A, 0.9);
       marker.setStrokeStyle(2, 0x3b2509, 1);
-      marker.setDepth(980);
+      marker.setDepth(sprite.depth + 1);
 
       const itemName = ITEM_DEFINITIONS[item.itemId]?.name || item.itemId;
-      const label = this.add.text(item.x, item.y - 20, itemName, {
+      const label = this.add.text(item.x, markerY - 12, itemName, {
         font: '12px Cinzel, Georgia, serif',
         color: '#F4E6BE',
         stroke: '#000000',
         strokeThickness: 2,
       });
       label.setOrigin(0.5, 1);
-      label.setDepth(981);
+      label.setDepth(sprite.depth + 2);
       label.setVisible(false);
 
       this.worldItems.push({
         id: item.id,
         itemId: item.itemId,
         description: item.description,
+        sprite,
+        anchorX: item.x,
+        anchorY: item.y,
         glow,
         marker,
         label,
@@ -1081,34 +1115,56 @@ export class GameScene extends Phaser.Scene {
 
       const x = obj.position?.x || 0;
       const y = obj.position?.y || 0;
+      const spriteKey = this.resolveGameplaySpriteKey(obj.sprite);
+      const sprite = this.add.image(x, y, spriteKey);
+      sprite.setOrigin(0.5, 1);
+      sprite.setScale(3);
+      sprite.setDepth(y + 1);
 
-      const glow = this.add.ellipse(x, y, 32, 18, 0xD4AF37, 0.12);
+      const markerY = y - Math.max(22, sprite.displayHeight) - 8;
+      const glow = this.add.ellipse(x, y - 4, 36, 20, 0xD4AF37, 0.12);
       glow.setDepth(979);
       glow.setBlendMode(Phaser.BlendModes.ADD);
 
-      const marker = this.add.circle(x, y, 6, 0xD4AF37, 0.7);
+      const marker = this.add.circle(x, markerY, 6, 0xD4AF37, 0.7);
       marker.setStrokeStyle(2, 0x3b2509, 0.8);
-      marker.setDepth(980);
+      marker.setDepth(sprite.depth + 1);
 
-      const label = this.add.text(x, y - 20, obj.name, {
+      const label = this.add.text(x, markerY - 12, obj.name, {
         font: 'italic 11px Cinzel, Georgia, serif',
         color: '#D4AF37',
         stroke: '#000000',
         strokeThickness: 2,
       });
       label.setOrigin(0.5, 1);
-      label.setDepth(981);
+      label.setDepth(sprite.depth + 2);
       label.setVisible(false);
 
       this.loreObjects.push({
         id: obj.id,
         name: obj.name,
         description: obj.examineText || obj.description,
+        sprite,
+        anchorX: x,
+        anchorY: y,
         glow,
         marker,
         label,
       });
     });
+  }
+
+  private resolveGameplaySpriteKey(preferredKey?: string): string {
+    if (preferredKey && this.textures.exists(preferredKey)) {
+      return preferredKey;
+    }
+
+    const alias = preferredKey ? LORE_SPRITE_ALIASES[preferredKey] : null;
+    if (alias && this.textures.exists(alias)) {
+      return alias;
+    }
+
+    return 'debug-prop-missing';
   }
 
   private createTransitionHotspots() {
@@ -2188,12 +2244,14 @@ export class GameScene extends Phaser.Scene {
       this.playerShadow = null;
     }
     this.worldItems.forEach((item) => {
+      item.sprite.destroy();
       item.glow.destroy();
       item.marker.destroy();
       item.label.destroy();
     });
     this.worldItems = [];
     this.loreObjects.forEach((obj) => {
+      obj.sprite.destroy();
       obj.glow.destroy();
       obj.marker.destroy();
       obj.label.destroy();
@@ -2511,8 +2569,8 @@ export class GameScene extends Phaser.Scene {
       const distance = Phaser.Math.Distance.Between(
         this.player.x,
         this.player.y,
-        item.marker.x,
-        item.marker.y
+        item.anchorX,
+        item.anchorY
       );
 
       if (distance < interactionRadius) {
@@ -2521,6 +2579,7 @@ export class GameScene extends Phaser.Scene {
         emitGameEvent('item:examine', item.itemId, item.description);
         this.showNotification(`Found: ${itemName}`);
 
+        item.sprite.destroy();
         item.glow.destroy();
         item.marker.destroy();
         item.label.destroy();
@@ -2563,8 +2622,8 @@ export class GameScene extends Phaser.Scene {
       const distance = Phaser.Math.Distance.Between(
         this.player.x,
         this.player.y,
-        obj.marker.x,
-        obj.marker.y
+        obj.anchorX,
+        obj.anchorY
       );
 
       if (distance < interactionRadius) {
@@ -3109,8 +3168,8 @@ export class GameScene extends Phaser.Scene {
       const distance = Phaser.Math.Distance.Between(
         this.player.x,
         this.player.y,
-        item.marker.x,
-        item.marker.y
+        item.anchorX,
+        item.anchorY
       );
       const nearby = distance < interactionRadius;
 

@@ -2,10 +2,11 @@
 /**
  * Character Sprite Sheet Generator v2
  *
- * Generates 64x128 sprite sheets (4 cols x 4 rows of 16x32 frames)
- * matching BootScene.ts expectations:
- *   Row 0 = down (front), Row 1 = left, Row 2 = right, Row 3 = up (back)
- *   4 walk-cycle frames per direction
+ * Generates 64x192 sprite sheets (4 cols x 6 rows of 16x32 frames)
+ * matching the live runtime contract:
+ *   Rows 0-3 = walk down/left/right/up (4 frames each)
+ *   Row 4 = idle down/left/right/up (1 frame per direction)
+ *   Row 5 = talk down/left/right/up (1 frame per direction)
  *
  * Each character is drawn at 24x48 using Ultima 8 palette, then
  * scaled nearest-neighbor to 16x32 per frame.
@@ -29,9 +30,9 @@ const {
 const FRAME_W = 16;
 const FRAME_H = 32;
 const COLS = 4; // frames per direction
-const ROWS = 4; // directions: down, left, right, up
+const ROWS = 6; // walk rows + idle row + talk row
 const SHEET_W = FRAME_W * COLS; // 64
-const SHEET_H = FRAME_H * ROWS; // 128
+const SHEET_H = FRAME_H * ROWS; // 192
 const SRC_W = CHAR_WIDTH;  // 24
 const SRC_H = CHAR_HEIGHT; // 48
 
@@ -392,6 +393,23 @@ function scaleDown(srcCanvas) {
 }
 
 /**
+ * Generate a dedicated idle pose for the direction.
+ * This keeps idle content in a stable row even when it is derived from the base pose.
+ */
+function generateIdleFrame(dirCanvas) {
+  return scaleDown(dirCanvas);
+}
+
+/**
+ * Generate a dedicated talk pose for the direction.
+ * For now this reuses a lively walk-derived silhouette until bespoke talk acting is authored.
+ */
+function generateTalkFrame(dirCanvas, meta, directionIndex) {
+  const talkSourceFrame = directionIndex % 2 === 0 ? 1 : 3;
+  return scaleDown(applyWalkFrame(dirCanvas, meta, talkSourceFrame));
+}
+
+/**
  * Generate a complete sprite sheet for one character
  */
 function generateSheet(name, meta) {
@@ -411,8 +429,8 @@ function generateSheet(name, meta) {
     createBackView(frontCanvas, meta),       // row 3: up (back)
   ];
 
-  // Draw each direction x frame
-  for (let row = 0; row < ROWS; row++) {
+  // Walk rows: each direction gets 4 animated frames.
+  for (let row = 0; row < 4; row++) {
     const dirCanvas = directions[row];
     for (let col = 0; col < COLS; col++) {
       const frameCanvas = applyWalkFrame(dirCanvas, meta, col);
@@ -421,15 +439,19 @@ function generateSheet(name, meta) {
     }
   }
 
-  return sheet;
-}
+  // Idle row: 1 frame per direction (down, left, right, up) laid out by column.
+  directions.forEach((dirCanvas, index) => {
+    const scaled = generateIdleFrame(dirCanvas);
+    sheetCtx.drawImage(scaled, index * FRAME_W, 4 * FRAME_H);
+  });
 
-/**
- * Generate a single static sprite (frame 0, down direction)
- */
-function generateStatic(meta) {
-  const frontCanvas = drawFront(meta.drawFunc);
-  return scaleDown(frontCanvas);
+  // Talk row: 1 expressive frame per direction laid out by column.
+  directions.forEach((dirCanvas, index) => {
+    const scaled = generateTalkFrame(dirCanvas, meta, index);
+    sheetCtx.drawImage(scaled, index * FRAME_W, 5 * FRAME_H);
+  });
+
+  return sheet;
 }
 
 function main() {
@@ -437,7 +459,7 @@ function main() {
 
   const requestedChars = process.argv.length > 2
     ? process.argv.slice(2)
-    : Object.keys(CHARACTER_META);
+    : Object.keys(CHARACTER_META).filter((name) => name !== 'crowd-indian');
 
   console.log('Generating character sprite sheets v2...');
   console.log('  Output: ' + OUT_DIR);
@@ -459,22 +481,7 @@ function main() {
     fs.writeFileSync(sheetPath, sheet.toBuffer('image/png'));
     console.log('  OK: ' + name + '-sheet.png (' + SHEET_W + 'x' + SHEET_H + ')');
 
-    // Generate static sprite (front-facing, frame 0)
-    const staticSprite = generateStatic(meta);
-    const staticPath = path.join(OUT_DIR, name + '.png');
-    fs.writeFileSync(staticPath, staticSprite.toBuffer('image/png'));
-    console.log('  OK: ' + name + '.png (' + FRAME_W + 'x' + FRAME_H + ')');
-
     generated++;
-  }
-
-  // Also generate fallback NPC sprite
-  if (requestedChars.includes('aminah') || requestedChars.length === Object.keys(CHARACTER_META).length) {
-    const npcMeta = CHARACTER_META['aminah'];
-    const npcStatic = generateStatic(npcMeta);
-    const npcPath = path.join(OUT_DIR, 'npc.png');
-    fs.writeFileSync(npcPath, npcStatic.toBuffer('image/png'));
-    console.log('  OK: npc.png (fallback)');
   }
 
   console.log('\nDone! Generated ' + generated + ' character sprite sheets.');

@@ -39,6 +39,9 @@ npm run build
 # Preview production build
 npm run preview
 
+# Validate gameplay art contract
+npm run validate:art -- --strict
+
 # Run Electron desktop app
 npm run electron
 
@@ -56,6 +59,8 @@ npm run package:linux  # Linux AppImage
 - **6 NPCs**: Fernao Gomes, Capitao Rodrigues, Padre Tomas, Aminah, Chen Wei, Rashid
 - **3 Quests**: The Merchant's Seal (main), The Padre's Dilemma, Rashid's Cargo
 - **Day/Night Cycle**: 4 lighting states with atmospheric particles
+- **Manifest-Driven Gameplay Art**: 10 named sheets, 10 crowd roles, 5 shipping isometric maps
+- **Strict Art Validation**: Sheet layout, palette, runtime parity, and dead-asset checks
 - **Full Inventory**: Item pickup, examination, quest items
 - **Journal System**: Quest tracking and objectives
 - **Save/Load**: 4 slots with autosave
@@ -81,7 +86,7 @@ src/
 └── data/                # NPCs, Items, Quests (JSON)
 
 assets/
-├── sprites/             # Characters, Tiles, Objects, UI
+├── sprites/             # Characters, Crowd, Tiles, Objects, UI
 ├── audio/               # Music and SFX
 ├── maps/                # Tiled JSON maps
 └── tilesets/            # Master tileset images
@@ -125,10 +130,8 @@ assets/
 
 - **PROJECT_STATUS.md** - Current status and roadmap
 - **CLAUDE.md** - Development guidelines
+- **docs/art-bible/gameplay-asset-spec.json** - Shipping gameplay art contract
+- **docs/art-bible/ART_PIPELINE.md** - Generator and validator workflow
 - **docs/art-bible/ART_BIBLE.md** - Visual specifications
 - **docs/AUDIO_DIRECTION.md** - Audio specifications
 - **TESTING.md** - Manual test checklist
-
----
-
-**Happy coding!**

@@ -4,10 +4,22 @@
 
 ### Run the Development Server
 ```bash
-cd /Users/home/Desktop/AI/Melaka
+cd /Users/home/AI/Melaka
 npm install     # If not done already
-npm start       # Opens at http://localhost:8081
+npm run dev     # Opens at http://localhost:3000
 ```
+
+### Validate Gameplay Art Before Manual QA
+```bash
+npm run validate:art -- --strict
+```
+
+This catches the common content regressions before a playthrough:
+- Named character sheets missing required rows or using the wrong dimensions
+- Crowd sprites that are not `8×16`
+- Gameplay sprites that drift off the indexed ramp canon
+- Manifest/runtime mismatches for maps, props, and gameplay assets
+- Reintroduced legacy standalone named character sprites
 
 ### Run as Desktop App (Electron)
 ```bash
@@ -152,6 +164,9 @@ Test each location transition:
 - Some quest interactions may not trigger properly
 - Payment system may need manual testing with debug mode
 
+### Art Runtime
+- Manual playthrough is still required after validator/build success to confirm landmark readability, object placement, and interaction feel in each isometric location
+
 ---
 
 ## Unit Tests
@@ -227,6 +242,5 @@ When reporting bugs, include:
 
 ---
 
-*Last Updated: December 3, 2025*
-
+*Last Updated: March 20, 2026*
 

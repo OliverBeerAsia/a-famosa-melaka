@@ -6,18 +6,23 @@
  */
 
 import Phaser from 'phaser';
+import runtimeAssetManifest from '../../data/runtime-asset-manifest.json';
 
-const CHARACTER_IDS = [
-  'player',
-  'fernao-gomes',
-  'capitao-rodrigues',
-  'padre-tomas',
-  'aminah',
-  'chen-wei',
-  'rashid',
-  'siti',
-  'alvares',
-  'mak-enang',
+const CHARACTER_IDS = runtimeAssetManifest.characters.named as readonly string[];
+const CROWD_IDS = runtimeAssetManifest.crowd.sprites as readonly string[];
+const BASE_MAP_IDS = runtimeAssetManifest.maps.base as readonly string[];
+const ISO_MAP_IDS = runtimeAssetManifest.maps.isometric as readonly string[];
+const BASE_TILE_IDS = runtimeAssetManifest.tiles.base as readonly string[];
+const ISO_TILE_IDS = runtimeAssetManifest.tiles.isometric as readonly string[];
+const STATIC_OBJECT_IDS = runtimeAssetManifest.objects.static as readonly string[];
+
+const ANIMATED_OBJECT_SHEETS = [
+  { key: 'torch-flame', file: 'torch-flame-sheet.png', frameWidth: 8, frameHeight: 16 },
+  { key: 'palm-frond', file: 'palm-frond-sheet.png', frameWidth: 16, frameHeight: 48 },
+  { key: 'awning-flutter', file: 'awning-flutter-sheet.png', frameWidth: 16, frameHeight: 16 },
+  { key: 'smoke-column', file: 'smoke-sheet.png', frameWidth: 8, frameHeight: 16 },
+  { key: 'seagull', file: 'seagull-sheet.png', frameWidth: 16, frameHeight: 8 },
+  { key: 'flag-wave', file: 'flag-sheet.png', frameWidth: 16, frameHeight: 16 },
 ] as const;
 
 export class BootScene extends Phaser.Scene {
@@ -80,100 +85,54 @@ export class BootScene extends Phaser.Scene {
     // Scene backgrounds
     this.loadSceneBackgrounds();
 
-    // Portraits
-    this.loadPortraits();
-
     // Audio
     this.loadAudio();
   }
 
   private loadCharacterSprites() {
     CHARACTER_IDS.forEach((char) => {
-      this.load.image(char, `sprites/characters/${char}.png`);
       this.load.spritesheet(`${char}-sheet`, `sprites/characters/${char}-sheet.png`, {
         frameWidth: 16,
         frameHeight: 32,
       });
     });
 
-    // Fallback texture for any dynamically-added NPC without a dedicated sprite.
-    this.load.image('npc', 'sprites/characters/npc.png');
-
-    // Crowd atmosphere sprites
-    const crowdTypes = ['portuguese', 'malay', 'chinese', 'arab', 'indian'];
-    crowdTypes.forEach((type) => {
+    CROWD_IDS.forEach((type) => {
       this.load.image(`crowd-${type}`, `sprites/crowd/${type}.png`);
     });
   }
 
   private loadTilemaps() {
-    const maps = [
-      'melaka-demo',
-      'a-famosa-gate',
-      'rua-direita',
-      'st-pauls-church',
-      'waterfront',
-      'kampung',
-    ];
-
-    maps.forEach((mapKey) => {
+    BASE_MAP_IDS.forEach((mapKey) => {
       this.load.tilemapTiledJSON(mapKey, `maps/${mapKey}.json`);
     });
 
-    // Isometric map variants
-    const isoMaps = ['a-famosa-gate', 'rua-direita', 'st-pauls-church', 'waterfront', 'kampung'];
-    isoMaps.forEach((mapKey) => {
+    ISO_MAP_IDS.forEach((mapKey) => {
       this.load.tilemapTiledJSON(`${mapKey}-iso`, `maps/${mapKey}-iso.json`);
     });
   }
 
   private loadTileSprites() {
-    const tiles = [
-      'fortress-stone', 'wall-white', 'roof-terracotta', 'cobblestone', 'door-wood',
-      'church-stone', 'church-floor', 'dock-wood', 'water-tile', 'dirt-path',
-      'bamboo-floor', 'thatch-roof', 'grass-tropical', 'sand-beach',
-    ];
-
-    tiles.forEach((tile) => {
+    BASE_TILE_IDS.forEach((tile) => {
       this.load.image(tile, `sprites/tiles/${tile}.png`);
     });
 
-    // Isometric tile sprite variants (64×32 diamond tiles)
-    const isoTiles = [
-      'fortress-stone', 'grass', 'cobblestone', 'wall-white',
-      'dirt-path', 'bamboo-floor', 'thatch-roof',
-      'church-stone', 'church-floor',
-      'water-tile', 'dock-wood', 'roof-terracotta', 'door-wood',
-    ];
-    isoTiles.forEach((tile) => {
+    ISO_TILE_IDS.forEach((tile) => {
       this.load.image(`${tile}-iso`, `sprites/tiles/iso/${tile}-iso.png`);
     });
   }
 
   private loadObjectSprites() {
-    const objects = [
-      'palm-tree', 'bush', 'flowers', 'banana-tree', 'coconut',
-      'barrel', 'pottery', 'crate', 'sack', 'amphora',
-      'market-stall', 'market-stall-2', 'lantern', 'tavern-sign',
-      'stone-cross', 'gravestone', 'arched-window', 'wooden-pew', 'altar', 'bell',
-      'rope-coil', 'ship-mast', 'cargo-crate', 'fishing-net', 'anchor', 'dhow-sail',
-      'hanging-cloth', 'woven-mat', 'cooking-fire', 'cannon',
-      'balance-scale', 'betel-nut-tray', 'rice-mortar', 'fish-trap', 'prayer-mat',
-      'porcelain', 'moored-sampan', 'hanging-oil-lantern', 'drying-fish-rack', 'laundry-line',
-    ];
-
-    objects.forEach((obj) => {
-      // Try both regular and ai-objects folders
+    STATIC_OBJECT_IDS.forEach((obj) => {
       this.load.image(obj, `sprites/objects/${obj}.png`);
     });
 
-    // Animated object sprite sheets
-    this.load.spritesheet('torch-flame', 'sprites/objects/torch-flame-sheet.png', { frameWidth: 8, frameHeight: 16 });
-    this.load.spritesheet('palm-frond', 'sprites/objects/palm-frond-sheet.png', { frameWidth: 16, frameHeight: 48 });
-    this.load.spritesheet('awning-flutter', 'sprites/objects/awning-flutter-sheet.png', { frameWidth: 16, frameHeight: 16 });
-    this.load.spritesheet('smoke-column', 'sprites/objects/smoke-sheet.png', { frameWidth: 8, frameHeight: 16 });
-    this.load.spritesheet('seagull', 'sprites/objects/seagull-sheet.png', { frameWidth: 16, frameHeight: 8 });
-    this.load.spritesheet('flag-wave', 'sprites/objects/flag-sheet.png', { frameWidth: 16, frameHeight: 16 });
+    ANIMATED_OBJECT_SHEETS.forEach((sheet) => {
+      this.load.spritesheet(sheet.key, `sprites/objects/${sheet.file}`, {
+        frameWidth: sheet.frameWidth,
+        frameHeight: sheet.frameHeight,
+      });
+    });
   }
 
   private loadSceneBackgrounds() {
@@ -200,13 +159,6 @@ export class BootScene extends Phaser.Scene {
         const key = `scene-${location}-${time}`;
         this.load.image(key, `scenes/${key}.png`);
       });
-    });
-  }
-
-  private loadPortraits() {
-    CHARACTER_IDS.forEach((portrait) => {
-      // Load high-quality portraits (256×256)
-      this.load.image(`portrait-${portrait}`, `sprites/portraits/${portrait}.png`);
     });
   }
 
@@ -245,6 +197,7 @@ export class BootScene extends Phaser.Scene {
   }
 
   create() {
+    this.createDebugTextures();
     // Create animations
     this.createAnimations();
 
@@ -259,17 +212,19 @@ export class BootScene extends Phaser.Scene {
   }
 
   private createAnimations() {
-    const directions = ['down', 'left', 'right', 'up'];
-    const frameRows = [0, 1, 2, 3];
-    const framesPerRow = 4;
+    const directions = ['down', 'left', 'right', 'up'] as const;
+    const framesPerRow = runtimeAssetManifest.characters.sheet.columns;
+    const idleRow = 4;
+    const talkRow = 5;
 
     CHARACTER_IDS.forEach((character) => {
       const sheetKey = `${character}-sheet`;
       if (!this.textures.exists(sheetKey)) return;
 
       directions.forEach((dir, index) => {
-        const row = frameRows[index];
-        const startFrame = row * framesPerRow;
+        const walkStartFrame = index * framesPerRow;
+        const idleFrame = (idleRow * framesPerRow) + index;
+        const talkFrame = (talkRow * framesPerRow) + index;
 
         const walkKey = character === 'player' ? `walk-${dir}` : `${character}-walk-${dir}`;
         const idleKey = character === 'player' ? `idle-${dir}` : `${character}-idle-${dir}`;
@@ -279,8 +234,8 @@ export class BootScene extends Phaser.Scene {
           this.anims.create({
             key: walkKey,
             frames: this.anims.generateFrameNumbers(sheetKey, {
-              start: startFrame,
-              end: startFrame + 3,
+              start: walkStartFrame,
+              end: walkStartFrame + 3,
             }),
             frameRate: 8,
             repeat: -1,
@@ -290,28 +245,43 @@ export class BootScene extends Phaser.Scene {
         if (!this.anims.exists(idleKey)) {
           this.anims.create({
             key: idleKey,
-            frames: [
-              { key: sheetKey, frame: startFrame },
-              { key: sheetKey, frame: startFrame + 2 },
-            ],
-            frameRate: 2,
-            repeat: -1,
+            frames: [{ key: sheetKey, frame: idleFrame }],
+            frameRate: 1,
           });
         }
 
         if (!this.anims.exists(talkKey)) {
           this.anims.create({
             key: talkKey,
-            frames: [
-              { key: sheetKey, frame: startFrame + 1 },
-              { key: sheetKey, frame: startFrame + 3 },
-            ],
-            frameRate: 5,
+            frames: [{ key: sheetKey, frame: talkFrame }],
+            frameRate: 1,
             repeat: -1,
           });
         }
       });
     });
+  }
+
+  private createDebugTextures() {
+    const character = this.add.graphics();
+    character.fillStyle(0x5a1136, 1);
+    character.fillRect(0, 0, 16, 32);
+    character.lineStyle(2, 0xf7d354, 1);
+    character.strokeRect(1, 1, 14, 30);
+    character.lineBetween(2, 2, 14, 30);
+    character.lineBetween(14, 2, 2, 30);
+    character.generateTexture('debug-character-missing', 16, 32);
+    character.destroy();
+
+    const prop = this.add.graphics();
+    prop.fillStyle(0x27314f, 1);
+    prop.fillRect(0, 0, 16, 16);
+    prop.lineStyle(2, 0xf7d354, 1);
+    prop.strokeRect(1, 1, 14, 14);
+    prop.lineBetween(2, 2, 14, 14);
+    prop.lineBetween(14, 2, 2, 14);
+    prop.generateTexture('debug-prop-missing', 16, 16);
+    prop.destroy();
   }
 
   private createAnimatedObjectAnims() {

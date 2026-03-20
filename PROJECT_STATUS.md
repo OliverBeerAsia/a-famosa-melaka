@@ -3,8 +3,53 @@
 ## Current Status
 
 **Date**: March 20, 2026
-**Status**: Art Elevation Pass Complete (Ultima 8 Quality Target)
+**Status**: Gameplay Art Runtime Contract Complete (`v0.5.0`)
 **Code Health**: 9/10 (Modern architecture, TypeScript, comprehensive documentation)
+
+---
+
+## Gameplay Art Runtime Contract (March 20, 2026)
+
+### Overview
+The project now has one shipping gameplay-art standard for the live TypeScript Phaser runtime. Named characters are sheet-only, crowd sprites use a dedicated silhouette contract, isometric map props are manifest-defined, and the validator enforces runtime parity instead of just file naming.
+
+### Contract Summary
+| Area | Shipping Rule |
+|------|---------------|
+| Gameplay projection | 2:1 isometric traversal in the live Phaser runtime |
+| Named characters | `64×192` sheets (`16×32` frames, `4×6`, walk + idle + talk rows) |
+| Crowd sprites | `8×16` silhouettes, one sprite per crowd role |
+| Runtime asset truth | `src/data/runtime-asset-manifest.json` |
+| Palette policy | Indexed ramp canon from `tools/ultima8-graphics/palette.cjs` |
+| Shipping fallback policy | No standalone named gameplay sprites in shipping paths |
+
+### Runtime Coverage
+| Category | Count |
+|----------|-------|
+| Named character sheets | 10 |
+| Crowd role sprites | 10 |
+| Base maps | 6 |
+| Shipping isometric maps | 5 |
+| Static object sprites | 62 |
+| Animated object sheets | 6 |
+| Base tiles | 14 |
+| Isometric tiles | 13 |
+
+### What Changed
+- **Manifest-driven boot flow**: `BootScene.ts` now loads named sheets, crowd sprites, maps, tiles, and prop assets from `src/data/runtime-asset-manifest.json`
+- **Named characters are sheet-only**: legacy standalone named gameplay sprites and the generic `npc.png` fallback were removed from shipping gameplay paths
+- **Crowd role differentiation**: Portuguese guard/worker/priest plus Malay woman/child variants now have dedicated `8×16` silhouettes
+- **Live map object rendering**: `IsometricRenderer.ts` now renders authored Tiled object layers for props and overhangs in the runtime scene
+- **Physical world storytelling props**: `GameScene.ts` now attaches visible prop sprites to world items and lore objects instead of marker-only placement
+- **Strict validator gate**: `tools/validate-gameplay-assets.cjs` now checks palette compliance, dimensions, dead assets, manifest reachability, and map object parity
+
+### Release Verification
+```bash
+npm run validate:art -- --strict
+npm run build
+```
+
+Both commands pass for `v0.5.0`. Remaining risk is playthrough-level polish rather than contract or build breakage.
 
 ---
 
@@ -260,6 +305,10 @@ npm run preview # Preview production build
 - [x] Indian merchant crowd sprite
 - [x] 5 new historical lore objects
 - [x] 4 new palette entries for textiles and skin tones
+- [x] Manifest-driven runtime asset contract
+- [x] Sheet-only named character loading
+- [x] Dedicated `8×16` crowd role silhouettes
+- [x] Strict art validator with map parity checks
 
 ### Audio System
 
@@ -323,6 +372,11 @@ npm run package:linux  # Linux AppImage
 
 ## Next Steps
 
+### Gameplay Polish
+- [ ] Full in-engine pass across all 5 isometric locations for landmark readability and route clarity
+- [ ] Rua Direita final-art review as the benchmark slice before broader environment polish
+- [ ] Additional authored `Props` / `Overhang` / `Canopy` layers where locations still read thin in runtime
+
 ### Audio (Critical - Phase 3)
 Replace placeholder audio files with actual recordings:
 - Music: Chiptune/lo-fi Renaissance-Gamelan fusion (see AUDIO_DIRECTION.md)
@@ -354,7 +408,8 @@ Replace placeholder audio files with actual recordings:
 |------|-------|
 | Resolution | 960×540 (game canvas) |
 | Character Scale | 3× (sprites designed for 320×180) |
-| Tile Size | 16×16 pixels (native) |
+| Shipping Gameplay Tile Size | 64×32 pixels (isometric) |
+| Legacy Orthogonal Tile Size | 16×16 pixels |
 | Character Size | 16×32 pixels (native), 48×96 displayed |
 | Map Size | 40×30 tiles |
 | Frame Rate | 60 FPS |
@@ -388,5 +443,5 @@ Replace placeholder audio files with actual recordings:
 ---
 
 *Last Updated: March 20, 2026*
-*Phase: Art Elevation Pass Complete (Ultima 8 Quality)*
-*Code Lines: ~6,000+ (new architecture + art pipeline + environment system)*
+*Phase: Gameplay Art Runtime Contract Complete (`v0.5.0`)*
+*Code Lines: ~6,000+ (architecture, content systems, and gameplay art pipeline)*

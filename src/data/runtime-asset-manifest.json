@@ -1,0 +1,170 @@
+{
+  "characters": {
+    "named": [
+      "player",
+      "fernao-gomes",
+      "capitao-rodrigues",
+      "padre-tomas",
+      "aminah",
+      "chen-wei",
+      "rashid",
+      "siti",
+      "alvares",
+      "mak-enang"
+    ],
+    "sheet": {
+      "frameWidth": 16,
+      "frameHeight": 32,
+      "columns": 4,
+      "rows": 6,
+      "requiredRows": [
+        "walk-down",
+        "walk-left",
+        "walk-right",
+        "walk-up",
+        "idle",
+        "talk"
+      ]
+    }
+  },
+  "crowd": {
+    "sprites": [
+      "portuguese",
+      "portuguese-guard",
+      "portuguese-worker",
+      "portuguese-priest",
+      "malay",
+      "malay-woman",
+      "malay-child",
+      "chinese",
+      "arab",
+      "indian"
+    ],
+    "frameWidth": 8,
+    "frameHeight": 16
+  },
+  "maps": {
+    "base": [
+      "melaka-demo",
+      "a-famosa-gate",
+      "rua-direita",
+      "st-pauls-church",
+      "waterfront",
+      "kampung"
+    ],
+    "isometric": [
+      "a-famosa-gate",
+      "rua-direita",
+      "st-pauls-church",
+      "waterfront",
+      "kampung"
+    ]
+  },
+  "tiles": {
+    "base": [
+      "fortress-stone",
+      "wall-white",
+      "roof-terracotta",
+      "cobblestone",
+      "door-wood",
+      "church-stone",
+      "church-floor",
+      "dock-wood",
+      "water-tile",
+      "dirt-path",
+      "bamboo-floor",
+      "thatch-roof",
+      "grass-tropical",
+      "sand-beach"
+    ],
+    "isometric": [
+      "fortress-stone",
+      "grass",
+      "cobblestone",
+      "wall-white",
+      "dirt-path",
+      "bamboo-floor",
+      "thatch-roof",
+      "church-stone",
+      "church-floor",
+      "water-tile",
+      "dock-wood",
+      "roof-terracotta",
+      "door-wood"
+    ]
+  },
+  "objects": {
+    "static": [
+      "altar",
+      "amphora",
+      "anchor",
+      "arched-window",
+      "awning",
+      "balance-scale",
+      "bamboo-fence",
+      "banana-tree",
+      "barrel",
+      "bell",
+      "bench",
+      "betel-nut-tray",
+      "bush",
+      "candelabra",
+      "cannon",
+      "cargo-crate",
+      "ceramic-vase",
+      "coconut",
+      "coconut-water-stand",
+      "cooking-fire",
+      "crate",
+      "dhow-sail",
+      "drying-fish-rack",
+      "fish-basket",
+      "fish-trap",
+      "fishing-net",
+      "flowers",
+      "fruit-basket",
+      "gravestone",
+      "handcart",
+      "hanging-cloth",
+      "hanging-oil-lantern",
+      "herb-drying-rack",
+      "iron-fence",
+      "lantern",
+      "laundry-line",
+      "maritime-barrel",
+      "market-stall",
+      "market-stall-1",
+      "market-stall-2",
+      "moored-sampan",
+      "palm-tree",
+      "pelourinho",
+      "pottery",
+      "prayer-mat",
+      "rice-mortar",
+      "rice-pot",
+      "rope-coil",
+      "sack",
+      "scroll-rack",
+      "ship-mast",
+      "spice-pile",
+      "spice-pile-pepper",
+      "stone-cross",
+      "sugar-cone",
+      "tavern-sign",
+      "tin-ingots",
+      "water-well",
+      "wayang-kulit-puppet",
+      "wine-jug",
+      "wooden-pew",
+      "woven-mat"
+    ],
+    "animatedSheets": [
+      "torch-flame",
+      "palm-frond",
+      "awning-flutter",
+      "smoke-column",
+      "seagull",
+      "flag-wave"
+    ]
+  }
+}

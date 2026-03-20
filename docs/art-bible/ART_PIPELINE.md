@@ -4,9 +4,16 @@ This is the operational companion to `ART_BIBLE.md`. Use it for production decis
 
 ## Target
 
-- Gameplay: Ultima VIII-leaning 2:1 isometric pixel art.
-- Cinematic: 16:9 scene art and portraits.
+- Gameplay: pure Ultima VIII-first 2:1 isometric pixel art for live traversal.
+- Cinematic: 16:9 scene art and portraits for interstitials only.
 - Concept: staging only; never ship raw concept renders.
+
+## Shipping Truth
+
+- The live gameplay runtime is the TypeScript Phaser path under `src/phaser/`.
+- Shipping gameplay world art is the isometric traversal map, not the scene backdrop.
+- Scene PNGs and portraits are cinematic assets; they do not define the gameplay asset contract.
+- Runtime asset parity is defined in `src/data/runtime-asset-manifest.json`.
 
 ## Commands
 
@@ -25,6 +32,9 @@ Use for anything the player traverses, clicks, equips, or reads in the world.
 - No blur, no anti-aliasing, no baked perspective drift.
 - Keep silhouette readable at 1x and 3x.
 - Keep source art under 256px on the longest side unless the spec explicitly allows a module.
+- Named characters ship as `64x192` sheets with `4x6` row-major walk/idle/talk layout.
+- Crowd ships as `8x16` silhouettes only.
+- Gameplay palette is the approved indexed-ramp canon from `tools/ultima8-graphics/palette.cjs`.
 
 ### Cinematic
 
@@ -80,8 +90,9 @@ Before promotion to shipping cinematic art, confirm:
 2. Run `npm run validate:art -- --report docs/art-bible/art-audit.md`.
 3. Fix all `error` findings first.
 4. Fix `warn` findings before promotion if the asset is player-facing.
-5. Move anything exploratory into concept/staging paths.
-6. Re-run the audit until the report is clean for that asset class.
+5. Confirm the live TypeScript Phaser runtime can actually load and render the asset.
+6. Move anything exploratory into concept/staging paths.
+7. Re-run the audit until the report is clean for that asset class.
 
 ## Ship Gate
 

@@ -1,7 +1,8 @@
 {
-  "version": 2,
-  "targetLook": "Ultima VIII-leaning historical isometric RPG",
+  "version": 3,
+  "targetLook": "Pure Ultima VIII-first historical isometric gameplay art for 1580 Melaka",
   "projectionMode": "isometric-2:1",
+  "runtimeContractPath": "src/data/runtime-asset-manifest.json",
   "projection": {
     "nativeCanvas": {
       "width": 320,
@@ -38,7 +39,11 @@
         "textureFiltering": "nearest",
         "maxSourceDimension": 256,
         "strictPaletteRequired": true,
-        "standaloneCharacterSpritesAllowed": false
+        "standaloneCharacterSpritesAllowed": false,
+        "palettePolicy": {
+          "mode": "indexed-ramps",
+          "source": "tools/ultima8-graphics/palette.cjs"
+        }
       }
     },
     "cinematic": {
@@ -82,8 +87,18 @@
       { "width": 64, "height": 32 }
     ],
     "characterSheetFrame": [
-      { "width": 16, "height": 32 },
-      { "width": 24, "height": 48 }
+      { "width": 16, "height": 32 }
+    ],
+    "namedCharacterSheet": [
+      {
+        "width": 64,
+        "height": 192,
+        "columns": 4,
+        "rows": 6,
+        "frameWidth": 16,
+        "frameHeight": 32,
+        "rowOrder": ["walk-down", "walk-left", "walk-right", "walk-up", "idle", "talk"]
+      }
     ],
     "crowdSilhouette": [
       { "width": 8, "height": 16 }
@@ -123,7 +138,11 @@
     "textureFiltering": "nearest",
     "maxSourceDimension": 256,
     "strictPaletteRequired": true,
-    "standaloneCharacterSpritesAllowed": false
+    "standaloneCharacterSpritesAllowed": false,
+    "palettePolicy": {
+      "mode": "indexed-ramps",
+      "source": "tools/ultima8-graphics/palette.cjs"
+    }
   },
   "cinematicRules": {
     "sceneSize": {
@@ -142,8 +161,11 @@
     "gameplay": [
       "File is in an approved gameplay directory.",
       "File name matches the repo naming pattern.",
+      "Named character sheets are 64x192 with row-major walk/idle/talk layout.",
+      "Crowd silhouettes are 8x16 and reserved for background atmosphere only.",
       "Frame size or footprint matches the spec.",
       "The asset reads clearly on the 320x180 native canvas.",
+      "The asset only uses the approved indexed ramp palette.",
       "A historical reference exists and was checked."
     ],
     "cinematic": [
@@ -153,6 +175,7 @@
     ],
     "promotion": [
       "Move exploratory work into concept/staging paths.",
+      "Gameplay promotion requires validator parity with the live TypeScript Phaser runtime.",
       "Fix warnings before promoting player-facing assets.",
       "Promote only after the audit is clean for that asset class."
     ]

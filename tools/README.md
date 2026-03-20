@@ -4,6 +4,15 @@ Asset generation and utility scripts for A Famosa: Streets of Golden Melaka.
 
 ## Primary Tools
 
+Supported shipping generators:
+
+- Gameplay characters: `generate-character-sheets-v2.cjs`
+- Gameplay crowd silhouettes: `generate-crowd-silhouettes.cjs`
+- Gameplay tiles and objects: `ultima8-graphics/generate-all.cjs`
+- Cinematic scene art: `generate-scene-backgrounds.js` and `generate-time-of-day-variants.cjs`
+
+Legacy or experimental generators in this folder should be treated as reference/staging tools unless explicitly promoted.
+
 ### `validate-gameplay-assets.cjs` (NEW - Mar 2026)
 **Art pipeline audit** - Checks gameplay vs cinematic folders, isometric 2:1 sheet sizes, oversized source art, legacy standalone character sprites, and naming conventions. Can also emit a markdown report for review.
 
@@ -48,20 +57,12 @@ Generates 15 files:
 - `scene-*-dusk.png`
 - `scene-*-night.png`
 
-### `generate-all-assets.js`
-**Master asset generator** - Generates all game sprites following Art Bible specifications.
+### `generate-crowd-silhouettes.cjs`
+**Crowd silhouette generator** - Creates approved `8x16` background crowd sprites for the live Phaser runtime.
 
 ```bash
-node tools/generate-all-assets.js
+node tools/generate-crowd-silhouettes.cjs
 ```
-
-Creates:
-- 7 character sprite sheets (64x128, 16 frames each)
-- 6 object sprites at correct pixel density
-- 6 UI elements
-- 5 particle effects
-- 4 crowd silhouettes
-- 3 animated tile sets
 
 ### `create-placeholders.js`
 Creates initial placeholder assets for rapid prototyping.
