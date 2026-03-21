@@ -1,0 +1,56 @@
+{
+  "version": 1,
+  "lastUpdated": "2026-03-21",
+  "waves": {
+    "wave-1": {
+      "name": "Named Gameplay Sheets and Portraits",
+      "description": "Align the 14 named character sheets and 14 matched portraits to Ultima VIII silhouette, contrast, and palette language.",
+      "status": "graded",
+      "totalAssets": 28,
+      "graded": 28,
+      "keep": 28,
+      "tune": 0,
+      "replace": 0,
+      "complete": false,
+      "assets": {
+        "character-sheets": 14,
+        "portraits": 14
+      }
+    },
+    "wave-2": {
+      "name": "Tiles, Props, Animated Objects, and Crowd",
+      "description": "Refresh tiles, isometric tiles, props, animated objects, and crowd silhouettes with denser occlusion, clearer shadows, and Ultima VIII material treatment.",
+      "status": "graded",
+      "totalAssets": 163,
+      "graded": 90,
+      "keep": 89,
+      "tune": 0,
+      "replace": 1,
+      "complete": false,
+      "assets": {
+        "tiles-base": 14,
+        "tiles-isometric": 13,
+        "objects-static": 63,
+        "animated-sheets": 6,
+        "crowd-silhouettes": 10
+      },
+      "prerequisite": "wave-1"
+    },
+    "wave-3": {
+      "name": "Scene Backdrops",
+      "description": "Regenerate the base scenes and time-of-day variants after the gameplay art kit stabilizes, ensuring cinematic art shares the same palette and density logic.",
+      "status": "graded",
+      "totalAssets": 21,
+      "graded": 21,
+      "keep": 0,
+      "tune": 0,
+      "replace": 21,
+      "complete": false,
+      "assets": {
+        "base-scenes": 6,
+        "time-variants": 15
+      },
+      "blockedBy": "wave-2"
+    }
+  }
+}

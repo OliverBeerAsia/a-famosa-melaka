@@ -1,5 +1,5 @@
 /**
- * Title Scene - Sierra/LucasArts Style
+ * Title Scene - Ultima VIII Style
  * 
  * Features:
  * - Full-screen AI-generated opening artwork

@@ -10,6 +10,7 @@
 const fs = require('fs');
 const path = require('path');
 const https = require('https');
+const { getStyleHeader } = require('./load-style-header.cjs');
 
 // API Configuration  
 const API_KEY = process.env.GEMINI_API_KEY;
@@ -32,16 +33,8 @@ const OBJECTS_DIR = path.join(OUTPUT_DIR, 'objects');
   }
 });
 
-// Base style for all sprites
-const STYLE_PREFIX = `Create a pixel art sprite in classic 16-bit RPG style (like Ultima VII).
-CRITICAL REQUIREMENTS:
-- Pure pixel art with crisp, clean edges
-- NO anti-aliasing, NO smoothing, NO gradients
-- Limited palette: max 32 colors
-- Warm tropical colors: terracotta, gold, cream, green, ocean blue, brown
-- Portuguese colonial Melaka setting (1580)
-- Transparent background (or solid color I can remove)
-`;
+// Base style for all sprites — loaded from canonical style header
+const STYLE_PREFIX = getStyleHeader();
 
 // All sprites to generate
 const SPRITES = {

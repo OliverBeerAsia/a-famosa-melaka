@@ -184,5 +184,144 @@
     "reportFormat": "markdown",
     "defaultReportPath": "docs/art-bible/art-audit.md",
     "strictOnWarnings": false
-  }
+  },
+  "styleProfiles": {
+    "named-character-sheet": {
+      "outlineWeight": "1px hard black or near-black",
+      "internalShading": "indexed-ramp dithering, no smooth gradients",
+      "shadowDirection": "south-east, consistent with projection.shadowDirection",
+      "silhouetteTest": "must read role, culture, and status at 16x32 native and at 48x96 scaled",
+      "ditherPattern": "2x2 or 4x4 ordered, matching palette.cjs ramps",
+      "materialTreatment": "cloth folds via 2-3 shade steps within a single ramp, metal via specular ramp highlight, skin via dedicated skin ramp",
+      "antiAliasing": "forbidden",
+      "minimumContrast": "at least 3 ramp steps between darkest shadow and brightest highlight on primary garment",
+      "validationThresholds": {
+        "maxAntiAliasingRatio": 0.02,
+        "maxSmoothGradientRatio": 0.05,
+        "maxSmoothGradientRun": 4
+      }
+    },
+    "crowd-silhouette": {
+      "outlineWeight": "1px or none; shape must carry all information",
+      "internalShading": "flat fill with at most 2 shade steps",
+      "silhouetteTest": "must read culture/role at 8x16 native",
+      "antiAliasing": "forbidden",
+      "validationThresholds": {
+        "maxAntiAliasingRatio": 0.02,
+        "maxSmoothGradientRatio": 0.05,
+        "maxSmoothGradientRun": 4
+      }
+    },
+    "base-tile": {
+      "outlineWeight": "no outline; edges defined by color contrast with neighbors",
+      "internalShading": "ordered dithering between adjacent ramp entries",
+      "materialTreatment": "texture must imply physical material (stone grain, wood grain, water refraction, earth granularity)",
+      "seamTreatment": "seamless tileable; no visible repeat artifacts at 4x4 tile coverage",
+      "antiAliasing": "forbidden",
+      "validationThresholds": {
+        "maxAntiAliasingRatio": 0.02,
+        "maxSmoothGradientRatio": 0.05,
+        "maxSmoothGradientRun": 4
+      }
+    },
+    "iso-tile": {
+      "outlineWeight": "no outline; 2:1 diamond footprint defined by color contrast",
+      "internalShading": "same as base-tile",
+      "materialTreatment": "same as base-tile, adapted to isometric perspective",
+      "shadowDirection": "south-east consistent baked shadow",
+      "antiAliasing": "forbidden",
+      "validationThresholds": {
+        "maxAntiAliasingRatio": 0.02,
+        "maxSmoothGradientRatio": 0.05,
+        "maxSmoothGradientRun": 4
+      }
+    },
+    "static-object": {
+      "outlineWeight": "1px hard outline, darkest ramp entry for the object's primary material",
+      "internalShading": "indexed-ramp dithering, 3-5 shade steps visible",
+      "shadowDirection": "south-east drop shadow or implied ground contact shadow",
+      "materialTreatment": "wood shows grain, metal shows specular, fabric shows folds, stone shows weathering",
+      "anchorPoint": "bottom-center of footprint",
+      "physicalityTest": "object must look like it has weight and could be picked up or bumped",
+      "antiAliasing": "forbidden",
+      "validationThresholds": {
+        "maxAntiAliasingRatio": 0.02,
+        "maxSmoothGradientRatio": 0.05,
+        "maxSmoothGradientRun": 4
+      }
+    },
+    "animated-object": {
+      "outlineWeight": "same as static-object",
+      "internalShading": "same as static-object per frame",
+      "frameConsistency": "outline and shadow must not shift between frames; only the animated element changes",
+      "antiAliasing": "forbidden",
+      "validationThresholds": {
+        "maxAntiAliasingRatio": 0.02,
+        "maxSmoothGradientRatio": 0.05,
+        "maxSmoothGradientRun": 4
+      }
+    },
+    "scene-backdrop": {
+      "note": "cinematic class; Ultima VIII density and palette inform composition but strict pixel rules are relaxed",
+      "densityTarget": "environment should feel crowded, layered, and physically plausible per Ultima VIII city/interior screenshots",
+      "paletteAffinity": "should lean toward palette.cjs ramps even when higher fidelity is allowed",
+      "validationThresholds": {
+        "maxSmoothGradientRun": 8
+      }
+    },
+    "portrait": {
+      "note": "cinematic class; VGA-grade color clusters, strong silhouette, no soft airbrush",
+      "colorClusters": "use 4-6 distinct value bands per material, analogous to VGA portrait palettes",
+      "silhouetteTest": "face and headwear must read clearly at 64x64 minimum",
+      "antiAliasing": "minimal; only where needed for face-scale readability",
+      "validationThresholds": {
+        "maxAntiAliasingRatio": 0.10,
+        "minColorClusters": 4,
+        "maxColorClusters": 256
+      }
+    }
+  },
+  "densityRequirements": {
+    "minObjectsPerLayer": {
+      "Props": 5,
+      "Overhang": 3,
+      "Canopy": 2,
+      "Highlights": 2
+    },
+    "minClustersPerLocation": 6
+  },
+  "referenceRequirements": {
+    "minimumCoverage": {
+      "named-character-sheet": 2,
+      "crowd-silhouette": 1,
+      "base-tile": 1,
+      "iso-tile": 1,
+      "static-object": 1,
+      "animated-object": 1,
+      "scene-backdrop": 1,
+      "portrait": 1
+    },
+    "referenceManifestPath": "docs/art-bible/ultima8-reference-manifest.json",
+    "styleMapPath": "docs/art-bible/shipping-asset-style-map.json"
+  },
+  "bannedStyleAnchors": [
+    "painterly",
+    "watercolor",
+    "Sierra",
+    "LucasArts",
+    "Monkey Island",
+    "Quest for Glory",
+    "Gabriel Knight",
+    "Baldur's Gate",
+    "Infinity Engine",
+    "Stardew Valley",
+    "airbrush",
+    "soft gradient",
+    "smooth shading",
+    "photorealistic",
+    "cel-shaded",
+    "anime",
+    "vector",
+    "flat design"
+  ]
 }

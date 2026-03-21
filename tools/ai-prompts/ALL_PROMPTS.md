@@ -8,16 +8,25 @@
 
 ### cobblestone (16x16)
 ```
-Create a pixel art sprite in the style of classic 16-bit RPGs like Ultima VII and Ultima VIII.
+Create a pixel art sprite in the visual language of Ultima VIII: Pagan — dense, physical, material-honest isometric pixel art.
 
-STYLE REQUIREMENTS:
-- Pure pixel art with clean, crisp edges
-- NO anti-aliasing or smoothing
-- Limited color palette (max 32 colors)
+STYLE REQUIREMENTS (NON-NEGOTIABLE):
+- Pure pixel art with hard, crisp edges — NO anti-aliasing, NO soft blending, NO feathered transparency
+- Every surface communicates its material: stone reads as stone, wood as wood, cloth as cloth, metal as metal
+- Use ordered dithering or flat color steps for shading — NO smooth gradients, NO airbrushed transitions
+- Objects have physical weight and volume — props are not flat decoration stamps
+- Shadow direction is fixed south-east for all objects
+- Objects overlap and occlude each other naturally — NO flat, non-overlapping placement
+- Anchor all sprites from bottom-center for consistent depth sorting
+- Limited indexed palette from the approved Ultima VIII ramp set
 - Warm tropical color scheme: terracotta, gold, cream, forest green, ocean blue, deep brown
-- Subtle dithering for shading gradients
-- Portuguese colonial Melaka setting (1580)
-- Southeast Asian tropical atmosphere
+- Portuguese colonial Melaka setting (1580), Southeast Asian tropical atmosphere
+
+BANNED TECHNIQUES:
+- Anti-aliased edges or sub-pixel smoothing
+- Painterly gradients or airbrush shading
+- Flat decorative placement without occlusion or overlap
+- Generic materials where different surfaces use the same shading ramp
 
 
 SPRITE SPECIFICATIONS:
@@ -38,16 +47,25 @@ OUTPUT REQUIREMENTS:
 
 ### grass-tropical (16x16)
 ```
-Create a pixel art sprite in the style of classic 16-bit RPGs like Ultima VII and Ultima VIII.
+Create a pixel art sprite in the visual language of Ultima VIII: Pagan — dense, physical, material-honest isometric pixel art.
 
-STYLE REQUIREMENTS:
-- Pure pixel art with clean, crisp edges
-- NO anti-aliasing or smoothing
-- Limited color palette (max 32 colors)
+STYLE REQUIREMENTS (NON-NEGOTIABLE):
+- Pure pixel art with hard, crisp edges — NO anti-aliasing, NO soft blending, NO feathered transparency
+- Every surface communicates its material: stone reads as stone, wood as wood, cloth as cloth, metal as metal
+- Use ordered dithering or flat color steps for shading — NO smooth gradients, NO airbrushed transitions
+- Objects have physical weight and volume — props are not flat decoration stamps
+- Shadow direction is fixed south-east for all objects
+- Objects overlap and occlude each other naturally — NO flat, non-overlapping placement
+- Anchor all sprites from bottom-center for consistent depth sorting
+- Limited indexed palette from the approved Ultima VIII ramp set
 - Warm tropical color scheme: terracotta, gold, cream, forest green, ocean blue, deep brown
-- Subtle dithering for shading gradients
-- Portuguese colonial Melaka setting (1580)
-- Southeast Asian tropical atmosphere
+- Portuguese colonial Melaka setting (1580), Southeast Asian tropical atmosphere
+
+BANNED TECHNIQUES:
+- Anti-aliased edges or sub-pixel smoothing
+- Painterly gradients or airbrush shading
+- Flat decorative placement without occlusion or overlap
+- Generic materials where different surfaces use the same shading ramp
 
 
 SPRITE SPECIFICATIONS:
@@ -68,16 +86,25 @@ OUTPUT REQUIREMENTS:
 
 ### water-harbor (16x16)
 ```
-Create a pixel art sprite in the style of classic 16-bit RPGs like Ultima VII and Ultima VIII.
+Create a pixel art sprite in the visual language of Ultima VIII: Pagan — dense, physical, material-honest isometric pixel art.
 
-STYLE REQUIREMENTS:
-- Pure pixel art with clean, crisp edges
-- NO anti-aliasing or smoothing
-- Limited color palette (max 32 colors)
+STYLE REQUIREMENTS (NON-NEGOTIABLE):
+- Pure pixel art with hard, crisp edges — NO anti-aliasing, NO soft blending, NO feathered transparency
+- Every surface communicates its material: stone reads as stone, wood as wood, cloth as cloth, metal as metal
+- Use ordered dithering or flat color steps for shading — NO smooth gradients, NO airbrushed transitions
+- Objects have physical weight and volume — props are not flat decoration stamps
+- Shadow direction is fixed south-east for all objects
+- Objects overlap and occlude each other naturally — NO flat, non-overlapping placement
+- Anchor all sprites from bottom-center for consistent depth sorting
+- Limited indexed palette from the approved Ultima VIII ramp set
 - Warm tropical color scheme: terracotta, gold, cream, forest green, ocean blue, deep brown
-- Subtle dithering for shading gradients
-- Portuguese colonial Melaka setting (1580)
-- Southeast Asian tropical atmosphere
+- Portuguese colonial Melaka setting (1580), Southeast Asian tropical atmosphere
+
+BANNED TECHNIQUES:
+- Anti-aliased edges or sub-pixel smoothing
+- Painterly gradients or airbrush shading
+- Flat decorative placement without occlusion or overlap
+- Generic materials where different surfaces use the same shading ramp
 
 
 SPRITE SPECIFICATIONS:
@@ -98,16 +125,25 @@ OUTPUT REQUIREMENTS:
 
 ### wood-dock (16x16)
 ```
-Create a pixel art sprite in the style of classic 16-bit RPGs like Ultima VII and Ultima VIII.
+Create a pixel art sprite in the visual language of Ultima VIII: Pagan — dense, physical, material-honest isometric pixel art.
 
-STYLE REQUIREMENTS:
-- Pure pixel art with clean, crisp edges
-- NO anti-aliasing or smoothing
-- Limited color palette (max 32 colors)
+STYLE REQUIREMENTS (NON-NEGOTIABLE):
+- Pure pixel art with hard, crisp edges — NO anti-aliasing, NO soft blending, NO feathered transparency
+- Every surface communicates its material: stone reads as stone, wood as wood, cloth as cloth, metal as metal
+- Use ordered dithering or flat color steps for shading — NO smooth gradients, NO airbrushed transitions
+- Objects have physical weight and volume — props are not flat decoration stamps
+- Shadow direction is fixed south-east for all objects
+- Objects overlap and occlude each other naturally — NO flat, non-overlapping placement
+- Anchor all sprites from bottom-center for consistent depth sorting
+- Limited indexed palette from the approved Ultima VIII ramp set
 - Warm tropical color scheme: terracotta, gold, cream, forest green, ocean blue, deep brown
-- Subtle dithering for shading gradients
-- Portuguese colonial Melaka setting (1580)
-- Southeast Asian tropical atmosphere
+- Portuguese colonial Melaka setting (1580), Southeast Asian tropical atmosphere
+
+BANNED TECHNIQUES:
+- Anti-aliased edges or sub-pixel smoothing
+- Painterly gradients or airbrush shading
+- Flat decorative placement without occlusion or overlap
+- Generic materials where different surfaces use the same shading ramp
 
 
 SPRITE SPECIFICATIONS:
@@ -128,16 +164,25 @@ OUTPUT REQUIREMENTS:
 
 ### sand-beach (16x16)
 ```
-Create a pixel art sprite in the style of classic 16-bit RPGs like Ultima VII and Ultima VIII.
+Create a pixel art sprite in the visual language of Ultima VIII: Pagan — dense, physical, material-honest isometric pixel art.
 
-STYLE REQUIREMENTS:
-- Pure pixel art with clean, crisp edges
-- NO anti-aliasing or smoothing
-- Limited color palette (max 32 colors)
+STYLE REQUIREMENTS (NON-NEGOTIABLE):
+- Pure pixel art with hard, crisp edges — NO anti-aliasing, NO soft blending, NO feathered transparency
+- Every surface communicates its material: stone reads as stone, wood as wood, cloth as cloth, metal as metal
+- Use ordered dithering or flat color steps for shading — NO smooth gradients, NO airbrushed transitions
+- Objects have physical weight and volume — props are not flat decoration stamps
+- Shadow direction is fixed south-east for all objects
+- Objects overlap and occlude each other naturally — NO flat, non-overlapping placement
+- Anchor all sprites from bottom-center for consistent depth sorting
+- Limited indexed palette from the approved Ultima VIII ramp set
 - Warm tropical color scheme: terracotta, gold, cream, forest green, ocean blue, deep brown
-- Subtle dithering for shading gradients
-- Portuguese colonial Melaka setting (1580)
-- Southeast Asian tropical atmosphere
+- Portuguese colonial Melaka setting (1580), Southeast Asian tropical atmosphere
+
+BANNED TECHNIQUES:
+- Anti-aliased edges or sub-pixel smoothing
+- Painterly gradients or airbrush shading
+- Flat decorative placement without occlusion or overlap
+- Generic materials where different surfaces use the same shading ramp
 
 
 SPRITE SPECIFICATIONS:
@@ -158,16 +203,25 @@ OUTPUT REQUIREMENTS:
 
 ### terracotta (16x16)
 ```
-Create a pixel art sprite in the style of classic 16-bit RPGs like Ultima VII and Ultima VIII.
+Create a pixel art sprite in the visual language of Ultima VIII: Pagan — dense, physical, material-honest isometric pixel art.
 
-STYLE REQUIREMENTS:
-- Pure pixel art with clean, crisp edges
-- NO anti-aliasing or smoothing
-- Limited color palette (max 32 colors)
+STYLE REQUIREMENTS (NON-NEGOTIABLE):
+- Pure pixel art with hard, crisp edges — NO anti-aliasing, NO soft blending, NO feathered transparency
+- Every surface communicates its material: stone reads as stone, wood as wood, cloth as cloth, metal as metal
+- Use ordered dithering or flat color steps for shading — NO smooth gradients, NO airbrushed transitions
+- Objects have physical weight and volume — props are not flat decoration stamps
+- Shadow direction is fixed south-east for all objects
+- Objects overlap and occlude each other naturally — NO flat, non-overlapping placement
+- Anchor all sprites from bottom-center for consistent depth sorting
+- Limited indexed palette from the approved Ultima VIII ramp set
 - Warm tropical color scheme: terracotta, gold, cream, forest green, ocean blue, deep brown
-- Subtle dithering for shading gradients
-- Portuguese colonial Melaka setting (1580)
-- Southeast Asian tropical atmosphere
+- Portuguese colonial Melaka setting (1580), Southeast Asian tropical atmosphere
+
+BANNED TECHNIQUES:
+- Anti-aliased edges or sub-pixel smoothing
+- Painterly gradients or airbrush shading
+- Flat decorative placement without occlusion or overlap
+- Generic materials where different surfaces use the same shading ramp
 
 
 SPRITE SPECIFICATIONS:
@@ -188,16 +242,25 @@ OUTPUT REQUIREMENTS:
 
 ### white-wall (16x32)
 ```
-Create a pixel art sprite in the style of classic 16-bit RPGs like Ultima VII and Ultima VIII.
+Create a pixel art sprite in the visual language of Ultima VIII: Pagan — dense, physical, material-honest isometric pixel art.
 
-STYLE REQUIREMENTS:
-- Pure pixel art with clean, crisp edges
-- NO anti-aliasing or smoothing
-- Limited color palette (max 32 colors)
+STYLE REQUIREMENTS (NON-NEGOTIABLE):
+- Pure pixel art with hard, crisp edges — NO anti-aliasing, NO soft blending, NO feathered transparency
+- Every surface communicates its material: stone reads as stone, wood as wood, cloth as cloth, metal as metal
+- Use ordered dithering or flat color steps for shading — NO smooth gradients, NO airbrushed transitions
+- Objects have physical weight and volume — props are not flat decoration stamps
+- Shadow direction is fixed south-east for all objects
+- Objects overlap and occlude each other naturally — NO flat, non-overlapping placement
+- Anchor all sprites from bottom-center for consistent depth sorting
+- Limited indexed palette from the approved Ultima VIII ramp set
 - Warm tropical color scheme: terracotta, gold, cream, forest green, ocean blue, deep brown
-- Subtle dithering for shading gradients
-- Portuguese colonial Melaka setting (1580)
-- Southeast Asian tropical atmosphere
+- Portuguese colonial Melaka setting (1580), Southeast Asian tropical atmosphere
+
+BANNED TECHNIQUES:
+- Anti-aliased edges or sub-pixel smoothing
+- Painterly gradients or airbrush shading
+- Flat decorative placement without occlusion or overlap
+- Generic materials where different surfaces use the same shading ramp
 
 
 SPRITE SPECIFICATIONS:
@@ -218,16 +281,25 @@ OUTPUT REQUIREMENTS:
 
 ### roof-tile (16x16)
 ```
-Create a pixel art sprite in the style of classic 16-bit RPGs like Ultima VII and Ultima VIII.
+Create a pixel art sprite in the visual language of Ultima VIII: Pagan — dense, physical, material-honest isometric pixel art.
 
-STYLE REQUIREMENTS:
-- Pure pixel art with clean, crisp edges
-- NO anti-aliasing or smoothing
-- Limited color palette (max 32 colors)
+STYLE REQUIREMENTS (NON-NEGOTIABLE):
+- Pure pixel art with hard, crisp edges — NO anti-aliasing, NO soft blending, NO feathered transparency
+- Every surface communicates its material: stone reads as stone, wood as wood, cloth as cloth, metal as metal
+- Use ordered dithering or flat color steps for shading — NO smooth gradients, NO airbrushed transitions
+- Objects have physical weight and volume — props are not flat decoration stamps
+- Shadow direction is fixed south-east for all objects
+- Objects overlap and occlude each other naturally — NO flat, non-overlapping placement
+- Anchor all sprites from bottom-center for consistent depth sorting
+- Limited indexed palette from the approved Ultima VIII ramp set
 - Warm tropical color scheme: terracotta, gold, cream, forest green, ocean blue, deep brown
-- Subtle dithering for shading gradients
-- Portuguese colonial Melaka setting (1580)
-- Southeast Asian tropical atmosphere
+- Portuguese colonial Melaka setting (1580), Southeast Asian tropical atmosphere
+
+BANNED TECHNIQUES:
+- Anti-aliased edges or sub-pixel smoothing
+- Painterly gradients or airbrush shading
+- Flat decorative placement without occlusion or overlap
+- Generic materials where different surfaces use the same shading ramp
 
 
 SPRITE SPECIFICATIONS:
@@ -251,16 +323,25 @@ OUTPUT REQUIREMENTS:
 
 ### player (24x32)
 ```
-Create a pixel art sprite in the style of classic 16-bit RPGs like Ultima VII and Ultima VIII.
+Create a pixel art sprite in the visual language of Ultima VIII: Pagan — dense, physical, material-honest isometric pixel art.
 
-STYLE REQUIREMENTS:
-- Pure pixel art with clean, crisp edges
-- NO anti-aliasing or smoothing
-- Limited color palette (max 32 colors)
+STYLE REQUIREMENTS (NON-NEGOTIABLE):
+- Pure pixel art with hard, crisp edges — NO anti-aliasing, NO soft blending, NO feathered transparency
+- Every surface communicates its material: stone reads as stone, wood as wood, cloth as cloth, metal as metal
+- Use ordered dithering or flat color steps for shading — NO smooth gradients, NO airbrushed transitions
+- Objects have physical weight and volume — props are not flat decoration stamps
+- Shadow direction is fixed south-east for all objects
+- Objects overlap and occlude each other naturally — NO flat, non-overlapping placement
+- Anchor all sprites from bottom-center for consistent depth sorting
+- Limited indexed palette from the approved Ultima VIII ramp set
 - Warm tropical color scheme: terracotta, gold, cream, forest green, ocean blue, deep brown
-- Subtle dithering for shading gradients
-- Portuguese colonial Melaka setting (1580)
-- Southeast Asian tropical atmosphere
+- Portuguese colonial Melaka setting (1580), Southeast Asian tropical atmosphere
+
+BANNED TECHNIQUES:
+- Anti-aliased edges or sub-pixel smoothing
+- Painterly gradients or airbrush shading
+- Flat decorative placement without occlusion or overlap
+- Generic materials where different surfaces use the same shading ramp
 
 
 SPRITE SPECIFICATIONS:
@@ -281,16 +362,25 @@ OUTPUT REQUIREMENTS:
 
 ### fernao-gomes (24x32)
 ```
-Create a pixel art sprite in the style of classic 16-bit RPGs like Ultima VII and Ultima VIII.
+Create a pixel art sprite in the visual language of Ultima VIII: Pagan — dense, physical, material-honest isometric pixel art.
 
-STYLE REQUIREMENTS:
-- Pure pixel art with clean, crisp edges
-- NO anti-aliasing or smoothing
-- Limited color palette (max 32 colors)
+STYLE REQUIREMENTS (NON-NEGOTIABLE):
+- Pure pixel art with hard, crisp edges — NO anti-aliasing, NO soft blending, NO feathered transparency
+- Every surface communicates its material: stone reads as stone, wood as wood, cloth as cloth, metal as metal
+- Use ordered dithering or flat color steps for shading — NO smooth gradients, NO airbrushed transitions
+- Objects have physical weight and volume — props are not flat decoration stamps
+- Shadow direction is fixed south-east for all objects
+- Objects overlap and occlude each other naturally — NO flat, non-overlapping placement
+- Anchor all sprites from bottom-center for consistent depth sorting
+- Limited indexed palette from the approved Ultima VIII ramp set
 - Warm tropical color scheme: terracotta, gold, cream, forest green, ocean blue, deep brown
-- Subtle dithering for shading gradients
-- Portuguese colonial Melaka setting (1580)
-- Southeast Asian tropical atmosphere
+- Portuguese colonial Melaka setting (1580), Southeast Asian tropical atmosphere
+
+BANNED TECHNIQUES:
+- Anti-aliased edges or sub-pixel smoothing
+- Painterly gradients or airbrush shading
+- Flat decorative placement without occlusion or overlap
+- Generic materials where different surfaces use the same shading ramp
 
 
 SPRITE SPECIFICATIONS:
@@ -311,16 +401,25 @@ OUTPUT REQUIREMENTS:
 
 ### capitao-rodrigues (24x32)
 ```
-Create a pixel art sprite in the style of classic 16-bit RPGs like Ultima VII and Ultima VIII.
+Create a pixel art sprite in the visual language of Ultima VIII: Pagan — dense, physical, material-honest isometric pixel art.
 
-STYLE REQUIREMENTS:
-- Pure pixel art with clean, crisp edges
-- NO anti-aliasing or smoothing
-- Limited color palette (max 32 colors)
+STYLE REQUIREMENTS (NON-NEGOTIABLE):
+- Pure pixel art with hard, crisp edges — NO anti-aliasing, NO soft blending, NO feathered transparency
+- Every surface communicates its material: stone reads as stone, wood as wood, cloth as cloth, metal as metal
+- Use ordered dithering or flat color steps for shading — NO smooth gradients, NO airbrushed transitions
+- Objects have physical weight and volume — props are not flat decoration stamps
+- Shadow direction is fixed south-east for all objects
+- Objects overlap and occlude each other naturally — NO flat, non-overlapping placement
+- Anchor all sprites from bottom-center for consistent depth sorting
+- Limited indexed palette from the approved Ultima VIII ramp set
 - Warm tropical color scheme: terracotta, gold, cream, forest green, ocean blue, deep brown
-- Subtle dithering for shading gradients
-- Portuguese colonial Melaka setting (1580)
-- Southeast Asian tropical atmosphere
+- Portuguese colonial Melaka setting (1580), Southeast Asian tropical atmosphere
+
+BANNED TECHNIQUES:
+- Anti-aliased edges or sub-pixel smoothing
+- Painterly gradients or airbrush shading
+- Flat decorative placement without occlusion or overlap
+- Generic materials where different surfaces use the same shading ramp
 
 
 SPRITE SPECIFICATIONS:
@@ -341,16 +440,25 @@ OUTPUT REQUIREMENTS:
 
 ### padre-tomas (24x32)
 ```
-Create a pixel art sprite in the style of classic 16-bit RPGs like Ultima VII and Ultima VIII.
+Create a pixel art sprite in the visual language of Ultima VIII: Pagan — dense, physical, material-honest isometric pixel art.
 
-STYLE REQUIREMENTS:
-- Pure pixel art with clean, crisp edges
-- NO anti-aliasing or smoothing
-- Limited color palette (max 32 colors)
+STYLE REQUIREMENTS (NON-NEGOTIABLE):
+- Pure pixel art with hard, crisp edges — NO anti-aliasing, NO soft blending, NO feathered transparency
+- Every surface communicates its material: stone reads as stone, wood as wood, cloth as cloth, metal as metal
+- Use ordered dithering or flat color steps for shading — NO smooth gradients, NO airbrushed transitions
+- Objects have physical weight and volume — props are not flat decoration stamps
+- Shadow direction is fixed south-east for all objects
+- Objects overlap and occlude each other naturally — NO flat, non-overlapping placement
+- Anchor all sprites from bottom-center for consistent depth sorting
+- Limited indexed palette from the approved Ultima VIII ramp set
 - Warm tropical color scheme: terracotta, gold, cream, forest green, ocean blue, deep brown
-- Subtle dithering for shading gradients
-- Portuguese colonial Melaka setting (1580)
-- Southeast Asian tropical atmosphere
+- Portuguese colonial Melaka setting (1580), Southeast Asian tropical atmosphere
+
+BANNED TECHNIQUES:
+- Anti-aliased edges or sub-pixel smoothing
+- Painterly gradients or airbrush shading
+- Flat decorative placement without occlusion or overlap
+- Generic materials where different surfaces use the same shading ramp
 
 
 SPRITE SPECIFICATIONS:
@@ -371,16 +479,25 @@ OUTPUT REQUIREMENTS:
 
 ### aminah (24x32)
 ```
-Create a pixel art sprite in the style of classic 16-bit RPGs like Ultima VII and Ultima VIII.
+Create a pixel art sprite in the visual language of Ultima VIII: Pagan — dense, physical, material-honest isometric pixel art.
 
-STYLE REQUIREMENTS:
-- Pure pixel art with clean, crisp edges
-- NO anti-aliasing or smoothing
-- Limited color palette (max 32 colors)
+STYLE REQUIREMENTS (NON-NEGOTIABLE):
+- Pure pixel art with hard, crisp edges — NO anti-aliasing, NO soft blending, NO feathered transparency
+- Every surface communicates its material: stone reads as stone, wood as wood, cloth as cloth, metal as metal
+- Use ordered dithering or flat color steps for shading — NO smooth gradients, NO airbrushed transitions
+- Objects have physical weight and volume — props are not flat decoration stamps
+- Shadow direction is fixed south-east for all objects
+- Objects overlap and occlude each other naturally — NO flat, non-overlapping placement
+- Anchor all sprites from bottom-center for consistent depth sorting
+- Limited indexed palette from the approved Ultima VIII ramp set
 - Warm tropical color scheme: terracotta, gold, cream, forest green, ocean blue, deep brown
-- Subtle dithering for shading gradients
-- Portuguese colonial Melaka setting (1580)
-- Southeast Asian tropical atmosphere
+- Portuguese colonial Melaka setting (1580), Southeast Asian tropical atmosphere
+
+BANNED TECHNIQUES:
+- Anti-aliased edges or sub-pixel smoothing
+- Painterly gradients or airbrush shading
+- Flat decorative placement without occlusion or overlap
+- Generic materials where different surfaces use the same shading ramp
 
 
 SPRITE SPECIFICATIONS:
@@ -401,16 +518,25 @@ OUTPUT REQUIREMENTS:
 
 ### chen-wei (24x32)
 ```
-Create a pixel art sprite in the style of classic 16-bit RPGs like Ultima VII and Ultima VIII.
+Create a pixel art sprite in the visual language of Ultima VIII: Pagan — dense, physical, material-honest isometric pixel art.
 
-STYLE REQUIREMENTS:
-- Pure pixel art with clean, crisp edges
-- NO anti-aliasing or smoothing
-- Limited color palette (max 32 colors)
+STYLE REQUIREMENTS (NON-NEGOTIABLE):
+- Pure pixel art with hard, crisp edges — NO anti-aliasing, NO soft blending, NO feathered transparency
+- Every surface communicates its material: stone reads as stone, wood as wood, cloth as cloth, metal as metal
+- Use ordered dithering or flat color steps for shading — NO smooth gradients, NO airbrushed transitions
+- Objects have physical weight and volume — props are not flat decoration stamps
+- Shadow direction is fixed south-east for all objects
+- Objects overlap and occlude each other naturally — NO flat, non-overlapping placement
+- Anchor all sprites from bottom-center for consistent depth sorting
+- Limited indexed palette from the approved Ultima VIII ramp set
 - Warm tropical color scheme: terracotta, gold, cream, forest green, ocean blue, deep brown
-- Subtle dithering for shading gradients
-- Portuguese colonial Melaka setting (1580)
-- Southeast Asian tropical atmosphere
+- Portuguese colonial Melaka setting (1580), Southeast Asian tropical atmosphere
+
+BANNED TECHNIQUES:
+- Anti-aliased edges or sub-pixel smoothing
+- Painterly gradients or airbrush shading
+- Flat decorative placement without occlusion or overlap
+- Generic materials where different surfaces use the same shading ramp
 
 
 SPRITE SPECIFICATIONS:
@@ -431,16 +557,25 @@ OUTPUT REQUIREMENTS:
 
 ### rashid (24x32)
 ```
-Create a pixel art sprite in the style of classic 16-bit RPGs like Ultima VII and Ultima VIII.
+Create a pixel art sprite in the visual language of Ultima VIII: Pagan — dense, physical, material-honest isometric pixel art.
 
-STYLE REQUIREMENTS:
-- Pure pixel art with clean, crisp edges
-- NO anti-aliasing or smoothing
-- Limited color palette (max 32 colors)
+STYLE REQUIREMENTS (NON-NEGOTIABLE):
+- Pure pixel art with hard, crisp edges — NO anti-aliasing, NO soft blending, NO feathered transparency
+- Every surface communicates its material: stone reads as stone, wood as wood, cloth as cloth, metal as metal
+- Use ordered dithering or flat color steps for shading — NO smooth gradients, NO airbrushed transitions
+- Objects have physical weight and volume — props are not flat decoration stamps
+- Shadow direction is fixed south-east for all objects
+- Objects overlap and occlude each other naturally — NO flat, non-overlapping placement
+- Anchor all sprites from bottom-center for consistent depth sorting
+- Limited indexed palette from the approved Ultima VIII ramp set
 - Warm tropical color scheme: terracotta, gold, cream, forest green, ocean blue, deep brown
-- Subtle dithering for shading gradients
-- Portuguese colonial Melaka setting (1580)
-- Southeast Asian tropical atmosphere
+- Portuguese colonial Melaka setting (1580), Southeast Asian tropical atmosphere
+
+BANNED TECHNIQUES:
+- Anti-aliased edges or sub-pixel smoothing
+- Painterly gradients or airbrush shading
+- Flat decorative placement without occlusion or overlap
+- Generic materials where different surfaces use the same shading ramp
 
 
 SPRITE SPECIFICATIONS:
@@ -464,16 +599,25 @@ OUTPUT REQUIREMENTS:
 
 ### market-stall (32x32)
 ```
-Create a pixel art sprite in the style of classic 16-bit RPGs like Ultima VII and Ultima VIII.
+Create a pixel art sprite in the visual language of Ultima VIII: Pagan — dense, physical, material-honest isometric pixel art.
 
-STYLE REQUIREMENTS:
-- Pure pixel art with clean, crisp edges
-- NO anti-aliasing or smoothing
-- Limited color palette (max 32 colors)
+STYLE REQUIREMENTS (NON-NEGOTIABLE):
+- Pure pixel art with hard, crisp edges — NO anti-aliasing, NO soft blending, NO feathered transparency
+- Every surface communicates its material: stone reads as stone, wood as wood, cloth as cloth, metal as metal
+- Use ordered dithering or flat color steps for shading — NO smooth gradients, NO airbrushed transitions
+- Objects have physical weight and volume — props are not flat decoration stamps
+- Shadow direction is fixed south-east for all objects
+- Objects overlap and occlude each other naturally — NO flat, non-overlapping placement
+- Anchor all sprites from bottom-center for consistent depth sorting
+- Limited indexed palette from the approved Ultima VIII ramp set
 - Warm tropical color scheme: terracotta, gold, cream, forest green, ocean blue, deep brown
-- Subtle dithering for shading gradients
-- Portuguese colonial Melaka setting (1580)
-- Southeast Asian tropical atmosphere
+- Portuguese colonial Melaka setting (1580), Southeast Asian tropical atmosphere
+
+BANNED TECHNIQUES:
+- Anti-aliased edges or sub-pixel smoothing
+- Painterly gradients or airbrush shading
+- Flat decorative placement without occlusion or overlap
+- Generic materials where different surfaces use the same shading ramp
 
 
 SPRITE SPECIFICATIONS:
@@ -494,16 +638,25 @@ OUTPUT REQUIREMENTS:
 
 ### spice-pile-turmeric (16x16)
 ```
-Create a pixel art sprite in the style of classic 16-bit RPGs like Ultima VII and Ultima VIII.
+Create a pixel art sprite in the visual language of Ultima VIII: Pagan — dense, physical, material-honest isometric pixel art.
 
-STYLE REQUIREMENTS:
-- Pure pixel art with clean, crisp edges
-- NO anti-aliasing or smoothing
-- Limited color palette (max 32 colors)
+STYLE REQUIREMENTS (NON-NEGOTIABLE):
+- Pure pixel art with hard, crisp edges — NO anti-aliasing, NO soft blending, NO feathered transparency
+- Every surface communicates its material: stone reads as stone, wood as wood, cloth as cloth, metal as metal
+- Use ordered dithering or flat color steps for shading — NO smooth gradients, NO airbrushed transitions
+- Objects have physical weight and volume — props are not flat decoration stamps
+- Shadow direction is fixed south-east for all objects
+- Objects overlap and occlude each other naturally — NO flat, non-overlapping placement
+- Anchor all sprites from bottom-center for consistent depth sorting
+- Limited indexed palette from the approved Ultima VIII ramp set
 - Warm tropical color scheme: terracotta, gold, cream, forest green, ocean blue, deep brown
-- Subtle dithering for shading gradients
-- Portuguese colonial Melaka setting (1580)
-- Southeast Asian tropical atmosphere
+- Portuguese colonial Melaka setting (1580), Southeast Asian tropical atmosphere
+
+BANNED TECHNIQUES:
+- Anti-aliased edges or sub-pixel smoothing
+- Painterly gradients or airbrush shading
+- Flat decorative placement without occlusion or overlap
+- Generic materials where different surfaces use the same shading ramp
 
 
 SPRITE SPECIFICATIONS:
@@ -524,16 +677,25 @@ OUTPUT REQUIREMENTS:
 
 ### spice-pile-pepper (16x16)
 ```
-Create a pixel art sprite in the style of classic 16-bit RPGs like Ultima VII and Ultima VIII.
+Create a pixel art sprite in the visual language of Ultima VIII: Pagan — dense, physical, material-honest isometric pixel art.
 
-STYLE REQUIREMENTS:
-- Pure pixel art with clean, crisp edges
-- NO anti-aliasing or smoothing
-- Limited color palette (max 32 colors)
+STYLE REQUIREMENTS (NON-NEGOTIABLE):
+- Pure pixel art with hard, crisp edges — NO anti-aliasing, NO soft blending, NO feathered transparency
+- Every surface communicates its material: stone reads as stone, wood as wood, cloth as cloth, metal as metal
+- Use ordered dithering or flat color steps for shading — NO smooth gradients, NO airbrushed transitions
+- Objects have physical weight and volume — props are not flat decoration stamps
+- Shadow direction is fixed south-east for all objects
+- Objects overlap and occlude each other naturally — NO flat, non-overlapping placement
+- Anchor all sprites from bottom-center for consistent depth sorting
+- Limited indexed palette from the approved Ultima VIII ramp set
 - Warm tropical color scheme: terracotta, gold, cream, forest green, ocean blue, deep brown
-- Subtle dithering for shading gradients
-- Portuguese colonial Melaka setting (1580)
-- Southeast Asian tropical atmosphere
+- Portuguese colonial Melaka setting (1580), Southeast Asian tropical atmosphere
+
+BANNED TECHNIQUES:
+- Anti-aliased edges or sub-pixel smoothing
+- Painterly gradients or airbrush shading
+- Flat decorative placement without occlusion or overlap
+- Generic materials where different surfaces use the same shading ramp
 
 
 SPRITE SPECIFICATIONS:
@@ -554,16 +716,25 @@ OUTPUT REQUIREMENTS:
 
 ### barrel (16x24)
 ```
-Create a pixel art sprite in the style of classic 16-bit RPGs like Ultima VII and Ultima VIII.
+Create a pixel art sprite in the visual language of Ultima VIII: Pagan — dense, physical, material-honest isometric pixel art.
 
-STYLE REQUIREMENTS:
-- Pure pixel art with clean, crisp edges
-- NO anti-aliasing or smoothing
-- Limited color palette (max 32 colors)
+STYLE REQUIREMENTS (NON-NEGOTIABLE):
+- Pure pixel art with hard, crisp edges — NO anti-aliasing, NO soft blending, NO feathered transparency
+- Every surface communicates its material: stone reads as stone, wood as wood, cloth as cloth, metal as metal
+- Use ordered dithering or flat color steps for shading — NO smooth gradients, NO airbrushed transitions
+- Objects have physical weight and volume — props are not flat decoration stamps
+- Shadow direction is fixed south-east for all objects
+- Objects overlap and occlude each other naturally — NO flat, non-overlapping placement
+- Anchor all sprites from bottom-center for consistent depth sorting
+- Limited indexed palette from the approved Ultima VIII ramp set
 - Warm tropical color scheme: terracotta, gold, cream, forest green, ocean blue, deep brown
-- Subtle dithering for shading gradients
-- Portuguese colonial Melaka setting (1580)
-- Southeast Asian tropical atmosphere
+- Portuguese colonial Melaka setting (1580), Southeast Asian tropical atmosphere
+
+BANNED TECHNIQUES:
+- Anti-aliased edges or sub-pixel smoothing
+- Painterly gradients or airbrush shading
+- Flat decorative placement without occlusion or overlap
+- Generic materials where different surfaces use the same shading ramp
 
 
 SPRITE SPECIFICATIONS:
@@ -584,16 +755,25 @@ OUTPUT REQUIREMENTS:
 
 ### crate (16x16)
 ```
-Create a pixel art sprite in the style of classic 16-bit RPGs like Ultima VII and Ultima VIII.
+Create a pixel art sprite in the visual language of Ultima VIII: Pagan — dense, physical, material-honest isometric pixel art.
 
-STYLE REQUIREMENTS:
-- Pure pixel art with clean, crisp edges
-- NO anti-aliasing or smoothing
-- Limited color palette (max 32 colors)
+STYLE REQUIREMENTS (NON-NEGOTIABLE):
+- Pure pixel art with hard, crisp edges — NO anti-aliasing, NO soft blending, NO feathered transparency
+- Every surface communicates its material: stone reads as stone, wood as wood, cloth as cloth, metal as metal
+- Use ordered dithering or flat color steps for shading — NO smooth gradients, NO airbrushed transitions
+- Objects have physical weight and volume — props are not flat decoration stamps
+- Shadow direction is fixed south-east for all objects
+- Objects overlap and occlude each other naturally — NO flat, non-overlapping placement
+- Anchor all sprites from bottom-center for consistent depth sorting
+- Limited indexed palette from the approved Ultima VIII ramp set
 - Warm tropical color scheme: terracotta, gold, cream, forest green, ocean blue, deep brown
-- Subtle dithering for shading gradients
-- Portuguese colonial Melaka setting (1580)
-- Southeast Asian tropical atmosphere
+- Portuguese colonial Melaka setting (1580), Southeast Asian tropical atmosphere
+
+BANNED TECHNIQUES:
+- Anti-aliased edges or sub-pixel smoothing
+- Painterly gradients or airbrush shading
+- Flat decorative placement without occlusion or overlap
+- Generic materials where different surfaces use the same shading ramp
 
 
 SPRITE SPECIFICATIONS:
@@ -614,16 +794,25 @@ OUTPUT REQUIREMENTS:
 
 ### palm-tree (32x48)
 ```
-Create a pixel art sprite in the style of classic 16-bit RPGs like Ultima VII and Ultima VIII.
+Create a pixel art sprite in the visual language of Ultima VIII: Pagan — dense, physical, material-honest isometric pixel art.
 
-STYLE REQUIREMENTS:
-- Pure pixel art with clean, crisp edges
-- NO anti-aliasing or smoothing
-- Limited color palette (max 32 colors)
+STYLE REQUIREMENTS (NON-NEGOTIABLE):
+- Pure pixel art with hard, crisp edges — NO anti-aliasing, NO soft blending, NO feathered transparency
+- Every surface communicates its material: stone reads as stone, wood as wood, cloth as cloth, metal as metal
+- Use ordered dithering or flat color steps for shading — NO smooth gradients, NO airbrushed transitions
+- Objects have physical weight and volume — props are not flat decoration stamps
+- Shadow direction is fixed south-east for all objects
+- Objects overlap and occlude each other naturally — NO flat, non-overlapping placement
+- Anchor all sprites from bottom-center for consistent depth sorting
+- Limited indexed palette from the approved Ultima VIII ramp set
 - Warm tropical color scheme: terracotta, gold, cream, forest green, ocean blue, deep brown
-- Subtle dithering for shading gradients
-- Portuguese colonial Melaka setting (1580)
-- Southeast Asian tropical atmosphere
+- Portuguese colonial Melaka setting (1580), Southeast Asian tropical atmosphere
+
+BANNED TECHNIQUES:
+- Anti-aliased edges or sub-pixel smoothing
+- Painterly gradients or airbrush shading
+- Flat decorative placement without occlusion or overlap
+- Generic materials where different surfaces use the same shading ramp
 
 
 SPRITE SPECIFICATIONS:
@@ -644,16 +833,25 @@ OUTPUT REQUIREMENTS:
 
 ### banana-tree (24x32)
 ```
-Create a pixel art sprite in the style of classic 16-bit RPGs like Ultima VII and Ultima VIII.
+Create a pixel art sprite in the visual language of Ultima VIII: Pagan — dense, physical, material-honest isometric pixel art.
 
-STYLE REQUIREMENTS:
-- Pure pixel art with clean, crisp edges
-- NO anti-aliasing or smoothing
-- Limited color palette (max 32 colors)
+STYLE REQUIREMENTS (NON-NEGOTIABLE):
+- Pure pixel art with hard, crisp edges — NO anti-aliasing, NO soft blending, NO feathered transparency
+- Every surface communicates its material: stone reads as stone, wood as wood, cloth as cloth, metal as metal
+- Use ordered dithering or flat color steps for shading — NO smooth gradients, NO airbrushed transitions
+- Objects have physical weight and volume — props are not flat decoration stamps
+- Shadow direction is fixed south-east for all objects
+- Objects overlap and occlude each other naturally — NO flat, non-overlapping placement
+- Anchor all sprites from bottom-center for consistent depth sorting
+- Limited indexed palette from the approved Ultima VIII ramp set
 - Warm tropical color scheme: terracotta, gold, cream, forest green, ocean blue, deep brown
-- Subtle dithering for shading gradients
-- Portuguese colonial Melaka setting (1580)
-- Southeast Asian tropical atmosphere
+- Portuguese colonial Melaka setting (1580), Southeast Asian tropical atmosphere
+
+BANNED TECHNIQUES:
+- Anti-aliased edges or sub-pixel smoothing
+- Painterly gradients or airbrush shading
+- Flat decorative placement without occlusion or overlap
+- Generic materials where different surfaces use the same shading ramp
 
 
 SPRITE SPECIFICATIONS:
@@ -674,16 +872,25 @@ OUTPUT REQUIREMENTS:
 
 ### lantern-brass (16x16)
 ```
-Create a pixel art sprite in the style of classic 16-bit RPGs like Ultima VII and Ultima VIII.
+Create a pixel art sprite in the visual language of Ultima VIII: Pagan — dense, physical, material-honest isometric pixel art.
 
-STYLE REQUIREMENTS:
-- Pure pixel art with clean, crisp edges
-- NO anti-aliasing or smoothing
-- Limited color palette (max 32 colors)
+STYLE REQUIREMENTS (NON-NEGOTIABLE):
+- Pure pixel art with hard, crisp edges — NO anti-aliasing, NO soft blending, NO feathered transparency
+- Every surface communicates its material: stone reads as stone, wood as wood, cloth as cloth, metal as metal
+- Use ordered dithering or flat color steps for shading — NO smooth gradients, NO airbrushed transitions
+- Objects have physical weight and volume — props are not flat decoration stamps
+- Shadow direction is fixed south-east for all objects
+- Objects overlap and occlude each other naturally — NO flat, non-overlapping placement
+- Anchor all sprites from bottom-center for consistent depth sorting
+- Limited indexed palette from the approved Ultima VIII ramp set
 - Warm tropical color scheme: terracotta, gold, cream, forest green, ocean blue, deep brown
-- Subtle dithering for shading gradients
-- Portuguese colonial Melaka setting (1580)
-- Southeast Asian tropical atmosphere
+- Portuguese colonial Melaka setting (1580), Southeast Asian tropical atmosphere
+
+BANNED TECHNIQUES:
+- Anti-aliased edges or sub-pixel smoothing
+- Painterly gradients or airbrush shading
+- Flat decorative placement without occlusion or overlap
+- Generic materials where different surfaces use the same shading ramp
 
 
 SPRITE SPECIFICATIONS:
@@ -704,16 +911,25 @@ OUTPUT REQUIREMENTS:
 
 ### anchor (24x24)
 ```
-Create a pixel art sprite in the style of classic 16-bit RPGs like Ultima VII and Ultima VIII.
+Create a pixel art sprite in the visual language of Ultima VIII: Pagan — dense, physical, material-honest isometric pixel art.
 
-STYLE REQUIREMENTS:
-- Pure pixel art with clean, crisp edges
-- NO anti-aliasing or smoothing
-- Limited color palette (max 32 colors)
+STYLE REQUIREMENTS (NON-NEGOTIABLE):
+- Pure pixel art with hard, crisp edges — NO anti-aliasing, NO soft blending, NO feathered transparency
+- Every surface communicates its material: stone reads as stone, wood as wood, cloth as cloth, metal as metal
+- Use ordered dithering or flat color steps for shading — NO smooth gradients, NO airbrushed transitions
+- Objects have physical weight and volume — props are not flat decoration stamps
+- Shadow direction is fixed south-east for all objects
+- Objects overlap and occlude each other naturally — NO flat, non-overlapping placement
+- Anchor all sprites from bottom-center for consistent depth sorting
+- Limited indexed palette from the approved Ultima VIII ramp set
 - Warm tropical color scheme: terracotta, gold, cream, forest green, ocean blue, deep brown
-- Subtle dithering for shading gradients
-- Portuguese colonial Melaka setting (1580)
-- Southeast Asian tropical atmosphere
+- Portuguese colonial Melaka setting (1580), Southeast Asian tropical atmosphere
+
+BANNED TECHNIQUES:
+- Anti-aliased edges or sub-pixel smoothing
+- Painterly gradients or airbrush shading
+- Flat decorative placement without occlusion or overlap
+- Generic materials where different surfaces use the same shading ramp
 
 
 SPRITE SPECIFICATIONS:
@@ -734,16 +950,25 @@ OUTPUT REQUIREMENTS:
 
 ### cannon (32x16)
 ```
-Create a pixel art sprite in the style of classic 16-bit RPGs like Ultima VII and Ultima VIII.
+Create a pixel art sprite in the visual language of Ultima VIII: Pagan — dense, physical, material-honest isometric pixel art.
 
-STYLE REQUIREMENTS:
-- Pure pixel art with clean, crisp edges
-- NO anti-aliasing or smoothing
-- Limited color palette (max 32 colors)
+STYLE REQUIREMENTS (NON-NEGOTIABLE):
+- Pure pixel art with hard, crisp edges — NO anti-aliasing, NO soft blending, NO feathered transparency
+- Every surface communicates its material: stone reads as stone, wood as wood, cloth as cloth, metal as metal
+- Use ordered dithering or flat color steps for shading — NO smooth gradients, NO airbrushed transitions
+- Objects have physical weight and volume — props are not flat decoration stamps
+- Shadow direction is fixed south-east for all objects
+- Objects overlap and occlude each other naturally — NO flat, non-overlapping placement
+- Anchor all sprites from bottom-center for consistent depth sorting
+- Limited indexed palette from the approved Ultima VIII ramp set
 - Warm tropical color scheme: terracotta, gold, cream, forest green, ocean blue, deep brown
-- Subtle dithering for shading gradients
-- Portuguese colonial Melaka setting (1580)
-- Southeast Asian tropical atmosphere
+- Portuguese colonial Melaka setting (1580), Southeast Asian tropical atmosphere
+
+BANNED TECHNIQUES:
+- Anti-aliased edges or sub-pixel smoothing
+- Painterly gradients or airbrush shading
+- Flat decorative placement without occlusion or overlap
+- Generic materials where different surfaces use the same shading ramp
 
 
 SPRITE SPECIFICATIONS:
@@ -764,16 +989,25 @@ OUTPUT REQUIREMENTS:
 
 ### stone-cross (16x32)
 ```
-Create a pixel art sprite in the style of classic 16-bit RPGs like Ultima VII and Ultima VIII.
+Create a pixel art sprite in the visual language of Ultima VIII: Pagan — dense, physical, material-honest isometric pixel art.
 
-STYLE REQUIREMENTS:
-- Pure pixel art with clean, crisp edges
-- NO anti-aliasing or smoothing
-- Limited color palette (max 32 colors)
+STYLE REQUIREMENTS (NON-NEGOTIABLE):
+- Pure pixel art with hard, crisp edges — NO anti-aliasing, NO soft blending, NO feathered transparency
+- Every surface communicates its material: stone reads as stone, wood as wood, cloth as cloth, metal as metal
+- Use ordered dithering or flat color steps for shading — NO smooth gradients, NO airbrushed transitions
+- Objects have physical weight and volume — props are not flat decoration stamps
+- Shadow direction is fixed south-east for all objects
+- Objects overlap and occlude each other naturally — NO flat, non-overlapping placement
+- Anchor all sprites from bottom-center for consistent depth sorting
+- Limited indexed palette from the approved Ultima VIII ramp set
 - Warm tropical color scheme: terracotta, gold, cream, forest green, ocean blue, deep brown
-- Subtle dithering for shading gradients
-- Portuguese colonial Melaka setting (1580)
-- Southeast Asian tropical atmosphere
+- Portuguese colonial Melaka setting (1580), Southeast Asian tropical atmosphere
+
+BANNED TECHNIQUES:
+- Anti-aliased edges or sub-pixel smoothing
+- Painterly gradients or airbrush shading
+- Flat decorative placement without occlusion or overlap
+- Generic materials where different surfaces use the same shading ramp
 
 
 SPRITE SPECIFICATIONS:
@@ -794,16 +1028,25 @@ OUTPUT REQUIREMENTS:
 
 ### fishing-net (24x24)
 ```
-Create a pixel art sprite in the style of classic 16-bit RPGs like Ultima VII and Ultima VIII.
+Create a pixel art sprite in the visual language of Ultima VIII: Pagan — dense, physical, material-honest isometric pixel art.
 
-STYLE REQUIREMENTS:
-- Pure pixel art with clean, crisp edges
-- NO anti-aliasing or smoothing
-- Limited color palette (max 32 colors)
+STYLE REQUIREMENTS (NON-NEGOTIABLE):
+- Pure pixel art with hard, crisp edges — NO anti-aliasing, NO soft blending, NO feathered transparency
+- Every surface communicates its material: stone reads as stone, wood as wood, cloth as cloth, metal as metal
+- Use ordered dithering or flat color steps for shading — NO smooth gradients, NO airbrushed transitions
+- Objects have physical weight and volume — props are not flat decoration stamps
+- Shadow direction is fixed south-east for all objects
+- Objects overlap and occlude each other naturally — NO flat, non-overlapping placement
+- Anchor all sprites from bottom-center for consistent depth sorting
+- Limited indexed palette from the approved Ultima VIII ramp set
 - Warm tropical color scheme: terracotta, gold, cream, forest green, ocean blue, deep brown
-- Subtle dithering for shading gradients
-- Portuguese colonial Melaka setting (1580)
-- Southeast Asian tropical atmosphere
+- Portuguese colonial Melaka setting (1580), Southeast Asian tropical atmosphere
+
+BANNED TECHNIQUES:
+- Anti-aliased edges or sub-pixel smoothing
+- Painterly gradients or airbrush shading
+- Flat decorative placement without occlusion or overlap
+- Generic materials where different surfaces use the same shading ramp
 
 
 SPRITE SPECIFICATIONS:
@@ -824,16 +1067,25 @@ OUTPUT REQUIREMENTS:
 
 ### ceramic-vase (16x24)
 ```
-Create a pixel art sprite in the style of classic 16-bit RPGs like Ultima VII and Ultima VIII.
+Create a pixel art sprite in the visual language of Ultima VIII: Pagan — dense, physical, material-honest isometric pixel art.
 
-STYLE REQUIREMENTS:
-- Pure pixel art with clean, crisp edges
-- NO anti-aliasing or smoothing
-- Limited color palette (max 32 colors)
+STYLE REQUIREMENTS (NON-NEGOTIABLE):
+- Pure pixel art with hard, crisp edges — NO anti-aliasing, NO soft blending, NO feathered transparency
+- Every surface communicates its material: stone reads as stone, wood as wood, cloth as cloth, metal as metal
+- Use ordered dithering or flat color steps for shading — NO smooth gradients, NO airbrushed transitions
+- Objects have physical weight and volume — props are not flat decoration stamps
+- Shadow direction is fixed south-east for all objects
+- Objects overlap and occlude each other naturally — NO flat, non-overlapping placement
+- Anchor all sprites from bottom-center for consistent depth sorting
+- Limited indexed palette from the approved Ultima VIII ramp set
 - Warm tropical color scheme: terracotta, gold, cream, forest green, ocean blue, deep brown
-- Subtle dithering for shading gradients
-- Portuguese colonial Melaka setting (1580)
-- Southeast Asian tropical atmosphere
+- Portuguese colonial Melaka setting (1580), Southeast Asian tropical atmosphere
+
+BANNED TECHNIQUES:
+- Anti-aliased edges or sub-pixel smoothing
+- Painterly gradients or airbrush shading
+- Flat decorative placement without occlusion or overlap
+- Generic materials where different surfaces use the same shading ramp
 
 
 SPRITE SPECIFICATIONS:
@@ -854,16 +1106,25 @@ OUTPUT REQUIREMENTS:
 
 ### silk-bolt (16x16)
 ```
-Create a pixel art sprite in the style of classic 16-bit RPGs like Ultima VII and Ultima VIII.
+Create a pixel art sprite in the visual language of Ultima VIII: Pagan — dense, physical, material-honest isometric pixel art.
 
-STYLE REQUIREMENTS:
-- Pure pixel art with clean, crisp edges
-- NO anti-aliasing or smoothing
-- Limited color palette (max 32 colors)
+STYLE REQUIREMENTS (NON-NEGOTIABLE):
+- Pure pixel art with hard, crisp edges — NO anti-aliasing, NO soft blending, NO feathered transparency
+- Every surface communicates its material: stone reads as stone, wood as wood, cloth as cloth, metal as metal
+- Use ordered dithering or flat color steps for shading — NO smooth gradients, NO airbrushed transitions
+- Objects have physical weight and volume — props are not flat decoration stamps
+- Shadow direction is fixed south-east for all objects
+- Objects overlap and occlude each other naturally — NO flat, non-overlapping placement
+- Anchor all sprites from bottom-center for consistent depth sorting
+- Limited indexed palette from the approved Ultima VIII ramp set
 - Warm tropical color scheme: terracotta, gold, cream, forest green, ocean blue, deep brown
-- Subtle dithering for shading gradients
-- Portuguese colonial Melaka setting (1580)
-- Southeast Asian tropical atmosphere
+- Portuguese colonial Melaka setting (1580), Southeast Asian tropical atmosphere
+
+BANNED TECHNIQUES:
+- Anti-aliased edges or sub-pixel smoothing
+- Painterly gradients or airbrush shading
+- Flat decorative placement without occlusion or overlap
+- Generic materials where different surfaces use the same shading ramp
 
 
 SPRITE SPECIFICATIONS:
@@ -884,16 +1145,25 @@ OUTPUT REQUIREMENTS:
 
 ### coin-pile (16x16)
 ```
-Create a pixel art sprite in the style of classic 16-bit RPGs like Ultima VII and Ultima VIII.
+Create a pixel art sprite in the visual language of Ultima VIII: Pagan — dense, physical, material-honest isometric pixel art.
 
-STYLE REQUIREMENTS:
-- Pure pixel art with clean, crisp edges
-- NO anti-aliasing or smoothing
-- Limited color palette (max 32 colors)
+STYLE REQUIREMENTS (NON-NEGOTIABLE):
+- Pure pixel art with hard, crisp edges — NO anti-aliasing, NO soft blending, NO feathered transparency
+- Every surface communicates its material: stone reads as stone, wood as wood, cloth as cloth, metal as metal
+- Use ordered dithering or flat color steps for shading — NO smooth gradients, NO airbrushed transitions
+- Objects have physical weight and volume — props are not flat decoration stamps
+- Shadow direction is fixed south-east for all objects
+- Objects overlap and occlude each other naturally — NO flat, non-overlapping placement
+- Anchor all sprites from bottom-center for consistent depth sorting
+- Limited indexed palette from the approved Ultima VIII ramp set
 - Warm tropical color scheme: terracotta, gold, cream, forest green, ocean blue, deep brown
-- Subtle dithering for shading gradients
-- Portuguese colonial Melaka setting (1580)
-- Southeast Asian tropical atmosphere
+- Portuguese colonial Melaka setting (1580), Southeast Asian tropical atmosphere
+
+BANNED TECHNIQUES:
+- Anti-aliased edges or sub-pixel smoothing
+- Painterly gradients or airbrush shading
+- Flat decorative placement without occlusion or overlap
+- Generic materials where different surfaces use the same shading ramp
 
 
 SPRITE SPECIFICATIONS:

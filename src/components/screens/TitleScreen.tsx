@@ -1,7 +1,7 @@
 /**
  * Title Screen Component
  *
- * Main menu with Sierra/LucasArts style presentation.
+ * Main menu with Ultima VIII style presentation.
  * Inspired by classic adventure games with modern polish.
  */
 

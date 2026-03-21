@@ -95,11 +95,28 @@ The first 10 minutes should establish:
 
 A release should not be called polished unless:
 
-- the build passes
-- tests pass
-- strict art validation passes
+- the build passes (`npm run build` — includes prebuild structural validation)
+- tests pass (`npm test` — includes pretest style validation)
+- strict art validation passes (`npm run validate:all`)
+- wave grading is current (`npm run wave:status`)
 - key locations were actually walked and judged by feel
 - docs describe the current product truth
+
+### Style enforcement pipeline
+
+The Ultima VIII style framework is enforced through automated tooling:
+
+- `npm test` — runs both structural and style validators before tests (pretest hook)
+- `npm run build` — runs structural validator before build (prebuild hook)
+- `npm run validate:all` — explicit combined structural + style validation
+- `npm run grade:wave -- --wave N` — auto-grade assets against style profiles
+- `npm run wave:status` — view grading progress across all 3 corrective waves
+- `npm run audit:art` — full audit with markdown reports
+
+Wave status and grade cards: `docs/art-bible/corrective-waves/`
+Location reviews: `docs/art-bible/corrective-waves/location-reviews/`
+Style profiles and thresholds: `docs/art-bible/gameplay-asset-spec.json`
+Shipping asset style map: `docs/art-bible/shipping-asset-style-map.json`
 
 ## Guardrails
 

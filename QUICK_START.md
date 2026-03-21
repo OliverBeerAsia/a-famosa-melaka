@@ -12,13 +12,45 @@ The development server runs at `http://localhost:3000`.
 ## Core Commands
 
 ```bash
-npm run dev
-npm run build
-npm run preview
-npm test -- --runInBand
-npm run validate:art -- --strict
-npm run electron
-npm run package:mac
+npm run dev                          # Start dev server
+npm run build                        # Build (includes prebuild validation)
+npm run preview                      # Preview production build
+npm test -- --runInBand              # Run tests (includes pretest validation)
+npm run electron                     # Build and launch in Electron
+npm run package:mac                  # Package for macOS
+```
+
+## Art & Style Commands
+
+```bash
+npm run validate:art -- --strict     # Structural art validation
+npm run validate:style               # Ultima VIII style compliance
+npm run validate:all                 # Combined structural + style validation
+npm run wave:status                  # View wave grading progress
+npm run grade:wave -- --wave 1       # Auto-grade Wave 1 assets
+npm run audit:art                    # Full audit with markdown reports
+npm run sync:ultima8-refs            # Sync style map with runtime manifest
+```
+
+## Art Generation (no API required)
+
+```bash
+npm run generate:portraits           # Procedural VGA portraits (all 14)
+npm run generate:all-art             # All gameplay sprites (tiles, objects, etc.)
+npm run generate:character-sheets    # Character animation sheets
+npm run generate:animated-objects    # Animated sprite sheets
+npm run generate:crowd               # Crowd silhouettes
+```
+
+## Art Generation (API required)
+
+```bash
+export OPENAI_API_KEY=sk-...         # Set OpenAI key
+npm run generate:openai -- --scenes  # Scene backdrops via DALL-E 3
+npm run generate:openai -- --all     # All scenes + portraits via DALL-E 3
+
+export GEMINI_API_KEY=AIza...        # Set Gemini key
+npm run generate:scenes              # Scenes via Gemini
 ```
 
 ## Controls
@@ -58,21 +90,25 @@ Packaging output is written to `release/`.
 Before committing a release build, run:
 
 ```bash
-npm test -- --runInBand
-npm run build
-npm run validate:art -- --strict
+npm test -- --runInBand              # Validates + tests (52 tests, 7 suites)
+npm run build                        # Validates + builds
+npm run wave:status                  # Confirm wave grading is current
+npm run audit:art                    # Full audit with reports
 ```
 
 ## Key Docs
 
 - `README.md`
 - `PROJECT_STATUS.md`
-- `CHANGELOG.md`
-- `TESTING.md`
+- `QUICK_START.md`
 - `docs/PROJECT_BRIEFING.md`
 - `docs/PROJECT_SETUP.md`
 - `docs/DESIGN_STANDARDS.md`
-- `docs/RPG_EXPANSION_PLAN.md`
-- `docs/ATMOSPHERIC_SYSTEMS.md`
-- `docs/RELEASE_NOTES_v0.7.0.md`
-- `docs/TODO.md`
+- `docs/art-bible/ART_BIBLE.md` — Visual philosophy + Ultima VIII style rules
+- `docs/art-bible/ART_PIPELINE.md` — Production workflow
+- `docs/art-bible/gameplay-asset-spec.json` — Machine-readable style profiles + thresholds
+- `docs/art-bible/shipping-asset-style-map.json` — Asset-to-reference mapping + grade cards
+- `docs/art-bible/ultima8-reference-manifest.json` — Ultima VIII reference catalog
+- `docs/art-bible/corrective-waves/wave-tracker.json` — Wave grading progress
+- `docs/art-bible/corrective-waves/location-reviews/` — Per-location density reviews
+- `docs/ULTIMA8_STYLE_PLAN.md` — Original style retrofit plan

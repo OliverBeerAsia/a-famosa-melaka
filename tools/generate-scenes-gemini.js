@@ -1,12 +1,12 @@
 /**
  * Scene Generator using Google Gemini API (Nano Banana)
  * 
- * Generates Sierra/LucasArts style adventure game scenes for:
+ * Generates Ultima VIII style adventure game scenes for:
  * - Opening/Title screen
  * - Location interstitials (5 locations)
  * - Character portraits
  * 
- * Style: Late 90s adventure games like Monkey Island, Quest for Glory
+ * Style: Dense atmospheric pixel art in the Ultima VIII tradition
  * 
  * NOTE: This script automatically backs up existing scenes before generating!
  *       Use --no-backup to skip backup.
@@ -16,6 +16,7 @@ const fs = require('fs');
 const path = require('path');
 const https = require('https');
 const { execSync } = require('child_process');
+const { getStyleHeader } = require('./load-style-header.cjs');
 
 // API Configuration  
 const API_KEY = process.env.GEMINI_API_KEY;
@@ -60,19 +61,8 @@ function backupScenesIfExists() {
   }
 }
 
-// Base style for Sierra/LucasArts scenes
-const STYLE_PREFIX = `Create a detailed pixel art scene in the style of late 1990s Sierra and LucasArts adventure games (like Monkey Island 3, Quest for Glory 4, Gabriel Knight).
-
-STYLE REQUIREMENTS:
-- High-quality pixel art with rich detail and depth
-- 16:9 widescreen aspect ratio, suitable for 1920x1080 display
-- Painterly pixel art with smooth gradients and careful dithering
-- Warm, atmospheric lighting with golden hour tropical tones
-- Rich color palette with deep shadows and vibrant highlights
-- Historical accuracy for 1580s Portuguese Melaka
-- Southeast Asian tropical setting with Portuguese colonial architecture
-- NO text, NO UI elements, NO watermarks - pure scene artwork
-`;
+// Base style for Ultima VIII scenes — loaded from canonical style header
+const STYLE_PREFIX = getStyleHeader('scene-backdrop');
 
 // Scene definitions
 const SCENES = {
@@ -117,7 +107,7 @@ ATMOSPHERE:
 - Some tropical vines growing on ancient stonework
 - A few civilians passing through the gate
 
-Style: Sierra/LucasArts adventure game, detailed and atmospheric.`
+Style: Dense Ultima VIII-era cinematic composition, detailed and atmospheric.`
   },
 
   'rua-direita': {
@@ -140,7 +130,7 @@ ATMOSPHERE:
 - Warm afternoon light
 - Distant view of fortress on hill through a gap in buildings
 
-Style: Sierra/LucasArts adventure game, rich detail, bustling life.`
+Style: Dense Ultima VIII-era cinematic composition, rich detail, bustling life.`
   },
 
   'st-pauls-church': {
@@ -162,7 +152,7 @@ ATMOSPHERE:
 - Cool shadows under the palm trees
 - Contrast between sacred European architecture and tropical setting
 
-Style: Sierra/LucasArts adventure game, serene and spiritual.`
+Style: Dense Ultima VIII-era cinematic composition, serene and spiritual.`
   },
 
   'waterfront': {
@@ -184,7 +174,7 @@ ATMOSPHERE:
 - Sense of global trade and adventure
 - Creaking wood and lapping waves implied
 
-Style: Sierra/LucasArts adventure game, nautical and adventurous.`
+Style: Dense Ultima VIII-era cinematic composition, nautical and adventurous.`
   },
 
   'kampung': {
@@ -207,7 +197,7 @@ ATMOSPHERE:
 - Contrast with colonial Portuguese areas
 - Authentic traditional Malay village life
 
-Style: Sierra/LucasArts adventure game, warm and cultural.`
+Style: Dense Ultima VIII-era cinematic composition, warm and cultural.`
   }
 };
 
@@ -295,7 +285,7 @@ async function generateScene(prompt, outputPath) {
  * Generate all scenes
  */
 async function generateAllScenes() {
-  console.log('\n🎨 A Famosa Scene Generator - Sierra/LucasArts Style\n');
+  console.log('\n🎨 A Famosa Scene Generator - Ultima VIII Style\n');
   console.log('Model:', MODEL);
   console.log('=' .repeat(60) + '\n');
   
@@ -368,7 +358,7 @@ async function main() {
     await generateSingle(args[0]);
   } else {
     console.log('\n🎨 A Famosa Scene Generator\n');
-    console.log('Generates Sierra/LucasArts style adventure game scenes\n');
+    console.log('Generates Ultima VIII style adventure game scenes\n');
     console.log('⚠️  NOTE: Automatically backs up existing scenes before generating!\n');
     console.log('Usage:');
     console.log('  node generate-scenes-gemini.js --all              Generate ALL scenes');

@@ -1,0 +1,104 @@
+{
+  "version": 1,
+  "description": "Approved Ultima VIII: Pagan visual reference catalog. Contains metadata pointers only, never copyrighted art.",
+  "sources": {
+    "spriters-resource": {
+      "label": "The Spriters Resource - Ultima VIII: Pagan",
+      "baseUrl": "https://www.spriters-resource.com/pc_computer/ultima8pagan/"
+    },
+    "mobygames": {
+      "label": "MobyGames - Ultima VIII: Pagan screenshots",
+      "baseUrl": "https://www.mobygames.com/game/1702/pagan-ultima-viii/screenshots/"
+    },
+    "bootstrike": {
+      "label": "Bootstrike Ultima VIII walkthrough screenshots",
+      "baseUrl": "https://bootstrike.com/ultima/ultima8/"
+    },
+    "map-archive": {
+      "label": "Ultima VIII map archive",
+      "baseUrl": ""
+    }
+  },
+  "references": {
+    "u8-avatar-walk": {
+      "sourceKey": "spriters-resource",
+      "sourceUrl": "https://www.spriters-resource.com/pc_computer/ultima8pagan/sheet/66498/",
+      "localPath": null,
+      "tags": ["character", "walk-cycle", "animated"],
+      "approvedFor": ["named-character-sheet"],
+      "notes": "Avatar 8-direction walk cycle. Key traits: strong 1px black outline, 3-4 shade steps on clothing, clear silhouette at small size. Walk frames use minimal limb displacement—shoulder-width stride, arms close to body. Indexed palette with visible ordered dithering on tunic fabric."
+    },
+    "u8-stone-floor": {
+      "sourceKey": "spriters-resource",
+      "sourceUrl": "https://www.spriters-resource.com/pc_computer/ultima8pagan/sheet/66512/",
+      "localPath": null,
+      "tags": ["ground-tile"],
+      "approvedFor": ["base-tile", "iso-tile"],
+      "notes": "Pagan stone floor tiles. No outlines; edges defined purely by value contrast. 2x2 ordered dithering between adjacent ramp entries creates convincing stone grain. Neutral grey-brown palette with subtle warm undertone. Seamlessly tileable with no visible repeat at 4x4 coverage."
+    },
+    "u8-barrel-crate": {
+      "sourceKey": "spriters-resource",
+      "sourceUrl": "https://www.spriters-resource.com/pc_computer/ultima8pagan/sheet/66505/",
+      "localPath": null,
+      "tags": ["prop"],
+      "approvedFor": ["static-object"],
+      "notes": "Wooden barrels and crates. Hard 1px outline in darkest wood ramp entry. Wood grain implied by horizontal dither lines across staves. Metal bands on barrels use 2-step specular ramp. South-east drop shadow grounds objects. Crates show plank joints as single-pixel lines. Objects read as having real weight and volume."
+    },
+    "u8-torch-fire": {
+      "sourceKey": "spriters-resource",
+      "sourceUrl": "https://www.spriters-resource.com/pc_computer/ultima8pagan/sheet/66510/",
+      "localPath": null,
+      "tags": ["prop", "animated"],
+      "approvedFor": ["animated-object"],
+      "notes": "Torch and fire animation frames. Flame uses 4-frame cycle with yellow-orange-red ramp. Torch handle maintains consistent outline and shadow across all frames—only flame shape changes. Light emission implied by brighter pixels on adjacent surfaces, not by transparency or glow effects."
+    },
+    "u8-townsperson": {
+      "sourceKey": "spriters-resource",
+      "sourceUrl": "https://www.spriters-resource.com/pc_computer/ultima8pagan/sheet/66500/",
+      "localPath": null,
+      "tags": ["character", "idle"],
+      "approvedFor": ["crowd-silhouette", "named-character-sheet"],
+      "notes": "Pagan townsperson sprites. Role and social class readable from silhouette alone at native resolution: robes vs tunics vs armor clearly distinguishable. Flat fill with minimal shading on background NPCs vs full dithered shading on foreground characters. Cultural garment details carried by outline shape, not internal detail."
+    },
+    "u8-building-facade": {
+      "sourceKey": "mobygames",
+      "sourceUrl": "https://www.mobygames.com/game/1702/pagan-ultima-viii/screenshots/platform:dos/",
+      "localPath": null,
+      "tags": ["building", "environment-screenshot"],
+      "approvedFor": ["scene-backdrop"],
+      "notes": "Tenebrae building facades. Multi-story structures with clear material separation: stone base, timber upper floors, slate roofs. Each material uses its own palette ramp. Buildings feel dense and physically plausible—windows are recessed, doors have depth, eaves cast shadows. Gothic architectural vocabulary adapted to isometric view."
+    },
+    "u8-environment-overview": {
+      "sourceKey": "mobygames",
+      "sourceUrl": "https://www.mobygames.com/game/1702/pagan-ultima-viii/screenshots/platform:dos/",
+      "localPath": null,
+      "tags": ["environment-screenshot", "map"],
+      "approvedFor": ["scene-backdrop"],
+      "notes": "Full environment overview showing Tenebrae and surrounding areas. Demonstrates density target: every tile occupied with props, vegetation, or architectural detail. No empty space. Layered depth achieved through overlapping elements and consistent south-east shadow direction. Color temperature shifts from warm interiors to cool exteriors."
+    },
+    "u8-vga-portrait": {
+      "sourceKey": "bootstrike",
+      "sourceUrl": "https://bootstrike.com/ultima/ultima8/npcs.shtml",
+      "localPath": null,
+      "tags": ["portrait"],
+      "approvedFor": ["portrait"],
+      "notes": "Ultima VIII VGA NPC portraits. 4-6 distinct value bands per material (skin, hair, clothing). Strong silhouette with face and headwear readable at small sizes. No airbrush—shading achieved through clustered color bands with hard edges between them. Skin tones use dedicated warm ramp. Dramatic lighting with clear light/shadow divide."
+    },
+    "u8-wall-tile": {
+      "sourceKey": "spriters-resource",
+      "sourceUrl": "https://www.spriters-resource.com/pc_computer/ultima8pagan/sheet/66515/",
+      "localPath": null,
+      "tags": ["wall-tile"],
+      "approvedFor": ["base-tile", "iso-tile"],
+      "notes": "Stone and timber wall tiles. Walls use heavier dithering than floors to imply rougher texture. Mortar lines between stone blocks rendered as single-pixel lighter lines. Timber walls show vertical grain pattern. Top edges of walls have subtle highlight to imply depth in isometric view. Material-specific palette ramps keep walls visually distinct from floors."
+    },
+    "u8-vegetation": {
+      "sourceKey": "spriters-resource",
+      "sourceUrl": "https://www.spriters-resource.com/pc_computer/ultima8pagan/sheet/66520/",
+      "localPath": null,
+      "tags": ["vegetation", "prop"],
+      "approvedFor": ["static-object"],
+      "notes": "Trees, bushes, and vegetation props. Foliage uses 3-4 green ramp entries with ordered dithering to create leaf density. Tree trunks have 1px outline and visible bark texture via horizontal dither. Canopy silhouette is irregular and organic—no circular blobs. Ground contact implied by small shadow footprint. Vegetation breaks up architectural grid lines and adds organic variety to scenes."
+    }
+  }
+}

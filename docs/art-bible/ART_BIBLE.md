@@ -28,11 +28,9 @@ Production rule:
 This game should feel like a **memory of a place you've never been** — warm, hazy, golden. Every pixel should serve atmosphere. We're not making a generic RPG; we're capturing **1580 Portuguese Melaka at the height of its glory and tension**.
 
 ### Visual Touchstones
-- **Ultima VIII: Pagan**: minimum bar for density, mood, physicality, and environmental authority
-- **Hyper Light Drifter**: Atmosphere through color and light
-- **Chrono Trigger**: Warmth, expressiveness, world-building through detail
-- **Ultima VII**: Interaction density, everything feels tangible
-- **Historical paintings of Goa and Melaka**: Architectural accuracy
+- **Ultima VIII: Pagan**: minimum bar for density, mood, physicality, material authority, and environmental weight
+- **Ultima VII: The Black Gate**: interaction density, everything feels tangible, world feels inhabited
+- **Historical paintings of Goa and Melaka**: architectural accuracy, cultural grounding
 
 ### The Golden Rule
 When in doubt, make it **historically truer**, **denser**, and **more tactile** before merely making it prettier. This is tropical Southeast Asia under empire; the air itself has weight, color, and tension.
@@ -96,6 +94,49 @@ Ink Black          #1C1C1C  (Text, outlines)
 Portuguese Red     #8B0000  (Accents, flags, danger)
 Spice Orange       #FF6347  (Highlights, spice piles)
 ```
+
+---
+
+## 2.5 ULTIMA VIII STYLE RULES
+
+These rules are non-negotiable for all gameplay art. They define the physicality and material honesty that separates this project from generic pixel art.
+
+### Dense Props
+Every ground surface should feel occupied, not empty. If a floor area is walkable, it should still have context objects nearby (dust, cracks, debris, stains, tool marks). Bare tile expanses are a style violation.
+
+### Hard Pixel Edges
+No anti-aliasing, no sub-pixel blending, no soft feathered edges between sprite boundaries and transparency. Every opaque pixel must have a clean, hard edge against its neighbors or against alpha. The only exception is particle sheets explicitly flagged for partial alpha.
+
+### Occlusion
+Objects overlap and hide parts of each other realistically. A barrel in front of a crate hides the crate's lower half. A wall overhang shadows the objects beneath it. Flat, non-overlapping object placement is a style violation.
+
+### Tactile Materials
+Stone reads as stone, wood as wood, cloth as cloth, metal as metal. Material identity comes from palette ramp selection and dither pattern, not from shape alone. Two objects of different materials that use the same shading treatment are a style violation.
+
+### Bottom-Center Anchoring
+All objects anchor from the bottom-center of their footprint for consistent depth sorting. This is enforced in the isometric runtime and must be authored into the sprite art itself.
+
+### Banned Painterly Gradients
+No smooth color transitions. Use dithering (ordered or noise) or flat color blocks for shading. Airbrushed or interpolated gradients are a style violation. This applies to gameplay art only; cinematic art has more latitude.
+
+### Shadow Consistency
+All gameplay objects cast south-east shadows. Shadow color comes from the shadow palette ramp. Shadow size is proportional to object height. Inconsistent shadow direction across objects in the same scene is a style violation.
+
+### Physicality
+Objects have weight and presence. A heavy barrel should look heavy. A light cloth should look draped. Props are not flat decoration stamps; they imply three-dimensional volume through highlight placement, shadow casting, and ramp progression.
+
+### Style Violations Summary
+
+| Violation | Symptom | Fix |
+|-----------|---------|-----|
+| Empty ground | Large tile area with no contextual props | Add density objects or debris |
+| Soft edges | Anti-aliased or feathered sprite boundaries | Re-export with nearest-neighbor, clean alpha |
+| Flat placement | All objects at same depth, no overlap | Layer props with occlusion |
+| Generic shading | Different materials using same ramp | Assign correct material palette ramp |
+| Wrong anchor | Object floats or sinks in isometric view | Re-anchor to bottom-center |
+| Smooth gradient | Airbrushed shading visible at 1x | Replace with dither or flat steps |
+| Shadow drift | Shadow falls north or west on some objects | Re-render with consistent SE light |
+| Flat props | Objects look like paper cutouts | Add volume highlights and cast shadows |
 
 ---
 

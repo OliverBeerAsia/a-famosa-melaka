@@ -1,5 +1,5 @@
 /**
- * Location Transition Scene - Sierra/LucasArts Style
+ * Location Transition Scene - Ultima VIII Style
  * 
  * Shows beautiful AI-generated scene artwork when traveling between locations.
  * Only appears for location-to-location transitions, NOT at game start.

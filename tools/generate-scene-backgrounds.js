@@ -1,7 +1,7 @@
 /**
- * Scene Background Generator - Monkey Island 1 Style
+ * Scene Background Generator - Ultima VIII style
  *
- * Creates detailed, atmospheric backgrounds inspired by classic LucasArts art
+ * Creates detailed, atmospheric backgrounds inspired by Ultima VIII-era dense isometric pixel art
  * with historically accurate 1580s Portuguese Melaka architecture
  *
  * Features:
@@ -97,7 +97,7 @@ const PALETTE = {
   goldenHaze: 'rgba(220,180,80,0.12)'
 };
 
-// Bayer 4x4 dithering matrix for Monkey Island style gradients
+// Bayer 4x4 dithering matrix for Ultima VIII style gradients
 const BAYER_4X4 = [
   [0, 8, 2, 10],
   [12, 4, 14, 6],
@@ -145,7 +145,7 @@ function lerpColor(color1, color2, t) {
   );
 }
 
-// Dithered gradient for Monkey Island style skies
+// Dithered gradient for Ultima VIII style skies
 function drawDitheredGradient(ctx, x, y, width, height, colors) {
   for (let py = 0; py < height; py++) {
     const t = py / height;
@@ -1747,7 +1747,7 @@ function generateOpeningScreen() {
 // MAIN
 // ============================================================================
 
-console.log('Generating Monkey Island-style scene backgrounds...');
+console.log('Generating Ultima VIII-style scene backgrounds...');
 console.log('1580s Portuguese Melaka - detailed and atmospheric\n');
 
 generateOpeningScreen();

@@ -11,11 +11,11 @@ Gradually move from a polished adventure slice toward a denser RPG structure wit
 - more systemic pressure
 - more reasons to revisit places and people
 
-The target is not to become a clone of any one game. The target is to learn from **Baldur's Gate** and **Daggerfall** while building something that fits one believable Melaka city slice.
+The target is not to become a clone of any one game. The target is to learn from **Baldur's Gate** (game design reference, not visual style) and **Daggerfall** while building something that fits one believable Melaka city slice.
 
 ## Lessons To Borrow
 
-### From Baldur's Gate
+### From Baldur's Gate (game design reference, not visual style)
 
 Keep:
 

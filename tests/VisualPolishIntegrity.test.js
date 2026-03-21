@@ -161,4 +161,69 @@ describe('Visual polish integrity', () => {
     expect(missingIcons).toEqual([]);
     expect(invalidWorldItems).toEqual([]);
   });
+
+  test('style map covers all assets referenced by the runtime manifest', () => {
+    const STYLE_MAP_PATH = path.join(__dirname, '..', 'docs', 'art-bible', 'shipping-asset-style-map.json');
+    if (!fs.existsSync(STYLE_MAP_PATH)) return;
+
+    const manifest = loadJson(RUNTIME_ASSET_MANIFEST);
+    const styleMap = loadJson(STYLE_MAP_PATH);
+    const assets = styleMap.assets || {};
+
+    const unmapped = [];
+
+    (manifest.characters?.named || []).forEach((id) => {
+      if (!assets.characters?.[id]) unmapped.push(`characters/${id}`);
+    });
+    (manifest.crowd?.sprites || []).forEach((id) => {
+      if (!assets.crowd?.[id]) unmapped.push(`crowd/${id}`);
+    });
+    (manifest.tiles?.base || []).forEach((id) => {
+      if (!assets.tiles?.base?.[id]) unmapped.push(`tiles.base/${id}`);
+    });
+    (manifest.tiles?.isometric || []).forEach((id) => {
+      if (!assets.tiles?.isometric?.[id]) unmapped.push(`tiles.isometric/${id}`);
+    });
+    (manifest.objects?.static || []).forEach((id) => {
+      if (!assets.objects?.static?.[id]) unmapped.push(`objects.static/${id}`);
+    });
+    (manifest.objects?.animatedSheets || []).forEach((id) => {
+      if (!assets.objects?.animatedSheets?.[id]) unmapped.push(`objects.animatedSheets/${id}`);
+    });
+
+    expect(unmapped).toEqual([]);
+  });
+
+  test('map layers meet style framework density requirements', () => {
+    const SPEC_PATH = path.join(__dirname, '..', 'docs', 'art-bible', 'gameplay-asset-spec.json');
+    const spec = loadJson(SPEC_PATH);
+    const densityReqs = spec.densityRequirements;
+    if (!densityReqs) return;
+
+    const maps = [
+      { path: RUA_DIREITA_MAP, name: 'rua-direita' },
+      { path: A_FAMOSA_MAP, name: 'a-famosa-gate' },
+      { path: ST_PAULS_MAP, name: 'st-pauls-church' },
+      { path: WATERFRONT_MAP, name: 'waterfront' },
+      { path: KAMPUNG_MAP, name: 'kampung' },
+    ];
+
+    const failures = [];
+
+    maps.forEach(({ path: mapPath, name }) => {
+      const map = loadJson(mapPath);
+      const layers = new Map(map.layers.map((l) => [l.name, l]));
+
+      Object.entries(densityReqs.minObjectsPerLayer).forEach(([layerName, minCount]) => {
+        const layer = layers.get(layerName);
+        if (!layer) return;
+        const count = (layer.objects || []).length;
+        if (count < minCount) {
+          failures.push({ location: name, layer: layerName, count, required: minCount });
+        }
+      });
+    });
+
+    expect(failures).toEqual([]);
+  });
 });

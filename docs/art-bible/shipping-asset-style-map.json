@@ -1,0 +1,3613 @@
+{
+  "version": 1,
+  "description": "Maps every shipping asset from the runtime manifest to Ultima VIII style references and historical context.",
+  "assets": {
+    "characters": {
+      "player": {
+        "assetClass": "named-character-sheet",
+        "runtimePath": "assets/sprites/characters/player-sheet.png",
+        "u8References": [
+          "u8-avatar-walk",
+          "u8-townsperson"
+        ],
+        "historicalNotes": "Portuguese adventurer or mixed-heritage merchant's agent in 1580 Melaka. Would wear a doublet, hose, and soft boots typical of middling Portuguese colonials, adapted for tropical heat with lighter fabrics.",
+        "status": "keep",
+        "wave": 1,
+        "gradeCard": {
+          "silhouetteClarity": "pass",
+          "paletteCompliance": "pass",
+          "outlineWeight": "pass",
+          "ditherQuality": "pass",
+          "shadowConsistency": "pass",
+          "historicalAccuracy": null,
+          "densityMatch": null,
+          "overallGrade": "pass",
+          "reviewer": "auto-grader-v1",
+          "reviewDate": "2026-03-21",
+          "notes": ""
+        }
+      },
+      "fernao-gomes": {
+        "assetClass": "named-character-sheet",
+        "runtimePath": "assets/sprites/characters/fernao-gomes-sheet.png",
+        "u8References": [
+          "u8-avatar-walk",
+          "u8-townsperson"
+        ],
+        "historicalNotes": "Wealthy Portuguese spice merchant. Would wear a fine doublet with slashed sleeves, a short cape, and a merchant's cap. Prosperous build reflecting success in the lucrative pepper and clove trade.",
+        "status": "keep",
+        "wave": 1,
+        "gradeCard": {
+          "silhouetteClarity": "pass",
+          "paletteCompliance": "pass",
+          "outlineWeight": "pass",
+          "ditherQuality": "pass",
+          "shadowConsistency": "pass",
+          "historicalAccuracy": null,
+          "densityMatch": null,
+          "overallGrade": "pass",
+          "reviewer": "auto-grader-v1",
+          "reviewDate": "2026-03-21",
+          "notes": ""
+        }
+      },
+      "capitao-rodrigues": {
+        "assetClass": "named-character-sheet",
+        "runtimePath": "assets/sprites/characters/capitao-rodrigues-sheet.png",
+        "u8References": [
+          "u8-avatar-walk",
+          "u8-townsperson"
+        ],
+        "historicalNotes": "Portuguese fortress guard captain at A Famosa. Would wear a morion helmet, breastplate over padded gambeson, and carry a partisan or sword. Military bearing and upright posture define the silhouette.",
+        "status": "keep",
+        "wave": 1,
+        "gradeCard": {
+          "silhouetteClarity": "pass",
+          "paletteCompliance": "pass",
+          "outlineWeight": "pass",
+          "ditherQuality": "pass",
+          "shadowConsistency": "pass",
+          "historicalAccuracy": null,
+          "densityMatch": null,
+          "overallGrade": "pass",
+          "reviewer": "auto-grader-v1",
+          "reviewDate": "2026-03-21",
+          "notes": ""
+        }
+      },
+      "padre-tomas": {
+        "assetClass": "named-character-sheet",
+        "runtimePath": "assets/sprites/characters/padre-tomas-sheet.png",
+        "u8References": [
+          "u8-avatar-walk",
+          "u8-townsperson"
+        ],
+        "historicalNotes": "Jesuit priest at St. Paul's Church. Would wear a black Jesuit cassock with a white collar, a wide-brimmed capello romano hat. Tall, thin silhouette distinguishable by the long unbroken robe line.",
+        "status": "keep",
+        "wave": 1,
+        "gradeCard": {
+          "silhouetteClarity": "pass",
+          "paletteCompliance": "pass",
+          "outlineWeight": "pass",
+          "ditherQuality": "pass",
+          "shadowConsistency": "pass",
+          "historicalAccuracy": null,
+          "densityMatch": null,
+          "overallGrade": "pass",
+          "reviewer": "auto-grader-v1",
+          "reviewDate": "2026-03-21",
+          "notes": ""
+        }
+      },
+      "aminah": {
+        "assetClass": "named-character-sheet",
+        "runtimePath": "assets/sprites/characters/aminah-sheet.png",
+        "u8References": [
+          "u8-avatar-walk",
+          "u8-townsperson"
+        ],
+        "historicalNotes": "Malay market vendor. Would wear a baju kurung (long tunic and sarong) in batik-patterned fabric with a tudung (headscarf). Silhouette reads as distinctly Malay through the sarong drape and head covering.",
+        "status": "keep",
+        "wave": 1,
+        "gradeCard": {
+          "silhouetteClarity": "pass",
+          "paletteCompliance": "pass",
+          "outlineWeight": "pass",
+          "ditherQuality": "pass",
+          "shadowConsistency": "pass",
+          "historicalAccuracy": null,
+          "densityMatch": null,
+          "overallGrade": "pass",
+          "reviewer": "auto-grader-v1",
+          "reviewDate": "2026-03-21",
+          "notes": ""
+        }
+      },
+      "chen-wei": {
+        "assetClass": "named-character-sheet",
+        "runtimePath": "assets/sprites/characters/chen-wei-sheet.png",
+        "u8References": [
+          "u8-avatar-walk",
+          "u8-townsperson"
+        ],
+        "historicalNotes": "Chinese guild representative at the waterfront. Would wear a Ming-dynasty changshan (long robe) with a round collar and a guanmao cap. Upright bearing with hands often clasped, reflecting merchant-scholar status in the Chinese trading community.",
+        "status": "keep",
+        "wave": 1,
+        "gradeCard": {
+          "silhouetteClarity": "pass",
+          "paletteCompliance": "pass",
+          "outlineWeight": "pass",
+          "ditherQuality": "pass",
+          "shadowConsistency": "pass",
+          "historicalAccuracy": null,
+          "densityMatch": null,
+          "overallGrade": "pass",
+          "reviewer": "auto-grader-v1",
+          "reviewDate": "2026-03-21",
+          "notes": ""
+        }
+      },
+      "rashid": {
+        "assetClass": "named-character-sheet",
+        "runtimePath": "assets/sprites/characters/rashid-sheet.png",
+        "u8References": [
+          "u8-avatar-walk",
+          "u8-townsperson"
+        ],
+        "historicalNotes": "Arab sailor and navigator from a docked dhow. Would wear a thobe or loose shirt with a turban or keffiyeh. Weathered, lean build of a maritime trader on the monsoon route between Arabia and the Malay Archipelago.",
+        "status": "keep",
+        "wave": 1,
+        "gradeCard": {
+          "silhouetteClarity": "pass",
+          "paletteCompliance": "pass",
+          "outlineWeight": "pass",
+          "ditherQuality": "pass",
+          "shadowConsistency": "pass",
+          "historicalAccuracy": null,
+          "densityMatch": null,
+          "overallGrade": "pass",
+          "reviewer": "auto-grader-v1",
+          "reviewDate": "2026-03-21",
+          "notes": ""
+        }
+      },
+      "siti": {
+        "assetClass": "named-character-sheet",
+        "runtimePath": "assets/sprites/characters/siti-sheet.png",
+        "u8References": [
+          "u8-avatar-walk",
+          "u8-townsperson"
+        ],
+        "historicalNotes": "Malay woman, likely a local resident of the kampung quarter. Would wear a traditional baju kurung with a kain samping wrap. Hair tied or covered with a selendang shawl, reflecting Malay cultural modesty norms of the period.",
+        "status": "keep",
+        "wave": 1,
+        "gradeCard": {
+          "silhouetteClarity": "pass",
+          "paletteCompliance": "pass",
+          "outlineWeight": "pass",
+          "ditherQuality": "pass",
+          "shadowConsistency": null,
+          "historicalAccuracy": null,
+          "densityMatch": null,
+          "overallGrade": "pass",
+          "reviewer": "auto-grader-v1",
+          "reviewDate": "2026-03-21",
+          "notes": ""
+        }
+      },
+      "alvares": {
+        "assetClass": "named-character-sheet",
+        "runtimePath": "assets/sprites/characters/alvares-sheet.png",
+        "u8References": [
+          "u8-avatar-walk",
+          "u8-townsperson"
+        ],
+        "historicalNotes": "Portuguese colonial figure. Would wear standard Portuguese attire of the era: doublet, trunk hose, and a felt hat. Likely an official or merchant tied to the Estado da India administration in Melaka.",
+        "status": "keep",
+        "wave": 1,
+        "gradeCard": {
+          "silhouetteClarity": "pass",
+          "paletteCompliance": "pass",
+          "outlineWeight": "pass",
+          "ditherQuality": "pass",
+          "shadowConsistency": "pass",
+          "historicalAccuracy": null,
+          "densityMatch": null,
+          "overallGrade": "pass",
+          "reviewer": "auto-grader-v1",
+          "reviewDate": "2026-03-21",
+          "notes": ""
+        }
+      },
+      "mak-enang": {
+        "assetClass": "named-character-sheet",
+        "runtimePath": "assets/sprites/characters/mak-enang-sheet.png",
+        "u8References": [
+          "u8-avatar-walk",
+          "u8-townsperson"
+        ],
+        "historicalNotes": "Malay elder woman, a respected community figure in the kampung. Would wear a loose baju and batik sarong with a shoulder cloth. Older, stouter build signaling matriarchal authority in Malay village life.",
+        "status": "keep",
+        "wave": 1,
+        "gradeCard": {
+          "silhouetteClarity": "pass",
+          "paletteCompliance": "pass",
+          "outlineWeight": "pass",
+          "ditherQuality": "pass",
+          "shadowConsistency": null,
+          "historicalAccuracy": null,
+          "densityMatch": null,
+          "overallGrade": "pass",
+          "reviewer": "auto-grader-v1",
+          "reviewDate": "2026-03-21",
+          "notes": ""
+        }
+      },
+      "gaspar-mesquita": {
+        "assetClass": "named-character-sheet",
+        "runtimePath": "assets/sprites/characters/gaspar-mesquita-sheet.png",
+        "u8References": [
+          "u8-avatar-walk",
+          "u8-townsperson"
+        ],
+        "historicalNotes": "Portuguese noble or high-ranking official in Melaka. Would wear an elaborate doublet with puffed sleeves, a short cloak, and a plumed hat, reflecting the fidalgo class that governed Portuguese Malacca under the captain-general.",
+        "status": "keep",
+        "wave": 1,
+        "gradeCard": {
+          "silhouetteClarity": "pass",
+          "paletteCompliance": "pass",
+          "outlineWeight": "pass",
+          "ditherQuality": "pass",
+          "shadowConsistency": "pass",
+          "historicalAccuracy": null,
+          "densityMatch": null,
+          "overallGrade": "pass",
+          "reviewer": "auto-grader-v1",
+          "reviewDate": "2026-03-21",
+          "notes": ""
+        }
+      },
+      "diogo-almeida": {
+        "assetClass": "named-character-sheet",
+        "runtimePath": "assets/sprites/characters/diogo-almeida-sheet.png",
+        "u8References": [
+          "u8-avatar-walk",
+          "u8-townsperson"
+        ],
+        "historicalNotes": "Portuguese figure, possibly a soldier or lower official. Standard colonial doublet and hose, perhaps with a leather jerkin. Part of the garrison or administrative apparatus of the Estado da India's Melaka outpost.",
+        "status": "keep",
+        "wave": 1,
+        "gradeCard": {
+          "silhouetteClarity": "pass",
+          "paletteCompliance": "pass",
+          "outlineWeight": "pass",
+          "ditherQuality": "pass",
+          "shadowConsistency": "pass",
+          "historicalAccuracy": null,
+          "densityMatch": null,
+          "overallGrade": "pass",
+          "reviewer": "auto-grader-v1",
+          "reviewDate": "2026-03-21",
+          "notes": ""
+        }
+      },
+      "lin-mei": {
+        "assetClass": "named-character-sheet",
+        "runtimePath": "assets/sprites/characters/lin-mei-sheet.png",
+        "u8References": [
+          "u8-avatar-walk",
+          "u8-townsperson"
+        ],
+        "historicalNotes": "Chinese woman in the Melaka trading community. Would wear a Ming-era ruqun (cross-collar blouse and skirt) or ao (jacket) with her hair in a traditional bun. Part of the established Chinese merchant families who had traded in Melaka since the Sultanate era.",
+        "status": "keep",
+        "wave": 1,
+        "gradeCard": {
+          "silhouetteClarity": "pass",
+          "paletteCompliance": "pass",
+          "outlineWeight": "pass",
+          "ditherQuality": "pass",
+          "shadowConsistency": "pass",
+          "historicalAccuracy": null,
+          "densityMatch": null,
+          "overallGrade": "pass",
+          "reviewer": "auto-grader-v1",
+          "reviewDate": "2026-03-21",
+          "notes": ""
+        }
+      },
+      "pak-salleh": {
+        "assetClass": "named-character-sheet",
+        "runtimePath": "assets/sprites/characters/pak-salleh-sheet.png",
+        "u8References": [
+          "u8-avatar-walk",
+          "u8-townsperson"
+        ],
+        "historicalNotes": "Malay man, an elder or community leader in the kampung. Would wear a baju melayu (tunic) with a sarong and a songkok cap. Carries himself with the quiet authority of a local headman navigating life under Portuguese colonial rule.",
+        "status": "keep",
+        "wave": 1,
+        "gradeCard": {
+          "silhouetteClarity": "pass",
+          "paletteCompliance": "pass",
+          "outlineWeight": "pass",
+          "ditherQuality": "pass",
+          "shadowConsistency": "pass",
+          "historicalAccuracy": null,
+          "densityMatch": null,
+          "overallGrade": "pass",
+          "reviewer": "auto-grader-v1",
+          "reviewDate": "2026-03-21",
+          "notes": ""
+        }
+      }
+    },
+    "crowd": {
+      "portuguese": {
+        "assetClass": "crowd-silhouette",
+        "runtimePath": "assets/sprites/crowd/portuguese.png",
+        "u8References": [
+          "u8-townsperson"
+        ],
+        "historicalNotes": "Generic Portuguese colonist. Doublet and hose silhouette, European hat.",
+        "status": "keep",
+        "wave": 2,
+        "gradeCard": {
+          "silhouetteClarity": "pass",
+          "paletteCompliance": "pass",
+          "outlineWeight": "pass",
+          "ditherQuality": "pass",
+          "shadowConsistency": null,
+          "historicalAccuracy": null,
+          "densityMatch": null,
+          "overallGrade": "pass",
+          "reviewer": "auto-grader-v1",
+          "reviewDate": "2026-03-21",
+          "notes": ""
+        }
+      },
+      "portuguese-guard": {
+        "assetClass": "crowd-silhouette",
+        "runtimePath": "assets/sprites/crowd/portuguese-guard.png",
+        "u8References": [
+          "u8-townsperson"
+        ],
+        "historicalNotes": "Portuguese soldier silhouette. Morion helmet and weapon define the shape at 8x16.",
+        "status": "keep",
+        "wave": 2,
+        "gradeCard": {
+          "silhouetteClarity": "pass",
+          "paletteCompliance": "pass",
+          "outlineWeight": "pass",
+          "ditherQuality": "pass",
+          "shadowConsistency": null,
+          "historicalAccuracy": null,
+          "densityMatch": null,
+          "overallGrade": "pass",
+          "reviewer": "auto-grader-v1",
+          "reviewDate": "2026-03-21",
+          "notes": ""
+        }
+      },
+      "portuguese-worker": {
+        "assetClass": "crowd-silhouette",
+        "runtimePath": "assets/sprites/crowd/portuguese-worker.png",
+        "u8References": [
+          "u8-townsperson"
+        ],
+        "historicalNotes": "Portuguese laborer. Simpler tunic, possibly carrying a load. Dockworker or construction hand.",
+        "status": "keep",
+        "wave": 2,
+        "gradeCard": {
+          "silhouetteClarity": "pass",
+          "paletteCompliance": "pass",
+          "outlineWeight": "pass",
+          "ditherQuality": "pass",
+          "shadowConsistency": null,
+          "historicalAccuracy": null,
+          "densityMatch": null,
+          "overallGrade": "pass",
+          "reviewer": "auto-grader-v1",
+          "reviewDate": "2026-03-21",
+          "notes": ""
+        }
+      },
+      "portuguese-priest": {
+        "assetClass": "crowd-silhouette",
+        "runtimePath": "assets/sprites/crowd/portuguese-priest.png",
+        "u8References": [
+          "u8-townsperson"
+        ],
+        "historicalNotes": "Catholic priest or friar. Long robe silhouette with tonsured head or wide hat.",
+        "status": "keep",
+        "wave": 2,
+        "gradeCard": {
+          "silhouetteClarity": "pass",
+          "paletteCompliance": "pass",
+          "outlineWeight": "pass",
+          "ditherQuality": "pass",
+          "shadowConsistency": null,
+          "historicalAccuracy": null,
+          "densityMatch": null,
+          "overallGrade": "pass",
+          "reviewer": "auto-grader-v1",
+          "reviewDate": "2026-03-21",
+          "notes": ""
+        }
+      },
+      "malay": {
+        "assetClass": "crowd-silhouette",
+        "runtimePath": "assets/sprites/crowd/malay.png",
+        "u8References": [
+          "u8-townsperson"
+        ],
+        "historicalNotes": "Malay man. Baju melayu tunic and sarong silhouette with songkok cap.",
+        "status": "keep",
+        "wave": 2,
+        "gradeCard": {
+          "silhouetteClarity": "pass",
+          "paletteCompliance": "pass",
+          "outlineWeight": "pass",
+          "ditherQuality": "pass",
+          "shadowConsistency": null,
+          "historicalAccuracy": null,
+          "densityMatch": null,
+          "overallGrade": "pass",
+          "reviewer": "auto-grader-v1",
+          "reviewDate": "2026-03-21",
+          "notes": ""
+        }
+      },
+      "malay-woman": {
+        "assetClass": "crowd-silhouette",
+        "runtimePath": "assets/sprites/crowd/malay-woman.png",
+        "u8References": [
+          "u8-townsperson"
+        ],
+        "historicalNotes": "Malay woman. Baju kurung and headscarf silhouette, often carrying a basket.",
+        "status": "keep",
+        "wave": 2,
+        "gradeCard": {
+          "silhouetteClarity": "pass",
+          "paletteCompliance": "pass",
+          "outlineWeight": "pass",
+          "ditherQuality": "pass",
+          "shadowConsistency": null,
+          "historicalAccuracy": null,
+          "densityMatch": null,
+          "overallGrade": "pass",
+          "reviewer": "auto-grader-v1",
+          "reviewDate": "2026-03-21",
+          "notes": ""
+        }
+      },
+      "malay-child": {
+        "assetClass": "crowd-silhouette",
+        "runtimePath": "assets/sprites/crowd/malay-child.png",
+        "u8References": [
+          "u8-townsperson"
+        ],
+        "historicalNotes": "Malay child. Smaller proportions, simple tunic. Adds life and scale reference to crowd scenes.",
+        "status": "keep",
+        "wave": 2,
+        "gradeCard": {
+          "silhouetteClarity": "pass",
+          "paletteCompliance": "pass",
+          "outlineWeight": "pass",
+          "ditherQuality": "pass",
+          "shadowConsistency": null,
+          "historicalAccuracy": null,
+          "densityMatch": null,
+          "overallGrade": "pass",
+          "reviewer": "auto-grader-v1",
+          "reviewDate": "2026-03-21",
+          "notes": ""
+        }
+      },
+      "chinese": {
+        "assetClass": "crowd-silhouette",
+        "runtimePath": "assets/sprites/crowd/chinese.png",
+        "u8References": [
+          "u8-townsperson"
+        ],
+        "historicalNotes": "Chinese merchant or laborer. Long changshan robe or shorter work tunic with cap.",
+        "status": "keep",
+        "wave": 2,
+        "gradeCard": {
+          "silhouetteClarity": "pass",
+          "paletteCompliance": "pass",
+          "outlineWeight": "pass",
+          "ditherQuality": "pass",
+          "shadowConsistency": null,
+          "historicalAccuracy": null,
+          "densityMatch": null,
+          "overallGrade": "pass",
+          "reviewer": "auto-grader-v1",
+          "reviewDate": "2026-03-21",
+          "notes": ""
+        }
+      },
+      "arab": {
+        "assetClass": "crowd-silhouette",
+        "runtimePath": "assets/sprites/crowd/arab.png",
+        "u8References": [
+          "u8-townsperson"
+        ],
+        "historicalNotes": "Arab trader or sailor. Thobe and turban or keffiyeh silhouette.",
+        "status": "keep",
+        "wave": 2,
+        "gradeCard": {
+          "silhouetteClarity": "pass",
+          "paletteCompliance": "pass",
+          "outlineWeight": "pass",
+          "ditherQuality": "pass",
+          "shadowConsistency": null,
+          "historicalAccuracy": null,
+          "densityMatch": null,
+          "overallGrade": "pass",
+          "reviewer": "auto-grader-v1",
+          "reviewDate": "2026-03-21",
+          "notes": ""
+        }
+      },
+      "indian": {
+        "assetClass": "crowd-silhouette",
+        "runtimePath": "assets/sprites/crowd/indian.png",
+        "u8References": [
+          "u8-townsperson"
+        ],
+        "historicalNotes": "Indian trader from Gujarat or Malabar coast. Dhoti and turban silhouette, part of the Tamil and Gujarati merchant communities in Melaka.",
+        "status": "keep",
+        "wave": 2,
+        "gradeCard": {
+          "silhouetteClarity": "pass",
+          "paletteCompliance": "pass",
+          "outlineWeight": "pass",
+          "ditherQuality": "pass",
+          "shadowConsistency": null,
+          "historicalAccuracy": null,
+          "densityMatch": null,
+          "overallGrade": "pass",
+          "reviewer": "auto-grader-v1",
+          "reviewDate": "2026-03-21",
+          "notes": ""
+        }
+      }
+    },
+    "tiles": {
+      "base": {
+        "fortress-stone": {
+          "assetClass": "base-tile",
+          "runtimePath": "assets/sprites/tiles/fortress-stone.png",
+          "u8References": [
+            "u8-stone-floor",
+            "u8-wall-tile"
+          ],
+          "historicalNotes": "Laterite stone used in A Famosa fortress construction, quarried locally.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": null,
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-03-21",
+            "notes": ""
+          }
+        },
+        "wall-white": {
+          "assetClass": "base-tile",
+          "runtimePath": "assets/sprites/tiles/wall-white.png",
+          "u8References": [
+            "u8-wall-tile"
+          ],
+          "historicalNotes": "Whitewashed plaster walls typical of Portuguese colonial architecture in tropical climates.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": null,
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-03-21",
+            "notes": ""
+          }
+        },
+        "roof-terracotta": {
+          "assetClass": "base-tile",
+          "runtimePath": "assets/sprites/tiles/roof-terracotta.png",
+          "u8References": [
+            "u8-wall-tile"
+          ],
+          "historicalNotes": "Portuguese-style terracotta roof tiles, a hallmark of Estado da India architecture.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": null,
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-03-21",
+            "notes": ""
+          }
+        },
+        "cobblestone": {
+          "assetClass": "base-tile",
+          "runtimePath": "assets/sprites/tiles/cobblestone.png",
+          "u8References": [
+            "u8-stone-floor"
+          ],
+          "historicalNotes": "Cobblestone paving on Rua Direita, the main commercial street of Portuguese Melaka.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": null,
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-03-21",
+            "notes": ""
+          }
+        },
+        "door-wood": {
+          "assetClass": "base-tile",
+          "runtimePath": "assets/sprites/tiles/door-wood.png",
+          "u8References": [
+            "u8-barrel-crate",
+            "u8-wall-tile"
+          ],
+          "historicalNotes": "Heavy wooden doors typical of Portuguese colonial and Malay merchant buildings.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": null,
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-03-21",
+            "notes": ""
+          }
+        },
+        "church-stone": {
+          "assetClass": "base-tile",
+          "runtimePath": "assets/sprites/tiles/church-stone.png",
+          "u8References": [
+            "u8-stone-floor",
+            "u8-wall-tile"
+          ],
+          "historicalNotes": "Dressed stone for St. Paul's Church, built atop Bukit Melaka overlooking the strait.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": null,
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-03-21",
+            "notes": ""
+          }
+        },
+        "church-floor": {
+          "assetClass": "base-tile",
+          "runtimePath": "assets/sprites/tiles/church-floor.png",
+          "u8References": [
+            "u8-stone-floor"
+          ],
+          "historicalNotes": "Polished stone floor inside St. Paul's Church, cooler and smoother than exterior paving.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": null,
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-03-21",
+            "notes": ""
+          }
+        },
+        "dock-wood": {
+          "assetClass": "base-tile",
+          "runtimePath": "assets/sprites/tiles/dock-wood.png",
+          "u8References": [
+            "u8-barrel-crate"
+          ],
+          "historicalNotes": "Timber dock planking at the waterfront quay where Portuguese carracks and local prahu unloaded.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": null,
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-03-21",
+            "notes": ""
+          }
+        },
+        "water-tile": {
+          "assetClass": "base-tile",
+          "runtimePath": "assets/sprites/tiles/water-tile.png",
+          "u8References": [
+            "u8-stone-floor"
+          ],
+          "historicalNotes": "Melaka Strait water surface. Warm tropical waters where the monsoon trading routes converge.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": null,
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-03-21",
+            "notes": ""
+          }
+        },
+        "dirt-path": {
+          "assetClass": "base-tile",
+          "runtimePath": "assets/sprites/tiles/dirt-path.png",
+          "u8References": [
+            "u8-stone-floor"
+          ],
+          "historicalNotes": "Packed earth paths in the kampung quarter and outskirts of the Portuguese settlement.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": null,
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-03-21",
+            "notes": ""
+          }
+        },
+        "bamboo-floor": {
+          "assetClass": "base-tile",
+          "runtimePath": "assets/sprites/tiles/bamboo-floor.png",
+          "u8References": [
+            "u8-barrel-crate"
+          ],
+          "historicalNotes": "Split bamboo flooring in Malay kampung houses, raised on stilts above the ground.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": null,
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-03-21",
+            "notes": ""
+          }
+        },
+        "thatch-roof": {
+          "assetClass": "base-tile",
+          "runtimePath": "assets/sprites/tiles/thatch-roof.png",
+          "u8References": [
+            "u8-wall-tile"
+          ],
+          "historicalNotes": "Attap palm-leaf thatch roofing on Malay kampung dwellings.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": null,
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-03-21",
+            "notes": ""
+          }
+        },
+        "grass-tropical": {
+          "assetClass": "base-tile",
+          "runtimePath": "assets/sprites/tiles/grass-tropical.png",
+          "u8References": [
+            "u8-stone-floor",
+            "u8-vegetation"
+          ],
+          "historicalNotes": "Lush tropical grass and undergrowth around Melaka's less-developed areas.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": null,
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-03-21",
+            "notes": ""
+          }
+        },
+        "sand-beach": {
+          "assetClass": "base-tile",
+          "runtimePath": "assets/sprites/tiles/sand-beach.png",
+          "u8References": [
+            "u8-stone-floor"
+          ],
+          "historicalNotes": "Sandy shore along the Melaka coastline where fishing boats are beached.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": null,
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-03-21",
+            "notes": ""
+          }
+        }
+      },
+      "isometric": {
+        "fortress-stone": {
+          "assetClass": "iso-tile",
+          "runtimePath": "assets/sprites/tiles/iso/fortress-stone.png",
+          "u8References": [
+            "u8-stone-floor",
+            "u8-wall-tile"
+          ],
+          "historicalNotes": "Isometric laterite fortress stone for A Famosa.",
+          "status": "tune",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": null,
+            "paletteCompliance": null,
+            "outlineWeight": null,
+            "ditherQuality": null,
+            "shadowConsistency": null,
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": null,
+            "reviewer": null,
+            "reviewDate": null,
+            "notes": ""
+          }
+        },
+        "grass": {
+          "assetClass": "iso-tile",
+          "runtimePath": "assets/sprites/tiles/iso/grass.png",
+          "u8References": [
+            "u8-stone-floor",
+            "u8-vegetation"
+          ],
+          "historicalNotes": "Isometric tropical grass tile.",
+          "status": "tune",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": null,
+            "paletteCompliance": null,
+            "outlineWeight": null,
+            "ditherQuality": null,
+            "shadowConsistency": null,
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": null,
+            "reviewer": null,
+            "reviewDate": null,
+            "notes": ""
+          }
+        },
+        "cobblestone": {
+          "assetClass": "iso-tile",
+          "runtimePath": "assets/sprites/tiles/iso/cobblestone.png",
+          "u8References": [
+            "u8-stone-floor"
+          ],
+          "historicalNotes": "Isometric cobblestone paving for Rua Direita.",
+          "status": "tune",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": null,
+            "paletteCompliance": null,
+            "outlineWeight": null,
+            "ditherQuality": null,
+            "shadowConsistency": null,
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": null,
+            "reviewer": null,
+            "reviewDate": null,
+            "notes": ""
+          }
+        },
+        "wall-white": {
+          "assetClass": "iso-tile",
+          "runtimePath": "assets/sprites/tiles/iso/wall-white.png",
+          "u8References": [
+            "u8-wall-tile"
+          ],
+          "historicalNotes": "Isometric whitewashed wall tile.",
+          "status": "tune",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": null,
+            "paletteCompliance": null,
+            "outlineWeight": null,
+            "ditherQuality": null,
+            "shadowConsistency": null,
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": null,
+            "reviewer": null,
+            "reviewDate": null,
+            "notes": ""
+          }
+        },
+        "dirt-path": {
+          "assetClass": "iso-tile",
+          "runtimePath": "assets/sprites/tiles/iso/dirt-path.png",
+          "u8References": [
+            "u8-stone-floor"
+          ],
+          "historicalNotes": "Isometric packed earth path.",
+          "status": "tune",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": null,
+            "paletteCompliance": null,
+            "outlineWeight": null,
+            "ditherQuality": null,
+            "shadowConsistency": null,
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": null,
+            "reviewer": null,
+            "reviewDate": null,
+            "notes": ""
+          }
+        },
+        "bamboo-floor": {
+          "assetClass": "iso-tile",
+          "runtimePath": "assets/sprites/tiles/iso/bamboo-floor.png",
+          "u8References": [
+            "u8-barrel-crate"
+          ],
+          "historicalNotes": "Isometric bamboo floor tile for kampung houses.",
+          "status": "tune",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": null,
+            "paletteCompliance": null,
+            "outlineWeight": null,
+            "ditherQuality": null,
+            "shadowConsistency": null,
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": null,
+            "reviewer": null,
+            "reviewDate": null,
+            "notes": ""
+          }
+        },
+        "thatch-roof": {
+          "assetClass": "iso-tile",
+          "runtimePath": "assets/sprites/tiles/iso/thatch-roof.png",
+          "u8References": [
+            "u8-wall-tile"
+          ],
+          "historicalNotes": "Isometric attap thatch roofing.",
+          "status": "tune",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": null,
+            "paletteCompliance": null,
+            "outlineWeight": null,
+            "ditherQuality": null,
+            "shadowConsistency": null,
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": null,
+            "reviewer": null,
+            "reviewDate": null,
+            "notes": ""
+          }
+        },
+        "church-stone": {
+          "assetClass": "iso-tile",
+          "runtimePath": "assets/sprites/tiles/iso/church-stone.png",
+          "u8References": [
+            "u8-stone-floor",
+            "u8-wall-tile"
+          ],
+          "historicalNotes": "Isometric dressed stone for St. Paul's Church.",
+          "status": "tune",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": null,
+            "paletteCompliance": null,
+            "outlineWeight": null,
+            "ditherQuality": null,
+            "shadowConsistency": null,
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": null,
+            "reviewer": null,
+            "reviewDate": null,
+            "notes": ""
+          }
+        },
+        "church-floor": {
+          "assetClass": "iso-tile",
+          "runtimePath": "assets/sprites/tiles/iso/church-floor.png",
+          "u8References": [
+            "u8-stone-floor"
+          ],
+          "historicalNotes": "Isometric polished church interior floor.",
+          "status": "tune",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": null,
+            "paletteCompliance": null,
+            "outlineWeight": null,
+            "ditherQuality": null,
+            "shadowConsistency": null,
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": null,
+            "reviewer": null,
+            "reviewDate": null,
+            "notes": ""
+          }
+        },
+        "water-tile": {
+          "assetClass": "iso-tile",
+          "runtimePath": "assets/sprites/tiles/iso/water-tile.png",
+          "u8References": [
+            "u8-stone-floor"
+          ],
+          "historicalNotes": "Isometric Melaka Strait water surface.",
+          "status": "tune",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": null,
+            "paletteCompliance": null,
+            "outlineWeight": null,
+            "ditherQuality": null,
+            "shadowConsistency": null,
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": null,
+            "reviewer": null,
+            "reviewDate": null,
+            "notes": ""
+          }
+        },
+        "dock-wood": {
+          "assetClass": "iso-tile",
+          "runtimePath": "assets/sprites/tiles/iso/dock-wood.png",
+          "u8References": [
+            "u8-barrel-crate"
+          ],
+          "historicalNotes": "Isometric timber dock planking.",
+          "status": "tune",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": null,
+            "paletteCompliance": null,
+            "outlineWeight": null,
+            "ditherQuality": null,
+            "shadowConsistency": null,
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": null,
+            "reviewer": null,
+            "reviewDate": null,
+            "notes": ""
+          }
+        },
+        "roof-terracotta": {
+          "assetClass": "iso-tile",
+          "runtimePath": "assets/sprites/tiles/iso/roof-terracotta.png",
+          "u8References": [
+            "u8-wall-tile"
+          ],
+          "historicalNotes": "Isometric Portuguese terracotta roof tile.",
+          "status": "tune",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": null,
+            "paletteCompliance": null,
+            "outlineWeight": null,
+            "ditherQuality": null,
+            "shadowConsistency": null,
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": null,
+            "reviewer": null,
+            "reviewDate": null,
+            "notes": ""
+          }
+        },
+        "door-wood": {
+          "assetClass": "iso-tile",
+          "runtimePath": "assets/sprites/tiles/iso/door-wood.png",
+          "u8References": [
+            "u8-barrel-crate",
+            "u8-wall-tile"
+          ],
+          "historicalNotes": "Isometric wooden door tile.",
+          "status": "tune",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": null,
+            "paletteCompliance": null,
+            "outlineWeight": null,
+            "ditherQuality": null,
+            "shadowConsistency": null,
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": null,
+            "reviewer": null,
+            "reviewDate": null,
+            "notes": ""
+          }
+        }
+      }
+    },
+    "objects": {
+      "static": {
+        "altar": {
+          "assetClass": "static-object",
+          "runtimePath": "assets/sprites/objects/altar.png",
+          "u8References": [
+            "u8-barrel-crate"
+          ],
+          "historicalNotes": "Catholic altar in St. Paul's Church, with crucifix and candles.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": "pass",
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-03-21",
+            "notes": ""
+          }
+        },
+        "amphora": {
+          "assetClass": "static-object",
+          "runtimePath": "assets/sprites/objects/amphora.png",
+          "u8References": [
+            "u8-barrel-crate"
+          ],
+          "historicalNotes": "Mediterranean-style storage vessel brought by Portuguese traders.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": null,
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-03-21",
+            "notes": ""
+          }
+        },
+        "anchor": {
+          "assetClass": "static-object",
+          "runtimePath": "assets/sprites/objects/anchor.png",
+          "u8References": [
+            "u8-barrel-crate"
+          ],
+          "historicalNotes": "Iron ship anchor at the waterfront, from Portuguese carracks or local vessels.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": null,
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-03-21",
+            "notes": ""
+          }
+        },
+        "arched-window": {
+          "assetClass": "static-object",
+          "runtimePath": "assets/sprites/objects/arched-window.png",
+          "u8References": [
+            "u8-building-facade"
+          ],
+          "historicalNotes": "Portuguese colonial arched window, common in Melaka's European quarter.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": null,
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-03-21",
+            "notes": ""
+          }
+        },
+        "awning": {
+          "assetClass": "static-object",
+          "runtimePath": "assets/sprites/objects/awning.png",
+          "u8References": [
+            "u8-building-facade"
+          ],
+          "historicalNotes": "Cloth market awning providing shade on Rua Direita.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": "pass",
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-03-21",
+            "notes": ""
+          }
+        },
+        "balance-scale": {
+          "assetClass": "static-object",
+          "runtimePath": "assets/sprites/objects/balance-scale.png",
+          "u8References": [
+            "u8-barrel-crate"
+          ],
+          "historicalNotes": "Merchant's balance scale for weighing spices and trade goods.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": "pass",
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-03-21",
+            "notes": ""
+          }
+        },
+        "bamboo-fence": {
+          "assetClass": "static-object",
+          "runtimePath": "assets/sprites/objects/bamboo-fence.png",
+          "u8References": [
+            "u8-barrel-crate",
+            "u8-vegetation"
+          ],
+          "historicalNotes": "Bamboo fence in the kampung quarter, common boundary marker.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": null,
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-03-21",
+            "notes": ""
+          }
+        },
+        "banana-tree": {
+          "assetClass": "static-object",
+          "runtimePath": "assets/sprites/objects/banana-tree.png",
+          "u8References": [
+            "u8-vegetation"
+          ],
+          "historicalNotes": "Banana plant, ubiquitous in tropical Melaka and a staple food source.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": "pass",
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-03-21",
+            "notes": ""
+          }
+        },
+        "barrel": {
+          "assetClass": "static-object",
+          "runtimePath": "assets/sprites/objects/barrel.png",
+          "u8References": [
+            "u8-barrel-crate"
+          ],
+          "historicalNotes": "European-style wooden barrel for wine, water, or dry goods storage.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": null,
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-03-21",
+            "notes": ""
+          }
+        },
+        "bell": {
+          "assetClass": "static-object",
+          "runtimePath": "assets/sprites/objects/bell.png",
+          "u8References": [
+            "u8-barrel-crate"
+          ],
+          "historicalNotes": "Church bell or ship's bell, cast bronze.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": "pass",
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-03-21",
+            "notes": ""
+          }
+        },
+        "bench": {
+          "assetClass": "static-object",
+          "runtimePath": "assets/sprites/objects/bench.png",
+          "u8References": [
+            "u8-barrel-crate"
+          ],
+          "historicalNotes": "Simple wooden bench, found in public areas and church grounds.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": null,
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-03-21",
+            "notes": ""
+          }
+        },
+        "betel-nut-tray": {
+          "assetClass": "static-object",
+          "runtimePath": "assets/sprites/objects/betel-nut-tray.png",
+          "u8References": [
+            "u8-barrel-crate"
+          ],
+          "historicalNotes": "Betel nut chewing set, a widespread social custom across Southeast Asian cultures.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": "pass",
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-03-21",
+            "notes": ""
+          }
+        },
+        "bush": {
+          "assetClass": "static-object",
+          "runtimePath": "assets/sprites/objects/bush.png",
+          "u8References": [
+            "u8-vegetation"
+          ],
+          "historicalNotes": "Tropical shrub, common landscaping around colonial and local buildings.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": null,
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-03-21",
+            "notes": ""
+          }
+        },
+        "candelabra": {
+          "assetClass": "static-object",
+          "runtimePath": "assets/sprites/objects/candelabra.png",
+          "u8References": [
+            "u8-barrel-crate",
+            "u8-torch-fire"
+          ],
+          "historicalNotes": "Multi-branched candle holder in the church or wealthy merchant homes.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": "pass",
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-03-21",
+            "notes": ""
+          }
+        },
+        "cannon": {
+          "assetClass": "static-object",
+          "runtimePath": "assets/sprites/objects/cannon.png",
+          "u8References": [
+            "u8-barrel-crate"
+          ],
+          "historicalNotes": "Portuguese bronze cannon defending A Famosa fortress, key to holding the Strait.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": "pass",
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-03-21",
+            "notes": ""
+          }
+        },
+        "cargo-crate": {
+          "assetClass": "static-object",
+          "runtimePath": "assets/sprites/objects/cargo-crate.png",
+          "u8References": [
+            "u8-barrel-crate"
+          ],
+          "historicalNotes": "Large shipping crate for spices, textiles, or porcelain at the waterfront.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": null,
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-03-21",
+            "notes": ""
+          }
+        },
+        "ceramic-vase": {
+          "assetClass": "static-object",
+          "runtimePath": "assets/sprites/objects/ceramic-vase.png",
+          "u8References": [
+            "u8-barrel-crate"
+          ],
+          "historicalNotes": "Chinese or local ceramic ware, a major trade commodity in Melaka.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": "pass",
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-03-21",
+            "notes": ""
+          }
+        },
+        "coconut": {
+          "assetClass": "static-object",
+          "runtimePath": "assets/sprites/objects/coconut.png",
+          "u8References": [
+            "u8-barrel-crate",
+            "u8-vegetation"
+          ],
+          "historicalNotes": "Coconut, essential food and material in Malay daily life.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": null,
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-03-21",
+            "notes": ""
+          }
+        },
+        "coconut-water-stand": {
+          "assetClass": "static-object",
+          "runtimePath": "assets/sprites/objects/coconut-water-stand.png",
+          "u8References": [
+            "u8-barrel-crate"
+          ],
+          "historicalNotes": "Street vendor stand selling coconut water, a common refreshment.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": "pass",
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-03-21",
+            "notes": ""
+          }
+        },
+        "cooking-fire": {
+          "assetClass": "static-object",
+          "runtimePath": "assets/sprites/objects/cooking-fire.png",
+          "u8References": [
+            "u8-torch-fire",
+            "u8-barrel-crate"
+          ],
+          "historicalNotes": "Open cooking fire in the kampung, used for preparing rice and fish dishes.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": "pass",
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-03-21",
+            "notes": ""
+          }
+        },
+        "crate": {
+          "assetClass": "static-object",
+          "runtimePath": "assets/sprites/objects/crate.png",
+          "u8References": [
+            "u8-barrel-crate"
+          ],
+          "historicalNotes": "Generic wooden storage crate.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": null,
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-03-21",
+            "notes": ""
+          }
+        },
+        "dhow-sail": {
+          "assetClass": "static-object",
+          "runtimePath": "assets/sprites/objects/dhow-sail.png",
+          "u8References": [
+            "u8-barrel-crate"
+          ],
+          "historicalNotes": "Lateen sail from an Arab dhow, the workhorse of Indian Ocean trade.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": "pass",
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-03-21",
+            "notes": ""
+          }
+        },
+        "drying-fish-rack": {
+          "assetClass": "static-object",
+          "runtimePath": "assets/sprites/objects/drying-fish-rack.png",
+          "u8References": [
+            "u8-barrel-crate"
+          ],
+          "historicalNotes": "Wooden rack for drying fish in the sun, a Malay preservation method.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": null,
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-03-21",
+            "notes": ""
+          }
+        },
+        "fish-basket": {
+          "assetClass": "static-object",
+          "runtimePath": "assets/sprites/objects/fish-basket.png",
+          "u8References": [
+            "u8-barrel-crate"
+          ],
+          "historicalNotes": "Woven rattan basket for carrying fresh catch from the strait.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": null,
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-03-21",
+            "notes": ""
+          }
+        },
+        "fish-trap": {
+          "assetClass": "static-object",
+          "runtimePath": "assets/sprites/objects/fish-trap.png",
+          "u8References": [
+            "u8-barrel-crate"
+          ],
+          "historicalNotes": "Bubu fish trap woven from bamboo, traditional Malay fishing gear.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": null,
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-03-21",
+            "notes": ""
+          }
+        },
+        "fishing-net": {
+          "assetClass": "static-object",
+          "runtimePath": "assets/sprites/objects/fishing-net.png",
+          "u8References": [
+            "u8-barrel-crate"
+          ],
+          "historicalNotes": "Cast net draped over the dock or hung to dry after fishing.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": "pass",
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-03-21",
+            "notes": ""
+          }
+        },
+        "flowers": {
+          "assetClass": "static-object",
+          "runtimePath": "assets/sprites/objects/flowers.png",
+          "u8References": [
+            "u8-vegetation"
+          ],
+          "historicalNotes": "Tropical flowers: frangipani, hibiscus, or bougainvillea.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": "pass",
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-03-21",
+            "notes": ""
+          }
+        },
+        "fruit-basket": {
+          "assetClass": "static-object",
+          "runtimePath": "assets/sprites/objects/fruit-basket.png",
+          "u8References": [
+            "u8-barrel-crate"
+          ],
+          "historicalNotes": "Basket of tropical fruit: durian, rambutan, mangosteen, sold at market.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": "pass",
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-03-21",
+            "notes": ""
+          }
+        },
+        "gravestone": {
+          "assetClass": "static-object",
+          "runtimePath": "assets/sprites/objects/gravestone.png",
+          "u8References": [
+            "u8-barrel-crate",
+            "u8-stone-floor"
+          ],
+          "historicalNotes": "Portuguese tombstone at St. Paul's churchyard, many dating to early colonial period.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": null,
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-03-21",
+            "notes": ""
+          }
+        },
+        "handcart": {
+          "assetClass": "static-object",
+          "runtimePath": "assets/sprites/objects/handcart.png",
+          "u8References": [
+            "u8-barrel-crate"
+          ],
+          "historicalNotes": "Wooden handcart for moving goods between the waterfront and market.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": null,
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-03-21",
+            "notes": ""
+          }
+        },
+        "hanging-cloth": {
+          "assetClass": "static-object",
+          "runtimePath": "assets/sprites/objects/hanging-cloth.png",
+          "u8References": [
+            "u8-barrel-crate"
+          ],
+          "historicalNotes": "Dyed cloth or batik hanging to dry or displayed for sale at market.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": null,
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-03-21",
+            "notes": ""
+          }
+        },
+        "hanging-oil-lantern": {
+          "assetClass": "static-object",
+          "runtimePath": "assets/sprites/objects/hanging-oil-lantern.png",
+          "u8References": [
+            "u8-torch-fire",
+            "u8-barrel-crate"
+          ],
+          "historicalNotes": "Oil lantern hung from buildings or poles for nighttime illumination.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": "pass",
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-03-21",
+            "notes": ""
+          }
+        },
+        "herb-drying-rack": {
+          "assetClass": "static-object",
+          "runtimePath": "assets/sprites/objects/herb-drying-rack.png",
+          "u8References": [
+            "u8-barrel-crate",
+            "u8-vegetation"
+          ],
+          "historicalNotes": "Rack for drying herbs and spices, part of Melaka's spice processing trade.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": null,
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-03-21",
+            "notes": ""
+          }
+        },
+        "iron-fence": {
+          "assetClass": "static-object",
+          "runtimePath": "assets/sprites/objects/iron-fence.png",
+          "u8References": [
+            "u8-barrel-crate"
+          ],
+          "historicalNotes": "Wrought iron fence around Portuguese colonial buildings or the church compound.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": null,
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-03-21",
+            "notes": ""
+          }
+        },
+        "lantern": {
+          "assetClass": "static-object",
+          "runtimePath": "assets/sprites/objects/lantern.png",
+          "u8References": [
+            "u8-torch-fire",
+            "u8-barrel-crate"
+          ],
+          "historicalNotes": "Portable oil or candle lantern, Chinese or Portuguese design.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": "pass",
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-03-21",
+            "notes": ""
+          }
+        },
+        "laundry-line": {
+          "assetClass": "static-object",
+          "runtimePath": "assets/sprites/objects/laundry-line.png",
+          "u8References": [
+            "u8-barrel-crate"
+          ],
+          "historicalNotes": "Clothes drying on a line, a domestic detail adding life to residential areas.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": "pass",
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-03-21",
+            "notes": ""
+          }
+        },
+        "maritime-barrel": {
+          "assetClass": "static-object",
+          "runtimePath": "assets/sprites/objects/maritime-barrel.png",
+          "u8References": [
+            "u8-barrel-crate"
+          ],
+          "historicalNotes": "Pitch-sealed barrel for ship stores: water, salt pork, or gunpowder.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": null,
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-03-21",
+            "notes": ""
+          }
+        },
+        "market-stall": {
+          "assetClass": "static-object",
+          "runtimePath": "assets/sprites/objects/market-stall.png",
+          "u8References": [
+            "u8-barrel-crate",
+            "u8-building-facade"
+          ],
+          "historicalNotes": "Open market stall on Rua Direita, the commercial heart of Portuguese Melaka.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": "pass",
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-03-21",
+            "notes": ""
+          }
+        },
+        "market-stall-1": {
+          "assetClass": "static-object",
+          "runtimePath": "assets/sprites/objects/market-stall-1.png",
+          "u8References": [
+            "u8-barrel-crate",
+            "u8-building-facade"
+          ],
+          "historicalNotes": "Market stall variant with awning, selling spices or textiles.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": "pass",
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-03-21",
+            "notes": ""
+          }
+        },
+        "market-stall-2": {
+          "assetClass": "static-object",
+          "runtimePath": "assets/sprites/objects/market-stall-2.png",
+          "u8References": [
+            "u8-barrel-crate",
+            "u8-building-facade"
+          ],
+          "historicalNotes": "Market stall variant, possibly a food vendor or craftsman's booth.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": "pass",
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-03-21",
+            "notes": ""
+          }
+        },
+        "moored-sampan": {
+          "assetClass": "static-object",
+          "runtimePath": "assets/sprites/objects/moored-sampan.png",
+          "u8References": [
+            "u8-barrel-crate"
+          ],
+          "historicalNotes": "Small Malay flat-bottomed boat moored at the waterfront or riverbank.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": null,
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-03-21",
+            "notes": ""
+          }
+        },
+        "palm-tree": {
+          "assetClass": "static-object",
+          "runtimePath": "assets/sprites/objects/palm-tree.png",
+          "u8References": [
+            "u8-vegetation"
+          ],
+          "historicalNotes": "Coconut palm, defining feature of the Melaka coastal landscape.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": null,
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-03-21",
+            "notes": ""
+          }
+        },
+        "pelourinho": {
+          "assetClass": "static-object",
+          "runtimePath": "assets/sprites/objects/pelourinho.png",
+          "u8References": [
+            "u8-barrel-crate",
+            "u8-stone-floor"
+          ],
+          "historicalNotes": "Portuguese pillory column, symbol of colonial justice and authority in the town square.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": null,
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-03-21",
+            "notes": ""
+          }
+        },
+        "pottery": {
+          "assetClass": "static-object",
+          "runtimePath": "assets/sprites/objects/pottery.png",
+          "u8References": [
+            "u8-barrel-crate"
+          ],
+          "historicalNotes": "Local or imported earthenware pots used for cooking and storage.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": null,
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-03-21",
+            "notes": ""
+          }
+        },
+        "prayer-mat": {
+          "assetClass": "static-object",
+          "runtimePath": "assets/sprites/objects/prayer-mat.png",
+          "u8References": [
+            "u8-barrel-crate"
+          ],
+          "historicalNotes": "Muslim prayer mat, reflecting the Islamic faith of the Malay and Arab communities.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": "pass",
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-03-21",
+            "notes": ""
+          }
+        },
+        "rice-mortar": {
+          "assetClass": "static-object",
+          "runtimePath": "assets/sprites/objects/rice-mortar.png",
+          "u8References": [
+            "u8-barrel-crate"
+          ],
+          "historicalNotes": "Wooden mortar and pestle for husking rice, staple food preparation tool.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": null,
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-03-21",
+            "notes": ""
+          }
+        },
+        "rice-pot": {
+          "assetClass": "static-object",
+          "runtimePath": "assets/sprites/objects/rice-pot.png",
+          "u8References": [
+            "u8-barrel-crate"
+          ],
+          "historicalNotes": "Clay or iron pot for cooking rice over an open fire.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": "pass",
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-03-21",
+            "notes": ""
+          }
+        },
+        "rope-coil": {
+          "assetClass": "static-object",
+          "runtimePath": "assets/sprites/objects/rope-coil.png",
+          "u8References": [
+            "u8-barrel-crate"
+          ],
+          "historicalNotes": "Coiled hemp or coconut-fiber rope at the docks.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": null,
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-03-21",
+            "notes": ""
+          }
+        },
+        "sack": {
+          "assetClass": "static-object",
+          "runtimePath": "assets/sprites/objects/sack.png",
+          "u8References": [
+            "u8-barrel-crate"
+          ],
+          "historicalNotes": "Burlap or cloth sack for rice, spices, or other dry goods.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": null,
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-03-21",
+            "notes": ""
+          }
+        },
+        "scroll-rack": {
+          "assetClass": "static-object",
+          "runtimePath": "assets/sprites/objects/scroll-rack.png",
+          "u8References": [
+            "u8-barrel-crate"
+          ],
+          "historicalNotes": "Rack for documents or maps in a counting house or church sacristy.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": null,
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-03-21",
+            "notes": ""
+          }
+        },
+        "ship-mast": {
+          "assetClass": "static-object",
+          "runtimePath": "assets/sprites/objects/ship-mast.png",
+          "u8References": [
+            "u8-barrel-crate"
+          ],
+          "historicalNotes": "Tall ship mast visible at the waterfront, from a Portuguese carrack or nau.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": null,
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-03-21",
+            "notes": ""
+          }
+        },
+        "spice-pile": {
+          "assetClass": "static-object",
+          "runtimePath": "assets/sprites/objects/spice-pile.png",
+          "u8References": [
+            "u8-barrel-crate"
+          ],
+          "historicalNotes": "Heaped spices at market: cloves, nutmeg, mace, or cinnamon.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": "pass",
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-03-21",
+            "notes": ""
+          }
+        },
+        "spice-pile-pepper": {
+          "assetClass": "static-object",
+          "runtimePath": "assets/sprites/objects/spice-pile-pepper.png",
+          "u8References": [
+            "u8-barrel-crate"
+          ],
+          "historicalNotes": "Black pepper pile, Melaka's most valuable trade commodity by volume.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": null,
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-03-21",
+            "notes": ""
+          }
+        },
+        "stone-cross": {
+          "assetClass": "static-object",
+          "runtimePath": "assets/sprites/objects/stone-cross.png",
+          "u8References": [
+            "u8-barrel-crate",
+            "u8-stone-floor"
+          ],
+          "historicalNotes": "Stone crucifix or padrao marker, symbol of Portuguese Catholic presence.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": null,
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-03-21",
+            "notes": ""
+          }
+        },
+        "sugar-cone": {
+          "assetClass": "static-object",
+          "runtimePath": "assets/sprites/objects/sugar-cone.png",
+          "u8References": [
+            "u8-barrel-crate"
+          ],
+          "historicalNotes": "Conical sugar loaf, a valuable European trade item in the spice exchange.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": "pass",
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-03-21",
+            "notes": ""
+          }
+        },
+        "tavern-sign": {
+          "assetClass": "static-object",
+          "runtimePath": "assets/sprites/objects/tavern-sign.png",
+          "u8References": [
+            "u8-barrel-crate",
+            "u8-building-facade"
+          ],
+          "historicalNotes": "Hanging wooden sign for a tavern on Rua Direita, serving wine and arrack.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": null,
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-03-21",
+            "notes": ""
+          }
+        },
+        "tin-ingots": {
+          "assetClass": "static-object",
+          "runtimePath": "assets/sprites/objects/tin-ingots.png",
+          "u8References": [
+            "u8-barrel-crate"
+          ],
+          "historicalNotes": "Tin ingots from Malay Peninsula mines, a major export commodity.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": null,
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-03-21",
+            "notes": ""
+          }
+        },
+        "water-well": {
+          "assetClass": "static-object",
+          "runtimePath": "assets/sprites/objects/water-well.png",
+          "u8References": [
+            "u8-barrel-crate",
+            "u8-stone-floor"
+          ],
+          "historicalNotes": "Stone or brick well providing fresh water in the settlement.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": null,
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-03-21",
+            "notes": ""
+          }
+        },
+        "wayang-kulit-puppet": {
+          "assetClass": "static-object",
+          "runtimePath": "assets/sprites/objects/wayang-kulit-puppet.png",
+          "u8References": [
+            "u8-barrel-crate"
+          ],
+          "historicalNotes": "Leather shadow puppet from Malay wayang kulit tradition, an ancient storytelling art.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": "pass",
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-03-21",
+            "notes": ""
+          }
+        },
+        "wine-jug": {
+          "assetClass": "static-object",
+          "runtimePath": "assets/sprites/objects/wine-jug.png",
+          "u8References": [
+            "u8-barrel-crate"
+          ],
+          "historicalNotes": "Ceramic wine jug, imported from Portugal or produced locally.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": null,
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-03-21",
+            "notes": ""
+          }
+        },
+        "wooden-pew": {
+          "assetClass": "static-object",
+          "runtimePath": "assets/sprites/objects/wooden-pew.png",
+          "u8References": [
+            "u8-barrel-crate"
+          ],
+          "historicalNotes": "Church pew in St. Paul's, carved from local tropical hardwood.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": null,
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-03-21",
+            "notes": ""
+          }
+        },
+        "woven-mat": {
+          "assetClass": "static-object",
+          "runtimePath": "assets/sprites/objects/woven-mat.png",
+          "u8References": [
+            "u8-barrel-crate"
+          ],
+          "historicalNotes": "Woven pandanus leaf mat, used for sitting and sleeping in Malay households.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": null,
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-03-21",
+            "notes": ""
+          }
+        }
+      },
+      "animatedSheets": {
+        "torch-flame": {
+          "assetClass": "animated-object",
+          "runtimePath": "assets/sprites/objects/torch-flame-sheet.png",
+          "u8References": [
+            "u8-torch-fire"
+          ],
+          "historicalNotes": "Torch flame animation for wall-mounted or standing torches.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": "pass",
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-03-21",
+            "notes": ""
+          }
+        },
+        "palm-frond": {
+          "assetClass": "animated-object",
+          "runtimePath": "assets/sprites/objects/palm-frond-sheet.png",
+          "u8References": [
+            "u8-torch-fire",
+            "u8-vegetation"
+          ],
+          "historicalNotes": "Swaying palm frond animation, driven by tropical breeze.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": null,
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-03-21",
+            "notes": ""
+          }
+        },
+        "awning-flutter": {
+          "assetClass": "animated-object",
+          "runtimePath": "assets/sprites/objects/awning-flutter-sheet.png",
+          "u8References": [
+            "u8-torch-fire"
+          ],
+          "historicalNotes": "Market awning cloth fluttering in the wind.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": "pass",
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-03-21",
+            "notes": ""
+          }
+        },
+        "smoke-column": {
+          "assetClass": "animated-object",
+          "runtimePath": "assets/sprites/objects/smoke-column-sheet.png",
+          "u8References": [
+            "u8-torch-fire"
+          ],
+          "historicalNotes": "Rising smoke from cooking fires or forges.",
+          "status": "tune",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": null,
+            "paletteCompliance": null,
+            "outlineWeight": null,
+            "ditherQuality": null,
+            "shadowConsistency": null,
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": null,
+            "reviewer": null,
+            "reviewDate": null,
+            "notes": ""
+          }
+        },
+        "seagull": {
+          "assetClass": "animated-object",
+          "runtimePath": "assets/sprites/objects/seagull-sheet.png",
+          "u8References": [
+            "u8-torch-fire"
+          ],
+          "historicalNotes": "Seagull wing-flap animation, waterfront atmosphere element.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": "pass",
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1-override",
+            "reviewDate": "2026-03-21",
+            "notes": "Shadow direction scoring not applicable to flying bird animation. Shadow check overridden — seagull is an atmospheric element, not a ground-anchored object."
+          }
+        },
+        "flag-wave": {
+          "assetClass": "animated-object",
+          "runtimePath": "assets/sprites/objects/flag-wave-sheet.png",
+          "u8References": [
+            "u8-torch-fire"
+          ],
+          "historicalNotes": "Portuguese flag waving at A Famosa fortress, bearing the royal coat of arms.",
+          "status": "tune",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": null,
+            "paletteCompliance": null,
+            "outlineWeight": null,
+            "ditherQuality": null,
+            "shadowConsistency": null,
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": null,
+            "reviewer": null,
+            "reviewDate": null,
+            "notes": ""
+          }
+        }
+      }
+    },
+    "portraits": {
+      "player": {
+        "assetClass": "portrait",
+        "runtimePath": "assets/sprites/portraits/player.png",
+        "u8References": [
+          "u8-vga-portrait"
+        ],
+        "historicalNotes": "Portuguese or mixed-heritage adventurer. VGA portrait should show European features with sun-weathered skin, reflecting life in tropical Melaka.",
+        "status": "keep",
+        "wave": 1,
+        "gradeCard": {
+          "silhouetteClarity": "pass",
+          "paletteCompliance": null,
+          "outlineWeight": "pass",
+          "ditherQuality": "pass",
+          "shadowConsistency": "pass",
+          "historicalAccuracy": null,
+          "densityMatch": null,
+          "overallGrade": "pass",
+          "reviewer": "auto-grader-v1",
+          "reviewDate": "2026-03-21",
+          "notes": ""
+        }
+      },
+      "fernao-gomes": {
+        "assetClass": "portrait",
+        "runtimePath": "assets/sprites/portraits/fernao-gomes.png",
+        "u8References": [
+          "u8-vga-portrait"
+        ],
+        "historicalNotes": "Wealthy Portuguese spice merchant. Portrait should convey prosperity: well-fed features, trimmed beard, rich fabric doublet with merchant's cap.",
+        "status": "keep",
+        "wave": 1,
+        "gradeCard": {
+          "silhouetteClarity": "pass",
+          "paletteCompliance": null,
+          "outlineWeight": "pass",
+          "ditherQuality": "pass",
+          "shadowConsistency": "pass",
+          "historicalAccuracy": null,
+          "densityMatch": null,
+          "overallGrade": "pass",
+          "reviewer": "auto-grader-v1",
+          "reviewDate": "2026-03-21",
+          "notes": ""
+        }
+      },
+      "capitao-rodrigues": {
+        "assetClass": "portrait",
+        "runtimePath": "assets/sprites/portraits/capitao-rodrigues.png",
+        "u8References": [
+          "u8-vga-portrait"
+        ],
+        "historicalNotes": "Portuguese fortress guard captain. Stern military bearing, morion helmet or bare-headed with close-cropped hair, weathered face of a colonial soldier.",
+        "status": "keep",
+        "wave": 1,
+        "gradeCard": {
+          "silhouetteClarity": "pass",
+          "paletteCompliance": null,
+          "outlineWeight": "pass",
+          "ditherQuality": "pass",
+          "shadowConsistency": "pass",
+          "historicalAccuracy": null,
+          "densityMatch": null,
+          "overallGrade": "pass",
+          "reviewer": "auto-grader-v1",
+          "reviewDate": "2026-03-21",
+          "notes": ""
+        }
+      },
+      "padre-tomas": {
+        "assetClass": "portrait",
+        "runtimePath": "assets/sprites/portraits/padre-tomas.png",
+        "u8References": [
+          "u8-vga-portrait"
+        ],
+        "historicalNotes": "Jesuit priest. Tonsured head or skullcap, black cassock with white collar, scholarly and ascetic features reflecting the intellectual Jesuit order.",
+        "status": "keep",
+        "wave": 1,
+        "gradeCard": {
+          "silhouetteClarity": "pass",
+          "paletteCompliance": null,
+          "outlineWeight": "pass",
+          "ditherQuality": "pass",
+          "shadowConsistency": null,
+          "historicalAccuracy": null,
+          "densityMatch": null,
+          "overallGrade": "pass",
+          "reviewer": "auto-grader-v1",
+          "reviewDate": "2026-03-21",
+          "notes": ""
+        }
+      },
+      "aminah": {
+        "assetClass": "portrait",
+        "runtimePath": "assets/sprites/portraits/aminah.png",
+        "u8References": [
+          "u8-vga-portrait"
+        ],
+        "historicalNotes": "Malay market vendor. Warm, open expression of a trader. Wearing tudung headscarf, with visible batik fabric at the neckline. Southeast Asian features.",
+        "status": "keep",
+        "wave": 1,
+        "gradeCard": {
+          "silhouetteClarity": "pass",
+          "paletteCompliance": null,
+          "outlineWeight": "pass",
+          "ditherQuality": "pass",
+          "shadowConsistency": "pass",
+          "historicalAccuracy": null,
+          "densityMatch": null,
+          "overallGrade": "pass",
+          "reviewer": "auto-grader-v1",
+          "reviewDate": "2026-03-21",
+          "notes": ""
+        }
+      },
+      "chen-wei": {
+        "assetClass": "portrait",
+        "runtimePath": "assets/sprites/portraits/chen-wei.png",
+        "u8References": [
+          "u8-vga-portrait"
+        ],
+        "historicalNotes": "Chinese guild representative. Composed, calculating expression. Ming-era guanmao cap, round-collar changshan visible. East Asian features reflecting the Hokkien merchant diaspora.",
+        "status": "keep",
+        "wave": 1,
+        "gradeCard": {
+          "silhouetteClarity": "pass",
+          "paletteCompliance": null,
+          "outlineWeight": "pass",
+          "ditherQuality": "pass",
+          "shadowConsistency": null,
+          "historicalAccuracy": null,
+          "densityMatch": null,
+          "overallGrade": "pass",
+          "reviewer": "auto-grader-v1",
+          "reviewDate": "2026-03-21",
+          "notes": ""
+        }
+      },
+      "rashid": {
+        "assetClass": "portrait",
+        "runtimePath": "assets/sprites/portraits/rashid.png",
+        "u8References": [
+          "u8-vga-portrait"
+        ],
+        "historicalNotes": "Arab sailor and navigator. Weathered, jovial expression. Turban or keffiyeh, sun-darkened skin from years on Indian Ocean monsoon routes. Arab features.",
+        "status": "keep",
+        "wave": 1,
+        "gradeCard": {
+          "silhouetteClarity": "pass",
+          "paletteCompliance": null,
+          "outlineWeight": "pass",
+          "ditherQuality": "pass",
+          "shadowConsistency": null,
+          "historicalAccuracy": null,
+          "densityMatch": null,
+          "overallGrade": "pass",
+          "reviewer": "auto-grader-v1",
+          "reviewDate": "2026-03-21",
+          "notes": ""
+        }
+      },
+      "siti": {
+        "assetClass": "portrait",
+        "runtimePath": "assets/sprites/portraits/siti.png",
+        "u8References": [
+          "u8-vga-portrait"
+        ],
+        "historicalNotes": "Malay woman. Gentle features framed by a selendang shawl. Southeast Asian complexion and features typical of the Malay Peninsula.",
+        "status": "keep",
+        "wave": 1,
+        "gradeCard": {
+          "silhouetteClarity": "pass",
+          "paletteCompliance": null,
+          "outlineWeight": "pass",
+          "ditherQuality": "pass",
+          "shadowConsistency": null,
+          "historicalAccuracy": null,
+          "densityMatch": null,
+          "overallGrade": "pass",
+          "reviewer": "auto-grader-v1",
+          "reviewDate": "2026-03-21",
+          "notes": ""
+        }
+      },
+      "alvares": {
+        "assetClass": "portrait",
+        "runtimePath": "assets/sprites/portraits/alvares.png",
+        "u8References": [
+          "u8-vga-portrait"
+        ],
+        "historicalNotes": "Portuguese official or merchant. European features, possibly with a goatee, wearing a felt cap and doublet appropriate to his station.",
+        "status": "keep",
+        "wave": 1,
+        "gradeCard": {
+          "silhouetteClarity": "pass",
+          "paletteCompliance": null,
+          "outlineWeight": "pass",
+          "ditherQuality": "pass",
+          "shadowConsistency": "pass",
+          "historicalAccuracy": null,
+          "densityMatch": null,
+          "overallGrade": "pass",
+          "reviewer": "auto-grader-v1",
+          "reviewDate": "2026-03-21",
+          "notes": ""
+        }
+      },
+      "mak-enang": {
+        "assetClass": "portrait",
+        "runtimePath": "assets/sprites/portraits/mak-enang.png",
+        "u8References": [
+          "u8-vga-portrait"
+        ],
+        "historicalNotes": "Malay elder woman. Lined face showing age and wisdom, wearing a plain headcloth. Respected matriarchal figure in kampung society.",
+        "status": "keep",
+        "wave": 1,
+        "gradeCard": {
+          "silhouetteClarity": "pass",
+          "paletteCompliance": null,
+          "outlineWeight": "pass",
+          "ditherQuality": "pass",
+          "shadowConsistency": "pass",
+          "historicalAccuracy": null,
+          "densityMatch": null,
+          "overallGrade": "pass",
+          "reviewer": "auto-grader-v1",
+          "reviewDate": "2026-03-21",
+          "notes": ""
+        }
+      },
+      "gaspar-mesquita": {
+        "assetClass": "portrait",
+        "runtimePath": "assets/sprites/portraits/gaspar-mesquita.png",
+        "u8References": [
+          "u8-vga-portrait"
+        ],
+        "historicalNotes": "Portuguese fidalgo. Aristocratic bearing, groomed beard, plumed hat or bare head showing high forehead. Rich doublet with slashed sleeves visible.",
+        "status": "keep",
+        "wave": 1,
+        "gradeCard": {
+          "silhouetteClarity": "pass",
+          "paletteCompliance": null,
+          "outlineWeight": "pass",
+          "ditherQuality": "pass",
+          "shadowConsistency": "pass",
+          "historicalAccuracy": null,
+          "densityMatch": null,
+          "overallGrade": "pass",
+          "reviewer": "auto-grader-v1",
+          "reviewDate": "2026-03-21",
+          "notes": ""
+        }
+      },
+      "diogo-almeida": {
+        "assetClass": "portrait",
+        "runtimePath": "assets/sprites/portraits/diogo-almeida.png",
+        "u8References": [
+          "u8-vga-portrait"
+        ],
+        "historicalNotes": "Portuguese soldier or minor official. Rough-hewn features, stubble, practical attire. A working colonial rather than an aristocrat.",
+        "status": "keep",
+        "wave": 1,
+        "gradeCard": {
+          "silhouetteClarity": "pass",
+          "paletteCompliance": null,
+          "outlineWeight": "pass",
+          "ditherQuality": "pass",
+          "shadowConsistency": "pass",
+          "historicalAccuracy": null,
+          "densityMatch": null,
+          "overallGrade": "pass",
+          "reviewer": "auto-grader-v1",
+          "reviewDate": "2026-03-21",
+          "notes": ""
+        }
+      },
+      "lin-mei": {
+        "assetClass": "portrait",
+        "runtimePath": "assets/sprites/portraits/lin-mei.png",
+        "u8References": [
+          "u8-vga-portrait"
+        ],
+        "historicalNotes": "Chinese woman from the Melaka trading community. Hair in a traditional bun with a decorative pin, Ming-era cross-collar visible. East Asian features of the Hokkien diaspora.",
+        "status": "keep",
+        "wave": 1,
+        "gradeCard": {
+          "silhouetteClarity": "pass",
+          "paletteCompliance": null,
+          "outlineWeight": "pass",
+          "ditherQuality": "pass",
+          "shadowConsistency": null,
+          "historicalAccuracy": null,
+          "densityMatch": null,
+          "overallGrade": "pass",
+          "reviewer": "auto-grader-v1",
+          "reviewDate": "2026-03-21",
+          "notes": ""
+        }
+      },
+      "pak-salleh": {
+        "assetClass": "portrait",
+        "runtimePath": "assets/sprites/portraits/pak-salleh.png",
+        "u8References": [
+          "u8-vga-portrait"
+        ],
+        "historicalNotes": "Malay elder man. Dignified bearing with songkok cap, greying facial hair. The face of local Malay authority in the kampung under Portuguese rule.",
+        "status": "keep",
+        "wave": 1,
+        "gradeCard": {
+          "silhouetteClarity": "pass",
+          "paletteCompliance": null,
+          "outlineWeight": "pass",
+          "ditherQuality": "pass",
+          "shadowConsistency": "pass",
+          "historicalAccuracy": null,
+          "densityMatch": null,
+          "overallGrade": "pass",
+          "reviewer": "auto-grader-v1",
+          "reviewDate": "2026-03-21",
+          "notes": ""
+        }
+      }
+    },
+    "scenes": {
+      "opening-screen": {
+        "assetClass": "scene-backdrop",
+        "runtimePath": "assets/scenes/opening-screen.png",
+        "u8References": [
+          "u8-environment-overview",
+          "u8-building-facade"
+        ],
+        "historicalNotes": "Title screen vista of 1580 Melaka, showing the fortress, strait, and layered cityscape.",
+        "status": "replace",
+        "wave": 3,
+        "gradeCard": {
+          "silhouetteClarity": null,
+          "paletteCompliance": null,
+          "outlineWeight": "pass",
+          "ditherQuality": "fail",
+          "shadowConsistency": "pass",
+          "historicalAccuracy": null,
+          "densityMatch": null,
+          "overallGrade": "fail",
+          "reviewer": "auto-grader-v1",
+          "reviewDate": "2026-03-21",
+          "notes": "dither: gradient ratio 1.524 exceeds 0.05"
+        }
+      },
+      "scene-a-famosa": {
+        "assetClass": "scene-backdrop",
+        "runtimePath": "assets/scenes/scene-a-famosa.png",
+        "u8References": [
+          "u8-environment-overview",
+          "u8-building-facade"
+        ],
+        "historicalNotes": "A Famosa fortress gate, the iconic laterite stone entrance to Portuguese Melaka, built by Afonso de Albuquerque after 1511.",
+        "status": "replace",
+        "wave": 3,
+        "gradeCard": {
+          "silhouetteClarity": null,
+          "paletteCompliance": null,
+          "outlineWeight": "pass",
+          "ditherQuality": "fail",
+          "shadowConsistency": "fail",
+          "historicalAccuracy": null,
+          "densityMatch": null,
+          "overallGrade": "fail",
+          "reviewer": "auto-grader-v1",
+          "reviewDate": "2026-03-21",
+          "notes": "dither: gradient ratio 0.719 exceeds 0.05; shadow: SE score 0.25"
+        }
+      },
+      "scene-a-famosa-dawn": {
+        "assetClass": "scene-backdrop",
+        "runtimePath": "assets/scenes/scene-a-famosa-dawn.png",
+        "u8References": [
+          "u8-environment-overview"
+        ],
+        "historicalNotes": "A Famosa at dawn, warm golden light from the east over the Strait of Melaka.",
+        "status": "replace",
+        "wave": 3,
+        "gradeCard": {
+          "silhouetteClarity": null,
+          "paletteCompliance": null,
+          "outlineWeight": "pass",
+          "ditherQuality": "fail",
+          "shadowConsistency": "fail",
+          "historicalAccuracy": null,
+          "densityMatch": null,
+          "overallGrade": "fail",
+          "reviewer": "auto-grader-v1",
+          "reviewDate": "2026-03-21",
+          "notes": "dither: gradient ratio 3.369 exceeds 0.05; shadow: SE score 0.21"
+        }
+      },
+      "scene-a-famosa-dusk": {
+        "assetClass": "scene-backdrop",
+        "runtimePath": "assets/scenes/scene-a-famosa-dusk.png",
+        "u8References": [
+          "u8-environment-overview"
+        ],
+        "historicalNotes": "A Famosa at dusk, orange and purple sky as the sun sets behind the peninsula.",
+        "status": "replace",
+        "wave": 3,
+        "gradeCard": {
+          "silhouetteClarity": null,
+          "paletteCompliance": null,
+          "outlineWeight": "pass",
+          "ditherQuality": "fail",
+          "shadowConsistency": "fail",
+          "historicalAccuracy": null,
+          "densityMatch": null,
+          "overallGrade": "fail",
+          "reviewer": "auto-grader-v1",
+          "reviewDate": "2026-03-21",
+          "notes": "dither: gradient ratio 2.383 exceeds 0.05; shadow: SE score 0.25"
+        }
+      },
+      "scene-a-famosa-night": {
+        "assetClass": "scene-backdrop",
+        "runtimePath": "assets/scenes/scene-a-famosa-night.png",
+        "u8References": [
+          "u8-environment-overview"
+        ],
+        "historicalNotes": "A Famosa at night, torchlit fortress walls under a tropical starfield.",
+        "status": "replace",
+        "wave": 3,
+        "gradeCard": {
+          "silhouetteClarity": null,
+          "paletteCompliance": null,
+          "outlineWeight": "pass",
+          "ditherQuality": "fail",
+          "shadowConsistency": "pass",
+          "historicalAccuracy": null,
+          "densityMatch": null,
+          "overallGrade": "fail",
+          "reviewer": "auto-grader-v1",
+          "reviewDate": "2026-03-21",
+          "notes": "dither: gradient ratio 5.667 exceeds 0.05"
+        }
+      },
+      "scene-rua-direita": {
+        "assetClass": "scene-backdrop",
+        "runtimePath": "assets/scenes/scene-rua-direita.png",
+        "u8References": [
+          "u8-environment-overview",
+          "u8-building-facade"
+        ],
+        "historicalNotes": "Rua Direita, the main commercial street of Portuguese Melaka, lined with shops, taverns, and market stalls.",
+        "status": "replace",
+        "wave": 3,
+        "gradeCard": {
+          "silhouetteClarity": null,
+          "paletteCompliance": null,
+          "outlineWeight": "pass",
+          "ditherQuality": "fail",
+          "shadowConsistency": "pass",
+          "historicalAccuracy": null,
+          "densityMatch": null,
+          "overallGrade": "fail",
+          "reviewer": "auto-grader-v1",
+          "reviewDate": "2026-03-21",
+          "notes": "dither: gradient ratio 2.959 exceeds 0.05"
+        }
+      },
+      "scene-rua-direita-dawn": {
+        "assetClass": "scene-backdrop",
+        "runtimePath": "assets/scenes/scene-rua-direita-dawn.png",
+        "u8References": [
+          "u8-environment-overview"
+        ],
+        "historicalNotes": "Rua Direita at dawn as merchants open stalls and early traders arrive.",
+        "status": "replace",
+        "wave": 3,
+        "gradeCard": {
+          "silhouetteClarity": null,
+          "paletteCompliance": null,
+          "outlineWeight": "pass",
+          "ditherQuality": "fail",
+          "shadowConsistency": "partial",
+          "historicalAccuracy": null,
+          "densityMatch": null,
+          "overallGrade": "fail",
+          "reviewer": "auto-grader-v1",
+          "reviewDate": "2026-03-21",
+          "notes": "dither: gradient ratio 4.719 exceeds 0.05; shadow: SE score 0.37"
+        }
+      },
+      "scene-rua-direita-dusk": {
+        "assetClass": "scene-backdrop",
+        "runtimePath": "assets/scenes/scene-rua-direita-dusk.png",
+        "u8References": [
+          "u8-environment-overview"
+        ],
+        "historicalNotes": "Rua Direita at dusk, golden light on whitewashed walls as the market winds down.",
+        "status": "replace",
+        "wave": 3,
+        "gradeCard": {
+          "silhouetteClarity": null,
+          "paletteCompliance": null,
+          "outlineWeight": "pass",
+          "ditherQuality": "fail",
+          "shadowConsistency": "pass",
+          "historicalAccuracy": null,
+          "densityMatch": null,
+          "overallGrade": "fail",
+          "reviewer": "auto-grader-v1",
+          "reviewDate": "2026-03-21",
+          "notes": "dither: gradient ratio 4.648 exceeds 0.05"
+        }
+      },
+      "scene-rua-direita-night": {
+        "assetClass": "scene-backdrop",
+        "runtimePath": "assets/scenes/scene-rua-direita-night.png",
+        "u8References": [
+          "u8-environment-overview"
+        ],
+        "historicalNotes": "Rua Direita at night, oil lanterns and tavern light spilling onto cobblestones.",
+        "status": "replace",
+        "wave": 3,
+        "gradeCard": {
+          "silhouetteClarity": null,
+          "paletteCompliance": null,
+          "outlineWeight": "pass",
+          "ditherQuality": "fail",
+          "shadowConsistency": "pass",
+          "historicalAccuracy": null,
+          "densityMatch": null,
+          "overallGrade": "fail",
+          "reviewer": "auto-grader-v1",
+          "reviewDate": "2026-03-21",
+          "notes": "dither: gradient ratio 4.972 exceeds 0.05"
+        }
+      },
+      "scene-st-pauls": {
+        "assetClass": "scene-backdrop",
+        "runtimePath": "assets/scenes/scene-st-pauls.png",
+        "u8References": [
+          "u8-environment-overview",
+          "u8-building-facade"
+        ],
+        "historicalNotes": "St. Paul's Church atop Bukit Melaka, a stone chapel built by the Portuguese with panoramic views of the strait.",
+        "status": "replace",
+        "wave": 3,
+        "gradeCard": {
+          "silhouetteClarity": null,
+          "paletteCompliance": null,
+          "outlineWeight": "pass",
+          "ditherQuality": "fail",
+          "shadowConsistency": "pass",
+          "historicalAccuracy": null,
+          "densityMatch": null,
+          "overallGrade": "fail",
+          "reviewer": "auto-grader-v1",
+          "reviewDate": "2026-03-21",
+          "notes": "dither: gradient ratio 2.583 exceeds 0.05"
+        }
+      },
+      "scene-st-pauls-dawn": {
+        "assetClass": "scene-backdrop",
+        "runtimePath": "assets/scenes/scene-st-pauls-dawn.png",
+        "u8References": [
+          "u8-environment-overview"
+        ],
+        "historicalNotes": "St. Paul's Church at dawn, sunrise over the Strait illuminating the stone facade.",
+        "status": "replace",
+        "wave": 3,
+        "gradeCard": {
+          "silhouetteClarity": null,
+          "paletteCompliance": null,
+          "outlineWeight": "pass",
+          "ditherQuality": "fail",
+          "shadowConsistency": "pass",
+          "historicalAccuracy": null,
+          "densityMatch": null,
+          "overallGrade": "fail",
+          "reviewer": "auto-grader-v1",
+          "reviewDate": "2026-03-21",
+          "notes": "dither: gradient ratio 5.057 exceeds 0.05"
+        }
+      },
+      "scene-st-pauls-dusk": {
+        "assetClass": "scene-backdrop",
+        "runtimePath": "assets/scenes/scene-st-pauls-dusk.png",
+        "u8References": [
+          "u8-environment-overview"
+        ],
+        "historicalNotes": "St. Paul's Church at dusk, silhouetted against the sunset sky.",
+        "status": "replace",
+        "wave": 3,
+        "gradeCard": {
+          "silhouetteClarity": null,
+          "paletteCompliance": null,
+          "outlineWeight": "pass",
+          "ditherQuality": "fail",
+          "shadowConsistency": "partial",
+          "historicalAccuracy": null,
+          "densityMatch": null,
+          "overallGrade": "fail",
+          "reviewer": "auto-grader-v1",
+          "reviewDate": "2026-03-21",
+          "notes": "dither: gradient ratio 4.878 exceeds 0.05; shadow: SE score 0.31"
+        }
+      },
+      "scene-st-pauls-night": {
+        "assetClass": "scene-backdrop",
+        "runtimePath": "assets/scenes/scene-st-pauls-night.png",
+        "u8References": [
+          "u8-environment-overview"
+        ],
+        "historicalNotes": "St. Paul's Church at night, candlelit interior glimpsed through windows.",
+        "status": "replace",
+        "wave": 3,
+        "gradeCard": {
+          "silhouetteClarity": null,
+          "paletteCompliance": null,
+          "outlineWeight": "pass",
+          "ditherQuality": "fail",
+          "shadowConsistency": "pass",
+          "historicalAccuracy": null,
+          "densityMatch": null,
+          "overallGrade": "fail",
+          "reviewer": "auto-grader-v1",
+          "reviewDate": "2026-03-21",
+          "notes": "dither: gradient ratio 6.163 exceeds 0.05"
+        }
+      },
+      "scene-waterfront": {
+        "assetClass": "scene-backdrop",
+        "runtimePath": "assets/scenes/scene-waterfront.png",
+        "u8References": [
+          "u8-environment-overview",
+          "u8-building-facade"
+        ],
+        "historicalNotes": "The Waterfront Quay, where Portuguese carracks, Malay prahu, Arab dhows, and Chinese junks crowd the harbor.",
+        "status": "replace",
+        "wave": 3,
+        "gradeCard": {
+          "silhouetteClarity": null,
+          "paletteCompliance": null,
+          "outlineWeight": "pass",
+          "ditherQuality": "fail",
+          "shadowConsistency": "pass",
+          "historicalAccuracy": null,
+          "densityMatch": null,
+          "overallGrade": "fail",
+          "reviewer": "auto-grader-v1",
+          "reviewDate": "2026-03-21",
+          "notes": "dither: gradient ratio 5.644 exceeds 0.05"
+        }
+      },
+      "scene-waterfront-dawn": {
+        "assetClass": "scene-backdrop",
+        "runtimePath": "assets/scenes/scene-waterfront-dawn.png",
+        "u8References": [
+          "u8-environment-overview"
+        ],
+        "historicalNotes": "Waterfront at dawn, fishing boats returning with the night's catch.",
+        "status": "replace",
+        "wave": 3,
+        "gradeCard": {
+          "silhouetteClarity": null,
+          "paletteCompliance": null,
+          "outlineWeight": "pass",
+          "ditherQuality": "fail",
+          "shadowConsistency": "pass",
+          "historicalAccuracy": null,
+          "densityMatch": null,
+          "overallGrade": "fail",
+          "reviewer": "auto-grader-v1",
+          "reviewDate": "2026-03-21",
+          "notes": "dither: gradient ratio 3.311 exceeds 0.05"
+        }
+      },
+      "scene-waterfront-dusk": {
+        "assetClass": "scene-backdrop",
+        "runtimePath": "assets/scenes/scene-waterfront-dusk.png",
+        "u8References": [
+          "u8-environment-overview"
+        ],
+        "historicalNotes": "Waterfront at dusk, ships' masts silhouetted against the darkening sky.",
+        "status": "replace",
+        "wave": 3,
+        "gradeCard": {
+          "silhouetteClarity": null,
+          "paletteCompliance": null,
+          "outlineWeight": "pass",
+          "ditherQuality": "fail",
+          "shadowConsistency": "pass",
+          "historicalAccuracy": null,
+          "densityMatch": null,
+          "overallGrade": "fail",
+          "reviewer": "auto-grader-v1",
+          "reviewDate": "2026-03-21",
+          "notes": "dither: gradient ratio 3.391 exceeds 0.05"
+        }
+      },
+      "scene-waterfront-night": {
+        "assetClass": "scene-backdrop",
+        "runtimePath": "assets/scenes/scene-waterfront-night.png",
+        "u8References": [
+          "u8-environment-overview"
+        ],
+        "historicalNotes": "Waterfront at night, lanterns on anchored ships reflecting on dark water.",
+        "status": "replace",
+        "wave": 3,
+        "gradeCard": {
+          "silhouetteClarity": null,
+          "paletteCompliance": null,
+          "outlineWeight": "pass",
+          "ditherQuality": "fail",
+          "shadowConsistency": "pass",
+          "historicalAccuracy": null,
+          "densityMatch": null,
+          "overallGrade": "fail",
+          "reviewer": "auto-grader-v1",
+          "reviewDate": "2026-03-21",
+          "notes": "dither: gradient ratio 3.809 exceeds 0.05"
+        }
+      },
+      "scene-kampung": {
+        "assetClass": "scene-backdrop",
+        "runtimePath": "assets/scenes/scene-kampung.png",
+        "u8References": [
+          "u8-environment-overview",
+          "u8-building-facade",
+          "u8-vegetation"
+        ],
+        "historicalNotes": "The Kampung Quarter, a Malay village of stilted wooden houses with attap roofs amid coconut palms and tropical vegetation.",
+        "status": "replace",
+        "wave": 3,
+        "gradeCard": {
+          "silhouetteClarity": null,
+          "paletteCompliance": null,
+          "outlineWeight": "fail",
+          "ditherQuality": "fail",
+          "shadowConsistency": "partial",
+          "historicalAccuracy": null,
+          "densityMatch": null,
+          "overallGrade": "fail",
+          "reviewer": "auto-grader-v1",
+          "reviewDate": "2026-03-21",
+          "notes": "outline: AA ratio 0.067 exceeds 0.02; dither: gradient ratio 1.402 exceeds 0.05; shadow: SE score 0.45"
+        }
+      },
+      "scene-kampung-dawn": {
+        "assetClass": "scene-backdrop",
+        "runtimePath": "assets/scenes/scene-kampung-dawn.png",
+        "u8References": [
+          "u8-environment-overview"
+        ],
+        "historicalNotes": "Kampung at dawn, mist rising from the river and early cooking smoke.",
+        "status": "replace",
+        "wave": 3,
+        "gradeCard": {
+          "silhouetteClarity": null,
+          "paletteCompliance": null,
+          "outlineWeight": "fail",
+          "ditherQuality": "fail",
+          "shadowConsistency": null,
+          "historicalAccuracy": null,
+          "densityMatch": null,
+          "overallGrade": "fail",
+          "reviewer": "auto-grader-v1",
+          "reviewDate": "2026-03-21",
+          "notes": "outline: AA ratio 0.067 exceeds 0.02; dither: gradient ratio 4.980 exceeds 0.05"
+        }
+      },
+      "scene-kampung-dusk": {
+        "assetClass": "scene-backdrop",
+        "runtimePath": "assets/scenes/scene-kampung-dusk.png",
+        "u8References": [
+          "u8-environment-overview"
+        ],
+        "historicalNotes": "Kampung at dusk, warm light through bamboo walls as families gather.",
+        "status": "replace",
+        "wave": 3,
+        "gradeCard": {
+          "silhouetteClarity": null,
+          "paletteCompliance": null,
+          "outlineWeight": "fail",
+          "ditherQuality": "fail",
+          "shadowConsistency": "pass",
+          "historicalAccuracy": null,
+          "densityMatch": null,
+          "overallGrade": "fail",
+          "reviewer": "auto-grader-v1",
+          "reviewDate": "2026-03-21",
+          "notes": "outline: AA ratio 0.067 exceeds 0.02; dither: gradient ratio 3.909 exceeds 0.05"
+        }
+      },
+      "scene-kampung-night": {
+        "assetClass": "scene-backdrop",
+        "runtimePath": "assets/scenes/scene-kampung-night.png",
+        "u8References": [
+          "u8-environment-overview"
+        ],
+        "historicalNotes": "Kampung at night, firefly light and distant oil lamps in the tropical darkness.",
+        "status": "replace",
+        "wave": 3,
+        "gradeCard": {
+          "silhouetteClarity": null,
+          "paletteCompliance": null,
+          "outlineWeight": "fail",
+          "ditherQuality": "fail",
+          "shadowConsistency": "pass",
+          "historicalAccuracy": null,
+          "densityMatch": null,
+          "overallGrade": "fail",
+          "reviewer": "auto-grader-v1",
+          "reviewDate": "2026-03-21",
+          "notes": "outline: AA ratio 0.067 exceeds 0.02; dither: gradient ratio 9.439 exceeds 0.05"
+        }
+      }
+    }
+  }
+}

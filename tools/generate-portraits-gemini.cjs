@@ -11,6 +11,7 @@
 const fs = require('fs');
 const path = require('path');
 const https = require('https');
+const { getStyleHeader } = require('./load-style-header.cjs');
 
 // API Configuration
 const API_KEY = process.env.GEMINI_API_KEY;
@@ -28,30 +29,8 @@ if (!fs.existsSync(OUTPUT_DIR)) {
   fs.mkdirSync(OUTPUT_DIR, { recursive: true });
 }
 
-// Base style for VGA-era portraits
-const STYLE_PREFIX = `Create a character bio portrait in the style of late-1980s to very early-1990s VGA computer games, bridging classic Sierra and Origin-era presentation.
-
-ART STYLE (CRITICAL):
-- True pixel art portrait, not painted concept art
-- 256-color VGA sensibility with disciplined palette use
-- Chunky but readable facial planes, clear clusters, selective outlines
-- Strong light/shadow separation using stepped color ramps, not soft airbrushing
-- Background simplified into evocative pixel blocks that suggest location without stealing focus
-- Historic costume details preserved, but rendered as crisp sprite-like shapes
-
-COMPOSITION:
-- Head-and-shoulders or bust portrait, framed for an in-game bio panel
-- Character facing 3/4 toward viewer unless the pose strongly benefits from another angle
-- Eyes and silhouette must still read at small UI scale
-- Compose as if the source image were first authored around 96x96 to 128x128 pixels
-- Avoid modern painterly blur, glossy realism, or photographic skin texture
-
-QUALITY:
-- Premium VGA portrait quality, like top-shelf DOS-era character art
-- Costume details historically accurate to 1580s Portuguese Melaka
-- Material differences readable through pixel clusters and palette choice
-- NO text, NO UI elements, NO watermarks, NO borders
-`;
+// Base style for VGA-era portraits — loaded from canonical style header
+const STYLE_PREFIX = getStyleHeader('portrait');
 
 // Character portrait definitions based on Art Bible and NPC data
 const PORTRAITS = {

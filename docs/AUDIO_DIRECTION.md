@@ -23,7 +23,7 @@ Sound is **half the experience**. When a player closes their eyes, they should s
 - **Portuguese Fado** (Amália Rodrigues) — *Saudade*, longing
 - **Traditional Gamelan** — Interlocking rhythms, metallic tones
 - **Shovel Knight / Celeste OST** — Modern chiptune excellence
-- **Baldur's Gate tavern music** — Renaissance period feel
+- **Baldur's Gate tavern music** — Renaissance period feel (musical mood reference, not visual style)
 
 ---
 

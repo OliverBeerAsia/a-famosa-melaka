@@ -8,6 +8,7 @@
 const fs = require('fs');
 const path = require('path');
 const https = require('https');
+const { getStyleHeader } = require('./load-style-header.cjs');
 
 // API Configuration  
 const API_KEY = process.env.GEMINI_API_KEY;
@@ -25,20 +26,8 @@ if (!fs.existsSync(OUTPUT_DIR)) {
   fs.mkdirSync(OUTPUT_DIR, { recursive: true });
 }
 
-// Base style for character sprites
-const STYLE_PREFIX = `Create a pixel art character sprite sheet in classic 16-bit RPG style (like Ultima VII, Final Fantasy VI).
-
-TECHNICAL REQUIREMENTS:
-- Sprite sheet layout: 4 columns (animation frames) x 4 rows (directions)
-- Each sprite cell: 24x32 pixels
-- Total sheet size: 96x128 pixels
-- Directions from top to bottom: Down, Left, Right, Up
-- Animation frames: Standing, Walk1, Walk2, Walk1 (for each direction)
-- Pure pixel art with clean edges, NO anti-aliasing
-- Transparent background (or solid magenta #FF00FF for easy removal)
-- Consistent lighting from top-left
-- Limited color palette (max 16 colors per character)
-`;
+// Base style for character sprites — loaded from canonical style header
+const STYLE_PREFIX = getStyleHeader('animated-object');
 
 // Character definitions for animation sheets
 const CHARACTERS = {

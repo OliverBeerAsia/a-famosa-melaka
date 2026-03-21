@@ -4,12 +4,13 @@
  * Generates time-of-day variants (dawn, dusk, night) for existing scene backgrounds.
  * Creates 15 scene variants (5 locations × 3 times of day).
  *
- * Style: Late 90s Sierra/LucasArts adventure games (Monkey Island, Quest for Glory)
+ * Style: Late 90s Ultima VIII: Pagan-style dense atmospheric pixel art
  */
 
 const fs = require('fs');
 const path = require('path');
 const https = require('https');
+const { getStyleHeader } = require('./load-style-header.cjs');
 
 // API Configuration
 const API_KEY = process.env.GEMINI_API_KEY;
@@ -27,17 +28,8 @@ if (!fs.existsSync(OUTPUT_DIR)) {
   fs.mkdirSync(OUTPUT_DIR, { recursive: true });
 }
 
-// Base style prefix
-const STYLE_PREFIX = `Create a detailed pixel art scene in the style of late 1990s Sierra and LucasArts adventure games (like Monkey Island 3, Quest for Glory 4).
-
-STYLE REQUIREMENTS:
-- High-quality pixel art with rich detail and depth
-- 16:9 widescreen aspect ratio
-- Painterly pixel art with smooth gradients and careful dithering
-- Historical accuracy for 1580s Portuguese Melaka
-- Southeast Asian tropical setting with Portuguese colonial architecture
-- NO text, NO UI elements, NO watermarks - pure scene artwork
-`;
+// Base style prefix — loaded from canonical style header
+const STYLE_PREFIX = getStyleHeader('scene-backdrop');
 
 // Location base descriptions
 const LOCATIONS = {

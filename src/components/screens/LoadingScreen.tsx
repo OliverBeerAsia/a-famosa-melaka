@@ -1,7 +1,7 @@
 /**
  * Loading Screen Component
  *
- * Sierra/LucasArts style location interstitial with historical atmosphere.
+ * Ultima VIII style location interstitial with historical atmosphere.
  */
 
 import React, { useEffect, useState } from 'react';

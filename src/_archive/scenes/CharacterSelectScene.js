@@ -2,7 +2,7 @@
  * Character Selection Scene
  * 
  * Player chooses their character before starting the game.
- * Sierra/LucasArts style with character portraits and descriptions.
+ * Ultima VIII style with character portraits and descriptions.
  */
 
 import Phaser from 'phaser';

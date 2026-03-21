@@ -1,7 +1,7 @@
 # Gemini AI Asset Generation Briefs
 ## A Famosa: Streets of Golden Melaka
 
-**Target Style**: Late 1990s isometric RPG (Ultima VII/VIII, Baldur's Gate, Fallout 1-2)
+**Target Style**: Late 1990s isometric RPG (Ultima VII/VIII, Ultima VIII: Pagan)
 **Setting**: Portuguese colonial Melaka, 1580 - the "Venice of the East"
 **Mood**: Humid, golden, exotic, colonial tension, beautiful decay
 
@@ -41,7 +41,7 @@ ROW 6: Water tiles (harbor water with subtle animation frames, 4 variants)
 ROW 7: Sand/beach (dry sand, wet sand, shells, debris)
 ROW 8: Transition tiles (cobble-to-grass, stone-to-water, etc.)
 
-Style: Ultima VII meets Baldur's Gate. Warm golden lighting. Visible pixel texture with subtle dithering. Weathered colonial atmosphere. Each tile must seamlessly connect to adjacent tiles.
+Style: Ultima VIII. Dense, warm, material-honest.. Warm golden lighting. Visible pixel texture with subtle dithering. Weathered colonial atmosphere. Each tile must seamlessly connect to adjacent tiles.
 
 Color palette: Warm browns (#8B7355, #6B5344), terracotta (#C65D3D), cream whites (#F5F5DC), tropical greens (#5C8A4D), ocean blues (#4A8BA8), golden highlights (#D4AF37).
 ```
@@ -437,7 +437,7 @@ Composition (960x540 pixels, can be generated larger and scaled):
 
 Atmosphere: Imperial power. The gateway between worlds. Hot tropical afternoon. Dust motes in sunlight.
 
-Style: Ultima VIII meets Baldur's Gate pre-rendered backgrounds. Rich detail. Painterly pixel art. Warm color temperature.
+Style: Ultima VIII density and physicality. Rich detail. Dithered pixel art. Warm color temperature.
 ```
 
 ---
@@ -465,7 +465,7 @@ Composition (960x540 pixels):
 
 Atmosphere: Sensory overload. The smell of spices. Haggling voices. The commercial heart of the "Venice of the East."
 
-Style: Dense with detail like Fallout 1's town maps. Every corner tells a story. Vibrant but not garish.
+Style: Dense with detail like Ultima VIII's dense town districts. Every corner tells a story. Vibrant but not garish.
 ```
 
 ---
@@ -494,7 +494,7 @@ Composition (960x540 pixels):
 
 Atmosphere: Sacred serenity above the chaos. Where Francis Xavier walked. Portuguese souls laid to rest far from home. Spectacular view of the maritime crossroads.
 
-Style: Romantic, slightly melancholic. The kind of view that inspired poetry. Chrono Trigger's sweeping vistas.
+Style: Romantic, slightly melancholic. The kind of view that inspired poetry. Grand isometric overlook.
 ```
 
 ---
@@ -525,7 +525,7 @@ Composition (960x540 pixels):
 
 Atmosphere: International commerce in motion. The wealth of three continents flowing through one port. Salt air and opportunity.
 
-Style: Busy, dense, alive. Baldur's Gate's docks areas. Ships should look seaworthy and traveled.
+Style: Busy, dense, alive. Ultima VIII's environmental density. Ships should look seaworthy and traveled.
 ```
 
 ---
@@ -556,7 +556,7 @@ Composition (960x540 pixels):
 
 Atmosphere: The real Melaka. Life continuing as it has for centuries despite colonial presence. Community, tradition, resilience.
 
-Style: Warm and inviting despite poverty. Stardew Valley's cozy village feel. The jungle is alive all around.
+Style: Warm and inviting despite poverty. Lived-in warmth and domestic detail. The jungle is alive all around.
 ```
 
 ---
@@ -596,7 +596,7 @@ Style: Aged paper textures. Brass and leather hardware. Portuguese royal motifs.
 ### For Best Results:
 
 1. **Specify pixel dimensions** - Be exact: "32x32 pixels" not just "small"
-2. **Reference specific games** - "Ultima VII style", "Baldur's Gate quality"
+2. **Reference specific games** - "Ultima VII style", "Ultima VIII density"
 3. **Color palette** - Provide hex codes for consistency
 4. **Lighting direction** - Always specify (usually top-left)
 5. **Request seamless tiling** - For ground tiles especially

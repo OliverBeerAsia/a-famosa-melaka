@@ -11,6 +11,7 @@
 const fs = require('fs');
 const path = require('path');
 const https = require('https');
+const { getStyleHeader } = require('./load-style-header.cjs');
 
 // API Configuration
 const API_KEY = process.env.GEMINI_API_KEY;
@@ -20,12 +21,8 @@ if (!API_KEY) {
   throw new Error('Missing GEMINI_API_KEY environment variable');
 }
 
-// Style constants for all prompts
-const STYLE_PREFIX = `Late 1990s isometric RPG pixel art style, like Ultima VII or Baldur's Gate. 
-Rich detailed pixel art with subtle dithering. Warm tropical lighting from top-left. 
-Setting: Portuguese colonial Melaka, Southeast Asia, 1580. The "Venice of the East."
-Color palette: warm browns (#8B7355), terracotta (#C65D3D), cream whites (#F5F5DC), 
-tropical greens (#5C8A4D), ocean blues (#4A8BA8), golden highlights (#D4AF37).`;
+// Style constants for all prompts — loaded from canonical style header
+const STYLE_PREFIX = getStyleHeader('scene-backdrop');
 
 const NEGATIVE_PROMPT = `blurry, low quality, modern elements, anachronistic, cartoon style, 
 anime, 3D render, photograph, realistic, photorealistic`;
@@ -386,7 +383,7 @@ ${prompt}
 
 CRITICAL REQUIREMENTS:
 - This MUST be pixel art in the style of late 1990s video game graphics
-- Like Ultima VII, Baldur's Gate, or LucasArts adventure games
+- Dense, physical pixel art in the Ultima VIII tradition
 - NOT photorealistic - pixelated game graphics style
 - Rich colors, detailed pixels, atmospheric lighting`
         }]

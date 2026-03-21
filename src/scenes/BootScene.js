@@ -23,7 +23,7 @@ export default class BootScene extends Phaser.Scene {
     // Load sprite assets
     this.loadSprites();
 
-    // Load scene backgrounds (AI-generated Sierra/LucasArts style)
+    // Load scene backgrounds (AI-generated Ultima VIII style)
     this.loadScenes();
 
     // Load tilemap
@@ -223,7 +223,7 @@ export default class BootScene extends Phaser.Scene {
   }
 
   loadScenes() {
-    // AI-generated Sierra/LucasArts style scene backgrounds
+    // AI-generated Ultima VIII style scene backgrounds
     // Opening/title screen
     this.load.image('opening-screen', 'assets/scenes/opening-screen.png');
 
