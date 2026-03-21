@@ -1,6 +1,6 @@
 {
   "name": "a-famosa-streets-of-golden-melaka",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "A pixel-art adventure RPG set in Portuguese Melaka circa 1580",
   "main": "electron/main.cjs",
   "type": "module",
@@ -106,7 +106,7 @@
   "build": {
     "appId": "com.afamosa.melaka",
     "productName": "A Famosa Streets of Golden Melaka",
-    "copyright": "Copyright © 2025",
+    "copyright": "Copyright © 2026",
     "directories": {
       "output": "release"
     },

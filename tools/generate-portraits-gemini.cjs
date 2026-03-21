@@ -1,8 +1,8 @@
 /**
  * Portrait Generator using Google Gemini API
  *
- * Generates high-quality 256×256 character portraits for NPC dialogues.
- * Styled in late 90s adventure game aesthetic (Monkey Island, Quest for Glory).
+ * Generates character portraits for NPC dialogues.
+ * Styled for late-80s / early-90s VGA adventure RPG portrait presentation.
  *
  * Characters are designed according to the Art Bible with culturally
  * accurate costume details for 1580s Portuguese Melaka.
@@ -28,29 +28,28 @@ if (!fs.existsSync(OUTPUT_DIR)) {
   fs.mkdirSync(OUTPUT_DIR, { recursive: true });
 }
 
-// Base style for adventure game portraits
-const STYLE_PREFIX = `Create a beautiful character portrait in the style of 1990s LucasArts adventure games, specifically "The Curse of Monkey Island" (1997) and "Gabriel Knight" series.
+// Base style for VGA-era portraits
+const STYLE_PREFIX = `Create a character bio portrait in the style of late-1980s to very early-1990s VGA computer games, bridging classic Sierra and Origin-era presentation.
 
 ART STYLE (CRITICAL):
-- Hand-painted, lush illustration style - NOT pixel art
-- Rich oil painting aesthetic with visible brushwork texture
-- Dramatic chiaroscuro lighting (strong light/shadow contrast)
-- Warm color palette: amber, gold, burgundy, deep browns, tropical greens
-- Slightly stylized proportions - expressive but not cartoonish
-- Painterly backgrounds with soft focus, suggesting location
+- True pixel art portrait, not painted concept art
+- 256-color VGA sensibility with disciplined palette use
+- Chunky but readable facial planes, clear clusters, selective outlines
+- Strong light/shadow separation using stepped color ramps, not soft airbrushing
+- Background simplified into evocative pixel blocks that suggest location without stealing focus
+- Historic costume details preserved, but rendered as crisp sprite-like shapes
 
 COMPOSITION:
-- Portrait orientation, head and shoulders visible
-- Character facing 3/4 view towards viewer
-- Eyes are the focal point - expressive and detailed
-- Dramatic rim lighting from one side
-- Atmospheric depth with subtle vignette
+- Head-and-shoulders or bust portrait, framed for an in-game bio panel
+- Character facing 3/4 toward viewer unless the pose strongly benefits from another angle
+- Eyes and silhouette must still read at small UI scale
+- Compose as if the source image were first authored around 96x96 to 128x128 pixels
+- Avoid modern painterly blur, glossy realism, or photographic skin texture
 
 QUALITY:
-- Museum-quality illustration
-- Professional concept art level detail
+- Premium VGA portrait quality, like top-shelf DOS-era character art
 - Costume details historically accurate to 1580s Portuguese Melaka
-- Fabric textures visible (silk sheen, wool texture, linen weave)
+- Material differences readable through pixel clusters and palette choice
 - NO text, NO UI elements, NO watermarks, NO borders
 `;
 
@@ -213,6 +212,69 @@ BACKGROUND: Blue sky, hint of ship rigging, the freedom of the open sea
 MOOD: Infectious joy, the spirit of adventure, a man with a thousand stories
 
 You'd trust him with your life but never with your coin purse.`
+  },
+
+  'siti': {
+    name: 'siti',
+    prompt: `Siti, a young Malay servant woman taking sanctuary in St. Paul's Church in 1580s Melaka.
+
+CHARACTER DETAILS:
+- Age: late teens or early 20s, visibly exhausted but still composed
+- Expression: Frightened vigilance mixed with quiet dignity
+- Clothing: Simple indigo or deep blue baju kurung with worn fabric, practical rather than luxurious
+- Head covering modest and slightly disordered from stress, not staged for elegance
+- Warm brown skin, youthful features, eyes rimmed by lack of sleep
+- No jewelry beyond perhaps one small family token or thread bracelet
+- Hands drawn close to the body or folded defensively
+- She should read instantly as vulnerable but not broken
+
+LIGHTING: Soft church light, cool and indirect with a faint warm candle edge
+BACKGROUND: Whitewashed chapel wall, worn timber, shadows of sanctuary rather than grand wealth
+MOOD: A fragile refuge, fear held together by faith and resolve
+
+She is not a market matriarch like Aminah. She is younger, poorer, and carrying fresh trauma without losing her self-respect.`
+  },
+
+  'alvares': {
+    name: 'alvares',
+    prompt: `Senhor Alvares, a wealthy Portuguese sugar merchant in 1580s Melaka whose polished respectability conceals cruelty.
+
+CHARACTER DETAILS:
+- Age: early to mid-40s, prosperous and well-fed
+- Expression: Controlled disdain, the kind of smile that never reaches the eyes
+- Clothing: Expensive but practical merchant attire, dark velvet or blackened crimson doublet with restrained gold trim
+- No anxious softness like Fernão Gomes; this man is composed and predatory
+- Clean beard or tightly trimmed facial hair, immaculate grooming
+- A merchant's cap or slicked hairline, carefully maintained in spite of tropical heat
+- A heavy ring, chain, or sign of wealth visible but not flamboyant
+- Pale-to-olive Portuguese complexion sun-touched by Melaka, with a stern jaw and narrowed eyes
+
+LIGHTING: Warm side light that reveals money and texture but also sharp shadow on the face
+BACKGROUND: Sugar cargo, ledgers, and a controlled mercantile interior rather than a cozy office
+MOOD: Colonial entitlement, economic power, menace behind civility
+
+The portrait should signal a man who thinks law, trade, and violence all belong to him by right.`
+  },
+
+  'mak-enang': {
+    name: 'mak-enang',
+    prompt: `Mak Enang, an elderly Malay healer in 1580s Melaka - respected, sharp-tongued, and impossible to intimidate.
+
+CHARACTER DETAILS:
+- Age: late 60s or older, lined face full of intelligence and lived experience
+- Expression: Assessing, amused, slightly severe - a woman who has seen too much to be impressed easily
+- Clothing: Muted green or earth-toned traditional dress with practical layering, not merchant finery
+- Head covering or shawl worn for function, not display
+- Weathered hands marked by work with herbs, roots, and medicines
+- Warm brown skin, silver strands visible, posture upright despite age
+- A small pouch of herbs, pestle, or bundle of roots may be visible at frame edge
+- She should read as village authority, not fragility
+
+LIGHTING: Filtered tropical shade with warm reflected light from wood and earth
+BACKGROUND: Kampung verandah, hanging herbs, clay jars, medicinal preparation space
+MOOD: Enduring knowledge, humor, and hard-earned authority
+
+This is the kind of elder people trust before they trust official doctors or priests.`
   }
 };
 

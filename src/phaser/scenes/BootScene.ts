@@ -7,6 +7,7 @@
 
 import Phaser from 'phaser';
 import runtimeAssetManifest from '../../data/runtime-asset-manifest.json';
+import { ITEM_DEFINITIONS } from '../../stores/inventoryStore';
 
 const CHARACTER_IDS = runtimeAssetManifest.characters.named as readonly string[];
 const CROWD_IDS = runtimeAssetManifest.crowd.sprites as readonly string[];
@@ -15,6 +16,7 @@ const ISO_MAP_IDS = runtimeAssetManifest.maps.isometric as readonly string[];
 const BASE_TILE_IDS = runtimeAssetManifest.tiles.base as readonly string[];
 const ISO_TILE_IDS = runtimeAssetManifest.tiles.isometric as readonly string[];
 const STATIC_OBJECT_IDS = runtimeAssetManifest.objects.static as readonly string[];
+const ITEM_ICON_IDS = Object.keys(ITEM_DEFINITIONS);
 
 const ANIMATED_OBJECT_SHEETS = [
   { key: 'torch-flame', file: 'torch-flame-sheet.png', frameWidth: 8, frameHeight: 16 },
@@ -125,6 +127,10 @@ export class BootScene extends Phaser.Scene {
   private loadObjectSprites() {
     STATIC_OBJECT_IDS.forEach((obj) => {
       this.load.image(obj, `sprites/objects/${obj}.png`);
+    });
+
+    ITEM_ICON_IDS.forEach((itemId) => {
+      this.load.image(`item-${itemId}`, `sprites/ui/items/${itemId}.png`);
     });
 
     ANIMATED_OBJECT_SHEETS.forEach((sheet) => {

@@ -253,6 +253,19 @@ interface QuestHotspot {
   labelText: Phaser.GameObjects.Text;
 }
 
+type InteractionTargetType = 'npc' | 'item' | 'quest' | 'transition' | 'lore';
+
+interface InteractionCandidate {
+  type: InteractionTargetType;
+  id: string;
+  label: string;
+  x: number;
+  y: number;
+  priority: number;
+  score: number;
+  interact: () => void;
+}
+
 // Art Bible time-of-day color configurations
 const TIME_COLORS = {
   dawn: { color: 0xFFB6C1, alpha: 0.25, blendMode: 'MULTIPLY' },    // Pink/coral morning
@@ -283,11 +296,12 @@ const TIME_RANGES = {
   night: { start: 20, end: 5 },
 } as const;
 
-const WORLD_ITEM_SPRITES: Record<string, string> = {
-  'coin-pouch': 'sack',
-  'spice-sample': 'spice-pile',
-  'medicinal-herbs': 'flowers',
-  'rosary': 'pottery',
+const WORLD_ITEM_TYPE_FALLBACKS: Record<string, string> = {
+  key: 'sack',
+  document: 'scroll-rack',
+  trade: 'spice-pile',
+  consumable: 'flowers',
+  valuable: 'ceramic-vase',
 };
 
 const LORE_SPRITE_ALIASES: Record<string, string> = {
@@ -345,6 +359,8 @@ export class GameScene extends Phaser.Scene {
   private weatherSystem: WeatherSystem | null = null;
   private environmentObjects: EnvironmentObjectSystem | null = null;
   private questHotspots: QuestHotspot[] = [];
+  private interactionPrompt: Phaser.GameObjects.Text | null = null;
+  private activeInteractionTarget: InteractionCandidate | null = null;
   private playerShadow: Phaser.GameObjects.Ellipse | null = null;
   private npcShadowMap: Map<Phaser.Physics.Arcade.Sprite, Phaser.GameObjects.Ellipse> = new Map();
   private locationLightSources: Phaser.GameObjects.Arc[] = [];
@@ -385,7 +401,17 @@ export class GameScene extends Phaser.Scene {
       this.currentMap = state.currentLocation;
     }
 
-    this.spawnOverride = data.spawnPoint ?? null;
+    const pendingSpawn = state.pendingSpawnPoint?.mapKey === this.currentMap
+      ? state.pendingSpawnPoint
+      : null;
+
+    this.spawnOverride = data.spawnPoint ?? (pendingSpawn
+      ? { x: pendingSpawn.x, y: pendingSpawn.y }
+      : null);
+
+    if (!data.spawnPoint && pendingSpawn) {
+      useGameStore.getState().clearPendingSpawnPoint();
+    }
 
     this.currentHour = state.time.hour;
     this.visualQualityMode = state.visualQualityMode;
@@ -470,6 +496,7 @@ export class GameScene extends Phaser.Scene {
 
     // Initialize tracked objective marker
     this.refreshObjectiveMarker(true);
+    this.createInteractionPrompt();
 
     // Emit game ready
     emitGameEvent('game:ready');
@@ -661,10 +688,14 @@ export class GameScene extends Phaser.Scene {
   }
 
   private createAtmosphere() {
+    const worldBounds = this.isIsometric && this.isoRenderer
+      ? this.isoRenderer.getWorldBounds()
+      : { width: GAME_WIDTH, height: GAME_HEIGHT };
+
     // Dust motes - intensity varies by time of day
     const dustParticles = this.add.particles(0, 0, 'particle', {
-      x: { min: 0, max: GAME_WIDTH },
-      y: { min: 0, max: GAME_HEIGHT },
+      x: { min: 0, max: worldBounds.width },
+      y: { min: 0, max: worldBounds.height },
       quantity: 1,
       frequency: 150,
       lifespan: { min: 8000, max: 12000 },
@@ -681,8 +712,8 @@ export class GameScene extends Phaser.Scene {
 
     // Heat haze - only during day/dusk
     const heatHazeParticles = this.add.particles(0, 0, 'particle', {
-      x: { min: 0, max: GAME_WIDTH },
-      y: { min: GAME_HEIGHT * 0.3, max: GAME_HEIGHT },
+      x: { min: 0, max: worldBounds.width },
+      y: { min: worldBounds.height * 0.3, max: worldBounds.height },
       quantity: 1,
       frequency: 300,
       lifespan: { min: 5000, max: 8000 },
@@ -774,12 +805,15 @@ export class GameScene extends Phaser.Scene {
   private updateFireflies() {
     const showFireflies = this.timeOfDay === 'night';
     const isKampung = this.currentMap === 'kampung';
+    const worldBounds = this.isIsometric && this.isoRenderer
+      ? this.isoRenderer.getWorldBounds()
+      : { width: GAME_WIDTH, height: GAME_HEIGHT };
 
     if (showFireflies) {
       if (!this.fireflyEmitter) {
         const fireflyParticles = this.add.particles(0, 0, 'firefly', {
-          x: { min: 50, max: GAME_WIDTH - 50 },
-          y: { min: GAME_HEIGHT * 0.4, max: GAME_HEIGHT * 0.8 },
+          x: { min: 50, max: Math.max(60, worldBounds.width - 50) },
+          y: { min: worldBounds.height * 0.4, max: worldBounds.height * 0.8 },
           quantity: 1,
           frequency: isKampung ? 400 : 800,  // More fireflies in kampung
           lifespan: { min: 3000, max: 6000 },
@@ -804,12 +838,15 @@ export class GameScene extends Phaser.Scene {
   private updateMist() {
     const showMist = this.timeOfDay === 'dawn';
     const isWaterfront = this.currentMap === 'waterfront';
+    const worldBounds = this.isIsometric && this.isoRenderer
+      ? this.isoRenderer.getWorldBounds()
+      : { width: GAME_WIDTH, height: GAME_HEIGHT };
 
     if (showMist) {
       if (!this.mistEmitter) {
         const mistParticles = this.add.particles(0, 0, 'mist', {
-          x: { min: 0, max: GAME_WIDTH },
-          y: { min: GAME_HEIGHT * 0.6, max: GAME_HEIGHT },
+          x: { min: 0, max: worldBounds.width },
+          y: { min: worldBounds.height * 0.6, max: worldBounds.height },
           quantity: 1,
           frequency: isWaterfront ? 500 : 1000,  // More mist at waterfront
           lifespan: { min: 8000, max: 15000 },
@@ -833,10 +870,13 @@ export class GameScene extends Phaser.Scene {
 
   private createWaterAnimations() {
     if (this.currentMap !== 'waterfront') return;
+    const worldBounds = this.isIsometric && this.isoRenderer
+      ? this.isoRenderer.getWorldBounds()
+      : { width: GAME_WIDTH, height: GAME_HEIGHT };
 
     this.waterEmitter = this.add.particles(0, 0, 'particle', {
-      x: { min: 0, max: GAME_WIDTH },
-      y: { min: 400, max: GAME_HEIGHT },
+      x: { min: 0, max: worldBounds.width },
+      y: { min: worldBounds.height * 0.55, max: worldBounds.height },
       quantity: 1,
       frequency: 200,
       lifespan: { min: 2000, max: 4000 },
@@ -1066,10 +1106,10 @@ export class GameScene extends Phaser.Scene {
     this.worldItems = [];
 
     worldItems.forEach((item) => {
-      const spriteKey = this.resolveGameplaySpriteKey(WORLD_ITEM_SPRITES[item.itemId]);
+      const spriteKey = this.resolveWorldItemSpriteKey(item.itemId);
       const sprite = this.add.image(item.x, item.y, spriteKey);
       sprite.setOrigin(0.5, 1);
-      sprite.setScale(3);
+      sprite.setScale(this.getWorldItemScale(spriteKey));
       sprite.setDepth(item.y + 1);
 
       const markerY = item.y - Math.max(22, sprite.displayHeight) - 8;
@@ -2269,6 +2309,11 @@ export class GameScene extends Phaser.Scene {
       hotspot.labelText.destroy();
     });
     this.questHotspots = [];
+    if (this.interactionPrompt) {
+      this.interactionPrompt.destroy();
+      this.interactionPrompt = null;
+    }
+    this.activeInteractionTarget = null;
     this.npcs = [];
     this.npcDataMap.clear();
     this.npcSpriteById.clear();
@@ -2502,8 +2547,272 @@ export class GameScene extends Phaser.Scene {
 
   private updateLocationState() {
     const name = getLocationName(this.currentMap);
-    useGameStore.getState().setLocation(this.currentMap, name);
+    const gameStore = useGameStore.getState();
+    gameStore.updatePlayer({
+      x: this.player.x,
+      y: this.player.y,
+      location: this.currentMap,
+    });
+    gameStore.setLocation(this.currentMap, name);
     emitGameEvent('player:location', this.currentMap, name);
+  }
+
+  private createInteractionPrompt() {
+    this.interactionPrompt = this.add.text(
+      GAME_WIDTH / 2,
+      GAME_HEIGHT - 28,
+      '',
+      {
+        font: 'bold 16px Cinzel, Georgia, serif',
+        color: '#F4E6C8',
+        stroke: '#000000',
+        strokeThickness: 4,
+        align: 'center',
+        backgroundColor: 'rgba(26, 14, 7, 0.78)',
+        padding: { x: 10, y: 6 },
+      }
+    );
+    this.interactionPrompt.setOrigin(0.5, 1);
+    this.interactionPrompt.setScrollFactor(0);
+    this.interactionPrompt.setDepth(1002);
+    this.interactionPrompt.setVisible(false);
+  }
+
+  private setInteractionPrompt(text: string | null, type?: InteractionTargetType) {
+    if (!this.interactionPrompt) return;
+
+    if (!text) {
+      this.interactionPrompt.setVisible(false);
+      return;
+    }
+
+    const promptStyle = {
+      npc: { color: '#F4E6C8', backgroundColor: 'rgba(64, 38, 16, 0.78)' },
+      item: { color: '#FFE19E', backgroundColor: 'rgba(81, 53, 10, 0.82)' },
+      quest: { color: '#F4D66A', backgroundColor: 'rgba(89, 61, 12, 0.84)' },
+      transition: { color: '#BEE7FF', backgroundColor: 'rgba(16, 41, 56, 0.82)' },
+      lore: { color: '#E7D7B4', backgroundColor: 'rgba(56, 42, 25, 0.82)' },
+    }[type || 'npc'];
+
+    this.interactionPrompt.setText(text);
+    this.interactionPrompt.setStyle({
+      color: promptStyle.color,
+      backgroundColor: promptStyle.backgroundColor,
+    });
+    this.interactionPrompt.setVisible(true);
+  }
+
+  private resolveWorldItemSpriteKey(itemId: string): string {
+    const iconKey = `item-${itemId}`;
+    if (this.textures.exists(iconKey)) {
+      return iconKey;
+    }
+
+    const itemType = ITEM_DEFINITIONS[itemId]?.type;
+    return this.resolveGameplaySpriteKey(
+      (itemType && WORLD_ITEM_TYPE_FALLBACKS[itemType]) || 'crate'
+    );
+  }
+
+  private getWorldItemScale(spriteKey: string): number {
+    return spriteKey.startsWith('item-') ? 2.5 : 3;
+  }
+
+  private getFacingVector(): Phaser.Math.Vector2 {
+    const facing = useGameStore.getState().player.facing;
+    switch (facing) {
+      case 'up':
+        return new Phaser.Math.Vector2(0, -1);
+      case 'left':
+        return new Phaser.Math.Vector2(-1, 0);
+      case 'right':
+        return new Phaser.Math.Vector2(1, 0);
+      case 'down':
+      default:
+        return new Phaser.Math.Vector2(0, 1);
+    }
+  }
+
+  private getDirectionBetween(
+    fromX: number,
+    fromY: number,
+    toX: number,
+    toY: number
+  ): 'up' | 'down' | 'left' | 'right' {
+    const dx = toX - fromX;
+    const dy = toY - fromY;
+    if (Math.abs(dx) > Math.abs(dy)) {
+      return dx < 0 ? 'left' : 'right';
+    }
+    return dy < 0 ? 'up' : 'down';
+  }
+
+  private setPlayerFacing(direction: 'up' | 'down' | 'left' | 'right') {
+    useGameStore.getState().updatePlayer({ facing: direction });
+
+    const idleKey = `idle-${direction}`;
+    if (
+      this.anims.exists(idleKey)
+      && this.player.body
+      && this.player.body.velocity.lengthSq() < 9
+      && this.player.anims.currentAnim?.key !== idleKey
+    ) {
+      this.player.play(idleKey);
+    }
+  }
+
+  private scoreInteractionTarget(
+    x: number,
+    y: number,
+    maxDistance: number
+  ): { distance: number; score: number } | null {
+    const distance = Phaser.Math.Distance.Between(this.player.x, this.player.y, x, y);
+    if (distance > maxDistance) return null;
+
+    const direction = new Phaser.Math.Vector2(x - this.player.x, y - this.player.y);
+    if (direction.lengthSq() === 0) {
+      return { distance, score: 0 };
+    }
+
+    direction.normalize();
+    const alignment = direction.dot(this.getFacingVector());
+    if (alignment < -0.35 && distance > 44) return null;
+
+    const facingBias = Phaser.Math.Clamp(alignment, -1, 1) * 28;
+    const closeBonus = distance < 52 ? 14 : 0;
+    return {
+      distance,
+      score: distance - facingBias - closeBonus,
+    };
+  }
+
+  private findBestInteractionTarget(): InteractionCandidate | null {
+    const candidates: InteractionCandidate[] = [];
+
+    for (const npc of this.npcs) {
+      const npcData = this.npcDataMap.get(npc);
+      if (!npcData) continue;
+      const scored = this.scoreInteractionTarget(npc.x, npc.y, 90);
+      if (!scored) continue;
+
+      candidates.push({
+        type: 'npc',
+        id: npcData.id,
+        label: `Talk to ${npcData.name}`,
+        x: npc.x,
+        y: npc.y,
+        priority: 0,
+        score: scored.score,
+        interact: () => this.startDialogue(npcData),
+      });
+    }
+
+    for (const item of this.worldItems) {
+      const scored = this.scoreInteractionTarget(item.anchorX, item.anchorY, 86);
+      if (!scored) continue;
+      const itemName = ITEM_DEFINITIONS[item.itemId]?.name || item.itemId;
+
+      candidates.push({
+        type: 'item',
+        id: item.id,
+        label: `Take ${itemName}`,
+        x: item.anchorX,
+        y: item.anchorY,
+        priority: 1,
+        score: scored.score,
+        interact: () => {
+          const itemIndex = this.worldItems.findIndex((entry) => entry.id === item.id);
+          if (itemIndex < 0) return;
+
+          const worldItem = this.worldItems[itemIndex];
+          emitGameEvent('item:pickup', worldItem.itemId, itemName);
+          emitGameEvent('item:examine', worldItem.itemId, worldItem.description);
+          this.showNotification(`Found: ${itemName}`);
+
+          worldItem.sprite.destroy();
+          worldItem.glow.destroy();
+          worldItem.marker.destroy();
+          worldItem.label.destroy();
+          this.worldItems.splice(itemIndex, 1);
+        },
+      });
+    }
+
+    for (const hotspot of this.questHotspots) {
+      if (!hotspot.isAvailable()) continue;
+      const scored = this.scoreInteractionTarget(hotspot.x, hotspot.y, hotspot.radius);
+      if (!scored) continue;
+
+      candidates.push({
+        type: 'quest',
+        id: hotspot.id,
+        label: hotspot.label,
+        x: hotspot.x,
+        y: hotspot.y,
+        priority: 1,
+        score: scored.score,
+        interact: hotspot.onInteract,
+      });
+    }
+
+    for (const hotspot of this.transitionHotspots) {
+      const x = hotspot.config.triggerArea.x + (hotspot.config.triggerArea.width / 2);
+      const y = hotspot.config.triggerArea.y + (hotspot.config.triggerArea.height / 2);
+      const withinArea = Phaser.Geom.Rectangle.Contains(
+        new Phaser.Geom.Rectangle(
+          hotspot.config.triggerArea.x,
+          hotspot.config.triggerArea.y,
+          hotspot.config.triggerArea.width,
+          hotspot.config.triggerArea.height
+        ),
+        this.player.x,
+        this.player.y
+      );
+      const scored = withinArea ? { distance: 0, score: -100 } : this.scoreInteractionTarget(x, y, 96);
+      if (!scored) continue;
+
+      candidates.push({
+        type: 'transition',
+        id: hotspot.config.targetLocation,
+        label: `Travel to ${getLocationName(hotspot.config.targetLocation)}`,
+        x,
+        y,
+        priority: withinArea ? 0 : 3,
+        score: scored.score,
+        interact: () => this.switchLocation(hotspot.config.targetLocation, hotspot.config.spawnAt),
+      });
+    }
+
+    for (const obj of this.loreObjects) {
+      const scored = this.scoreInteractionTarget(obj.anchorX, obj.anchorY, 82);
+      if (!scored) continue;
+
+      candidates.push({
+        type: 'lore',
+        id: obj.id,
+        label: `Examine ${obj.name}`,
+        x: obj.anchorX,
+        y: obj.anchorY,
+        priority: 2,
+        score: scored.score,
+        interact: () => emitGameEvent('message:show', obj.name, obj.description),
+      });
+    }
+
+    return candidates.sort((left, right) => {
+      if (left.priority !== right.priority) {
+        return left.priority - right.priority;
+      }
+      return left.score - right.score;
+    })[0] || null;
+  }
+
+  private updateInteractionTarget() {
+    this.activeInteractionTarget = this.findBestInteractionTarget();
+    this.setInteractionPrompt(
+      this.activeInteractionTarget ? `[Space] ${this.activeInteractionTarget.label}` : null,
+      this.activeInteractionTarget?.type
+    );
   }
 
   private showLocationName() {
@@ -2544,100 +2853,23 @@ export class GameScene extends Phaser.Scene {
   }
 
   private tryInteract() {
-    // Interaction radius scaled for 3x character size
-    const interactionRadius = 100;
+    const candidate = this.activeInteractionTarget || this.findBestInteractionTarget();
+    if (!candidate) return;
 
-    for (const npc of this.npcs) {
-      const distance = Phaser.Math.Distance.Between(
-        this.player.x,
-        this.player.y,
-        npc.x,
-        npc.y
-      );
-
-      if (distance < interactionRadius) {
-        const npcData = this.npcDataMap.get(npc);
-        if (npcData) {
-          this.startDialogue(npcData);
-        }
-        return;
-      }
+    if (candidate.type !== 'transition') {
+      this.setPlayerFacing(this.getDirectionBetween(this.player.x, this.player.y, candidate.x, candidate.y));
     }
 
-    for (let i = 0; i < this.worldItems.length; i += 1) {
-      const item = this.worldItems[i];
-      const distance = Phaser.Math.Distance.Between(
-        this.player.x,
-        this.player.y,
-        item.anchorX,
-        item.anchorY
-      );
-
-      if (distance < interactionRadius) {
-        const itemName = ITEM_DEFINITIONS[item.itemId]?.name || item.itemId;
-        emitGameEvent('item:pickup', item.itemId, itemName);
-        emitGameEvent('item:examine', item.itemId, item.description);
-        this.showNotification(`Found: ${itemName}`);
-
-        item.sprite.destroy();
-        item.glow.destroy();
-        item.marker.destroy();
-        item.label.destroy();
-        this.worldItems.splice(i, 1);
-        return;
-      }
-    }
-
-    for (const hotspot of this.questHotspots) {
-      if (!hotspot.isAvailable()) continue;
-
-      const distance = Phaser.Math.Distance.Between(
-        this.player.x,
-        this.player.y,
-        hotspot.x,
-        hotspot.y
-      );
-
-      if (distance < hotspot.radius) {
-        hotspot.onInteract();
-        return;
-      }
-    }
-
-    for (const hotspot of this.transitionHotspots) {
-      const { triggerArea } = hotspot.config;
-      const withinArea = Phaser.Geom.Rectangle.Contains(
-        new Phaser.Geom.Rectangle(triggerArea.x, triggerArea.y, triggerArea.width, triggerArea.height),
-        this.player.x,
-        this.player.y
-      );
-
-      if (withinArea) {
-        this.switchLocation(hotspot.config.targetLocation, hotspot.config.spawnAt);
-        return;
-      }
-    }
-
-    for (const obj of this.loreObjects) {
-      const distance = Phaser.Math.Distance.Between(
-        this.player.x,
-        this.player.y,
-        obj.anchorX,
-        obj.anchorY
-      );
-
-      if (distance < interactionRadius) {
-        emitGameEvent('message:show', obj.name, obj.description);
-        return;
-      }
-    }
+    candidate.interact();
   }
 
   private startDialogue(npcData: NPCData) {
     this.stopDialogueAnimation();
+    this.player.setVelocity(0, 0);
 
     const npc = this.npcSpriteById.get(npcData.id);
     if (npc) {
+      this.setPlayerFacing(this.getDirectionBetween(this.player.x, this.player.y, npc.x, npc.y));
       const direction = this.getNpcDirectionToPlayer(npc);
       this.npcFacingMap.set(npc, direction);
       const animationPrefix = this.npcAnimationPrefixMap.get(npc) || npcData.id;
@@ -2647,6 +2879,9 @@ export class GameScene extends Phaser.Scene {
       }
       this.activeDialogueNpc = npc;
     }
+
+    this.activeInteractionTarget = null;
+    this.setInteractionPrompt(null);
 
     // Emit dialogue event to React
     emitGameEvent('dialogue:start', {
@@ -2738,11 +2973,14 @@ export class GameScene extends Phaser.Scene {
     // Don't update if UI is open
     if (this.isAnyUIOpen()) {
       this.player.setVelocity(0, 0);
+      this.activeInteractionTarget = null;
+      this.setInteractionPrompt(null);
       return;
     }
 
     // Player movement
     this.updatePlayerMovement();
+    this.updateInteractionTarget();
 
     // Dynamic depth sorting in isometric mode
     if (this.isIsometric) {
@@ -2789,18 +3027,34 @@ export class GameScene extends Phaser.Scene {
       velocityY *= 0.707;
     }
 
+    const hasInput = velocityX !== 0 || velocityY !== 0;
+    let targetVelocityX = velocityX;
+    let targetVelocityY = velocityY;
+
     // In isometric mode, rotate input 45° so WASD aligns with diamond axes
     if (this.isIsometric) {
-      const isoX = velocityX - velocityY;
-      const isoY = (velocityX + velocityY) * 0.5;
-      this.player.setVelocity(isoX, isoY);
-    } else {
-      this.player.setVelocity(velocityX, velocityY);
+      targetVelocityX = velocityX - velocityY;
+      targetVelocityY = (velocityX + velocityY) * 0.5;
     }
-    this.updateFootstepAudio(velocityX, velocityY);
+
+    const body = this.player.body as Phaser.Physics.Arcade.Body | null;
+    if (body) {
+      const blend = hasInput ? 0.28 : 0.34;
+      let nextVelocityX = Phaser.Math.Linear(body.velocity.x, targetVelocityX, blend);
+      let nextVelocityY = Phaser.Math.Linear(body.velocity.y, targetVelocityY, blend);
+
+      if (!hasInput && Math.abs(nextVelocityX) < 6) nextVelocityX = 0;
+      if (!hasInput && Math.abs(nextVelocityY) < 6) nextVelocityY = 0;
+
+      this.player.setVelocity(nextVelocityX, nextVelocityY);
+      this.updateFootstepAudio(nextVelocityX, nextVelocityY);
+    } else {
+      this.player.setVelocity(targetVelocityX, targetVelocityY);
+      this.updateFootstepAudio(targetVelocityX, targetVelocityY);
+    }
 
     // Update animation
-    if (velocityX !== 0 || velocityY !== 0) {
+    if (hasInput) {
       let direction = 'down';
       if (Math.abs(velocityX) > Math.abs(velocityY)) {
         direction = velocityX < 0 ? 'left' : 'right';
@@ -2813,14 +3067,10 @@ export class GameScene extends Phaser.Scene {
         this.player.play(animKey);
       }
 
-      // Update facing in store
-      useGameStore.getState().updatePlayer({
-        facing: direction as 'up' | 'down' | 'left' | 'right',
-      });
+      this.setPlayerFacing(direction as 'up' | 'down' | 'left' | 'right');
     } else {
       // Idle
-      const currentAnim = this.player.anims.currentAnim?.key || 'idle-down';
-      const direction = currentAnim.split('-')[1] || 'down';
+      const direction = useGameStore.getState().player.facing;
       const idleKey = `idle-${direction}`;
       if (this.anims.exists(idleKey) && this.player.anims.currentAnim?.key !== idleKey) {
         this.player.play(idleKey);
@@ -3134,24 +3384,20 @@ export class GameScene extends Phaser.Scene {
   }
 
   private updateNPCIndicators() {
-    // Interaction radius scaled for 3x character size
-    const interactionRadius = 100;
+    const targetedNpcId = this.activeInteractionTarget?.type === 'npc'
+      ? this.activeInteractionTarget.id
+      : null;
 
     for (const npc of this.npcs) {
-      const distance = Phaser.Math.Distance.Between(
-        this.player.x,
-        this.player.y,
-        npc.x,
-        npc.y
-      );
-
       const indicator = (npc as unknown as { indicator: Phaser.GameObjects.Arc }).indicator;
+      const npcData = this.npcDataMap.get(npc);
       if (indicator) {
         // Update indicator position to follow NPC (in case NPC moves)
         const indicatorOffset = 20 * CHARACTER_SCALE;
         indicator.setPosition(npc.x, npc.y - indicatorOffset);
-        indicator.setVisible(distance < interactionRadius);
-        if (distance < interactionRadius) {
+        const isTargeted = npcData?.id === targetedNpcId;
+        indicator.setVisible(isTargeted);
+        if (isTargeted) {
           this.setNpcFacing(npc, this.getNpcDirectionToPlayer(npc));
 
           // Pulse effect
@@ -3162,16 +3408,12 @@ export class GameScene extends Phaser.Scene {
   }
 
   private updateWorldItemIndicators() {
-    const interactionRadius = 100;
+    const targetedItemId = this.activeInteractionTarget?.type === 'item'
+      ? this.activeInteractionTarget.id
+      : null;
 
     this.worldItems.forEach((item) => {
-      const distance = Phaser.Math.Distance.Between(
-        this.player.x,
-        this.player.y,
-        item.anchorX,
-        item.anchorY
-      );
-      const nearby = distance < interactionRadius;
+      const nearby = item.id === targetedItemId;
 
       item.label.setVisible(nearby);
       item.glow.setScale(nearby ? 1.15 + Math.sin(this.time.now / 230) * 0.08 : 1 + Math.sin(this.time.now / 450) * 0.03);
@@ -3182,11 +3424,15 @@ export class GameScene extends Phaser.Scene {
   }
 
   private updateHotspotIndicators() {
+    const targetedTransitionId = this.activeInteractionTarget?.type === 'transition'
+      ? this.activeInteractionTarget.id
+      : null;
+    const targetedQuestId = this.activeInteractionTarget?.type === 'quest'
+      ? this.activeInteractionTarget.id
+      : null;
+
     this.transitionHotspots.forEach((hotspot) => {
-      const x = hotspot.config.triggerArea.x + (hotspot.config.triggerArea.width / 2);
-      const y = hotspot.config.triggerArea.y + (hotspot.config.triggerArea.height / 2);
-      const distance = Phaser.Math.Distance.Between(this.player.x, this.player.y, x, y);
-      const nearby = distance < 120;
+      const nearby = hotspot.config.targetLocation === targetedTransitionId;
 
       hotspot.label.setVisible(nearby);
       hotspot.glow.setAlpha(nearby ? 0.2 : 0.08);
@@ -3202,8 +3448,7 @@ export class GameScene extends Phaser.Scene {
 
       if (!visible) return;
 
-      const distance = Phaser.Math.Distance.Between(this.player.x, this.player.y, hotspot.x, hotspot.y);
-      const nearby = distance < hotspot.radius;
+      const nearby = hotspot.id === targetedQuestId;
       hotspot.labelText.setVisible(nearby);
       hotspot.glow.setAlpha(nearby ? 0.22 : 0.08);
       hotspot.glow.setScale(nearby ? 1.1 + Math.sin(this.time.now / 240) * 0.08 : 1);

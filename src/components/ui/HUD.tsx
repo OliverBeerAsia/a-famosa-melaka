@@ -6,6 +6,7 @@
 
 import React from 'react';
 import { useGameStore, useTime, useLocation } from '../../stores/gameStore';
+import { useInventoryStore } from '../../stores/inventoryStore';
 import { useQuestStore, QuestObjective } from '../../stores/questStore';
 import { getLocationName } from '../../data/locationNames';
 import { useDialogueStore } from '../../stores/dialogueStore';
@@ -43,10 +44,13 @@ export function HUD() {
   const time = useTime();
   const location = useLocation();
   const trackedObjectiveData = useQuestStore((state) => state.getTrackedObjective());
+  const activeQuestCount = useQuestStore((state) => state.activeQuests.length);
   const reputation = useQuestStore((state) => state.reputation);
   const npcData = useDialogueStore((state) => state.allNPCData);
   const isDialogueOpen = useGameStore((state) => state.isDialogueOpen);
   const isPaused = useGameStore((state) => state.isPaused);
+  const onboarding = useGameStore((state) => state.onboarding);
+  const inventoryItemCount = useInventoryStore((state) => state.items.length);
 
   // Format time string
   const timeString = `${time.hour.toString().padStart(2, '0')}:${time.minute.toString().padStart(2, '0')}`;
@@ -64,6 +68,31 @@ export function HUD() {
 
   const trackedQuestName = trackedObjectiveData?.questName || null;
   const trackedObjective = trackedObjectiveData?.objective || null;
+
+  const tutorialHint = (() => {
+    if (location.id === 'rua-direita' && activeQuestCount === 0 && !onboarding.hasStartedDialogue) {
+      return {
+        title: 'First Lead',
+        text: 'Find Fernão Gomes in Rua Direita and press [Space] to begin the investigation.',
+      };
+    }
+
+    if (activeQuestCount > 0 && !onboarding.hasOpenedJournal) {
+      return {
+        title: 'Journal',
+        text: 'Press [J] to review your current lead and keep the city\'s names and promises straight.',
+      };
+    }
+
+    if (inventoryItemCount > 0 && !onboarding.hasOpenedInventory) {
+      return {
+        title: 'Inventory',
+        text: 'Press [I] to inspect what you carry. Important clues now travel with you.',
+      };
+    }
+
+    return null;
+  })();
 
   const getObjectiveLocation = (objective: QuestObjective | null): string | null => {
     if (!objective) return null;
@@ -143,41 +172,45 @@ export function HUD() {
       </div>
 
       {/* Quest tracker */}
-      <div className="absolute top-20 left-4 max-w-[420px] pointer-events-none">
-        <div className="bg-leather-300/82 border border-gold/25 rounded px-3 py-2 shadow-parchment">
-          <p className="font-cinzel text-gold text-xs uppercase tracking-wide">Quest Tracker</p>
-          {trackedQuestName && trackedObjective ? (
-            <>
-              <p className="text-parchment-200 text-sm font-semibold">{trackedQuestName}</p>
-              <p className="text-parchment-300/90 text-xs">{formatObjective(trackedObjective)}</p>
-              {trackedObjectiveLocation && trackedObjectiveLocation !== location.id && (
-                <p className="text-gold/90 text-[11px] mt-1">
-                  Travel to {getLocationName(trackedObjectiveLocation)}
-                </p>
-              )}
-            </>
-          ) : (
-            <p className="text-parchment-300/80 text-xs">No tracked objective. Speak to townsfolk for leads.</p>
-          )}
+      {(trackedQuestName && trackedObjective) || tutorialHint ? (
+        <div className="absolute top-20 left-4 max-w-[420px] pointer-events-none">
+          <div className="bg-leather-300/82 border border-gold/25 rounded px-3 py-2 shadow-parchment">
+            <p className="font-cinzel text-gold text-xs uppercase tracking-wide">
+              {trackedQuestName && trackedObjective ? 'Quest Tracker' : tutorialHint?.title}
+            </p>
+            {trackedQuestName && trackedObjective ? (
+              <>
+                <p className="text-parchment-200 text-sm font-semibold">{trackedQuestName}</p>
+                <p className="text-parchment-300/90 text-xs">{formatObjective(trackedObjective)}</p>
+                {trackedObjectiveLocation && trackedObjectiveLocation !== location.id && (
+                  <p className="text-gold/90 text-[11px] mt-1">
+                    Travel to {getLocationName(trackedObjectiveLocation)}
+                  </p>
+                )}
+              </>
+            ) : (
+              <p className="text-parchment-300/90 text-xs leading-5">{tutorialHint?.text}</p>
+            )}
 
-          {repHighlights.length > 0 && (
-            <div className="mt-2 flex flex-wrap gap-2 text-[11px]">
-              {repHighlights.map(([faction, value]) => (
-                <span
-                  key={faction}
-                  className={`px-2 py-0.5 rounded border ${
-                    value >= 0
-                      ? 'border-emerald-600/40 text-emerald-300'
-                      : 'border-rose-700/40 text-rose-300'
-                  }`}
-                >
-                  {faction}: {value > 0 ? '+' : ''}{value}
-                </span>
-              ))}
-            </div>
-          )}
+            {trackedQuestName && trackedObjective && repHighlights.length > 0 && (
+              <div className="mt-2 flex flex-wrap gap-2 text-[11px]">
+                {repHighlights.map(([faction, value]) => (
+                  <span
+                    key={faction}
+                    className={`px-2 py-0.5 rounded border ${
+                      value >= 0
+                        ? 'border-emerald-600/40 text-emerald-300'
+                        : 'border-rose-700/40 text-rose-300'
+                    }`}
+                  >
+                    {faction}: {value > 0 ? '+' : ''}{value}
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
-      </div>
+      ) : null}
 
       {!isPaused && travelHint && (
         <div className="absolute bottom-4 right-4 pointer-events-none">

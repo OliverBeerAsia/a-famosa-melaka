@@ -2701,10 +2701,333 @@
       "visible": true,
       "x": 0,
       "y": 0
+    },
+    {
+      "draworder": "topdown",
+      "id": 4,
+      "name": "Props",
+      "objects": [
+        {
+          "id": 24,
+          "name": "market-stall-1",
+          "rotation": 0,
+          "type": "decoration",
+          "visible": true,
+          "width": 32,
+          "height": 32,
+          "x": 224,
+          "y": 224
+        },
+        {
+          "id": 25,
+          "name": "market-stall-2",
+          "rotation": 0,
+          "type": "decoration",
+          "visible": true,
+          "width": 32,
+          "height": 32,
+          "x": 272,
+          "y": 224
+        },
+        {
+          "id": 26,
+          "name": "scroll-rack",
+          "rotation": 0,
+          "type": "decoration",
+          "visible": true,
+          "width": 16,
+          "height": 24,
+          "x": 368,
+          "y": 176
+        },
+        {
+          "id": 27,
+          "name": "balance-scale",
+          "rotation": 0,
+          "type": "decoration",
+          "visible": true,
+          "width": 16,
+          "height": 20,
+          "x": 432,
+          "y": 200
+        },
+        {
+          "id": 28,
+          "name": "cargo-crate",
+          "rotation": 0,
+          "type": "decoration",
+          "visible": true,
+          "width": 16,
+          "height": 16,
+          "x": 752,
+          "y": 272
+        },
+        {
+          "id": 29,
+          "name": "maritime-barrel",
+          "rotation": 0,
+          "type": "decoration",
+          "visible": true,
+          "width": 16,
+          "height": 20,
+          "x": 800,
+          "y": 276
+        },
+        {
+          "id": 30,
+          "name": "moored-sampan",
+          "rotation": 0,
+          "type": "decoration",
+          "visible": true,
+          "width": 16,
+          "height": 16,
+          "x": 1824,
+          "y": 288
+        }
+      ],
+      "opacity": 1,
+      "type": "objectgroup",
+      "visible": true,
+      "x": 0,
+      "y": 0
+    },
+    {
+      "draworder": "topdown",
+      "id": 5,
+      "name": "Overhang",
+      "objects": [
+        {
+          "id": 31,
+          "name": "awning",
+          "rotation": 0,
+          "type": "decoration",
+          "visible": true,
+          "width": 16,
+          "height": 16,
+          "x": 448,
+          "y": 176
+        },
+        {
+          "id": 32,
+          "name": "hanging-cloth",
+          "rotation": 0,
+          "type": "decoration",
+          "visible": true,
+          "width": 16,
+          "height": 16,
+          "x": 560,
+          "y": 168
+        },
+        {
+          "id": 33,
+          "name": "hanging-oil-lantern",
+          "rotation": 0,
+          "type": "decoration",
+          "visible": true,
+          "width": 16,
+          "height": 16,
+          "x": 688,
+          "y": 160
+        },
+        {
+          "id": 34,
+          "name": "awning",
+          "rotation": 0,
+          "type": "decoration",
+          "visible": true,
+          "width": 16,
+          "height": 16,
+          "x": 1088,
+          "y": 168
+        },
+        {
+          "id": 35,
+          "name": "hanging-cloth",
+          "rotation": 0,
+          "type": "decoration",
+          "visible": true,
+          "width": 16,
+          "height": 16,
+          "x": 1456,
+          "y": 164
+        },
+        {
+          "id": 36,
+          "name": "hanging-oil-lantern",
+          "rotation": 0,
+          "type": "decoration",
+          "visible": true,
+          "width": 16,
+          "height": 16,
+          "x": 1984,
+          "y": 160
+        }
+      ],
+      "opacity": 1,
+      "type": "objectgroup",
+      "visible": true,
+      "x": 0,
+      "y": 0
+    },
+    {
+      "draworder": "topdown",
+      "id": 6,
+      "name": "Canopy",
+      "objects": [
+        {
+          "id": 37,
+          "name": "ship-mast",
+          "rotation": 0,
+          "type": "decoration",
+          "visible": true,
+          "width": 16,
+          "height": 32,
+          "x": 160,
+          "y": 112
+        },
+        {
+          "id": 38,
+          "name": "dhow-sail",
+          "rotation": 0,
+          "type": "decoration",
+          "visible": true,
+          "width": 16,
+          "height": 32,
+          "x": 352,
+          "y": 112
+        },
+        {
+          "id": 39,
+          "name": "ship-mast",
+          "rotation": 0,
+          "type": "decoration",
+          "visible": true,
+          "width": 16,
+          "height": 32,
+          "x": 560,
+          "y": 96
+        },
+        {
+          "id": 40,
+          "name": "dhow-sail",
+          "rotation": 0,
+          "type": "decoration",
+          "visible": true,
+          "width": 16,
+          "height": 32,
+          "x": 896,
+          "y": 112
+        },
+        {
+          "id": 41,
+          "name": "ship-mast",
+          "rotation": 0,
+          "type": "decoration",
+          "visible": true,
+          "width": 16,
+          "height": 32,
+          "x": 1456,
+          "y": 104
+        },
+        {
+          "id": 42,
+          "name": "dhow-sail",
+          "rotation": 0,
+          "type": "decoration",
+          "visible": true,
+          "width": 16,
+          "height": 32,
+          "x": 1888,
+          "y": 112
+        }
+      ],
+      "opacity": 1,
+      "type": "objectgroup",
+      "visible": true,
+      "x": 0,
+      "y": 0
+    },
+    {
+      "draworder": "topdown",
+      "id": 7,
+      "name": "Highlights",
+      "objects": [
+        {
+          "id": 43,
+          "name": "lantern",
+          "rotation": 0,
+          "type": "decoration",
+          "visible": true,
+          "width": 8,
+          "height": 16,
+          "x": 432,
+          "y": 156
+        },
+        {
+          "id": 44,
+          "name": "lantern",
+          "rotation": 0,
+          "type": "decoration",
+          "visible": true,
+          "width": 8,
+          "height": 16,
+          "x": 768,
+          "y": 160
+        },
+        {
+          "id": 45,
+          "name": "ceramic-vase",
+          "rotation": 0,
+          "type": "decoration",
+          "visible": true,
+          "width": 16,
+          "height": 24,
+          "x": 1040,
+          "y": 220
+        },
+        {
+          "id": 46,
+          "name": "coconut-water-stand",
+          "rotation": 0,
+          "type": "decoration",
+          "visible": true,
+          "width": 16,
+          "height": 24,
+          "x": 1360,
+          "y": 228
+        },
+        {
+          "id": 47,
+          "name": "fish-basket",
+          "rotation": 0,
+          "type": "decoration",
+          "visible": true,
+          "width": 16,
+          "height": 16,
+          "x": 1760,
+          "y": 252
+        },
+        {
+          "id": 48,
+          "name": "lantern",
+          "rotation": 0,
+          "type": "decoration",
+          "visible": true,
+          "width": 8,
+          "height": 16,
+          "x": 2040,
+          "y": 156
+        }
+      ],
+      "opacity": 1,
+      "type": "objectgroup",
+      "visible": true,
+      "x": 0,
+      "y": 0
     }
   ],
-  "nextlayerid": 4,
-  "nextobjectid": 16,
+  "nextlayerid": 8,
+  "nextobjectid": 49,
   "orientation": "isometric",
   "renderorder": "right-down",
   "tiledversion": "1.10.2",

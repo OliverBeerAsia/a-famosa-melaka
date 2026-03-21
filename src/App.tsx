@@ -23,7 +23,6 @@ import { useDialogueStore } from './stores/dialogueStore';
 import { useSaveStore } from './stores/saveStore';
 import { loadGameData, startQuest } from './data/loader';
 import { onGameEvent } from './phaser/eventBridge';
-import { getLocationName } from './data/locationNames';
 
 type GameState = 'title' | 'loading' | 'playing' | 'credits';
 type InfoOverlay = { title: string; text: string } | null;
@@ -145,11 +144,11 @@ export default function App() {
     // Reset game state for new game
     useInventoryStore.getState().clear();
     useQuestStore.getState().hydrateQuests([], [], []);
+    useDialogueStore.getState().endDialogue();
     useDialogueStore.getState().loadUnlockedTopics({});
-    useGameStore.getState().closeAllPanels();
-    useGameStore.getState().setMessageOpen(false);
+    useGameStore.getState().resetWorldState('rua-direita');
+    useSaveStore.getState().startNewSession();
     setInfoOverlay(null);
-    useGameStore.getState().setLocation('rua-direita', getLocationName('rua-direita'));
 
     setLoadingLocation('rua-direita');
     setGameState('loading');
@@ -161,6 +160,8 @@ export default function App() {
     const saveStore = useSaveStore.getState();
     const latestSlot = await saveStore.findMostRecentSlot();
     if (latestSlot === null) {
+      useGameStore.getState().resetWorldState('rua-direita');
+      saveStore.startNewSession();
       setLoadingLocation('rua-direita');
       setGameState('loading');
       return;
@@ -227,6 +228,7 @@ export default function App() {
     return (
       <LoadingScreen
         locationId={loadingLocation}
+        mode="arrival"
         onComplete={handleLoadingComplete}
       />
     );
@@ -261,15 +263,9 @@ export default function App() {
       {transitionLocation && (
         <LoadingScreen
           locationId={transitionLocation}
+          mode="transition"
           onComplete={() => setTransitionLocation(null)}
         />
-      )}
-
-      {/* Keyboard hints (shown when no UI is open) */}
-      {!isDialogueOpen && !isInventoryOpen && !isJournalOpen && !isMessageOpen && !isPaused && !infoOverlay && (
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-parchment-400/60 text-sm font-mono">
-          [I] Inventory • [J] Journal • [ESC] Pause • [Space] Interact
-        </div>
       )}
     </div>
   );

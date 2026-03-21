@@ -15,6 +15,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useDialogueStore } from '../../stores/dialogueStore';
 import { useGameStore } from '../../stores/gameStore';
+import { getLocationName } from '../../data/locationNames';
 import { emitGameEvent, useGameEvent } from '../../phaser/eventBridge';
 
 // Topic display names for better readability
@@ -75,20 +76,19 @@ function PortraitImage({ npcId, npcName }: { npcId: string; npcName: string }) {
   const [hasError, setHasError] = useState(false);
 
   if (hasError) {
-    // Fallback to wax seal style
     return (
-      <div className="wax-seal flex-shrink-0">
+      <div className="wax-seal ui-portrait-fallback flex-shrink-0">
         {npcName.charAt(0).toUpperCase()}
       </div>
     );
   }
 
   return (
-    <div className="flex-shrink-0 w-16 h-16 rounded border-2 border-gold/50 overflow-hidden bg-leather-100 shadow-inner">
+    <div className="ui-portrait-frame flex-shrink-0">
       <img
         src={`/sprites/portraits/${npcId}.png`}
         alt={npcName}
-        className="w-full h-full object-cover"
+        className="ui-portrait-image"
         onError={() => setHasError(true)}
       />
     </div>
@@ -203,8 +203,10 @@ export function DialogueBox() {
   }, [currentNPC, isTyping, handleSkip, handleClose, handleTopicSelect]);
 
   if (!currentNPC) return null;
+  const portraitKey = currentNPC.portrait || currentNPC.id;
+  const locationId = (currentNPC as { location?: string }).location;
+  const locationLabel = locationId ? getLocationName(locationId) : 'Melaka';
 
-  // Format topic name for display
   const formatTopic = (topic: string): string => {
     if (topic.startsWith('pay-')) {
       const moneyMatch = currentNPC.dialogue.topics[topic]?.takesMoney;
@@ -240,70 +242,85 @@ export function DialogueBox() {
     return '';
   };
 
+  const getTopicTag = (topic: string): string | null => {
+    const topicData = currentNPC.dialogue.topics[topic];
+    if (!topicData) return null;
+
+    if (topicData.questTrigger || topicData.questCritical) return 'Quest';
+    if (topicData.takesMoney) return 'Trade';
+    if (topicData.givesItem || topicData.takesItem) return 'Item';
+    if (topicData.unlocks && topicData.unlocks.length > 0) return 'Lead';
+    return null;
+  };
+
   return (
-    <div className="absolute bottom-4 left-1/2 -translate-x-1/2 w-[800px] max-w-[95vw] animate-fade-in z-50">
-      {/* Shadow */}
-      <div className="absolute inset-0 translate-x-1 translate-y-1 bg-black/50 rounded" />
+    <div className="absolute bottom-3 left-1/2 -translate-x-1/2 w-[min(920px,96vw)] animate-fade-in z-50">
+      <div className="absolute inset-0 translate-x-2 translate-y-2 bg-black/45 rounded-[20px] blur-[1px]" />
 
-      {/* Main container */}
-      <div className="relative bg-parchment-200 border-2 border-gold rounded shadow-parchment">
-        <div className="bg-parchment-100 m-1 p-4">
-          {/* Header with portrait and NPC info */}
-          <div className="flex gap-4 mb-3">
-            {/* Character portrait with wax seal fallback */}
-            <PortraitImage npcId={currentNPC.id} npcName={currentNPC.name} />
+      <div className="relative ui-dialogue-shell p-3 md:p-4">
+        <div className="ui-parchment-panel p-4 md:p-5">
+          <div className="flex flex-col gap-4 md:flex-row md:gap-5">
+            <div className="flex items-start gap-4 md:w-[260px]">
+              <PortraitImage npcId={portraitKey} npcName={currentNPC.name} />
 
-            {/* NPC info and dialogue */}
-            <div className="flex-1 min-w-0">
-              <div className="mb-2">
-                <h3 className="font-cinzel text-crimson font-bold text-sm">
+              <div className="min-w-0 pt-1">
+                <p className="ui-caption mb-1">{locationLabel}</p>
+                <h3 className="font-cinzel text-crimson font-bold text-lg leading-tight">
                   {currentNPC.name}
                 </h3>
                 {currentNPC.title && (
-                  <p className="text-sepia-light text-xs italic">
+                  <p className="text-sepia-light text-xs italic leading-snug mt-1">
                     {currentNPC.title}
                   </p>
                 )}
+                <p className="text-sepia-light/80 text-[11px] uppercase tracking-[0.2em] mt-3">
+                  Speak carefully. Answers are not always free.
+                </p>
               </div>
+            </div>
 
-              {/* Dialogue text */}
-              <div className="text-leather-200 font-crimson text-base leading-relaxed min-h-[60px]">
+            <div className="flex-1 min-w-0">
+              <div className="ui-dialogue-text">
                 {displayedText}
                 {isTyping && <span className="typewriter-cursor" />}
               </div>
             </div>
           </div>
 
-          {/* Topics section */}
           {typingComplete && availableTopics.length > 0 && (
-            <div className="border-t border-sepia-light/30 pt-3 mt-2">
-              <p className="text-sepia-light text-xs italic mb-2">
-                — Ask About —
+            <div className="ui-topic-panel">
+              <p className="ui-caption mb-3">
+                Ask about
               </p>
-              <div className="flex flex-wrap gap-2">
+              <div className="grid gap-2 sm:grid-cols-2">
                 {availableTopics.slice(0, 9).map((topic, index) => (
                   <button
                     key={topic}
                     onClick={() => handleTopicSelect(index)}
-                    className={`topic-btn text-sm ${getTopicStyle(topic)}`}
+                    className={`topic-btn ui-topic-btn ${getTopicStyle(topic)}`}
                   >
-                    <span className="text-gold mr-1">[{index + 1}]</span>
-                    {formatTopic(topic)}
+                    <span className="ui-topic-number">[{index + 1}]</span>
+                    <span className="flex-1 text-left leading-snug">{formatTopic(topic)}</span>
+                    {getTopicTag(topic) && (
+                      <span className="ui-topic-tag">{getTopicTag(topic)}</span>
+                    )}
                   </button>
                 ))}
               </div>
               {availableTopics.length > 9 && (
-                <p className="text-sepia-light/50 text-xs mt-2">
+                <p className="text-sepia-light/60 text-xs mt-2">
                   + {availableTopics.length - 9} more topics...
                 </p>
               )}
             </div>
           )}
 
-          {/* Instructions */}
-          <div className="text-right mt-2">
+          <div className="flex items-center justify-between mt-3 pt-2 border-t border-sepia-light/20">
             <span className="text-sepia-light text-xs font-mono">
-              {isTyping ? '[SPACE] skip' : '[1-9] ask • [ESC] leave'}
+              {isTyping ? '[SPACE] skip' : '[1-9] ask • [ESC] close'}
+            </span>
+            <span className="text-sepia-light/60 text-[11px] uppercase tracking-[0.18em]">
+              Melaka remembers everything
             </span>
           </div>
         </div>

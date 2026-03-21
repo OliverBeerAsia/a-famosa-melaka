@@ -32,63 +32,63 @@
       }
     ],
     "dialogue": {
-      "greeting": "Ah, a visitor! Welcome to my humble stall. I am Fernão Gomes, purveyor of the finest spices from the Moluccas. Though I confess, these are troubled times for me.",
-      "greetingQuestActive": "You've returned! Any news of my seal? I cannot sleep, cannot eat... everything depends on finding it.",
-      "greetingQuestComplete": "My friend! You have saved me from ruin. Whenever you pass by, know that Fernão Gomes owes you a debt of honor.",
+      "greeting": "You caught me at a bad hour, friend. I am Fernão Gomes. My spices are sound, but my seal is not.",
+      "greetingQuestActive": "You return at last. Tell me you learned something. Without the seal, every ledger I own is ash.",
+      "greetingQuestComplete": "You found it. Good. In Melaka, a seal is not just wax. It is a man's name, credit, and future.",
       "topics": {
         "seal": {
-          "text": "My trading seal! It's gone missing. Without it, I cannot authorize shipments - the Crown requires it for all official trade documents. I last saw it three days ago, before that cursed meeting with Chen Wei...",
+          "text": "My trading seal vanished after I met Chen Wei. Without it I cannot authorize cargo, and every shipman in Rua Direita knows it.",
           "unlocks": ["investigate", "chen-wei", "debt"],
           "questTrigger": true
         },
         "investigate": {
-          "text": "Please, you must help me! Ask around - Aminah sees everything in the market, Rashid at the docks hears all the gossip. Someone must know something!",
+          "text": "Ask Aminah on the market edge. Rashid at the docks hears everything. Chen Wei knows the debt, but not the whole story.",
           "requires": ["seal"]
         },
         "chen-wei": {
-          "text": "*sighs heavily* Chen Wei of the waterfront counting house. I... I owe him money. A venture to the Moluccas went badly. The monsoon took my ship. But the seal is worth far more than the debt! It's extortion!",
+          "text": "Chen Wei of the counting house. I owe him money from a failed spice voyage. He keeps the seal as leverage.",
           "requires": ["seal"]
         },
         "debt": {
-          "text": "Fifty cruzados. A significant sum, yes, but I would pay it if I could! The voyage's loss left me without capital. I need the seal to make new deals, but without capital I cannot pay for the seal. You see my trap?",
+          "text": "Fifty cruzados. Too much to ignore, too little to lose the seal over. That is the trap.",
           "requires": ["chen-wei"]
         },
         "spices": {
-          "text": "Cloves from Ternate, nutmeg from Banda, cinnamon from Ceylon - treasures worth more than gold! Every foreign power with a ship and cannon covets these routes. Portugal holds them through blood and faith."
+          "text": "Cloves, nutmeg, cinnamon - these are the cargoes that move empires. One good hold can pay for a season."
         },
         "melaka": {
-          "text": "This city is the crossroads of the world. Arabs, Chinese, Malays, Gujaratis, Tamils, Siamese - all come here to trade. The Portuguese bring order, yes, but the trade? It was here before us and will outlast us."
+          "text": "Melaka is a port where languages braid together. The Portuguese rule the walls, but the market belongs to everyone who can bargain."
         },
         "portugal": {
-          "text": "I came from Lisbon fifteen years ago, a young man seeking fortune. My wife remained behind - she writes that our son is now taller than her. I have not seen him since he was a child. This is the price of empire."
+          "text": "I came from Lisbon to make a fortune and found a city that never lets you stop counting. That is the price of empire."
         },
         "chinese": {
-          "text": "The Chinese merchants are... formidable. They controlled this trade for centuries before us. Chen Wei's family has been in Melaka for three generations. They know things we do not."
+          "text": "The Chinese merchants are patient, exact, and impossible to bluff. Chen Wei has the better ledger and he knows it."
         },
         "weather": {
-          "text": "The monsoons rule everything here. June to September, the winds blow from the southwest - ships from India arrive. October to March, from the northeast - the China trade. Miss the monsoon, wait six months."
+          "text": "The monsoons decide who profits and who waits. Miss the wind, and you miss the season."
         },
         "food": {
-          "text": "I miss the bacalhau of home, the wine of Porto. Here I eat rice and curries - good, yes, but not Portuguese. The tavern serves a passable cozido, if you know to ask."
+          "text": "I still miss Porto wine and salted cod, but Rua Direita has its comforts. Ask for the tavern stew when you want something familiar."
         },
         "captain": {
-          "text": "Capitão Rodrigues? A good soldier, strict but fair. He fought in the siege of Diu - a hero of the Estado da India. But he has no head for trade. Commerce confuses him."
+          "text": "Capitão Rodrigues is all steel and duty. He understands gates and guards, not cargo and credit."
         },
         "church": {
-          "text": "I attend Mass every Sunday at St. Paul's. Padre Tomás is a good man, though his zeal for conversion sometimes... complicates our relations with the locals."
+          "text": "I attend Mass on Sundays. Padre Tomás means well, though he speaks as if faith alone can balance a ledger."
         },
         "rumors": {
-          "text": "There is talk of northern ships sighted near the straits. If they establish themselves in these waters... God help us all. They are ruthless, and they want what we have."
+          "text": "There are northern ships nosing near the straits. When they come, they bring hard bargains and harder guns."
         },
         "family": {
-          "text": "My brother Manuel trades in Goa. My father was a sailor who never returned from a voyage to Brazil. The sea takes and gives - this is our Portuguese fate."
+          "text": "My brother trades in Goa. My father never came home from the sea. Melaka has taught me that distance is expensive."
         },
         "advice": {
-          "text": "If you would thrive in Melaka, learn to read people. The Malay trader who smiles may cheat you. The Chinese who scowls may be your truest friend. Nothing is as it seems in this city."
+          "text": "Read the room before you read the price. In Melaka, the loudest man is rarely the most honest one."
         }
       },
-      "farewell": "May São Tomé protect you on your journey. And please - find my seal!",
-      "farewellQuestComplete": "Vá com Deus, my friend. My door is always open to you."
+      "farewell": "Find the seal. Until then, I sleep badly.",
+      "farewellQuestComplete": "You have my gratitude. If trade in Melaka survives, it will be because people still keep their word."
     },
     "questGiver": true,
     "questId": "merchants-seal",
@@ -314,6 +314,7 @@
     "culture": "malay",
     "location": "rua-direita",
     "position": { "x": 160, "y": 160 },
+    "portrait": "aminah",
     "schedule": [
       {
         "startHour": 5,
@@ -338,57 +339,57 @@
       }
     ],
     "dialogue": {
-      "greeting": "Selamat datang! Fresh mangoes today - sweetest in all Melaka! Rambutan, durian for the brave... What does your heart desire?",
-      "greetingRain": "Aiyo, this rain! Come, stand under my awning. Even the sky weeps for Melaka sometimes, yes?",
+      "greeting": "Selamat datang. Fresh fruit, clean shade, and enough gossip to ruin a merchant's lunch. What do you need?",
+      "greetingRain": "Aiyo, rain again. Stand under my awning before the fruit and the customers both get soggy.",
       "topics": {
         "seal": {
-          "text": "Ah yes, Senhor Gomes' seal. Very worried man, that one! I saw a Chinese man near his stall that morning - well-dressed, from the counting house perhaps? They argued in low voices. Money trouble, I think. Always money."
+          "text": "Gomes was worried, yes. I saw a polished clerk from the counting house arguing with him before the sun climbed high."
         },
         "market": {
-          "text": "This market has been here since before the Portuguese, before the Sultan even. My grandmother sold here, and her grandmother before that. Portuguese, Malay - the market remains. We adapt. We survive."
+          "text": "Rua Direita is busy because it must be. Portuguese stone above us, Malay feet below it. The street only lives when everyone works it."
         },
         "gossip": {
-          "text": "*lowers voice* People tell fruit sellers everything! They think we are invisible. Just yesterday I heard about the Capitão's new boots - very expensive! And a certain merchant's wife meeting a certain sailor... *winks*"
+          "text": "People talk to fruit sellers because they forget we hear them. I heard the captain's name, the bell schedule, and one very angry merchant."
         },
         "family": {
-          "text": "I have three children. My husband was a fisherman - the sea took him five years ago. Now I raise them alone. The market provides. My eldest son helps me carry goods from the kampung each morning."
+          "text": "My family lives off the market. My eldest helps carry goods from the kampung each morning, and that makes all the difference."
         },
         "kampung": {
-          "text": "The kampung is where the real Melaka lives. Not this Portuguese street with their stone buildings. We have our traditions, our food, our ways. The Portuguese think they rule here. *quiet laugh* They only rule what we let them see."
+          "text": "The market is Melaka's face. The kampung is its breath. One sells, the other remembers."
         },
         "food": {
-          "text": "My nasi lemak is famous! Coconut rice, sambal, ikan bilis, cucumber... The Portuguese, they cannot handle our spices. Red in the face like boiled prawns! *laughs* But some learn. The young ones."
+          "text": "My rice and sambal beat any heavy Portuguese stew. They swear they will not come back for more, then they do."
         },
         "sultan": {
-          "text": "*looks around carefully* The old Sultan's family still lives in Johor. Some say they will return one day. My mother remembers the old days, before the conquest. She says Melaka was greater then. I was too young to know."
+          "text": "The old Sultan's family still watches from Johor. Melaka has not forgotten them, even if the Portuguese pretend otherwise."
         },
         "portuguese": {
-          "text": "The Portuguese? They are not all bad. Some learn our language, marry our women. Their children become... something new. Not Portuguese, not Malay. Something between. This city creates new people."
+          "text": "Some learn our language. Some only learn to shout it. The clever ones stop pretending the walls make them masters."
         },
         "chen-wei": {
-          "text": "Chen Wei? Very serious man. Never smiles, always counting. But fair in business - better than many Portuguese! His family has been here longer than the fortress. They remember things."
+          "text": "Chen Wei speaks softly because he does not need to shout. His hands already know the numbers."
         },
         "gomes": {
-          "text": "Senhor Gomes is a good customer. Always pays fair price, never haggles too hard. But lately, stressed, worried. Dark circles under eyes. His seal problem, yes, but maybe something more? A man with secrets."
+          "text": "Gomes pays on time when he is calm. Right now, his worry is louder than his coins."
         },
         "weather": {
-          "text": "This heat! But what can we do? Drink coconut water, sit in shade. The Portuguese in their heavy clothes - so foolish! We Malays know how to live with the weather. They try to fight it."
+          "text": "This heat makes fools of Europeans. We know the shade, the rain, and when to close the awnings."
         },
         "children": {
-          "text": "My daughter wants to learn to read. Portuguese letters! Can you imagine? She watches the priest teaching children at the church. Times are changing, even in the kampung."
+          "text": "My daughter wants to learn letters. Good. A child who reads the price board can also read a liar."
         },
         "traditions": {
-          "text": "We still keep the old ways. The Portuguese think we all follow Mohammed now, but in the kampung... we remember the spirits. The dukun still heals. Some things the mosque cannot replace."
+          "text": "The old ways do not vanish. They move to the kampung, to the kitchen, to the places the Portuguese do not inspect."
         },
         "prices": {
-          "text": "Prices go up when ships are late. Down when too many arrive at once. The spice trade makes everyone crazy - including my customers! When nutmeg is scarce, even mangoes cost more. Everything connected."
+          "text": "When ships are late, everything rises. When the harbor fills, the good fruit goes first. That is Melaka."
         },
         "advice": {
-          "text": "You want advice? Watch more, talk less. In Melaka, the loud ones are usually foolish. The quiet ones - Portuguese, Chinese, Malay - they are the dangerous ones. And never trust a man who won't eat your food!"
+          "text": "Watch hands before faces. Honest people point to the thing they mean. Liars point at the sky."
         }
       },
-      "farewell": "Terima kasih! Come again - I save best mangoes for friends!",
-      "farewellEvening": "Time to close. The kampung calls. Be safe in the dark streets, yes?"
+      "farewell": "Come back with coin or news. Both spend well here.",
+      "farewellEvening": "Take the lit route home. Rua Direita is less kind after dark."
     },
     "personality": {
       "traits": ["sharp", "warm", "survivor", "proud"],
@@ -406,6 +407,7 @@
     "culture": "chinese",
     "location": "waterfront",
     "position": { "x": 180, "y": 190 },
+    "portrait": "chen-wei",
     "schedule": [
       {
         "startHour": 7,
@@ -444,63 +446,63 @@
       }
     ],
     "dialogue": {
-      "greeting": "Welcome to the counting house. I am Chen Wei. How may I be of service?",
-      "greetingReturning": "You return. I trust you have considered our previous discussion?",
+      "greeting": "Welcome to the counting house. If you need a favor, first tell me what it costs.",
+      "greetingReturning": "You return with either news or debt. Both are useful.",
       "topics": {
         "seal": {
-          "text": "*carefully* Yes, I know of Gomes' seal. There was... a business disagreement. The seal was taken as collateral for an unpaid debt. Fifty cruzados. Pay this amount, and the seal will be returned. This is proper and fair.",
+          "text": "Yes. Gomes left the seal here as collateral for fifty cruzados. Return the debt, and the seal goes back.",
           "questCritical": true
         },
         "debt": {
-          "text": "Senhor Gomes borrowed for a spice venture - a ship to the Moluccas. The monsoon was unkind. The ship was lost. The debt remains. He has avoided payment for six months now. Patience has limits.",
+          "text": "His spice voyage failed. The monsoon took the ship; the debt remains. Melaka does not forgive weather or delay.",
           "requires": ["seal"]
         },
         "guild": {
-          "text": "The Chinese merchants of Melaka have been here since long before the Portuguese. Some families came in the days of the Sultanate, and many keep books older than the city walls. We remember what others forget."
+          "text": "The Chinese merchant families have kept accounts in Melaka since before the fortress mattered. Ledgers remember what rulers try to forget."
         },
         "zheng-he": {
-          "text": "Admiral Zheng He came to Melaka many times with great fleets - the envoy of the Ming court. My ancestor served as translator. Those voyages brought honor and safe passage before the Portuguese ever raised their walls."
+          "text": "Admiral Zheng He came here with great fleets from the Ming court. My family remembers those voyages well."
         },
         "history": {
-          "text": "The Portuguese burned many records when they conquered the city. They thought they could erase our history. *slight smile* They were mistaken. We remember. Our ledgers and family accounts are longer than their guns."
+          "text": "The Portuguese burned records and called it victory. They were mistaken. Accounts outlast cannons."
         },
         "trade": {
-          "text": "Silk, porcelain, tea from China. Pepper, nutmeg, cloves from these islands. Gold from Sumatra, silver from Japan. The trade flows through Melaka like blood through a heart. Stop the trade, and all dies."
+          "text": "Silk, porcelain, tea, pepper, cloves, silver. Trade is the pulse of Melaka. Stop it, and the city weakens."
         },
         "portuguese": {
-          "text": "The Portuguese are... temporary. They have been here seventy years. My family has been here one hundred and fifty. They think they rule Melaka. They only control the fortress. The real power? *gestures at ledgers* Commerce."
+          "text": "The Portuguese rule the gate. The merchants rule the flow. Both depend on the other more than they admit."
         },
         "gomes": {
-          "text": "Fernão Gomes is not a bad man. Merely... desperate and proud. A dangerous combination. He made promises he could not keep. In business, a man's word must be his bond. Without trust, trade collapses."
+          "text": "Gomes is not dishonest. He is cornered, and proud men make poor choices when cornered."
         },
         "alternative": {
-          "text": "*considers* If you cannot pay... there may be another way. I have a shipment of silk held at the customs house. The Portuguese officer demands a fee I will not pay. If you could convince the Capitão to intervene...",
+          "text": "If you cannot pay, there is another path. The customs office wants a fee I will not accept. Convince the Capitão to intervene.",
           "requires": ["seal"],
           "unlocks": ["side-deal"]
         },
         "side-deal": {
-          "text": "Convince Capitão Rodrigues to release my silk without the officer's 'fee,' and I will return the seal as a gesture of good faith. Honor for honor. What say you?",
+          "text": "Bring me proof the customs officer will back off, and I will release the seal. Honor for honor.",
           "requires": ["alternative"],
           "questPath": "diplomatic"
         },
         "philosophy": {
-          "text": "Confucius teaches that harmony comes from each person fulfilling his proper station. The merchant trades fairly. The ruler governs justly. When these bonds break, chaos follows. Melaka is... imbalanced."
+          "text": "Harmony comes from each person holding their place. When merchants, rulers, and laborers fail their part, the city frays."
         },
         "family": {
-          "text": "I have a wife and four children. My eldest son studies in Macau - perhaps he will return to take my place. Or perhaps he will serve the Emperor directly. These are uncertain times for families abroad."
+          "text": "My eldest studies in Macau. Perhaps he returns to take my place. Perhaps he serves elsewhere. That is the burden of families abroad."
         },
         "religion": {
-          "text": "We honor our ancestors and follow the teachings of the sages. The Jesuits have tried to convert me. I listen politely. Their religion is... passionate. We prefer balance and measured conduct."
+          "text": "We honor our ancestors and the teachings of the sages. The Jesuits speak with passion; I prefer balance."
         },
         "dutch": {
-          "text": "*leans forward* There are whispers of northern traders and seamen with hard bargains. We listen. If the Portuguese become too... burdensome... *leaves thought unfinished*"
+          "text": "There are whispers of northern traders with hard bargains. Melaka listens to every wind."
         },
         "advice": {
-          "text": "You ask for wisdom? Never show all your cards. Never burn a bridge you may need to cross. And never, ever, assume that the man with the biggest sword is the most dangerous one in the room."
+          "text": "Do not ask for mercy where a contract will do. Melaka rewards clear terms."
         }
       },
-      "farewell": "Farewell. May your affairs prosper.",
-      "farewellDebt": "Remember - fifty cruzados, or find another way. Time passes, and patience wears thin."
+      "farewell": "I have other accounts to close.",
+      "farewellDebt": "Fifty cruzados. Or a cleaner arrangement. The arithmetic does not change."
     },
     "hasItem": "trading-seal",
     "requiresPayment": 50,
@@ -617,6 +619,7 @@
     "culture": "malay",
     "location": "st-pauls-church",
     "position": { "x": 160, "y": 180 },
+    "portrait": "siti",
     "schedule": [
       {
         "startHour": 0,
@@ -665,6 +668,7 @@
     "culture": "portuguese",
     "location": "rua-direita",
     "position": { "x": 200, "y": 200 },
+    "portrait": "alvares",
     "schedule": [
       {
         "startHour": 8,
@@ -689,30 +693,30 @@
       }
     ],
     "dialogue": {
-      "greeting": "Hmm? What do you want? I am a busy man. Senhor Alvares, sugar merchant — the finest refined sugar in all of Portuguese Melaka. Speak quickly.",
-      "greetingReturning": "You again? I hope you bring business this time, not idle chatter.",
+      "greeting": "If you are buying sugar, speak. If not, do not waste my time. I am Alvares.",
+      "greetingReturning": "You again. Either you are rich or persistent.",
       "topics": {
         "sugar": {
-          "text": "Sugar is the future, mark my words. Spices are yesterday's fortune. Sugar from local cane, refined to European standards — every ship captain wants it for the voyage home. I supply half the fleet."
+          "text": "Sugar is the future. Spice is for dreamers. Sugar fills holds, tables, and ledgers."
         },
         "business": {
-          "text": "Business is excellent. The local Malays grow the cane, my workers refine it, and Portuguese ships carry it to Goa and Lisbon. A perfect chain. Everyone profits. *straightens gold chain* Especially me."
+          "text": "The cane is cut locally, refined here, and shipped outward under Portuguese papers. That is how wealth works."
         },
         "servants": {
-          "text": "*eyes narrow* Servants? I employ many locals. I give them work, wages, purpose. Without men like me, they would still be scratching in the dirt. They should be grateful. Some are... ungrateful."
+          "text": "I pay laborers and expect labor. This is not cruelty; it is order. Those who complain mistake discipline for injustice."
         },
         "colony": {
-          "text": "Portugal brings civilization to these shores. Order, law, proper Christian values. The locals resist at first, but they learn. Those who cooperate prosper. Those who do not... *shrugs* ...have only themselves to blame."
+          "text": "Portugal brings law, coin, and roads that hold up in rain. The rest is sentiment."
         },
         "melaka": {
-          "text": "Melaka is a gold mine for those with vision. Most Portuguese here chase spices — following Gomes and his kind into debt and ruin. I build something lasting. Sugar plantations. Real wealth."
+          "text": "Rua Direita rewards men who see what the city is becoming, not what it once was. I see it clearly."
         },
         "gomes": {
-          "text": "*snorts* Fernão Gomes? A fool who lost his ship and now begs for his seal like a dog for a bone. I offered to buy his trading rights months ago. He refused out of pride. Now look at him."
+          "text": "Fernão Gomes sells stories of spice and honor. I sell what the harbor can move. That is the difference."
         }
       },
-      "farewell": "If you have no business, move along. Time is money, and I waste neither.",
-      "farewellBusiness": "Come back when you have something worth trading. Good day."
+      "farewell": "Move along. Sugar does not refine itself.",
+      "farewellBusiness": "Return when you can speak in numbers, not feelings."
     },
     "personality": {
       "traits": ["arrogant", "shrewd", "cruel", "ambitious"],
@@ -730,6 +734,7 @@
     "culture": "malay",
     "location": "kampung",
     "position": { "x": 600, "y": 320 },
+    "portrait": "mak-enang",
     "schedule": [
       {
         "startHour": 6,

@@ -1,187 +1,129 @@
-# Project Setup Documentation
+# Project Setup and Release Workflow
 
-## Initial Setup Complete
+## Current Stack
 
-This document records the initial project setup for A Famosa: Streets of Golden Melaka.
+- Engine: Phaser 3
+- UI: React 18
+- Language: TypeScript
+- State: Zustand
+- Build: Vite
+- Desktop packaging: Electron Builder
 
-### What Has Been Created
+This is the live shipping stack. Older Phaser-only, JavaScript-only, or webpack-first descriptions are obsolete.
 
-#### 1. Project Structure
-All directories created as per the design brief:
-- `assets/` - Sprite, audio, and map assets
-- `src/` - Source code (scenes, entities, systems, ui, data)
-- `tools/` - Development utilities
-- `docs/` - Documentation
+## Runtime Layout
 
-#### 2. Core Files
-
-**Configuration & Build:**
-- `package.json` - Node.js dependencies and scripts
-- `webpack.config.js` - Webpack bundler configuration
-- `.gitignore` - Git ignore rules
-
-**Source Code:**
-- `src/main.js` - Application entry point
-- `src/config.js` - Phaser game configuration
-- `src/index.html` - HTML template
-
-**Scenes:**
-- `src/scenes/BootScene.js` - Asset loading scene with progress bar
-- `src/scenes/GameScene.js` - Main gameplay scene
-
-**Entities:**
-- `src/entities/Player.js` - Player character with 8-directional movement
-
-**Assets:**
-- Placeholder sprites (player, NPC, ground, grass, water, stone tiles)
-- Sample Tiled map (`assets/maps/melaka-demo.json`)
-
-**Tools:**
-- `tools/create-placeholders.js` - Generates placeholder sprites
-
-**Documentation:**
-- `CLAUDE.md` - Claude Code development guidance
-- `README.md` - Project overview and instructions
-- This file
-
-### Technical Implementation
-
-#### Resolution & Scaling
-- Base resolution: 320×180
-- Integer scaling enabled via Phaser's Scale.FIT mode
-- Pixel-perfect rendering (pixelArt: true, roundPixels: true)
-
-#### Movement System
-- Full 8-directional movement (N, NE, E, SE, S, SW, W, NW)
-- Normalized diagonal movement (prevents faster diagonal speed)
-- Supports both Arrow Keys and WASD
-- Smooth physics-based movement at 60 pixels/second
-
-#### Tilemap System
-- Loads Tiled JSON format
-- Supports multiple layers (Ground, Collision)
-- Collision detection via tile properties
-- Sample map: 20×15 tiles (320×240 pixels)
-
-#### Camera System
-- Follows player with smooth interpolation
-- Bounded to tilemap dimensions
-- Ready for future zoom controls
-
-### How to Use
-
-#### Development
-```bash
-npm start          # Start dev server (http://localhost:8080)
-npm run dev        # Start dev server and open browser
-npm run build      # Create production build
+```text
+src/
+  App.tsx                    React application shell
+  components/
+    screens/                title, loading, credits, transitions
+    ui/                     HUD, dialogue, inventory, journal, pause
+  data/                     manifests, maps, NPCs, items, quests
+  phaser/
+    scenes/                 BootScene, GameScene
+    systems/                environment, weather, crowd, rendering
+  stores/                   game, save, quest, dialogue, inventory
+assets/
+  maps/                     Tiled JSON maps
+  sprites/
+    characters/             named gameplay sheets
+    crowd/                  crowd silhouettes
+    portraits/              dialogue portraits
+    objects/                world props and animated objects
+    ui/items/               item icons
 ```
 
-#### Creating New Maps
-1. Open [Tiled Map Editor](https://www.mapeditor.org/)
-2. New map: 16×16 tile size, orthogonal
-3. Add tilesets from `assets/sprites/tiles/`
-4. Create layers: Ground (visual), Collision (physics)
-5. For collision: add custom property `collides: true` to tiles
-6. Export as JSON to `assets/maps/`
-7. Load in `BootScene.js`
+## Shipping Contracts
 
-#### Adding New Sprites
-1. Place PNG in appropriate `assets/sprites/` subdirectory
-2. Load in `BootScene.preload()`:
-   ```javascript
-   this.load.image('sprite-key', 'assets/sprites/path/sprite.png');
-   ```
-3. Use in scenes:
-   ```javascript
-   this.add.image(x, y, 'sprite-key');
-   ```
+### Character contract
 
-### Next Steps
+- Named sheets: `64x192`
+- Frame size: `16x32`
+- Layout: `4x6`
+- Expected rows: walk, idle, talk
 
-#### Immediate Priorities (Phase 2)
-1. Add more map areas (A Famosa Gate, Market, Waterfront, etc.)
-2. Implement NPC entities
-3. Create basic dialogue system
-4. Add animated player sprites (walking in 4 directions)
+### Map contract
 
-#### Core Systems to Build
-1. **Dialogue System** (`src/systems/DialogueSystem.js`)
-   - Keyword-based or branching conversations
-   - Text box UI
-   - Character portraits
+Major isometric locations should expose:
 
-2. **Inventory System** (`src/systems/InventorySystem.js`)
-   - Item management
-   - Item combination
-   - UI overlay
+- `Ground`
+- `Walls`
+- `Objects`
+- `Props`
+- `Overhang`
+- `Canopy`
+- `Highlights`
 
-3. **Time System** (`src/systems/TimeSystem.js`)
-   - Day/night cycle
-   - NPC schedules
-   - Visual lighting changes
+### Portrait contract
 
-4. **Journal System** (`src/systems/JournalSystem.js`)
-   - Quest tracking
-   - Rumor logging
-   - UI interface
+- unique portrait per named dialogue NPC
+- VGA-style pixel-art family
+- square crop
+- readable at dialogue scale
 
-#### Art Pipeline
-1. Design color palette (32-48 colors)
-2. Create character sprite templates (16×32)
-3. Create tile templates (16×16)
-4. Animate player (idle + walk × 4 directions = 8 animations)
-5. Create NPC variations
-6. Build architecture tilesets (Portuguese colonial style)
+### Item-art contract
 
-#### Audio Pipeline
-1. Compose main theme (Renaissance-Gamelan fusion)
-2. Create location-specific tracks (Market, Waterfront, Church, etc.)
-3. Record/generate sound effects
-4. Implement audio manager with crossfading
+- every player-facing item must have a UI icon
+- important world pickups should prefer item-backed art, not generic proxy sprites
 
-### Technical Notes
+## Commands
 
-#### Phaser 3 Tips
-- Use `this.add.existing()` and `this.physics.add.existing()` for custom entities
-- Collision detection: `this.physics.add.collider(sprite, layer)`
-- Arcade physics is sufficient for top-down RPG
-- For multiple animations, use sprite sheets with `this.load.spritesheet()`
+```bash
+npm run dev
+npm run build
+npm run preview
+npm test -- --runInBand
+npm run validate:art -- --strict
+npm run electron
+npm run package:mac
+```
 
-#### Performance Considerations
-- Bundle size warning is expected (Phaser is 1.15 MB minified)
-- Consider code splitting if adding many scenes
-- Optimize sprite sheets (pack multiple sprites in one image)
-- Use texture atlases for efficiency
+## Release Verification
 
-#### Common Issues
-- **Black screen**: Check browser console for asset loading errors
-- **Sprite not showing**: Verify path in both load and usage
-- **Collision not working**: Ensure collision layer has `collides: true` property
-- **Movement feels wrong**: Adjust `PLAYER_SPEED` in `config.js`
+Run these before a release commit or tag:
 
-### Testing Checklist
+```bash
+npm test -- --runInBand
+npm run build
+npm run validate:art -- --strict
+```
 
-✅ Project builds without errors
-✅ Development server starts
-✅ Game renders in browser
-✅ Player sprite appears
-✅ Arrow keys move player
-✅ WASD moves player
-✅ Player collides with map boundaries
-✅ Player collides with stone border
-✅ Camera follows player smoothly
-✅ Map renders correctly
-✅ No console errors
+If packaging is required for the release, build the platform packages after those gates pass.
 
-### Version Information
+## Packaging
 
-- **Phaser**: 3.70.0
-- **Webpack**: 5.89.0
-- **Node**: Requires 16+
-- **Initial Setup Date**: 2025-12-03
+Electron Builder writes release artifacts into `release/`.
 
----
+Primary commands:
 
-*For development guidelines and architecture patterns, see CLAUDE.md*
-*For project overview and quick start, see README.md*
+```bash
+npm run package:mac
+npm run package:win
+npm run package:linux
+```
+
+## Manual Release Flow
+
+1. Update version metadata.
+2. Update root docs and `docs/`.
+3. Run tests, build, and strict art validation.
+4. Package platform artifacts if required.
+5. Commit on `main`.
+6. Push commit.
+7. Create an annotated tag.
+8. Create the GitHub release with release notes and attached artifacts.
+
+## Editing Rules for Content Work
+
+- Do not let cinematic scene art substitute for weak playable spaces.
+- Do not add new map areas without also extending tests or validation where practical.
+- Do not introduce portrait aliases for named cast members.
+- Do not lower the map density bar to make a release easier.
+
+## Current High-Risk Areas
+
+- Gameplay-sheet redraw quality for the named cast
+- Manual playthrough polish versus structural/tested correctness
+- Historical believability in NPC routines and conversation reactivity
+- Cross-time-of-day screenshot review for all major locations

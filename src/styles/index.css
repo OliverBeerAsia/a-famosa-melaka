@@ -15,6 +15,132 @@
 
 /* Game UI Components */
 @layer components {
+  .ui-dialogue-shell {
+    background-image: url('/sprites/ui/dialogue-box.png');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    image-rendering: pixelated;
+  }
+
+  .ui-inventory-shell {
+    background-image: url('/sprites/ui/parchment-bg.png');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    image-rendering: pixelated;
+  }
+
+  .ui-parchment-panel {
+    background-image: linear-gradient(180deg, rgba(245, 222, 179, 0.96), rgba(222, 184, 135, 0.9));
+    border: 1px solid rgba(139, 111, 78, 0.35);
+    box-shadow:
+      inset 0 0 0 1px rgba(255, 255, 255, 0.22),
+      0 10px 24px rgba(28, 16, 7, 0.2);
+    border-radius: 18px;
+  }
+
+  .ui-caption {
+    @apply text-sepia-light text-[11px] uppercase tracking-[0.18em];
+  }
+
+  .ui-dialogue-text {
+    @apply text-leather-200 font-crimson text-base md:text-lg leading-relaxed min-h-[96px];
+    text-shadow: 0 1px 0 rgba(245, 222, 179, 0.22);
+  }
+
+  .ui-portrait-frame {
+    width: 88px;
+    height: 88px;
+    padding: 8px;
+    background-image: url('/sprites/ui/portrait-frame.png');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    image-rendering: pixelated;
+    border-radius: 14px;
+    flex-shrink: 0;
+  }
+
+  .ui-portrait-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    image-rendering: pixelated;
+    border-radius: 8px;
+  }
+
+  .ui-portrait-fallback {
+    width: 88px;
+    height: 88px;
+  }
+
+  .ui-topic-panel {
+    @apply mt-4 pt-3 border-t border-sepia-light/25;
+  }
+
+  .ui-topic-btn {
+    @apply w-full min-h-[48px] justify-between gap-3 px-4 py-2;
+    @apply text-parchment-200;
+    @apply shadow-sm;
+    background-image: linear-gradient(180deg, rgba(92, 58, 30, 0.88), rgba(48, 32, 18, 0.94));
+    border-color: rgba(244, 180, 26, 0.45);
+  }
+
+  .ui-topic-btn:hover {
+    transform: translateY(-1px);
+    border-color: rgba(244, 180, 26, 0.8);
+  }
+
+  .ui-topic-number {
+    @apply text-gold text-xs font-cinzel;
+  }
+
+  .ui-topic-tag {
+    @apply text-[10px] uppercase tracking-[0.16em] text-gold-light;
+  }
+
+  .ui-inventory-slot-art {
+    background-image: url('/sprites/ui/inventory-slot.png');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    image-rendering: pixelated;
+  }
+
+  .ui-item-icon {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    image-rendering: pixelated;
+    filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.25));
+  }
+
+  .ui-item-fallback {
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+    @apply flex items-center justify-center font-cinzel text-parchment-200 text-lg;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.15);
+  }
+
+  .ui-quantity-badge {
+    @apply absolute -bottom-1 -right-1 text-[10px] text-white bg-black/70 px-1.5 py-0.5 rounded;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  .ui-money-pill {
+    @apply px-3 py-2 rounded-full border border-gold/40 bg-leather-100/70;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+  }
+
+  .ui-money-coin {
+    width: 22px;
+    height: 22px;
+    image-rendering: pixelated;
+  }
+
+  .ui-description-panel {
+    @apply p-3 rounded-xl border border-sepia-light/25 bg-parchment-400/50;
+    background-image: linear-gradient(180deg, rgba(245, 222, 179, 0.4), rgba(222, 184, 135, 0.24));
+  }
+
   /* Parchment panel style */
   .panel-parchment {
     @apply bg-parchment-200 border-2 border-gold rounded shadow-parchment;
@@ -38,14 +164,14 @@
 
   /* Topic button */
   .topic-btn {
-    @apply px-3 py-1 bg-parchment-300/50 hover:bg-parchment-400/50 rounded;
-    @apply text-leather-200 hover:text-crimson transition-colors cursor-pointer;
+    @apply flex items-center rounded-lg border transition-all duration-150 cursor-pointer;
+    @apply text-left text-sm hover:text-parchment-200;
   }
 
   /* Inventory slot */
   .inv-slot {
-    @apply w-12 h-12 bg-leather-300 border-2 border-leather-50 rounded;
-    @apply flex items-center justify-center;
+    @apply relative w-12 h-12 border-2 border-leather-50 rounded-lg overflow-hidden;
+    @apply flex items-center justify-center bg-leather-300;
   }
 
   .inv-slot-selected {

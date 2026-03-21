@@ -131,7 +131,7 @@ export function TitleScreen({ onNewGame, onContinue, onCredits }: TitleScreenPro
       {/* Footer */}
       <div className="absolute bottom-4 left-0 right-0 text-center">
         <p className="text-parchment-500/60 text-xs">
-          A Pixel Art Adventure RPG inspired by Ultima VII
+          A Pixel Art Adventure RPG chasing the density and mood of Ultima VIII
         </p>
       </div>
     </div>

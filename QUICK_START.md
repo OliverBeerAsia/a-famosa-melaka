@@ -7,131 +7,68 @@ npm install
 npm run dev
 ```
 
-Your development server will be running at: **http://localhost:3000**
+The development server runs at `http://localhost:3000`.
 
----
+## Core Commands
 
-## Game Controls
+```bash
+npm run dev
+npm run build
+npm run preview
+npm test -- --runInBand
+npm run validate:art -- --strict
+npm run electron
+npm run package:mac
+```
+
+## Controls
 
 | Key | Action |
 |-----|--------|
-| Arrow Keys / WASD | Move player (8-directional) |
-| Space | Interact with NPCs/Objects |
-| I | Open/Close Inventory |
-| J | Open/Close Journal |
-| ESC | Pause Menu (settings, save/load) |
-| E | Examine item (in inventory) |
-| F6-F10 | Quick travel to locations (debug) |
-| T | Advance time (debug) |
-| Y | Toggle time speed (debug) |
+| Arrow Keys / WASD | Move |
+| Space | Talk, interact, take item, or travel |
+| I | Open or close inventory |
+| J | Open or close journal |
+| ESC | Pause menu |
+| F6-F10 | Debug travel between locations |
+| T / Y | Debug time controls |
 
----
+## First Run Smoke Test
 
-## Development Commands
+1. Start a new game from the title screen.
+2. Confirm the arrival screen loads cleanly into `Rua Direita`.
+3. Walk, stop, and reorient near at least one NPC and one item.
+4. Start the first conversation and verify portrait, prompt, and dialogue flow.
+5. Open inventory and journal once each.
+6. Travel to at least one other location and confirm the transition screen and arrival state feel clean.
+
+## Packaging
 
 ```bash
-# Start development server (Vite with HMR)
-npm run dev
+npm run package:mac
+npm run package:win
+npm run package:linux
+```
 
-# Build for production
+Packaging output is written to `release/`.
+
+## Release Gate
+
+Before committing a release build, run:
+
+```bash
+npm test -- --runInBand
 npm run build
-
-# Preview production build
-npm run preview
-
-# Validate gameplay art contract
 npm run validate:art -- --strict
-
-# Run Electron desktop app
-npm run electron
-
-# Package for distribution
-npm run package:mac    # macOS DMG
-npm run package:win    # Windows installer
-npm run package:linux  # Linux AppImage
 ```
 
----
+## Key Docs
 
-## Current Features
-
-- **5 Locations**: A Famosa Gate, Rua Direita, St. Paul's Church, Waterfront, Kampung
-- **6 NPCs**: Fernao Gomes, Capitao Rodrigues, Padre Tomas, Aminah, Chen Wei, Rashid
-- **3 Quests**: The Merchant's Seal (main), The Padre's Dilemma, Rashid's Cargo
-- **Day/Night Cycle**: 4 lighting states with atmospheric particles
-- **Manifest-Driven Gameplay Art**: 10 named sheets, 10 crowd roles, 5 shipping isometric maps
-- **Strict Art Validation**: Sheet layout, palette, runtime parity, and dead-asset checks
-- **Full Inventory**: Item pickup, examination, quest items
-- **Journal System**: Quest tracking and objectives
-- **Save/Load**: 4 slots with autosave
-- **Pause Menu**: Volume controls, save/load
-
----
-
-## Project Structure (React + Phaser Hybrid)
-
-```
-src/
-├── App.tsx              # Main React app shell
-├── main.tsx             # Entry point
-├── components/
-│   ├── GameCanvas.tsx   # Phaser game embed
-│   ├── ui/              # React UI components
-│   └── screens/         # Full-screen views
-├── stores/              # Zustand state management
-├── phaser/
-│   ├── game.ts          # Phaser configuration
-│   ├── eventBridge.ts   # React-Phaser communication
-│   └── scenes/          # Phaser scenes (Boot, Game)
-└── data/                # NPCs, Items, Quests (JSON)
-
-assets/
-├── sprites/             # Characters, Crowd, Tiles, Objects, UI
-├── audio/               # Music and SFX
-├── maps/                # Tiled JSON maps
-└── tilesets/            # Master tileset images
-```
-
----
-
-## Technology Stack
-
-- **Game Engine**: Phaser 3
-- **UI Framework**: React 18
-- **State Management**: Zustand
-- **Styling**: Tailwind CSS
-- **Build Tool**: Vite
-- **Language**: TypeScript
-- **Desktop**: Electron
-
----
-
-## Troubleshooting
-
-**Game not loading?**
-- Check browser console (F12) for errors
-- Verify server: `curl http://localhost:3000`
-
-**TypeScript errors?**
-- Run `npx tsc --noEmit` to check for type errors
-- Install types: `npm install --save-dev @types/react`
-
-**Port in use?**
-- Vite will auto-select next available port
-- Or: `lsof -ti:3000 | xargs kill`
-
-**Electron not starting?**
-- Run production build first: `npm run build`
-- Then: `npm run electron`
-
----
-
-## Documentation
-
-- **PROJECT_STATUS.md** - Current status and roadmap
-- **CLAUDE.md** - Development guidelines
-- **docs/art-bible/gameplay-asset-spec.json** - Shipping gameplay art contract
-- **docs/art-bible/ART_PIPELINE.md** - Generator and validator workflow
-- **docs/art-bible/ART_BIBLE.md** - Visual specifications
-- **docs/AUDIO_DIRECTION.md** - Audio specifications
-- **TESTING.md** - Manual test checklist
+- `README.md`
+- `PROJECT_STATUS.md`
+- `CHANGELOG.md`
+- `TESTING.md`
+- `docs/PROJECT_BRIEFING.md`
+- `docs/PROJECT_SETUP.md`
+- `docs/RELEASE_NOTES_v0.6.0.md`
+- `docs/TODO.md`

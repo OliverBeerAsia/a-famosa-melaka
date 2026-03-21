@@ -8,6 +8,7 @@ import React, { useEffect, useState } from 'react';
 
 interface LoadingScreenProps {
   locationId: string;
+  mode?: 'arrival' | 'transition';
   onComplete: () => void;
 }
 
@@ -50,7 +51,7 @@ const locationData: Record<string, {
   },
 };
 
-export function LoadingScreen({ locationId, onComplete }: LoadingScreenProps) {
+export function LoadingScreen({ locationId, mode = 'arrival', onComplete }: LoadingScreenProps) {
   const [progress, setProgress] = useState(0);
   const [fadeOut, setFadeOut] = useState(false);
 
@@ -63,7 +64,7 @@ export function LoadingScreen({ locationId, onComplete }: LoadingScreenProps) {
 
   // Simulate loading with atmospheric delay
   useEffect(() => {
-    const duration = 3000; // 3 seconds for atmosphere
+    const duration = mode === 'transition' ? 1400 : 2600;
     const interval = 50;
     const steps = duration / interval;
     let step = 0;
@@ -80,7 +81,7 @@ export function LoadingScreen({ locationId, onComplete }: LoadingScreenProps) {
     }, interval);
 
     return () => clearInterval(timer);
-  }, [onComplete]);
+  }, [mode, onComplete]);
 
   return (
     <div
@@ -101,7 +102,7 @@ export function LoadingScreen({ locationId, onComplete }: LoadingScreenProps) {
         {/* Year badge */}
         <div className="mb-8">
           <span className="inline-block px-4 py-1 border border-gold/40 text-gold/80 text-sm font-mono">
-            ANNO DOMINI 1580
+            {mode === 'transition' ? 'CROSSING MELAKA' : 'ANNO DOMINI 1580'}
           </span>
         </div>
 
@@ -126,7 +127,9 @@ export function LoadingScreen({ locationId, onComplete }: LoadingScreenProps) {
 
         {/* Description */}
         <p className="font-crimson text-parchment-300 text-lg leading-relaxed mb-12">
-          {location.description}
+          {mode === 'transition'
+            ? `${location.description} Keep your bearings. The next district tells its story before anyone speaks.`
+            : location.description}
         </p>
 
         {/* Progress bar */}
@@ -138,7 +141,9 @@ export function LoadingScreen({ locationId, onComplete }: LoadingScreenProps) {
             />
           </div>
           <p className="text-parchment-500 text-xs mt-2 font-mono">
-            Entering {location.name}...
+            {mode === 'transition'
+              ? `Crossing into ${location.name}...`
+              : `Entering ${location.name}...`}
           </p>
         </div>
       </div>

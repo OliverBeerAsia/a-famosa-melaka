@@ -28,6 +28,13 @@ npm run electron        # Run as desktop app
 npm run electron:dev    # Run with dev server (hot reload)
 ```
 
+### Release Gate
+```bash
+npm test -- --runInBand
+npm run build
+npm run validate:art -- --strict
+```
+
 ### Package for Distribution
 ```bash
 npm run package:mac     # Create macOS .dmg and .zip
@@ -106,6 +113,8 @@ Test each location transition:
 - [ ] Fade transition works smoothly
 - [ ] Loading screen shows location image
 - [ ] Location name displays on entry
+- [ ] A Famosa reads as a dressed fortress edge, not a sparse connector
+- [ ] St. Paul's reads as a sacred ascent/descent with enough authored detail
 
 ### 8. Quest: "The Merchant's Seal"
 
@@ -138,6 +147,12 @@ Test each location transition:
 - [ ] Give seal to Fernão Gomes
 - [ ] Quest completes
 - [ ] Reward received
+
+### 8b. First-Play Presentation
+- [ ] Opening HUD stays quiet until meaningful quest context exists
+- [ ] First conversation shows the correct VGA-style portrait
+- [ ] Inventory icons render for collected items
+- [ ] Interaction prompts distinguish talking, taking, lore, and travel clearly
 
 ### 9. Quest: "Pirates on the Horizon" (New)
 - [ ] Go to Waterfront
@@ -242,5 +257,4 @@ When reporting bugs, include:
 
 ---
 
-*Last Updated: March 20, 2026*
-
+*Last Updated: March 21, 2026*

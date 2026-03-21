@@ -61,6 +61,7 @@ export interface SaveState {
 
   // Actions
   initializeSlots: () => Promise<void>;
+  startNewSession: () => void;
   saveGame: (slotIndex: number) => Promise<boolean>;
   loadGame: (slotIndex: number) => Promise<boolean>;
   getSlotMeta: (slotIndex: number) => Promise<SaveSlotMeta>;
@@ -201,7 +202,15 @@ export const useSaveStore = create<SaveState>((set, get) => ({
       slots.push(meta);
     }
 
-    set({ slots, sessionStartTime: Date.now() });
+    set({ slots });
+  },
+
+  startNewSession: () => {
+    set({
+      currentSlotIndex: null,
+      sessionStartTime: Date.now(),
+      totalPlaytime: 0,
+    });
   },
 
   getSlotMeta: async (slotIndex: number): Promise<SaveSlotMeta> => {
@@ -345,6 +354,11 @@ export const useSaveStore = create<SaveState>((set, get) => ({
       gameStore.updatePlayer(saveData.player);
       gameStore.updateTime(saveData.time);
       gameStore.setLocation(saveData.player.location, getLocationName(saveData.player.location));
+      gameStore.queuePendingSpawnPoint({
+        mapKey: saveData.player.location,
+        x: saveData.player.x,
+        y: saveData.player.y,
+      });
       gameStore.closeAllPanels();
 
       // Restore inventory

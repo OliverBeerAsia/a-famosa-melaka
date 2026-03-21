@@ -10,7 +10,7 @@
  */
 
 import Phaser from 'phaser';
-import { GAME_WIDTH, GAME_HEIGHT, ISO_TILE_WIDTH, ISO_TILE_HEIGHT } from '../game';
+import { ISO_TILE_WIDTH, ISO_TILE_HEIGHT } from '../game';
 import type { ResolvedVisualQuality } from '../visualProfile';
 import environmentData from '../../data/environment-objects.json';
 
@@ -85,6 +85,7 @@ export class EnvironmentObjectSystem {
   private placedObjects: PlacedObject[] = [];
   private animatedPlacements: AnimatedPlacement[] = [];
   private particleEmitters: Phaser.GameObjects.Particles.ParticleEmitter[] = [];
+  private managedTweens: Phaser.Tweens.Tween[] = [];
   private currentLocation: string = '';
 
   constructor(scene: Phaser.Scene, quality: ResolvedVisualQuality) {
@@ -204,13 +205,23 @@ export class EnvironmentObjectSystem {
    * Create a flickering torch glow effect.
    */
   private createTorchEffect(x: number, y: number): void {
-    // Create a simple pulsing glow circle
+    if (this.scene.anims.exists('torch-flicker') && this.scene.textures.exists('torch-flame')) {
+      const flame = this.scene.add.sprite(x, y, 'torch-flame');
+      flame.setOrigin(0.5, 1);
+      flame.setScale(3);
+      flame.setDepth(y + 1);
+      flame.play('torch-flicker');
+      this.animatedPlacements.push({
+        sprite: flame,
+        type: 'torch',
+      });
+    }
+
     const glow = this.scene.add.ellipse(x, y, 40, 40, 0xFFAA20, 0.15);
     glow.setDepth(y - 1);
     glow.setBlendMode(Phaser.BlendModes.ADD);
 
-    // Flicker tween
-    this.scene.tweens.add({
+    const tween = this.scene.tweens.add({
       targets: glow,
       alpha: { from: 0.1, to: 0.25 },
       scaleX: { from: 0.9, to: 1.1 },
@@ -220,8 +231,8 @@ export class EnvironmentObjectSystem {
       repeat: -1,
       ease: 'Sine.easeInOut',
     });
+    this.managedTweens.push(tween);
 
-    // Store for cleanup
     this.animatedPlacements.push({
       sprite: glow as unknown as Phaser.GameObjects.Sprite,
       type: 'torch',
@@ -232,17 +243,22 @@ export class EnvironmentObjectSystem {
    * Create a looping seagull path.
    */
   private createSeagullLoop(x: number, y: number): void {
-    // Simple elliptical path using a small white dot
-    const bird = this.scene.add.ellipse(x, y, 6, 3, 0xFFFFFF, 0.8);
+    const bird = this.scene.textures.exists('seagull')
+      ? this.scene.add.sprite(x, y, 'seagull')
+      : this.scene.add.ellipse(x, y, 6, 3, 0xFFFFFF, 0.8);
     bird.setDepth(10000); // Always on top (sky)
+
+    if (bird instanceof Phaser.GameObjects.Sprite && this.scene.anims.exists('seagull-fly')) {
+      bird.play('seagull-fly');
+      bird.setScale(2.5);
+    }
 
     const rx = 120 + Math.random() * 80;
     const ry = 30 + Math.random() * 20;
     const duration = 8000 + Math.random() * 4000;
     const startAngle = Math.random() * Math.PI * 2;
 
-    // Circular flight path
-    this.scene.tweens.addCounter({
+    const tween = this.scene.tweens.addCounter({
       from: 0,
       to: 360,
       duration,
@@ -253,6 +269,7 @@ export class EnvironmentObjectSystem {
         bird.y = y + Math.sin(angle) * ry;
       },
     });
+    this.managedTweens.push(tween);
 
     this.animatedPlacements.push({
       sprite: bird as unknown as Phaser.GameObjects.Sprite,
@@ -264,11 +281,23 @@ export class EnvironmentObjectSystem {
    * Create a flag wave effect.
    */
   private createFlagWave(x: number, y: number): void {
-    // Use a small colored rectangle to represent a waving flag
+    if (this.scene.textures.exists('flag-wave') && this.scene.anims.exists('flag-flutter')) {
+      const flag = this.scene.add.sprite(x, y, 'flag-wave');
+      flag.setOrigin(0.5, 1);
+      flag.setScale(3);
+      flag.setDepth(y - 10);
+      flag.play('flag-flutter');
+      this.animatedPlacements.push({
+        sprite: flag,
+        type: 'flag',
+      });
+      return;
+    }
+
     const flag = this.scene.add.rectangle(x, y, 24, 16, 0xCC2020, 0.9);
     flag.setDepth(y - 10);
 
-    this.scene.tweens.add({
+    const tween = this.scene.tweens.add({
       targets: flag,
       scaleX: { from: 0.85, to: 1.15 },
       angle: { from: -3, to: 3 },
@@ -277,6 +306,7 @@ export class EnvironmentObjectSystem {
       repeat: -1,
       ease: 'Sine.easeInOut',
     });
+    this.managedTweens.push(tween);
 
     this.animatedPlacements.push({
       sprite: flag as unknown as Phaser.GameObjects.Sprite,
@@ -288,7 +318,20 @@ export class EnvironmentObjectSystem {
    * Create a palm tree sway effect.
    */
   private createPalmSway(x: number, y: number): void {
-    // Subtle rotation on palm tree tops
+    if (this.scene.textures.exists('palm-frond') && this.scene.anims.exists('palm-sway')) {
+      const palm = this.scene.add.sprite(x, y, 'palm-frond');
+      palm.setOrigin(0.5, 1);
+      palm.setScale(3);
+      palm.setDepth(y);
+      palm.play('palm-sway');
+
+      this.animatedPlacements.push({
+        sprite: palm,
+        type: 'palm-sway',
+      });
+      return;
+    }
+
     if (!this.scene.textures.exists('palm-tree')) return;
 
     const palm = this.scene.add.image(x, y, 'palm-tree');
@@ -296,7 +339,7 @@ export class EnvironmentObjectSystem {
     palm.setScale(3);
     palm.setDepth(y);
 
-    this.scene.tweens.add({
+    const tween = this.scene.tweens.add({
       targets: palm,
       angle: { from: -2, to: 2 },
       duration: 2000 + Math.random() * 1000,
@@ -304,6 +347,7 @@ export class EnvironmentObjectSystem {
       repeat: -1,
       ease: 'Sine.easeInOut',
     });
+    this.managedTweens.push(tween);
 
     this.animatedPlacements.push({
       sprite: palm as unknown as Phaser.GameObjects.Sprite,
@@ -315,6 +359,20 @@ export class EnvironmentObjectSystem {
    * Create awning flutter effect.
    */
   private createAwningFlutter(x: number, y: number): void {
+    if (this.scene.textures.exists('awning-flutter') && this.scene.anims.exists('awning-flutter-anim')) {
+      const awning = this.scene.add.sprite(x, y, 'awning-flutter');
+      awning.setOrigin(0.5, 0);
+      awning.setScale(3);
+      awning.setDepth(y - 20);
+      awning.play('awning-flutter-anim');
+
+      this.animatedPlacements.push({
+        sprite: awning,
+        type: 'awning-flutter',
+      });
+      return;
+    }
+
     if (!this.scene.textures.exists('awning')) return;
 
     const awning = this.scene.add.image(x, y, 'awning');
@@ -322,7 +380,7 @@ export class EnvironmentObjectSystem {
     awning.setScale(3);
     awning.setDepth(y - 20);
 
-    this.scene.tweens.add({
+    const tween = this.scene.tweens.add({
       targets: awning,
       scaleY: { from: 2.9, to: 3.1 },
       duration: 800 + Math.random() * 400,
@@ -330,6 +388,7 @@ export class EnvironmentObjectSystem {
       repeat: -1,
       ease: 'Sine.easeInOut',
     });
+    this.managedTweens.push(tween);
 
     this.animatedPlacements.push({
       sprite: awning as unknown as Phaser.GameObjects.Sprite,
@@ -463,7 +522,7 @@ export class EnvironmentObjectSystem {
     }
     this.particleEmitters = [];
 
-    // Clean up tweens targeting our objects
-    this.scene.tweens.killAll();
+    this.managedTweens.forEach((tween) => tween.remove());
+    this.managedTweens = [];
   }
 }

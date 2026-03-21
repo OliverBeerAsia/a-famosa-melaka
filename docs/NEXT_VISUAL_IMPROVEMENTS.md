@@ -1,146 +1,94 @@
 # Next Visual Improvements
 
-**Date**: January 12, 2026
-**Focus**: Building on Monkey Island-style backgrounds
+**Date**: March 21, 2026  
+**Standard**: Ultima VIII minimum, historically grounded 1580 Melaka, gameplay-first
 
----
+## Current Direction
 
-## Completed This Session
+The live isometric runtime is the shipping source of truth. Scene backdrops, portraits, and concept art are support assets, not substitutes for weak gameplay maps.
 
-- [x] Monkey Island-style scene background generator with Bayer dithering
-- [x] 6 detailed scene backgrounds (960x540)
-- [x] Removed 7MB unused ai-tiles folder
-- [x] Fixed BootScene.js broken map references
-- [x] Updated documentation
+The immediate visual bar is:
 
----
+- Dense authored traversal, not empty transition corridors
+- Strong silhouette readability for the player and named cast
+- Historically specific Melaka atmosphere instead of generic tropical fantasy
+- Believable commercial, domestic, sacred, and maritime spaces
+- UI and dialogue presentation that matches the quality of the live world
 
-## Priority 1: Scene Background Enhancements
+## Active Baseline
 
-The current backgrounds are a strong foundation. Next improvements:
+These standards are now expected in the playable game:
 
-### 1.1 Add Animated Elements
-- **Water animations**: Harbor waves, river ripples (3-4 frame overlays)
-- **Fire/torch glow**: Flickering light on fortress walls
-- **Palm frond sway**: Subtle movement in kampung scene
-- **Flag animation**: Portuguese flag on fortress tower
+- `Rua Direita` is the reference hero slice
+- `Waterfront` and `Kampung` are being brought to the same live layering contract
+- Named dialogue NPCs should have unique portrait assets, not aliases
+- Bio portraits should read as late-80s / early-90s VGA pixel portraits, not painted key art
+- Save/load, interaction targeting, and movement feel are part of visual quality because weak control feel cheapens the art
 
-### 1.2 Time-of-Day Variants
-Generate alternate versions for day/night cycle:
-- `scene-*-dawn.png` - Pink/orange sky, long shadows
-- `scene-*-day.png` - Current bright versions
-- `scene-*-dusk.png` - Golden hour, warm light
-- `scene-*-night.png` - Blue tones, lit windows, torches
+## Medium-Term Plan
 
-### 1.3 Atmosphere Details
-- Add birds in sky (small silhouettes)
-- Ship movement in harbor background
-- Smoke from cooking fires in kampung
-- Church bell visible in St. Paul's tower
+### Phase 1: Hero Slice Parity
 
----
+- Keep `Rua Direita`, `Waterfront`, and `Kampung` visually dense across the full route, especially toward exits
+- Enforce `Ground`, `Walls`, `Objects`, `Props`, `Overhang`, `Canopy`, and `Highlights` as the standard live map stack
+- Keep environment clusters historically grounded:
+  - Portuguese mercantile frontage in `Rua Direita`
+  - Maritime trade complexity in `Waterfront`
+  - Domestic Malay village life in `Kampung`
+- Finish unique portrait coverage, keep the full named cast readable in dialogue, and maintain a consistent VGA portrait family
 
-## Priority 2: Character Sprite Overhaul
+### Phase 2: Parity for A Famosa and St. Paul’s
 
-Current character sprites are basic placeholders (~700 bytes each). They need:
+- `A Famosa`:
+  - stronger fortress massing
+  - artillery and guard staging
+  - authority markers and colonial wear
+- `St. Paul’s`:
+  - processional ascent
+  - graveyard rhythm and sacred objects
+  - hilltop vista framing and sanctuary tone
+- Both maps must pass the same density and authored-spread checks as the hero slices
 
-### 2.1 Cultural Accuracy Per Art Bible
-| Character | Missing Details |
-|-----------|----------------|
-| Capitao Rodrigues | Morion helmet, breastplate, pike |
-| Fernao Gomes | Ruff collar, doublet, merchant cap |
-| Padre Tomas | Tonsured hair, crucifix detail |
-| Aminah | Tudung headscarf, batik patterns |
-| Chen Wei | Ming topknot, mandarin collar |
-| Rashid | Keffiyeh detail, jambiya dagger |
+### Phase 3: Character Art Upgrade
 
-### 2.2 Animation Improvements
-- Current: 4-frame walk cycle only
-- Need: Idle breathing (2-3 frames)
-- Need: Talking animation (mouth movement)
-- Need: Interaction poses (reaching, gesturing)
+- Raise all named character sheets to a tighter cultural and silhouette bar
+- Keep portraits and character sheets adjacent in sensibility: crisp, limited-palette, UI-legible
+- Improve idle and talk frame readability before adding more exotic animation work
+- Keep costume logic historically specific:
+  - Portuguese merchant, soldier, and clergy distinctions
+  - Malay domestic and market clothing with real material cues
+  - Chinese merchant dress with stronger social-class signals
+  - Arab sailor silhouettes that read instantly at gameplay scale
+- Do not mix pixel densities or painting styles inside the live runtime
 
-### 2.3 32-Color Palette Compliance
-Regenerate all sprites using exact Art Bible palette colors.
+### Phase 4: Believability Pass
 
----
+- Add stronger historical reference checks per location before visual sign-off
+- Tune object placement to imply actual use:
+  - where goods are weighed
+  - where prayers happen
+  - where meals are cooked
+  - where cargo bottlenecks form
+- Reduce “set dressing for its own sake” and favor spaces that feel inhabited
 
-## Priority 3: Missing UI Assets
+### Phase 5: Gameplay Feel and Presentation
 
-No UI sprites currently exist. Need:
+- Keep movement response crisp and legible
+- Improve NPC facing, talk staging, and topic flow so conversation feels authored rather than mechanical
+- Continue integrating portrait, inventory, and dialogue art into the live game
+- Validate dawn/day/dusk/night readability on every upgraded map
 
-### 3.1 Dialogue System
-- `dialogue-box.png` - Parchment texture with wood frame (256x64)
-- `portrait-frame.png` - Gold/brass border for character portraits
-- `dialogue-arrow.png` - Continue indicator
+## Acceptance Criteria
 
-### 3.2 Inventory System
-- `inventory-bg.png` - Leather satchel aesthetic
-- `inventory-slot.png` - Item slot (20x20)
-- `coin-display.png` - Portuguese cruzado icon
+- No upgraded map should have a dead final third near a transition
+- No named dialogue NPC should ship with an alias portrait
+- Every upgraded location should communicate its identity in a single screenshot
+- Historical specificity should be visible without reading the codex text
+- Visual integrity tests should fail when layer richness, portrait coverage, or authored spread regress
 
-### 3.3 Journal System
-- `journal-bg.png` - Aged paper with hand-drawn aesthetic
-- `quest-marker.png` - Active quest indicator
-- `map-overlay.png` - Period-appropriate map style
+## Guardrails
 
----
-
-## Priority 4: Atmospheric Particles
-
-Particle effects to enhance immersion:
-
-### 4.1 Environmental
-- `dust-motes.png` - Golden floating particles for afternoon scenes
-- `rain-drops.png` - Monsoon season weather
-- `mist-wisps.png` - Morning harbor mist
-- `fireflies.png` - Night atmosphere in kampung
-
-### 4.2 Interactive
-- `smoke-puff.png` - Cooking fires, torches
-- `water-splash.png` - Harbor interactions
-- `sparkle.png` - Quest item highlight
-
----
-
-## Priority 5: Tile Consistency
-
-### 5.1 Verify Palette Compliance
-Audit all 29 tile sprites against Art Bible 32-color palette.
-
-### 5.2 Add Variation
-- Cobblestone: 3 variants for visual interest
-- Grass: Edge transition tiles
-- Water: Animated 3-frame version
-
----
-
-## Technical Notes
-
-### Background Generator Capabilities
-The `generate-scene-backgrounds.js` tool can be extended with:
-- Additional helper functions for new element types
-- Time-of-day color scheme presets
-- Overlay layer generation for animations
-
-### Sprite Generation Approach
-Consider creating `generate-character-sprites-v2.js` with:
-- Art Bible palette integration
-- Cultural detail layers
-- Animation frame generation
-
----
-
-## Effort Estimates
-
-| Task | Complexity | Files |
-|------|------------|-------|
-| Time-of-day backgrounds | Medium | 20 new PNGs |
-| Character sprite overhaul | High | 7 sprite sheets |
-| UI asset creation | Medium | 10-15 sprites |
-| Particle effects | Low | 8-10 sprites |
-| Tile palette audit | Low | 29 tiles |
-
----
-
-*Next session: Start with time-of-day background variants to maximize visual impact.*
+- Do not let cinematic PNGs hide weak gameplay spaces
+- Do not accept “pretty but generic” as success
+- Do not expand scope without also expanding tests and validation
+- Do not treat movement, interaction, and dialogue feel as separate from graphics quality

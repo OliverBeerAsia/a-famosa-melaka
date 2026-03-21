@@ -25,6 +25,27 @@ const itemColors: Record<string, string> = {
   'rosary': 'bg-gold-dark',
 };
 
+function ItemIcon({ item }: { item: InventoryItem }) {
+  const [hasError, setHasError] = useState(false);
+
+  if (hasError) {
+    return (
+      <div className={`ui-item-fallback ${itemColors[item.id] || 'bg-sepia'}`}>
+        {item.name.charAt(0).toUpperCase()}
+      </div>
+    );
+  }
+
+  return (
+    <img
+      src={`/sprites/ui/items/${item.id}.png`}
+      alt={item.name}
+      className="ui-item-icon"
+      onError={() => setHasError(true)}
+    />
+  );
+}
+
 export function InventoryPanel() {
   const { items, money, selectedSlot, setSelectedSlot, examineItem } = useInventoryStore();
   const setInventoryOpen = useGameStore((state) => state.setInventoryOpen);
@@ -102,22 +123,18 @@ export function InventoryPanel() {
   for (let i = 0; i < TOTAL_SLOTS; i++) {
     const item = items[i] as InventoryItem | undefined;
     const isSelected = i === selectedSlot;
-    const color = item ? itemColors[item.id] || 'bg-sepia' : '';
 
     slots.push(
       <button
         key={i}
         onClick={() => handleSelectSlot(i)}
-        className={`
-          inv-slot transition-all
-          ${isSelected ? 'inv-slot-selected' : ''}
-          ${item ? 'cursor-pointer hover:brightness-110' : 'cursor-default'}
-        `}
+        className={`inv-slot ui-inventory-slot-art transition-all ${isSelected ? 'inv-slot-selected' : ''} ${item ? 'cursor-pointer hover:brightness-110' : 'cursor-default'}`}
       >
         {item && (
-          <div className={`w-9 h-9 rounded ${color}`}>
+          <div className="relative w-9 h-9">
+            <ItemIcon item={item} />
             {item.quantity && item.quantity > 1 && (
-              <span className="absolute bottom-0 right-0 text-xs text-white bg-black/60 px-1 rounded">
+              <span className="ui-quantity-badge">
                 {item.quantity}
               </span>
             )}
@@ -135,54 +152,56 @@ export function InventoryPanel() {
         onClick={() => setInventoryOpen(false)}
       />
 
-      {/* Panel */}
-      <div className="relative">
-        {/* Shadow */}
-        <div className="absolute inset-0 translate-x-1 translate-y-1 bg-black/50 rounded" />
+      <div className="relative w-[min(860px,95vw)]">
+        <div className="absolute inset-0 translate-x-2 translate-y-2 bg-black/45 rounded-[20px] blur-[1px]" />
 
-        {/* Main container */}
-        <div className="relative bg-leather-200 border-2 border-gold rounded shadow-parchment p-3">
-          <div className="bg-parchment-200 p-4">
-            {/* Title */}
-            <h2 className="font-cinzel text-crimson text-lg font-bold text-center mb-4">
-              MERCHANT'S SATCHEL
-            </h2>
+        <div className="relative ui-inventory-shell p-3 md:p-4">
+          <div className="ui-parchment-panel p-4 md:p-5">
+            <div className="flex items-center justify-between gap-4 mb-4">
+              <div>
+                <p className="ui-caption mb-1">Satchel inventory</p>
+                <h2 className="font-cinzel text-crimson text-2xl font-bold tracking-wide">
+                  Merchant&apos;s Satchel
+                </h2>
+              </div>
 
-            <div className="flex gap-4">
-              {/* Item grid */}
+              <div className="flex items-center gap-3 ui-money-pill">
+                <img src="/sprites/ui/coin.png" alt="" className="ui-money-coin" />
+                <div className="text-right">
+                  <div className="font-cinzel text-gold text-lg leading-none">
+                    {money}
+                  </div>
+                  <div className="text-gold-dark text-[11px] uppercase tracking-[0.16em]">
+                    cruzados
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-4 lg:flex-row">
               <div
-                className="grid gap-1.5"
+                className="grid gap-2 flex-1"
                 style={{
-                  gridTemplateColumns: `repeat(${COLS}, 1fr)`,
-                  gridTemplateRows: `repeat(${ROWS}, 1fr)`,
+                  gridTemplateColumns: `repeat(${COLS}, minmax(0, 1fr))`,
+                  gridTemplateRows: `repeat(${ROWS}, minmax(0, 1fr))`,
                 }}
               >
                 {slots}
               </div>
 
-              {/* Money pouch */}
-              <div className="flex flex-col items-center">
-                <div className="w-16 h-12 bg-leather-50 rounded-full flex items-center justify-center border-2 border-leather-200">
-                  <span className="font-cinzel text-gold font-bold">
-                    {money}
+              <div className="lg:w-[280px]">
+                <div className="ui-description-panel">
+                  <p className="text-leather-200 font-crimson text-sm leading-relaxed min-h-[84px]">
+                    {description}
+                  </p>
+                </div>
+
+                <div className="mt-4 text-center">
+                  <span className="text-sepia text-xs font-mono">
+                    [I] close • [←→↑↓] select • [E] examine
                   </span>
                 </div>
-                <span className="text-gold-dark text-xs mt-1">cruzados</span>
               </div>
-            </div>
-
-            {/* Description */}
-            <div className="mt-4 p-2 bg-parchment-400/50 border border-sepia-light/30 rounded">
-              <p className="text-leather-200 font-crimson text-sm min-h-[40px]">
-                {description}
-              </p>
-            </div>
-
-            {/* Instructions */}
-            <div className="text-center mt-3">
-              <span className="text-sepia text-xs font-mono">
-                [I] close • [←→↑↓] select • [E] examine
-              </span>
             </div>
           </div>
         </div>

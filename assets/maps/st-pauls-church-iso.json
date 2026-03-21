@@ -2731,10 +2731,84 @@
       "visible": true,
       "x": 0,
       "y": 0
+    },
+    {
+      "draworder": "topdown",
+      "id": 4,
+      "name": "Props",
+      "objects": [
+        { "id": 27, "name": "stone-cross", "rotation": 0, "type": "decoration", "visible": true, "width": 16, "height": 32, "x": 224, "y": 88 },
+        { "id": 28, "name": "altar", "rotation": 0, "type": "decoration", "visible": true, "width": 16, "height": 16, "x": 256, "y": 152 },
+        { "id": 29, "name": "bench", "rotation": 0, "type": "decoration", "visible": true, "width": 16, "height": 16, "x": 176, "y": 224 },
+        { "id": 30, "name": "gravestone", "rotation": 0, "type": "decoration", "visible": true, "width": 16, "height": 16, "x": 352, "y": 592 },
+        { "id": 31, "name": "gravestone", "rotation": 0, "type": "decoration", "visible": true, "width": 16, "height": 16, "x": 400, "y": 616 },
+        { "id": 32, "name": "flowers", "rotation": 0, "type": "decoration", "visible": true, "width": 16, "height": 16, "x": 368, "y": 608 }
+      ],
+      "opacity": 1,
+      "type": "objectgroup",
+      "visible": true,
+      "x": 0,
+      "y": 0
+    },
+    {
+      "draworder": "topdown",
+      "id": 5,
+      "name": "Overhang",
+      "objects": [
+        { "id": 33, "name": "bell", "rotation": 0, "type": "decoration", "visible": true, "width": 16, "height": 16, "x": 256, "y": 88 },
+        { "id": 34, "name": "arched-window", "rotation": 0, "type": "decoration", "visible": true, "width": 16, "height": 32, "x": 200, "y": 160 },
+        { "id": 35, "name": "arched-window", "rotation": 0, "type": "decoration", "visible": true, "width": 16, "height": 32, "x": 288, "y": 160 },
+        { "id": 36, "name": "hanging-cloth", "rotation": 0, "type": "decoration", "visible": true, "width": 16, "height": 16, "x": 128, "y": 128 },
+        { "id": 37, "name": "lantern", "rotation": 0, "type": "decoration", "visible": true, "width": 8, "height": 16, "x": 368, "y": 136 },
+        { "id": 38, "name": "lantern", "rotation": 0, "type": "decoration", "visible": true, "width": 8, "height": 16, "x": 512, "y": 192 }
+      ],
+      "opacity": 1,
+      "type": "objectgroup",
+      "visible": true,
+      "x": 0,
+      "y": 0
+    },
+    {
+      "draworder": "topdown",
+      "id": 6,
+      "name": "Canopy",
+      "objects": [
+        { "id": 39, "name": "palm-tree", "rotation": 0, "type": "decoration", "visible": true, "width": 16, "height": 32, "x": 40, "y": 96 },
+        { "id": 40, "name": "palm-tree", "rotation": 0, "type": "decoration", "visible": true, "width": 16, "height": 32, "x": 592, "y": 96 },
+        { "id": 41, "name": "palm-tree", "rotation": 0, "type": "decoration", "visible": true, "width": 16, "height": 32, "x": 768, "y": 128 },
+        { "id": 42, "name": "palm-tree", "rotation": 0, "type": "decoration", "visible": true, "width": 16, "height": 32, "x": 944, "y": 160 },
+        { "id": 43, "name": "bush", "rotation": 0, "type": "decoration", "visible": true, "width": 16, "height": 16, "x": 176, "y": 384 },
+        { "id": 44, "name": "bush", "rotation": 0, "type": "decoration", "visible": true, "width": 16, "height": 16, "x": 448, "y": 384 },
+        { "id": 45, "name": "flowers", "rotation": 0, "type": "decoration", "visible": true, "width": 16, "height": 16, "x": 576, "y": 448 }
+      ],
+      "opacity": 1,
+      "type": "objectgroup",
+      "visible": true,
+      "x": 0,
+      "y": 0
+    },
+    {
+      "draworder": "topdown",
+      "id": 7,
+      "name": "Highlights",
+      "objects": [
+        { "id": 46, "name": "prayer-mat", "rotation": 0, "type": "decoration", "visible": true, "width": 16, "height": 16, "x": 224, "y": 208 },
+        { "id": 47, "name": "candelabra", "rotation": 0, "type": "decoration", "visible": true, "width": 16, "height": 16, "x": 248, "y": 120 },
+        { "id": 48, "name": "iron-fence", "rotation": 0, "type": "decoration", "visible": true, "width": 16, "height": 16, "x": 320, "y": 592 },
+        { "id": 49, "name": "iron-fence", "rotation": 0, "type": "decoration", "visible": true, "width": 16, "height": 16, "x": 336, "y": 592 },
+        { "id": 50, "name": "iron-fence", "rotation": 0, "type": "decoration", "visible": true, "width": 16, "height": 16, "x": 352, "y": 592 },
+        { "id": 51, "name": "stone-cross", "rotation": 0, "type": "decoration", "visible": true, "width": 16, "height": 32, "x": 1032, "y": 552 },
+        { "id": 52, "name": "lantern", "rotation": 0, "type": "decoration", "visible": true, "width": 8, "height": 16, "x": 1152, "y": 648 }
+      ],
+      "opacity": 1,
+      "type": "objectgroup",
+      "visible": true,
+      "x": 0,
+      "y": 0
     }
   ],
-  "nextlayerid": 4,
-  "nextobjectid": 22,
+  "nextlayerid": 8,
+  "nextobjectid": 53,
   "orientation": "isometric",
   "renderorder": "right-down",
   "tiledversion": "1.10.2",

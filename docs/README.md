@@ -1,81 +1,45 @@
 # Documentation Index
 
-Welcome to the A Famosa: Streets of Golden Melaka documentation.
+This folder tracks the live state of the project, not the older prototype era. If a document disagrees with the runtime, the runtime wins and the document should be corrected.
 
-## Core Documents
+## Start Here
 
-### 📋 [PROJECT_BRIEFING.md](PROJECT_BRIEFING.md)
-**The complete vision document** - Read this first!
+- [PROJECT_BRIEFING.md](PROJECT_BRIEFING.md): product vision, historical frame, and quality bar
+- [PROJECT_SETUP.md](PROJECT_SETUP.md): runtime architecture, asset contract, and release workflow
+- [RELEASE_NOTES_v0.6.0.md](RELEASE_NOTES_v0.6.0.md): what shipped in the current release
+- [LESSONS_LEARNED.md](LESSONS_LEARNED.md): practical takeaways from the recent polish passes
+- [TODO.md](TODO.md): medium-term backlog
 
-Contains:
-- Vision statement and historical setting
-- Complete art direction (visual style, color palette, atmosphere)
-- Audio direction (music style, sound effects)
-- Gameplay systems and mechanics
-- Demo quest outline and NPC details
-- Milestone breakdown and development principles
+## Root Docs
 
-### 🛠️ [PROJECT_SETUP.md](PROJECT_SETUP.md)
-**Technical setup and implementation guide**
+- [`README.md`](../README.md): overview and quick start
+- [`PROJECT_STATUS.md`](../PROJECT_STATUS.md): current status snapshot
+- [`CHANGELOG.md`](../CHANGELOG.md): release history
+- [`QUICK_START.md`](../QUICK_START.md): boot, verify, and package quickly
+- [`TESTING.md`](../TESTING.md): manual and automated test guidance
 
-Contains:
-- What has been created (files, systems, assets)
-- Technical implementation details
-- How to use the development tools
-- Next steps and priorities
-- Testing checklist
+## Specialist Docs
 
-## Quick Reference Documents
+- [art-bible/ART_BIBLE.md](art-bible/ART_BIBLE.md)
+- [art-bible/ART_PIPELINE.md](art-bible/ART_PIPELINE.md)
+- [NEXT_VISUAL_IMPROVEMENTS.md](NEXT_VISUAL_IMPROVEMENTS.md)
+- [AUDIO_DIRECTION.md](AUDIO_DIRECTION.md)
+- [AUDIO_REQUIREMENTS.md](AUDIO_REQUIREMENTS.md)
+- [ATMOSPHERIC_SYSTEMS.md](ATMOSPHERIC_SYSTEMS.md)
 
-### 📖 Root-Level Docs
+## Current Documentation Standard
 
-Located in the project root (`/`):
+- The live game is a Phaser isometric runtime, not a scene-backdrop-first experience.
+- Historical 1580 Melaka specificity is a hard requirement.
+- The minimum bar is Ultima VIII density and mood, not generic pixel-art nostalgia.
+- Release docs should always state what was verified and what was not.
 
-- **CLAUDE.md** - Guidance for Claude Code instances working on this project
-- **README.md** - Project overview, quick start, and commands
-- **QUICK_START.md** - How to run the game and use dev tools
-- **PROJECT_STATUS.md** - Current implementation status and what's working
+## Maintenance Rule
 
-## Additional Resources
+Update these docs whenever one of the following changes:
 
-### 📁 Subdirectories
-
-- **design/** - Design documents and specifications (to be added)
-- **lore/** - Historical research and world-building notes (to be added)
-- **art-bible/** - Visual style guide, executable production pipeline, and audit specs
-
-## Navigation Guide
-
-**New to the project?** Read in this order:
-1. Root `README.md` - Get oriented
-2. `docs/PROJECT_BRIEFING.md` - Understand the vision
-3. `QUICK_START.md` - Start developing
-
-**Resuming development?** Check:
-1. `PROJECT_STATUS.md` - See current progress
-2. `docs/PROJECT_SETUP.md` - Review implementation details
-3. `CLAUDE.md` - Refresh on development principles
-
-**Need specific info?**
-- **How to run**: `QUICK_START.md`
-- **What works**: `PROJECT_STATUS.md`
-- **The vision**: `docs/PROJECT_BRIEFING.md`
-- **How it's built**: `docs/PROJECT_SETUP.md`
-- **Dev guidelines**: `CLAUDE.md`
-
----
-
-## Document Status
-
-| Document | Status | Last Updated |
-|----------|--------|--------------|
-| PROJECT_BRIEFING.md | ✅ Complete | Dec 2025 |
-| PROJECT_SETUP.md | ✅ Complete | Dec 2025 |
-| CLAUDE.md | ✅ Complete | Dec 2025 |
-| README.md | ✅ Complete | Dec 2025 |
-| QUICK_START.md | ✅ Complete | Dec 2025 |
-| PROJECT_STATUS.md | ✅ Complete | Dec 2025 |
-
----
-
-*"A city balanced on the blade of empire."*
+- release version
+- shipping art/runtime contract
+- map layering standards
+- named cast or portrait expectations
+- packaging or release workflow

@@ -8,6 +8,7 @@
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
 import type { VisualQualityMode, ResolvedVisualQuality } from '../phaser/visualProfile';
+import { getLocationName } from '../data/locationNames';
 
 // Types
 export interface TimeState {
@@ -23,6 +24,38 @@ export interface PlayerState {
   location: string;
   facing: 'up' | 'down' | 'left' | 'right';
 }
+
+export interface PendingSpawnPoint {
+  mapKey: string;
+  x: number;
+  y: number;
+}
+
+export interface OnboardingState {
+  hasStartedDialogue: boolean;
+  hasOpenedInventory: boolean;
+  hasOpenedJournal: boolean;
+}
+
+export const DEFAULT_TIME_STATE: TimeState = {
+  hour: 10,
+  minute: 0,
+  day: 1,
+  timeOfDay: 'day',
+};
+
+export const DEFAULT_PLAYER_STATE: PlayerState = {
+  x: 480,
+  y: 270,
+  location: 'a-famosa-gate',
+  facing: 'down',
+};
+
+export const DEFAULT_ONBOARDING_STATE: OnboardingState = {
+  hasStartedDialogue: false,
+  hasOpenedInventory: false,
+  hasOpenedJournal: false,
+};
 
 export interface GameState {
   // UI visibility
@@ -41,6 +74,8 @@ export interface GameState {
   // Current location
   currentLocation: string;
   locationName: string;
+  pendingSpawnPoint: PendingSpawnPoint | null;
+  onboarding: OnboardingState;
 
   // Audio volumes
   musicVolume: number;
@@ -67,6 +102,9 @@ export interface GameState {
   updateTime: (time: Partial<TimeState>) => void;
   updatePlayer: (player: Partial<PlayerState>) => void;
   setLocation: (locationId: string, locationName: string) => void;
+  queuePendingSpawnPoint: (spawnPoint: PendingSpawnPoint) => void;
+  clearPendingSpawnPoint: () => void;
+  resetWorldState: (locationId?: string) => void;
 
   setMusicVolume: (volume: number) => void;
   setSfxVolume: (volume: number) => void;
@@ -88,24 +126,16 @@ export const useGameStore = create<GameState>()(
     isPaused: false,
 
     // Initial time state
-    time: {
-      hour: 10,
-      minute: 0,
-      day: 1,
-      timeOfDay: 'day',
-    },
+    time: { ...DEFAULT_TIME_STATE },
 
     // Initial player state
-    player: {
-      x: 480,
-      y: 270,
-      location: 'a-famosa-gate',
-      facing: 'down',
-    },
+    player: { ...DEFAULT_PLAYER_STATE },
 
     // Initial location
     currentLocation: 'a-famosa-gate',
     locationName: 'A Famosa Gate',
+    pendingSpawnPoint: null,
+    onboarding: { ...DEFAULT_ONBOARDING_STATE },
 
     // Audio volumes (0-1)
     musicVolume: 0.4,
@@ -122,7 +152,16 @@ export const useGameStore = create<GameState>()(
     setDialogueOpen: (open) => {
       if (open) {
         // Close other panels when opening dialogue
-        set({ isDialogueOpen: true, isInventoryOpen: false, isJournalOpen: false, isMessageOpen: false });
+        set((state) => ({
+          isDialogueOpen: true,
+          isInventoryOpen: false,
+          isJournalOpen: false,
+          isMessageOpen: false,
+          onboarding: {
+            ...state.onboarding,
+            hasStartedDialogue: true,
+          },
+        }));
       } else {
         set({ isDialogueOpen: false });
       }
@@ -130,7 +169,16 @@ export const useGameStore = create<GameState>()(
 
     setInventoryOpen: (open) => {
       if (open) {
-        set({ isInventoryOpen: true, isDialogueOpen: false, isJournalOpen: false, isMessageOpen: false });
+        set((state) => ({
+          isInventoryOpen: true,
+          isDialogueOpen: false,
+          isJournalOpen: false,
+          isMessageOpen: false,
+          onboarding: {
+            ...state.onboarding,
+            hasOpenedInventory: true,
+          },
+        }));
       } else {
         set({ isInventoryOpen: false });
       }
@@ -138,7 +186,16 @@ export const useGameStore = create<GameState>()(
 
     setJournalOpen: (open) => {
       if (open) {
-        set({ isJournalOpen: true, isDialogueOpen: false, isInventoryOpen: false, isMessageOpen: false });
+        set((state) => ({
+          isJournalOpen: true,
+          isDialogueOpen: false,
+          isInventoryOpen: false,
+          isMessageOpen: false,
+          onboarding: {
+            ...state.onboarding,
+            hasOpenedJournal: true,
+          },
+        }));
       } else {
         set({ isJournalOpen: false });
       }
@@ -200,6 +257,26 @@ export const useGameStore = create<GameState>()(
         location: locationId,
       },
     })),
+
+    queuePendingSpawnPoint: (spawnPoint) => set({ pendingSpawnPoint: spawnPoint }),
+    clearPendingSpawnPoint: () => set({ pendingSpawnPoint: null }),
+    resetWorldState: (locationId = 'rua-direita') => set({
+      isDialogueOpen: false,
+      isInventoryOpen: false,
+      isJournalOpen: false,
+      isMessageOpen: false,
+      isPaused: false,
+      isGameReady: false,
+      time: { ...DEFAULT_TIME_STATE },
+      currentLocation: locationId,
+      locationName: getLocationName(locationId),
+      player: {
+        ...DEFAULT_PLAYER_STATE,
+        location: locationId,
+      },
+      pendingSpawnPoint: null,
+      onboarding: { ...DEFAULT_ONBOARDING_STATE },
+    }),
 
     // Audio controls
     setMusicVolume: (volume) => set({ musicVolume: Math.max(0, Math.min(1, volume)) }),

@@ -76,6 +76,14 @@ export class WeatherSystem {
     this.particlesEnabled = quality !== 'low';
   }
 
+  private getTraversalBounds() {
+    const bounds = this.scene.physics.world.bounds;
+    return {
+      width: bounds.width > 0 ? bounds.width : GAME_WIDTH,
+      height: bounds.height > 0 ? bounds.height : GAME_HEIGHT,
+    };
+  }
+
   /** Create particle textures and emitters, start the weather cycle. */
   initialize(): void {
     this.createParticleTextures();
@@ -173,8 +181,9 @@ export class WeatherSystem {
   // ---------------------------------------------------------------------------
 
   private createRainSystem(): void {
+    const bounds = this.getTraversalBounds();
     this.rainEmitter = this.scene.add.particles(0, 0, 'rain-drop', {
-      x: { min: 0, max: GAME_WIDTH },
+      x: { min: 0, max: bounds.width },
       y: -10,
       quantity: 0,
       frequency: 20,
@@ -217,6 +226,7 @@ export class WeatherSystem {
 
   private startRainSplashes(): void {
     if (!this.particlesEnabled) return;
+    const bounds = this.getTraversalBounds();
 
     if (this.splashEmitter) {
       this.splashEmitter.destroy();
@@ -224,8 +234,8 @@ export class WeatherSystem {
     }
 
     this.splashEmitter = this.scene.add.particles(0, 0, 'rain-splash', {
-      x: { min: 0, max: GAME_WIDTH },
-      y: { min: GAME_HEIGHT - 100, max: GAME_HEIGHT },
+      x: { min: 0, max: bounds.width },
+      y: { min: bounds.height - 100, max: bounds.height },
       quantity: Math.floor(this.weatherIntensity * 3),
       frequency: 100,
       speedY: { min: -30, max: -10 },
@@ -263,9 +273,10 @@ export class WeatherSystem {
   // ---------------------------------------------------------------------------
 
   private createMistSystem(): void {
+    const bounds = this.getTraversalBounds();
     this.mistEmitter = this.scene.add.particles(0, 0, 'mist-particle', {
-      x: { min: 0, max: GAME_WIDTH },
-      y: { min: 0, max: GAME_HEIGHT },
+      x: { min: 0, max: bounds.width },
+      y: { min: 0, max: bounds.height },
       quantity: 0,
       frequency: 500,
       speedX: { min: 5, max: 20 },
@@ -324,9 +335,10 @@ export class WeatherSystem {
   // ---------------------------------------------------------------------------
 
   private createHumidityParticles(): void {
+    const bounds = this.getTraversalBounds();
     this.humidityEmitter = this.scene.add.particles(0, 0, 'dust-mote', {
-      x: { min: 0, max: GAME_WIDTH },
-      y: { min: 0, max: GAME_HEIGHT },
+      x: { min: 0, max: bounds.width },
+      y: { min: 0, max: bounds.height },
       quantity: 1,
       frequency: 200,
       speedX: { min: -10, max: 10 },

@@ -2,6 +2,37 @@
 
 All notable changes to A Famosa: Streets of Golden Melaka.
 
+## [0.6.0] - 2026-03-21
+
+### World Polish and Presentation Pass
+
+This release pushes the live game beyond the original `Rua Direita` hero slice and turns the current build into a much more coherent playable showcase. The major wins are richer world parity, complete item-art coverage, cleaner onboarding, and stronger documentation around the real shipping bar.
+
+### Added
+- Richer live layer stacks for `A Famosa Gate` and `St. Paul's Church` with `Props`, `Overhang`, `Canopy`, and `Highlights`
+- Additional environment clusters and historical objects for those locations so their routes extend with clearer visual intent
+- Complete `assets/sprites/ui/items/` coverage for every player-facing inventory item
+- Loading of item icon textures into Phaser so world pickups can use item-backed art where available
+- Contextual onboarding flags in `gameStore.ts` for dialogue, inventory, and journal discovery
+- New release documentation:
+  - `docs/RELEASE_NOTES_v0.6.0.md`
+  - `docs/LESSONS_LEARNED.md`
+  - `docs/TODO.md`
+
+### Changed
+- `GameScene.ts` now resolves world-item presentation dynamically from actual item icons before falling back to generic world sprites
+- Interaction prompts now better distinguish talking, taking items, reading lore, and traveling
+- The HUD now stays quieter before the player has actually entered the first quest loop
+- Arrival and travel loading screens are now staged differently
+- Previously untagged presentation and cinematic-atmosphere improvements are now rolled into the shipping release instead of lingering only as loose release notes
+- Project docs were rewritten to match the live TypeScript/Phaser runtime and the current Ultima VIII-first target bar
+- Version metadata moved to `0.6.0`
+
+### Verification
+- `npm test -- --runInBand`
+- `npm run build`
+- `npm run validate:art -- --strict`
+
 ## [0.5.0] - 2026-03-20
 
 ### Gameplay Art Runtime Contract
@@ -78,35 +109,6 @@ A focused art elevation pass across the entire procedural graphics pipeline, tou
 - `generate-all.cjs` now generates 48 tiles (+21 new), 61 objects (+15 new), 12 characters (+3), 5 crowd sprites (+1)
 - All existing character sprite sheets regenerated with enhanced dithering and shadow effects
 - `BootScene.ts` now loads Indian crowd sprite alongside existing crowd types
-
----
-
-## [Unreleased]
-
-### Added
-- **Cinematic Visual Pass** (2026-02-18): Added location-aware cinematic rendering layers for stronger atmosphere:
-  - Color grading overlays tuned by dawn/day/dusk/night
-  - Film grain overlay with animated drift
-  - Data-driven sun shafts and canopy shadows per location
-  - Improved objective marker readability with diegetic light beam
-  - Enhanced world item pickup glows
-
-### Changed
-- **Visual Quality Profiles** now scale cinematic effects (grain, shafts, color grade strength, canopy density) in `high`, `balanced`, and `low` modes.
-- **Character Lighting & Shadows** now react to time of day with directional cast shadows and warm/cool sprite tinting for stronger scene cohesion.
-- Pause menu now displays the active resolved runtime quality profile when adaptive mode is enabled.
-
-### Fixed
-- **Character Scaling** (2026-01-27): Fixed characters appearing extremely small relative to scene backgrounds. Characters are now scaled 3× to match the 960×540 resolution environment. See PROJECT_STATUS.md for technical details.
-
-### Changed
-- Player movement speed increased from 100 to 180 pixels/second (feels more natural with larger characters)
-- Interaction radius increased from 48 to 100 pixels (accounts for scaled character size)
-- NPC indicator positions adjusted for scaled character height
-
-### Added
-- `CHARACTER_SCALE` constant in `src/phaser/game.ts` for maintainable sprite scaling
-- Documentation in CLAUDE.md about the resolution/scaling architecture
 
 ---
 
