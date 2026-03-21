@@ -6,6 +6,8 @@ This folder tracks the live state of the project, not the older prototype era. I
 
 - [PROJECT_BRIEFING.md](PROJECT_BRIEFING.md): product vision, historical frame, and quality bar
 - [PROJECT_SETUP.md](PROJECT_SETUP.md): runtime architecture, asset contract, and release workflow
+- [DESIGN_STANDARDS.md](DESIGN_STANDARDS.md): permanent standards for art, design, atmosphere, storytelling, and player experience
+- [RPG_EXPANSION_PLAN.md](RPG_EXPANSION_PLAN.md): practical roadmap for non-linear RPG depth inspired by Baldur's Gate and Daggerfall
 - [RELEASE_NOTES_v0.6.0.md](RELEASE_NOTES_v0.6.0.md): what shipped in the current release
 - [LESSONS_LEARNED.md](LESSONS_LEARNED.md): practical takeaways from the recent polish passes
 - [TODO.md](TODO.md): medium-term backlog
@@ -22,16 +24,17 @@ This folder tracks the live state of the project, not the older prototype era. I
 
 - [art-bible/ART_BIBLE.md](art-bible/ART_BIBLE.md)
 - [art-bible/ART_PIPELINE.md](art-bible/ART_PIPELINE.md)
+- [ATMOSPHERIC_SYSTEMS.md](ATMOSPHERIC_SYSTEMS.md)
 - [NEXT_VISUAL_IMPROVEMENTS.md](NEXT_VISUAL_IMPROVEMENTS.md)
 - [AUDIO_DIRECTION.md](AUDIO_DIRECTION.md)
 - [AUDIO_REQUIREMENTS.md](AUDIO_REQUIREMENTS.md)
-- [ATMOSPHERIC_SYSTEMS.md](ATMOSPHERIC_SYSTEMS.md)
 
 ## Current Documentation Standard
 
 - The live game is a Phaser isometric runtime, not a scene-backdrop-first experience.
 - Historical 1580 Melaka specificity is a hard requirement.
 - The minimum bar is Ultima VIII density and mood, not generic pixel-art nostalgia.
+- Quest and progression design should expand through practical Melaka-grounded RPG systems, not generic fantasy content inflation.
 - Release docs should always state what was verified and what was not.
 
 ## Maintenance Rule

@@ -70,5 +70,8 @@ npm run validate:art -- --strict
 - `TESTING.md`
 - `docs/PROJECT_BRIEFING.md`
 - `docs/PROJECT_SETUP.md`
+- `docs/DESIGN_STANDARDS.md`
+- `docs/RPG_EXPANSION_PLAN.md`
+- `docs/ATMOSPHERIC_SYSTEMS.md`
 - `docs/RELEASE_NOTES_v0.6.0.md`
 - `docs/TODO.md`

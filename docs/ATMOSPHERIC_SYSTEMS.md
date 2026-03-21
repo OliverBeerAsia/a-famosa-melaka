@@ -1,217 +1,171 @@
-# Atmospheric Systems - Implementation Summary
+# Atmosphere Standards and Systems
 
-This document describes the atmospheric systems implemented to enhance immersion in A Famosa: Streets of Golden Melaka.
+This document defines the atmosphere bar for the project. It is not just an implementation note. It is a production standard for how the game should feel.
 
-## Overview
+## Core Rule
 
-Three major systems have been implemented to create a living, breathing world:
+Atmosphere in this game is not decoration layered on after the map is done. Atmosphere is the combined result of:
 
-1. **Particle Effects System** - Visual atmosphere (dust, heat haze)
-2. **Time & Lighting System** - Dynamic day/night cycle with realistic lighting
-3. **Ambient Sound System** - Layered audio atmosphere (ready for audio files)
+- layout and sightlines
+- object density and placement logic
+- movement and interaction feel
+- time-of-day lighting
+- particles and weather
+- UI restraint
+- audio and ambient motion
+- dialogue tone and quest framing
 
----
+If one of those is weak, the atmosphere is weak.
 
-## 1. Particle Effects System
+## Atmosphere Targets
 
-**Location**: `src/scenes/GameScene.js:106-145`
+The playable frame should communicate:
 
-### Features
+- humid tropical heat
+- port-city commerce
+- colonial authority and tension
+- lived-in domestic and sacred spaces
+- beauty mixed with pressure and surveillance
 
-- **Dust Motes**: Floating particles that drift slowly upward, giving a sense of tropical heat and stillness
-  - Spawn across entire map
-  - 150ms spawn frequency
-  - 8-12 second lifespan
-  - Warm whitewash tint (#F4E6D3)
-  - Additive blending for golden glow effect
+The visual minimum remains **Ultima VIII density and mood**. The historical requirement remains **specific 1580 Melaka logic**.
 
-- **Heat Haze**: Larger, very subtle particles creating atmospheric distortion
-  - Spawn in lower half of screen (where heat would rise from ground)
-  - 300ms spawn frequency
-  - 5-8 second lifespan
-  - Golden warmth tint (#F4B41A)
-  - Very low alpha (0.05) for subtle effect
+## Location Atmosphere Rules
 
-### Technical Details
+### A Famosa Gate
 
-- Uses Phaser 3 particle emitter system
-- Particles use procedurally generated 8x8 circular texture
-- Proper depth layering (heat haze at 500, dust motes at 900)
-- Performance-optimized with controlled spawn rates
+Should feel like:
 
----
+- authority
+- surveillance
+- stone mass
+- artillery readiness
 
-## 2. Time & Lighting System
+Needs:
 
-**Location**: `src/systems/TimeSystem.js`, `src/scenes/GameScene.js:151-210`
+- guard clustering
+- banners, weapons, storage, and checkpoint logic
+- less empty ceremonial space, more controlled working fortress space
 
-### Time System Features
+### Rua Direita
 
-- **Configurable Time Flow**: 1 real second = 1 game minute (adjustable)
-- **24-Hour Cycle**: Tracks hours and minutes
-- **Time of Day States**: Dawn (6-8), Day (8-18), Dusk (18-20), Night (20-6)
-- **Event System**: Emits `hourChanged` event for other systems to react
+Should feel like:
 
-### Lighting System Features
+- mercantile compression
+- bargaining and movement
+- layered social visibility
 
-- **Dynamic Overlay**: Rectangle covering entire map with variable tint and alpha
-- **Smooth Transitions**: 1-second tweens between lighting states
-- **Time-Based Colors**:
-  - Dawn: Warm orange (#FFB366)
-  - Day: Neutral white (#FFFFFF) - no overlay
-  - Dusk: Golden (#FF9966)
-  - Night: Cool blue (#4A5A8A) with 50% darkness
+Needs:
 
-- **Progressive Fading**: Gradual transitions during dawn (6-8) and dusk (18-20)
+- stalls, awnings, cargo, signage, and frontage rhythm
+- strong crowd implication even when the map is not literally crowded with sprites
 
-### UI Display
+### St. Paul's Church
 
-- Time shown in upper-right corner (HH:MM format)
-- Golden text (#F4B41A) with black stroke
-- Fixed to camera (doesn't scroll)
+Should feel like:
 
-### Debug Controls
+- ascent
+- ritual calm
+- institutional presence
+- overlook and reflection
 
-- **T Key**: Advance time by 1 hour
-- **Y Key**: Toggle between normal (60x) and fast (600x) time speed
+Needs:
 
----
+- path rhythm
+- sacred objects
+- grave, cross, and study-space logic
 
-## 3. Ambient Sound System
+### Waterfront
 
-**Location**: `src/systems/AmbientSoundSystem.js`, `src/scenes/GameScene.js:212-229`
+Should feel like:
 
-### Core Features
+- cargo pressure
+- maritime labor
+- trade friction
+- exposure to sea and weather
 
-- **Layered Audio**: Multiple sound layers play simultaneously with individual volumes
-- **Smooth Crossfading**: 2-second fades when changing locations or time of day
-- **Location-Specific Soundscapes**: Each map has unique ambient layers
-- **Time-of-Day Variations**: Sounds change based on dawn/day/dusk/night
-- **Graceful Degradation**: System works even when audio files are not yet loaded
+Needs:
 
-### Location Configurations
+- docks, service clutter, cargo staging, ship adjacency, and work bottlenecks
 
-#### A Famosa Fortress Gate
-- `base-tropical` (0.4) - Tropical ambience
-- `fortress-ambience` (0.6) - Stone fortress echoes
-- `distant-city` (0.3) - Muffled city sounds
+### Kampung
 
-#### Rua Direita (Market Street)
-- `base-tropical` (0.3)
-- `market-crowd` (0.7) - Portuguese/Malay voices, bargaining
-- `street-life` (0.5) - Carts, footsteps, coins
+Should feel like:
 
-#### St. Paul's Church
-- `base-tropical` (0.4)
-- `church-bells` (0.5) - Portuguese bells
-- `sacred-calm` (0.6) - Reverent atmosphere
+- domestic life
+- prayer and family rhythm
+- softer edge conditions
+- food, craft, and village-use spaces
 
-#### The Waterfront
-- `base-tropical` (0.3)
-- `water-lapping` (0.6) - Waves on docks
-- `harbor-activity` (0.5) - Sailors, cargo
-- `seagulls` (0.4) - Seabirds
+Needs:
 
-#### The Kampung Quarter
-- `base-tropical` (0.5)
-- `village-life` (0.6) - Malay village sounds
-- `jungle-sounds` (0.4) - Nearby jungle
+- cooking signs
+- herb drying and storage
+- planted edges
+- stilt-house logic and uneven domestic space
 
-### Time-of-Day Sound Variations
+## Time-of-Day Standards
 
-- **Dawn**: Add `morning-birds` (0.4), fade out night sounds
-- **Day**: Clear daytime ambience, no special layers
-- **Dusk**: Add `evening-calls` (0.3)
-- **Night**: Add `night-insects` (0.5) and `cricket-chorus` (0.4), reduce all other sounds to 60% volume
+Every major location should remain legible at:
 
-### Integration
+- dawn
+- day
+- dusk
+- night
 
-- Automatically updates when location changes (via scene restart)
-- Automatically updates when time of day changes (via `hourChanged` event)
-- Properly cleans up sounds when scene is destroyed
+Rules:
 
-### Audio Assets Required
+- dawn should feel expectant, not washed out
+- day should feel hottest and busiest
+- dusk should feel golden and transitional, not simply orange
+- night should feel quieter and riskier without becoming unreadable
 
-See `docs/AUDIO_REQUIREMENTS.md` for complete list of audio files needed.
+Time-of-day changes should alter tone, route reading, and social expectation, not just tint the screen.
 
-**Note**: Audio files are not yet included in the project. The system will log warnings when sounds are not found but will continue to function. Once audio files are added to `assets/audio/ambient/` and loaded in BootScene, the system will automatically play them.
+## Particles, Motion, and Audio
 
----
+Use atmospheric systems to reinforce place, not to hide missing content.
 
-## Usage in GameScene
+Good use:
 
-The systems are initialized in this order:
+- dust and heat haze in open stone and road spaces
+- cloth, palms, flags, smoke, and lanterns to show wind and stillness
+- sound layers that imply labor, worship, insects, waves, bells, or trade
 
-1. Tilemap created
-2. **Atmospheric particles** created
-3. **Time system** created (starts ticking)
-4. **Ambient sound** created (starts playing location sounds)
-5. Player created
-6. Camera set up
+Bad use:
 
-This ensures atmosphere is established before gameplay begins.
+- constant heavy particles that flatten the scene
+- ambient effects that obscure gameplay readability
+- generic fantasy ambience with no Melaka-specific logic
 
----
+## Storytelling Through Space
 
-## Performance Considerations
+Every upgraded map should answer:
 
-- **Particles**: Limited spawn rates and lifespans prevent particle buildup
-- **Lighting**: Single rectangle overlay, not per-pixel effects
-- **Audio**: Uses Web Audio API, efficient mixing, proper cleanup
-- **Tweens**: Reuses Phaser's tween system, no custom interpolation
+- who works here
+- who watches here
+- who trades here
+- who prays here
+- who eats here
+- who is excluded or under pressure here
 
----
+If the environment cannot answer those questions without dialogue, the atmosphere is still underdeveloped.
 
-## Future Enhancements
+## Experience Standards
 
-1. **Particle System**:
-   - Add fireflies at night
-   - Add rain during weather events
-   - Add smoke from chimneys
+Atmosphere depends on player experience quality:
 
-2. **Lighting System**:
-   - Add torches/lanterns as point lights at night
-   - Add window glow from buildings
-   - Add dynamic shadows from objects
+- movement must feel deliberate
+- interaction prompts must be clear and sparse
+- dialogue open/close beats should feel staged
+- the HUD should not compete with the scene
+- transitions should feel like movement through a city, not abrupt context loss
 
-3. **Sound System**:
-   - Add positional audio (3D sound based on player proximity)
-   - Add footstep variation based on ground type
-   - Add music system (separate from ambient)
+## Review Checklist
 
-4. **Integration**:
-   - Link weather system to particles and lighting
-   - Link NPC schedules to time system
-   - Add special events (church bells at specific hours)
+Before signing off a slice, confirm:
 
----
-
-## Testing
-
-To test the atmospheric systems:
-
-1. **Particles**: Should be visible immediately, floating gently upward
-2. **Time System**:
-   - Watch time display in upper-right
-   - Press `T` to advance time and see lighting change
-   - Press `Y` to speed up time and watch full day/night cycle
-3. **Ambient Sound**:
-   - Check browser console for "Setting ambient sound for location" messages
-   - Will play sounds once audio files are added
-   - Switch locations (1: Fortress, 2: Market) to hear different configurations
-
----
-
-## Integration with Project Brief
-
-These systems directly support the project's core atmosphere keywords:
-
-- **Humid**: Heat haze particles, tropical sound layers
-- **Golden**: Warm particle tints, golden dusk lighting, time display color
-- **Crowded**: Market crowd sounds, street life ambience
-- **Exotic**: Tropical base sounds, multicultural voice layers
-- **Colonial**: Church bells, fortress ambience, Portuguese elements
-- **Tense**: Night sounds, subtle atmospheric pressure
-- **Beautiful**: Particle effects, smooth lighting transitions, layered soundscapes
-
-**Priority alignment**: "Immersion Over Features" - These systems create deep atmosphere without adding gameplay complexity.
+1. One screenshot communicates the location's identity.
+2. The final third near exits is still dressed and intentional.
+3. Time-of-day variants preserve readability.
+4. The audio/particle plan reinforces the location instead of compensating for weak layout.
+5. The space implies actual trade, faith, labor, domestic life, or military control.

@@ -28,13 +28,14 @@ Production rule:
 This game should feel like a **memory of a place you've never been** — warm, hazy, golden. Every pixel should serve atmosphere. We're not making a generic RPG; we're capturing **1580 Portuguese Melaka at the height of its glory and tension**.
 
 ### Visual Touchstones
+- **Ultima VIII: Pagan**: minimum bar for density, mood, physicality, and environmental authority
 - **Hyper Light Drifter**: Atmosphere through color and light
 - **Chrono Trigger**: Warmth, expressiveness, world-building through detail
 - **Ultima VII**: Interaction density, everything feels tangible
 - **Historical paintings of Goa and Melaka**: Architectural accuracy
 
 ### The Golden Rule
-When in doubt, make it **warmer** and **hazier**. This is tropical Southeast Asia — the air itself has weight and color.
+When in doubt, make it **historically truer**, **denser**, and **more tactile** before merely making it prettier. This is tropical Southeast Asia under empire; the air itself has weight, color, and tension.
 
 ---
 

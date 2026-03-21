@@ -107,3 +107,28 @@ The project has moved past prototype status. The current milestone is a broad wo
 - improve early flow and conversation staging
 - keep expanding historical believability checks
 - make every release legible in both screenshots and playthroughs
+
+## RPG Growth Direction
+
+The game should gradually deepen into a stronger RPG without pretending it is already a giant party-based CRPG or a province-scale simulation.
+
+The practical target is:
+
+- authored quest density and consequence clarity inspired by **Baldur's Gate**
+- systemic faction, reputation, and time-pressure logic inspired by **Daggerfall**
+- all of it filtered through the scale of one believable Melaka city slice
+
+This means:
+
+- more overlapping quests in shared spaces
+- more than one viable resolution path when possible
+- stronger factional consequences for trade, faith, military authority, and local trust
+- light systemic depth before any huge content expansion
+
+It does **not** mean:
+
+- instantly adding massive procedural sprawl
+- generic fantasy guild content with Melaka names pasted on top
+- adding party systems, classes, or continents before the current city slice feels finished
+
+See `docs/DESIGN_STANDARDS.md` and `docs/RPG_EXPANSION_PLAN.md` for the working rules.

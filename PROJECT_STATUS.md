@@ -67,9 +67,10 @@ Remaining QA risk is experiential rather than structural: full playthrough feel,
 
 1. Redraw the named cast gameplay sheets inside the current runtime contract.
 2. Improve travel beats, conversation staging, and early quest pacing.
-3. Strengthen historical believability through more grounded schedules, use-patterns, and location logic.
-4. Tighten the item/world relationship for important quest and trade objects.
-5. Keep extending validation so visual regressions fail loudly.
+3. Add the first practical RPG-depth layer: faction trust, light reputation, and multi-path resolutions in the core quest lines.
+4. Strengthen historical believability through more grounded schedules, use-patterns, and location logic.
+5. Tighten the item/world relationship for important quest and trade objects.
+6. Keep extending validation so visual regressions fail loudly.
 
 ## Release History
 

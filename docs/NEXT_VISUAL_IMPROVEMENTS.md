@@ -76,6 +76,7 @@ These standards are now expected in the playable game:
 - Keep movement response crisp and legible
 - Improve NPC facing, talk staging, and topic flow so conversation feels authored rather than mechanical
 - Continue integrating portrait, inventory, and dialogue art into the live game
+- Build toward deeper RPG texture through faction trust, quest branching, and time-sensitive leads without abandoning the current city-slice scope
 - Validate dawn/day/dusk/night readability on every upgraded map
 
 ## Acceptance Criteria

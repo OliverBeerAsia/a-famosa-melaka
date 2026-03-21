@@ -120,6 +120,8 @@ npm run package:linux
 - Do not add new map areas without also extending tests or validation where practical.
 - Do not introduce portrait aliases for named cast members.
 - Do not lower the map density bar to make a release easier.
+- Do not add RPG scope without writing down the Melaka-specific quest/faction logic first.
+- Do not treat atmosphere, storytelling, and interaction feel as separate concerns.
 
 ## Current High-Risk Areas
 
@@ -127,3 +129,4 @@ npm run package:linux
 - Manual playthrough polish versus structural/tested correctness
 - Historical believability in NPC routines and conversation reactivity
 - Cross-time-of-day screenshot review for all major locations
+- Expanding quest non-linearity without losing practical production scope
