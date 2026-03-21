@@ -4,20 +4,20 @@ A historical pixel-art adventure RPG set in Portuguese Melaka circa 1580, built 
 
 ## Release Snapshot
 
-- Current release: `v0.6.0`
+- Current release: `v0.7.0`
 - Engine: Phaser 3 + React + TypeScript
 - Perspective: 2:1 isometric traversal
 - Native canvas: `960x540`
 - Art bar: historical Melaka first, Ultima VIII minimum
 
-## What v0.6.0 Adds
+## What v0.7.0 Adds
 
-- Full parity pass for `A Famosa Gate` and `St. Paul's Church` with the richer live map stack: `Ground`, `Walls`, `Objects`, `Props`, `Overhang`, `Canopy`, `Highlights`
-- Stronger authored spread across all five major locations so transition corridors do not collapse into empty final thirds
-- Late-80s / early-90s VGA-style portrait direction locked across the named cast
-- Complete inventory icon coverage for every player-facing item, with Phaser loading the item icons directly for world pickups where possible
-- Contextual onboarding and cleaner interaction presentation so the opening path reads more like an authored adventure RPG and less like a systems demo
-- Expanded visual integrity tests covering map richness, portrait coverage, and item-art coverage
+- A new interlocked quest cluster, `The Customs Ledger`, tying `Rua Direita`, `Waterfront`, `A Famosa Gate`, and `Kampung` into one corruption-and-cargo spine
+- A six-faction implicit reputation model with `City Currents` replacing the older coarse four-faction setup
+- A visible-but-locked `A Famosa Gate <-> Waterfront` service route gated by world state instead of being permanently open
+- Four new named customs-spine NPCs: `Gaspar Mesquita`, `Diogo Almeida`, `Lin Mei`, and `Pak Salleh`
+- Expanded customs-era environment dressing, world-item affordances, and fortress/quay paperwork spaces across the live route
+- Save/load migration and regression coverage for quest resolutions, route gating, and witness-driven quest state
 
 ## Quick Start
 
@@ -52,13 +52,14 @@ npm run package:mac
 ### World and presentation
 
 - Five major isometric locations: `A Famosa Gate`, `Rua Direita`, `St. Paul's Church`, `Waterfront`, `Kampung`
+- Active customs-corruption spine linking `Rua Direita`, `Waterfront`, `A Famosa Gate`, and `Kampung`
 - Time-of-day atmosphere with dawn, day, dusk, and night readability
 - Contextual loading, onboarding, HUD, dialogue, and inventory presentation
 - Save/load with exact location restore and cleaner new-game reset semantics
 
 ### Characters and art
 
-- Ten named gameplay sheets on the live `64x192` / `4x6` contract
+- Fourteen named gameplay sheets on the live `64x192` / `4x6` contract
 - Ten crowd-role silhouettes for the runtime background population layer
 - Unique VGA-style portraits for the named dialogue cast
 - Complete player-facing item icon set in `assets/sprites/ui/items/`
@@ -67,7 +68,7 @@ npm run package:mac
 
 - Runtime asset manifest controls gameplay-facing map, tile, character, and prop loading
 - `npm run validate:art -- --strict` enforces gameplay art contract compliance
-- Jest coverage includes save/load, visual integrity, and regression checks around map richness and portrait coverage
+- Jest coverage includes save/load, visual integrity, customs-route locking, and regression checks around map richness, quest gating, and portrait coverage
 
 ## Controls
 
@@ -94,7 +95,7 @@ assets/
 docs/
   PROJECT_BRIEFING.md    Product and world vision
   PROJECT_SETUP.md       Runtime, asset, and release workflow
-  RELEASE_NOTES_v0.6.0.md
+  RELEASE_NOTES_v0.7.0.md
   LESSONS_LEARNED.md
   TODO.md
 src/
@@ -108,7 +109,7 @@ tools/                   Art generation and validation scripts
 
 ## Release Verification
 
-`v0.6.0` was verified with:
+`v0.7.0` was verified with:
 
 ```bash
 npm test -- --runInBand
@@ -124,7 +125,7 @@ npm run validate:art -- --strict
 - [docs/DESIGN_STANDARDS.md](docs/DESIGN_STANDARDS.md)
 - [docs/RPG_EXPANSION_PLAN.md](docs/RPG_EXPANSION_PLAN.md)
 - [docs/ATMOSPHERIC_SYSTEMS.md](docs/ATMOSPHERIC_SYSTEMS.md)
-- [docs/RELEASE_NOTES_v0.6.0.md](docs/RELEASE_NOTES_v0.6.0.md)
+- [docs/RELEASE_NOTES_v0.7.0.md](docs/RELEASE_NOTES_v0.7.0.md)
 - [docs/LESSONS_LEARNED.md](docs/LESSONS_LEARNED.md)
 - [docs/TODO.md](docs/TODO.md)
 - [PROJECT_STATUS.md](PROJECT_STATUS.md)

@@ -45,7 +45,7 @@ export function HUD() {
   const location = useLocation();
   const trackedObjectiveData = useQuestStore((state) => state.getTrackedObjective());
   const activeQuestCount = useQuestStore((state) => state.activeQuests.length);
-  const reputation = useQuestStore((state) => state.reputation);
+  const narrativeCurrents = useQuestStore((state) => state.getNarrativeCurrents());
   const npcData = useDialogueStore((state) => state.allNPCData);
   const isDialogueOpen = useGameStore((state) => state.isDialogueOpen);
   const isPaused = useGameStore((state) => state.isPaused);
@@ -115,10 +115,7 @@ export function HUD() {
 
   const trackedObjectiveLocation = getObjectiveLocation(trackedObjective);
 
-  const repHighlights = (Object.entries(reputation) as Array<[string, number]>)
-    .filter(([, value]) => Math.abs(value) >= 10)
-    .sort(([, a], [, b]) => Math.abs(b) - Math.abs(a))
-    .slice(0, 2);
+  const currentHighlights = narrativeCurrents.slice(0, 2);
 
   const getTravelHint = (from: string, to: string | null): string | null => {
     if (!to || from === to) return null;
@@ -131,10 +128,12 @@ export function HUD() {
       },
       'waterfront': {
         'rua-direita': 'Take the west lane back toward the market street.',
+        'a-famosa-gate': 'Use the bonded service lane north toward the fortress customs gate.',
         'kampung': 'Follow the eastern path beyond the docks into the kampung.',
       },
       'a-famosa-gate': {
         'rua-direita': 'Pass east through the gate approach into town.',
+        'waterfront': 'Use the guarded service gate toward the bonded quay lane.',
       },
       'st-pauls-church': {
         'rua-direita': 'Descend south toward the market quarter.',
@@ -192,19 +191,21 @@ export function HUD() {
               <p className="text-parchment-300/90 text-xs leading-5">{tutorialHint?.text}</p>
             )}
 
-            {trackedQuestName && trackedObjective && repHighlights.length > 0 && (
-              <div className="mt-2 flex flex-wrap gap-2 text-[11px]">
-                {repHighlights.map(([faction, value]) => (
-                  <span
-                    key={faction}
-                    className={`px-2 py-0.5 rounded border ${
-                      value >= 0
-                        ? 'border-emerald-600/40 text-emerald-300'
-                        : 'border-rose-700/40 text-rose-300'
-                    }`}
+            {trackedQuestName && trackedObjective && currentHighlights.length > 0 && (
+              <div className="mt-2 space-y-1 text-[11px]">
+                {currentHighlights.map((current) => (
+                  <p
+                    key={current.id}
+                    className={
+                      current.tone === 'favorable'
+                        ? 'text-emerald-300'
+                        : current.tone === 'hostile'
+                          ? 'text-rose-300'
+                          : 'text-gold/90'
+                    }
                   >
-                    {faction}: {value > 0 ? '+' : ''}{value}
-                  </span>
+                    {current.title}: {current.text}
+                  </p>
                 ))}
               </div>
             )}

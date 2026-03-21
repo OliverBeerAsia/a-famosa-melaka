@@ -2986,6 +2986,66 @@
           "width": 16,
           "x": 1980,
           "y": 516
+        },
+        {
+          "gid": 39,
+          "height": 16,
+          "id": 140,
+          "name": "balance-scale",
+          "rotation": 0,
+          "type": "decoration",
+          "visible": true,
+          "width": 16,
+          "x": 464,
+          "y": 208
+        },
+        {
+          "gid": 41,
+          "height": 16,
+          "id": 141,
+          "name": "bench",
+          "rotation": 0,
+          "type": "decoration",
+          "visible": true,
+          "width": 16,
+          "x": 520,
+          "y": 248
+        },
+        {
+          "gid": 21,
+          "height": 16,
+          "id": 142,
+          "name": "barrel",
+          "rotation": 0,
+          "type": "decoration",
+          "visible": true,
+          "width": 16,
+          "x": 592,
+          "y": 216
+        },
+        {
+          "gid": 64,
+          "height": 16,
+          "id": 143,
+          "name": "hanging-oil-lantern",
+          "rotation": 0,
+          "type": "decoration",
+          "visible": true,
+          "width": 16,
+          "x": 676,
+          "y": 168
+        },
+        {
+          "gid": 46,
+          "height": 32,
+          "id": 144,
+          "name": "pelourinho",
+          "rotation": 0,
+          "type": "decoration",
+          "visible": true,
+          "width": 16,
+          "x": 1224,
+          "y": 312
         }
       ],
       "opacity": 1,
@@ -3257,7 +3317,7 @@
     }
   ],
   "nextlayerid": 8,
-  "nextobjectid": 140,
+  "nextobjectid": 145,
   "orientation": "isometric",
   "renderorder": "right-down",
   "tiledversion": "1.10.2",

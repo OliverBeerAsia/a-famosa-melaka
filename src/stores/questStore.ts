@@ -10,13 +10,39 @@ import { useGameStore } from './gameStore';
 import { useInventoryStore } from './inventoryStore';
 import { useDialogueStore, TopicData } from './dialogueStore';
 
-export type ReputationFaction = 'portuguese' | 'chinese' | 'malay' | 'arab';
+export type ReputationFaction =
+  | 'garrison'
+  | 'church'
+  | 'portuguese-merchants'
+  | 'chinese-merchants'
+  | 'kampung-community'
+  | 'dockside-network';
 
 export interface ReputationState {
-  portuguese: number;
-  chinese: number;
-  malay: number;
-  arab: number;
+  garrison: number;
+  church: number;
+  'portuguese-merchants': number;
+  'chinese-merchants': number;
+  'kampung-community': number;
+  'dockside-network': number;
+}
+
+export interface ReputationRequirementMap extends Partial<Record<ReputationFaction, number>> {}
+
+export interface ConditionalRequirements {
+  time?: 'dawn' | 'day' | 'dusk' | 'night';
+  location?: string;
+  money?: number;
+  itemsAll?: string[];
+  talkedTo?: string[];
+  topic?: string;
+  reputation?: ReputationRequirementMap;
+  maxReputation?: ReputationRequirementMap;
+  worldFlagsAll?: string[];
+  worldFlagsAny?: string[];
+  worldFlagsNone?: string[];
+  completedQuests?: string[];
+  completedQuestPaths?: string[];
 }
 
 export interface QuestObjective {
@@ -52,6 +78,15 @@ export interface QuestPathRequirements {
   talkedTo?: string[];
   topic?: string;
   time?: 'dawn' | 'day' | 'dusk' | 'night';
+  location?: string;
+  itemsAll?: string[];
+  reputation?: ReputationRequirementMap;
+  maxReputation?: ReputationRequirementMap;
+  worldFlagsAll?: string[];
+  worldFlagsAny?: string[];
+  worldFlagsNone?: string[];
+  completedQuests?: string[];
+  completedQuestPaths?: string[];
 }
 
 export interface QuestPathOption {
@@ -86,6 +121,7 @@ export interface QuestStage {
 export interface QuestPrerequisite {
   questComplete?: string;
   reputation?: Partial<Record<ReputationFaction, number>>;
+  completedQuestPaths?: string[];
 }
 
 export interface Quest {
@@ -122,21 +158,97 @@ export interface TrackedObjectiveData {
   objective: QuestObjective;
 }
 
+export interface NarrativeCurrent {
+  id: string;
+  title: string;
+  text: string;
+  tone: 'favorable' | 'wary' | 'hostile';
+}
+
 interface PathValidation {
   allowed: boolean;
   reason?: string;
 }
 
 const DEFAULT_REPUTATION: ReputationState = {
-  portuguese: 0,
-  chinese: 0,
-  malay: 0,
-  arab: 0,
+  garrison: 0,
+  church: 0,
+  'portuguese-merchants': 0,
+  'chinese-merchants': 0,
+  'kampung-community': 0,
+  'dockside-network': 0,
 };
+
+const SIGNIFICANT_REPUTATION_THRESHOLD = 12;
+
+const FACTION_DISPLAY_NAMES: Record<ReputationFaction, string> = {
+  garrison: 'Garrison',
+  church: 'Church',
+  'portuguese-merchants': 'Portuguese Merchants',
+  'chinese-merchants': 'Chinese Merchants',
+  'kampung-community': 'Kampung Community',
+  'dockside-network': 'Dockside Network',
+};
+
+const FACTION_NARRATIVE: Record<ReputationFaction, { favorable: string; wary: string; hostile: string }> = {
+  garrison: {
+    favorable: 'The garrison treats you as a useful hand in matters of order.',
+    wary: 'The garrison watches you, uncertain whether you serve order or profit.',
+    hostile: 'The garrison regards you as a liability around gates, inspections, and patrols.',
+  },
+  church: {
+    favorable: 'Church figures speak to you as someone who can be trusted with delicate matters of conscience.',
+    wary: 'The Church listens, but withholds full confidence until your conduct settles.',
+    hostile: 'Church trust has cooled; your name now carries doubt where mercy and witness are concerned.',
+  },
+  'portuguese-merchants': {
+    favorable: 'Portuguese merchants see you as someone who can move paper, favors, and cargo without waste.',
+    wary: 'Portuguese merchants weigh your usefulness against the trouble you attract.',
+    hostile: 'Portuguese merchants now treat you as dangerous to contracts, credit, or orderly trade.',
+  },
+  'chinese-merchants': {
+    favorable: 'Chinese merchants regard you as precise, discreet, and worth doing business with.',
+    wary: 'Chinese merchants still read you carefully before showing their ledgers or trust.',
+    hostile: 'Chinese merchants believe you disturb the balance of trade more than you help it.',
+  },
+  'kampung-community': {
+    favorable: 'The kampung speaks of you as someone who understands that survival is not always lawful.',
+    wary: 'The kampung has not closed its doors, but neither has it taken you fully into confidence.',
+    hostile: 'The kampung remembers the harm attached to your name and keeps its distance.',
+  },
+  'dockside-network': {
+    favorable: 'Dockside brokers and sailors treat you as someone who understands harbor realities.',
+    wary: 'The docks still deal with you, but rumor travels ahead of your footsteps.',
+    hostile: 'The dockside network marks you as unsafe company for smuggling, passage, or quiet work.',
+  },
+};
+
+export function getFactionDisplayName(faction: ReputationFaction): string {
+  return FACTION_DISPLAY_NAMES[faction];
+}
+
+export function getReputationBand(value: number): 'favorable' | 'wary' | 'hostile' {
+  if (value >= SIGNIFICANT_REPUTATION_THRESHOLD) return 'favorable';
+  if (value <= -SIGNIFICANT_REPUTATION_THRESHOLD) return 'hostile';
+  return 'wary';
+}
+
+export function describeNarrativeCurrent(faction: ReputationFaction, value: number): NarrativeCurrent | null {
+  if (Math.abs(value) < SIGNIFICANT_REPUTATION_THRESHOLD) return null;
+
+  const tone = getReputationBand(value);
+  return {
+    id: faction,
+    title: getFactionDisplayName(faction),
+    text: FACTION_NARRATIVE[faction][tone],
+    tone,
+  };
+}
 
 export interface QuestState {
   activeQuests: Quest[];
   completedQuests: string[];
+  completedQuestResolutions: Record<string, string>;
   journal: JournalEntry[];
   worldFlags: Record<string, boolean>;
   reputation: ReputationState;
@@ -171,6 +283,7 @@ export interface QuestState {
     journal: JournalEntry[],
     worldFlags?: Record<string, boolean>,
     reputation?: ReputationState,
+    completedQuestResolutions?: Record<string, string>,
     talkedToNPCs?: string[],
     seenTopics?: string[],
     trackedObjective?: TrackedObjectiveRef | null
@@ -179,6 +292,8 @@ export interface QuestState {
   getActiveQuests: () => Quest[];
   getQuestStage: (questId: string) => QuestStage | null;
   getTrackedObjective: () => TrackedObjectiveData | null;
+  getNarrativeCurrents: () => NarrativeCurrent[];
+  getCompletedQuestResolution: (questId: string) => string | null;
   isQuestActive: (questId: string) => boolean;
   isQuestCompleted: (questId: string) => boolean;
 }
@@ -187,6 +302,134 @@ let journalCounter = 0;
 
 function clampReputation(value: number): number {
   return Math.max(-100, Math.min(100, value));
+}
+
+function normalizeReputationState(
+  input?: Partial<Record<ReputationFaction, number>> | Record<string, number> | null
+): ReputationState {
+  if (!input) return { ...DEFAULT_REPUTATION };
+
+  const normalized: ReputationState = { ...DEFAULT_REPUTATION };
+
+  const legacyAliases: Record<string, ReputationFaction[]> = {
+    portuguese: ['garrison', 'portuguese-merchants'],
+    chinese: ['chinese-merchants'],
+    malay: ['kampung-community'],
+    arab: ['dockside-network'],
+  };
+
+  Object.entries(input).forEach(([rawFaction, rawValue]) => {
+    if (typeof rawValue !== 'number' || !Number.isFinite(rawValue)) return;
+
+    const faction = rawFaction as ReputationFaction;
+    if (faction in DEFAULT_REPUTATION) {
+      normalized[faction] = clampReputation(rawValue);
+      return;
+    }
+
+    const mappedFactions = legacyAliases[rawFaction] || [];
+    mappedFactions.forEach((mappedFaction) => {
+      normalized[mappedFaction] = clampReputation(rawValue);
+    });
+  });
+
+  return normalized;
+}
+
+function checkConditionalRequirements(
+  requirements: ConditionalRequirements | undefined,
+  state: Pick<QuestState, 'reputation' | 'worldFlags' | 'talkedToNPCs' | 'seenTopics' | 'completedQuests' | 'completedQuestResolutions'>,
+  inventoryState: ReturnType<typeof useInventoryStore.getState>,
+  gameState: ReturnType<typeof useGameStore.getState>
+): PathValidation {
+  if (!requirements) return { allowed: true };
+
+  if (requirements.money && inventoryState.money < requirements.money) {
+    return { allowed: false, reason: `Requires ${requirements.money} cruzados.` };
+  }
+
+  if (requirements.itemsAll?.length) {
+    const hasAllItems = requirements.itemsAll.every((itemId) => inventoryState.hasItem(itemId));
+    if (!hasAllItems) {
+      return { allowed: false, reason: 'You are missing the required documents or goods for this approach.' };
+    }
+  }
+
+  if (requirements.talkedTo?.length) {
+    const hasTalkedToAll = requirements.talkedTo.every((npcId) => state.talkedToNPCs.includes(npcId));
+    if (!hasTalkedToAll) {
+      return { allowed: false, reason: 'You need to gather more testimony before choosing this path.' };
+    }
+  }
+
+  if (requirements.topic && !state.seenTopics.includes(requirements.topic)) {
+    return { allowed: false, reason: `You must discuss topic "${requirements.topic}" first.` };
+  }
+
+  if (requirements.time && gameState.time.timeOfDay !== requirements.time) {
+    return { allowed: false, reason: `This path is only available during ${requirements.time}.` };
+  }
+
+  if (requirements.location && gameState.currentLocation !== requirements.location) {
+    return { allowed: false, reason: `You need to be in ${requirements.location} to pursue this route.` };
+  }
+
+  if (requirements.reputation) {
+    const meetsRep = (Object.entries(requirements.reputation) as Array<[ReputationFaction, number]>)
+      .every(([faction, minValue]) => (state.reputation[faction] ?? 0) >= minValue);
+    if (!meetsRep) {
+      return { allowed: false, reason: 'You do not yet have enough trust with the right people.' };
+    }
+  }
+
+  if (requirements.maxReputation) {
+    const underRep = (Object.entries(requirements.maxReputation) as Array<[ReputationFaction, number]>)
+      .every(([faction, maxValue]) => (state.reputation[faction] ?? 0) <= maxValue);
+    if (!underRep) {
+      return { allowed: false, reason: 'You are too closely associated with the wrong side for this path.' };
+    }
+  }
+
+  if (requirements.worldFlagsAll?.length) {
+    const hasAllFlags = requirements.worldFlagsAll.every((flag) => Boolean(state.worldFlags[flag]));
+    if (!hasAllFlags) {
+      return { allowed: false, reason: 'The city has not shifted into position for this route yet.' };
+    }
+  }
+
+  if (requirements.worldFlagsAny?.length) {
+    const hasAnyFlag = requirements.worldFlagsAny.some((flag) => Boolean(state.worldFlags[flag]));
+    if (!hasAnyFlag) {
+      return { allowed: false, reason: 'You still need leverage, rumor, or proof before this path opens.' };
+    }
+  }
+
+  if (requirements.worldFlagsNone?.length) {
+    const hasBlockedFlag = requirements.worldFlagsNone.some((flag) => Boolean(state.worldFlags[flag]));
+    if (hasBlockedFlag) {
+      return { allowed: false, reason: 'Events in the city have already closed off this route.' };
+    }
+  }
+
+  if (requirements.completedQuests?.length) {
+    const hasAllQuests = requirements.completedQuests.every((questId) => state.completedQuests.includes(questId));
+    if (!hasAllQuests) {
+      return { allowed: false, reason: 'You need more standing in the city before this opens.' };
+    }
+  }
+
+  if (requirements.completedQuestPaths?.length) {
+    const hasAllPaths = requirements.completedQuestPaths.every((token) => {
+      const [questId, resolution] = token.split(':');
+      if (!questId || !resolution) return false;
+      return state.completedQuestResolutions[questId] === resolution;
+    });
+    if (!hasAllPaths) {
+      return { allowed: false, reason: 'Your earlier choices have not opened this route.' };
+    }
+  }
+
+  return { allowed: true };
 }
 
 function mergeDialogueOverrides(
@@ -410,6 +653,7 @@ export const useQuestStore = create<QuestState>((set, get) => {
   return {
     activeQuests: [],
     completedQuests: [],
+    completedQuestResolutions: {},
     journal: [],
     worldFlags: {},
     reputation: { ...DEFAULT_REPUTATION },
@@ -418,9 +662,10 @@ export const useQuestStore = create<QuestState>((set, get) => {
     trackedObjective: null,
 
     startQuest: (quest) => {
-      const { activeQuests, completedQuests, reputation } = get();
+      const { activeQuests, completedQuests, completedQuestResolutions, reputation } = get();
       if (activeQuests.some((active) => active.id === quest.id)) return false;
       if (completedQuests.includes(quest.id)) return false;
+      if (completedQuestResolutions[quest.id]) return false;
 
       if (quest.prerequisites?.length) {
         const unmet = quest.prerequisites.some((id) => !completedQuests.includes(id));
@@ -435,6 +680,14 @@ export const useQuestStore = create<QuestState>((set, get) => {
         const meetsRep = (Object.entries(quest.prerequisite.reputation) as Array<[ReputationFaction, number]>)
           .every(([faction, minValue]) => (reputation[faction] ?? 0) >= minValue);
         if (!meetsRep) return false;
+      }
+
+      if (quest.prerequisite?.completedQuestPaths?.length) {
+        const hasRequiredPaths = quest.prerequisite.completedQuestPaths.every((token) => {
+          const [questId, resolution] = token.split(':');
+          return Boolean(questId && resolution && completedQuestResolutions[questId] === resolution);
+        });
+        if (!hasRequiredPaths) return false;
       }
 
       const firstStage = quest.stages[0];
@@ -555,29 +808,12 @@ export const useQuestStore = create<QuestState>((set, get) => {
       const option = stage.availablePaths.find((candidate) => candidate.id === pathId);
       if (!option) return { allowed: false, reason: 'Selected path was not found.' };
 
-      const requirements = option.requirements;
-      if (!requirements) return { allowed: true };
-
-      if (requirements.money && useInventoryStore.getState().money < requirements.money) {
-        return { allowed: false, reason: `Requires ${requirements.money} cruzados.` };
-      }
-
-      if (requirements.talkedTo?.length) {
-        const hasTalkedToAll = requirements.talkedTo.every((npcId) => get().talkedToNPCs.includes(npcId));
-        if (!hasTalkedToAll) {
-          return { allowed: false, reason: 'You need to gather more testimony before choosing this path.' };
-        }
-      }
-
-      if (requirements.topic && !get().seenTopics.includes(requirements.topic)) {
-        return { allowed: false, reason: `You must discuss topic "${requirements.topic}" first.` };
-      }
-
-      if (requirements.time && useGameStore.getState().time.timeOfDay !== requirements.time) {
-        return { allowed: false, reason: `This path is only available during ${requirements.time}.` };
-      }
-
-      return { allowed: true };
+      return checkConditionalRequirements(
+        option.requirements,
+        get(),
+        useInventoryStore.getState(),
+        useGameStore.getState()
+      );
     },
 
     completeObjective: (questId, objectiveId) => {
@@ -617,11 +853,22 @@ export const useQuestStore = create<QuestState>((set, get) => {
       const quest = activeQuests.find((active) => active.id === questId);
       if (!quest) return;
 
-      set({
-        activeQuests: activeQuests.filter((active) => active.id !== questId),
-        completedQuests: completedQuests.includes(questId)
-          ? completedQuests
-          : [...completedQuests, questId],
+      set((state) => {
+        const worldFlags = { ...state.worldFlags, [`quest-complete:${questId}`]: true };
+        if (resolution) {
+          worldFlags[`quest-outcome:${questId}:${resolution}`] = true;
+        }
+
+        return {
+          activeQuests: activeQuests.filter((active) => active.id !== questId),
+          completedQuests: completedQuests.includes(questId)
+            ? completedQuests
+            : [...completedQuests, questId],
+          completedQuestResolutions: resolution
+            ? { ...state.completedQuestResolutions, [questId]: resolution }
+            : state.completedQuestResolutions,
+          worldFlags,
+        };
       });
 
       const resolutionText = resolution ? ` (${resolution})` : '';
@@ -744,6 +991,7 @@ export const useQuestStore = create<QuestState>((set, get) => {
       journal,
       worldFlags,
       reputation,
+      completedQuestResolutions,
       talkedToNPCs,
       seenTopics,
       trackedObjective
@@ -753,7 +1001,8 @@ export const useQuestStore = create<QuestState>((set, get) => {
         completedQuests,
         journal,
         worldFlags: worldFlags || {},
-        reputation: reputation || { ...DEFAULT_REPUTATION },
+        reputation: normalizeReputationState(reputation),
+        completedQuestResolutions: completedQuestResolutions || {},
         talkedToNPCs: talkedToNPCs || [],
         seenTopics: seenTopics || [],
         trackedObjective: trackedObjective || null,
@@ -789,6 +1038,20 @@ export const useQuestStore = create<QuestState>((set, get) => {
         objective,
       };
     },
+
+    getNarrativeCurrents: () => {
+      const reputation = get().reputation;
+      return (Object.entries(reputation) as Array<[ReputationFaction, number]>)
+        .map(([faction, value]) => describeNarrativeCurrent(faction, value))
+        .filter((entry): entry is NarrativeCurrent => Boolean(entry))
+        .sort((left, right) => {
+          const leftStrength = Math.abs(reputation[left.id as ReputationFaction] || 0);
+          const rightStrength = Math.abs(reputation[right.id as ReputationFaction] || 0);
+          return rightStrength - leftStrength;
+        });
+    },
+
+    getCompletedQuestResolution: (questId) => get().completedQuestResolutions[questId] || null,
 
     isQuestActive: (questId) => get().activeQuests.some((active) => active.id === questId),
 

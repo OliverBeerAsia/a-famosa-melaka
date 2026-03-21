@@ -1,7 +1,7 @@
 {
   "id": "merchants-seal",
   "name": "The Merchant's Seal",
-  "description": "Help Fernão Gomes recover his trading seal from Chen Wei, who holds it as collateral for an unpaid debt. Multiple approaches are possible.",
+  "description": "Help Fernão Gomes recover his trading seal from Chen Wei, who holds it as collateral for an unpaid debt while Melaka's customs office quietly leans on the dispute. Multiple approaches are possible.",
   "startLocation": "rua-direita",
   "questGiver": "fernao-gomes",
   "giver": "fernao-gomes",
@@ -28,11 +28,12 @@
         { "type": "talk", "target": "rashid", "topic": "seal", "completed": false, "optional": true },
         { "type": "talk", "target": "capitao-rodrigues", "topic": "seal", "completed": false, "optional": true }
       ],
-      "journalEntry": "Aminah at the market may have seen something. Rashid at the docks and Capitão Rodrigues might also have useful information.",
+      "journalEntry": "Aminah at the market may have seen something. Rashid at the docks, Capitão Rodrigues, and Diogo Almeida may each know a different piece of Melaka's paper trail.",
       "hints": [
         "Aminah sees everything that happens in the market.",
         "Rashid witnessed an argument between Gomes and someone from the Chinese counting house.",
-        "The Capitão may have official insights."
+        "The Capitão may have official insights.",
+        "Diogo keeps an ear on customs books and notary scraps."
       ],
       "nextStage": "confront"
     },
@@ -113,6 +114,8 @@
       "consequenceText": "Chen Wei accepts payment with a slight bow. 'Business concluded. The Portuguese understand commerce when pressed.' He produces the seal from a locked drawer.",
       "consequences": {
         "reputation": { "chinese": 5, "portuguese": 0 },
+        "worldChanges": ["merchant-seal-settled"],
+        "flags": ["merchant-seal-settled"],
         "npcReactions": {
           "chen-wei": "respectful",
           "fernao-gomes": "grateful"
@@ -128,7 +131,7 @@
         { "type": "talk", "target": "chen-wei", "topic": "alternative", "completed": false },
         { "type": "talk", "target": "chen-wei", "topic": "side-deal", "completed": false }
       ],
-      "journalEntry": "Chen Wei has offered an alternative: if I can convince Capitão Rodrigues to release his silk shipment from customs without the officer's fee, he will return the seal. This requires navigating Portuguese military bureaucracy.",
+      "journalEntry": "Chen Wei has offered an alternative: if I can convince Capitão Rodrigues to release his silk shipment from customs without the officer's fee, he will return the seal. Diogo Almeida may know which ledger entries were altered and by whom.",
       "nextStage": "diplomatic-captain"
     },
 
@@ -139,7 +142,7 @@
       "objectives": [
         { "type": "talk", "target": "capitao-rodrigues", "topic": "customs", "completed": false }
       ],
-      "journalEntry": "I need to approach Capitão Rodrigues carefully. He may be willing to intervene if presented properly - perhaps as a matter of proper procedure rather than a favor to Chinese merchants.",
+      "journalEntry": "I need to approach Capitão Rodrigues carefully. He may be willing to intervene if presented properly - perhaps as a matter of procedure rather than a favor to Chinese merchants. Diogo's copy may give me a cleaner accusation.",
       "npcDialogueOverrides": {
         "capitao-rodrigues": {
           "customs": {
@@ -149,6 +152,13 @@
           "proof-request": {
             "text": "Bring me the inspector's written demand. Or find a witness who will testify. I cannot act on rumor alone - but if this is true, the inspector will answer for it.",
             "requires": ["customs"]
+          }
+        },
+        "diogo-almeida": {
+          "books": {
+            "text": "Gaspar's figures do not match the quay tallies. If Rodrigues wants proof, I can show him the line where duty became a private favor.",
+            "questCritical": true,
+            "questPath": "ledger-expose"
           }
         }
       },
@@ -163,12 +173,19 @@
         { "type": "talk", "target": "rashid", "topic": "inspector", "completed": false },
         { "type": "obtain", "item": "bribe-note", "completed": false, "optional": true }
       ],
-      "journalEntry": "Capitão Rodrigues needs evidence. Rashid may know something about the corrupt customs officer - sailors see everything at the docks. There might also be written evidence somewhere.",
+      "journalEntry": "Capitão Rodrigues needs evidence. Rashid may know something about the corrupt customs officer - sailors see everything at the docks. Gaspar Mesquita's own mouth may be the best proof if I can get him talking.",
       "npcDialogueOverrides": {
         "rashid": {
           "inspector": {
             "text": "The customs man? Ha! Everyone knows he takes money. I myself paid him 5 cruzados to 'expedite' paperwork last month. *pulls out crumpled paper* Look, he even gave me this receipt for my 'donation to fortress maintenance.' Very official looking, yes? *laughs* You want it? Take it. I hate that man.",
             "givesItem": "bribe-note"
+          }
+        },
+        "gaspar-mesquita": {
+          "ledger": {
+            "text": "If the books show an error, then the books should be corrected. That is not corruption. That is the burden of keeping a harbor in order. Perhaps the merchant classes prefer sloppier numbers.",
+            "questCritical": true,
+            "questPath": "ledger-broker"
           }
         }
       },
@@ -187,7 +204,8 @@
       "consequenceText": "Rodrigues examines the note, his face darkening. 'This is... damning. The inspector will be dealt with. I will personally ensure Chen Wei's shipment is released properly.' He pauses. 'You have done Portugal a service today. Corruption is a rot that destroys from within.'",
       "consequences": {
         "reputation": { "portuguese": 15, "chinese": 10 },
-        "worldChanges": ["inspector-removed"],
+        "worldChanges": ["inspector-removed", "customs-books-opened", "customs-ledger-clue"],
+        "flags": ["customs-questioned"],
         "npcReactions": {
           "capitao-rodrigues": "respectful",
           "chen-wei": "impressed"
@@ -281,7 +299,8 @@
       "consequenceText": "Chen Wei and Fernão Gomes have formed an unlikely partnership. The debt is forgiven in exchange for shared ventures. Both men seem... relieved. Perhaps even hopeful.",
       "consequences": {
         "reputation": { "portuguese": 5, "chinese": 15 },
-        "worldChanges": ["gomes-chen-partnership"],
+        "worldChanges": ["gomes-chen-partnership", "merchant-seal-settled", "customs-ledger-clue"],
+        "flags": ["customs-trail-open", "merchant-seal-settled"],
         "npcReactions": {
           "chen-wei": "friendly",
           "fernao-gomes": "humbled-grateful"
@@ -336,7 +355,7 @@
       "consequenceText": "The seal is cold in your hand. You slip back into the night, but a weight settles in your chest. Chen Wei's debt was legitimate. You have stolen from a man who was owed.",
       "consequences": {
         "reputation": { "chinese": -30 },
-        "worldChanges": ["seal-stolen", "chen-wei-hostile"],
+        "worldChanges": ["seal-stolen", "chen-wei-hostile", "customs-skittish"],
         "flags": ["player-is-thief"],
         "npcReactions": {
           "chen-wei": "hostile",

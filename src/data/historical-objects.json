@@ -80,6 +80,58 @@
       "historicalNote": "Fortified colonial gateways used flags, cloth hangings, heraldic markers, and painted insignia to advertise sovereignty. In Melaka, such displays mattered politically as much as militarily."
     },
 
+    "gate-customs-ledger": {
+      "id": "gate-customs-ledger",
+      "name": "Gate Customs Ledger",
+      "type": "administration",
+      "location": "a-famosa-gate",
+      "position": { "x": 1460, "y": 280 },
+      "sprite": "book",
+      "interaction": "examine",
+      "description": "A thick ledger used to record inspections, dues, and cargo discrepancies at the gate.",
+      "examineText": "Names, dates, weights, and terse accusations fill the page. Some entries are written neatly, others scratched over, as if the hand itself hesitated before naming what passed and what did not.\n\n*This is what corruption looks like when it learns to wear official ink.*",
+      "historicalNote": "Colonial gates and customs posts depended on written registers to track cargo, payments, and exemptions. Ledgers made it possible to tax trade, but also to conceal favors and irregularities."
+    },
+
+    "service-route-lantern": {
+      "id": "service-route-lantern",
+      "name": "Service Route Lantern",
+      "type": "navigation",
+      "location": "a-famosa-gate",
+      "position": { "x": 1720, "y": 340 },
+      "sprite": "hanging-oil-lantern",
+      "interaction": "examine",
+      "description": "A lantern hung low over the service route, guiding carts and officials through the customs side passage.",
+      "examineText": "The flame burns behind soot-dark glass, sheltered from the wind. It does not light the whole road, only the narrow strip that matters to those allowed through.\n\n*Such lights make secrecy feel ordinary. They are practical, which is why they are so useful to men who wish not to be noticed.*",
+      "historicalNote": "Service paths, side gates, and back routes in fortified towns were usually lit modestly and controlled closely. Limited illumination helped authorities manage movement without opening the whole approach."
+    },
+
+    "seized-goods-chest": {
+      "id": "seized-goods-chest",
+      "name": "Seized Goods Chest",
+      "type": "storage",
+      "location": "a-famosa-gate",
+      "position": { "x": 1840, "y": 420 },
+      "sprite": "chest",
+      "interaction": "examine",
+      "description": "A locked chest holding confiscated cargo and disputed goods awaiting inspection.",
+      "examineText": "The iron straps are fresh. Someone has cared enough to maintain it, which means the contents matter. Maybe spices. Maybe textiles. Maybe something the papers were not meant to mention.\n\n*In a port city, the difference between legal cargo and seized cargo can be only a signature.*",
+      "historicalNote": "Customs authorities in early modern ports regularly seized or detained goods pending payment, clarification, or investigation. Storage chests and bonded rooms kept such cargo under administrative control."
+    },
+
+    "inspection-scale": {
+      "id": "inspection-scale",
+      "name": "Inspection Scale",
+      "type": "tool",
+      "location": "a-famosa-gate",
+      "position": { "x": 1580, "y": 390 },
+      "sprite": "scale",
+      "interaction": "examine",
+      "description": "A worn scale used to weigh cargo that passes through customs inspection.",
+      "examineText": "The pans tilt just slightly from years of use. Every merchant complains that the weights are never quite fair, which is another way of saying the officers have leverage.\n\n*In a customs room, weighing goods is never only about weight.*",
+      "historicalNote": "Weights and measures were central to early modern customs practices. Control over weighing created opportunities for accurate taxation and for abuse by officials and intermediaries alike."
+    },
+
     "keris-display": {
       "id": "keris-display",
       "name": "Malay Keris",
@@ -119,6 +171,45 @@
       "historicalNote": "Cloves were used medicinally, as preservatives, and as luxury goods. The Portuguese established a fortress on Ternate in 1522 to control the clove trade."
     },
 
+    "merchant-petition-book": {
+      "id": "merchant-petition-book",
+      "name": "Merchant Petition Book",
+      "type": "administration",
+      "location": "rua-direita",
+      "position": { "x": 420, "y": 180 },
+      "sprite": "book",
+      "interaction": "examine",
+      "description": "A ledger of petitions, complaints, and requested exemptions from merchants along Rua Direita.",
+      "examineText": "Each page carries a different pressure: delayed payment, disputed cargo, a request for private inspection, a plea to overlook a missing seal. The pages do not read like stories, but they reveal one.\n\n*Every prosperous market keeps a paper trail of favors.*",
+      "historicalNote": "Petitions were a normal part of Portuguese colonial administration. Merchants used them to request exemptions, resolve disputes, and negotiate the terms of trade."
+    },
+
+    "notary-scroll": {
+      "id": "notary-scroll",
+      "name": "Notary Scroll",
+      "type": "administration",
+      "location": "rua-direita",
+      "position": { "x": 500, "y": 220 },
+      "sprite": "scroll",
+      "interaction": "examine",
+      "description": "A formal scroll prepared by a notary to record a trade agreement or complaint.",
+      "examineText": "The script is tidy, the seals are intact, and yet the margin bears hurried corrections. The notary has preserved the exact words while quietly allowing the meaning to shift.\n\n*Documents do not eliminate corruption. They give it better handwriting.*",
+      "historicalNote": "Notaries were essential in Iberian legal culture. In ports like Melaka, they helped formalize contracts, complaints, and exemptions that shaped day-to-day commercial life."
+    },
+
+    "customs-request-ledger": {
+      "id": "customs-request-ledger",
+      "name": "Customs Request Ledger",
+      "type": "administration",
+      "location": "rua-direita",
+      "position": { "x": 620, "y": 240 },
+      "sprite": "book",
+      "interaction": "examine",
+      "description": "A ledger documenting customs requests, waivers, and challenged tariffs.",
+      "examineText": "Here the same cargo can appear under several descriptions, depending on who asked, who signed, and who was owed a favor.\n\n*The ledger reveals not just trade, but the social machinery that keeps trade moving.*",
+      "historicalNote": "Customs books were instruments of fiscal control, but they also recorded the practical compromises that let commerce continue under colonial rule."
+    },
+
     "portuguese-carrack-model": {
       "id": "portuguese-carrack-model",
       "name": "Ship Model",
@@ -143,6 +234,58 @@
       "description": "A wooden counting frame with bamboo rods and beads.",
       "examineText": "The suanpan - the Chinese counting board. Two beads above the divider, five below. In skilled hands, calculations flow like water.\n\n*The Chinese have used this tool for over a thousand years. While Portuguese merchants struggle with quill and paper, a Chinese accountant clicks through complex sums in heartbeats. No wonder they dominate the trade.*",
       "historicalNote": "The Chinese abacus was an essential tool of commerce. Skilled operators could perform calculations faster than written arithmetic, giving Chinese merchants a practical advantage in trade negotiations."
+    },
+
+    "bonded-warehouse-ledger": {
+      "id": "bonded-warehouse-ledger",
+      "name": "Bonded Warehouse Ledger",
+      "type": "administration",
+      "location": "waterfront",
+      "position": { "x": 460, "y": 220 },
+      "sprite": "book",
+      "interaction": "examine",
+      "description": "A ledger listing cargo held in bonded storage until duty is paid or waived.",
+      "examineText": "The entries alternate between clean accounting and hurried marginal notes. Some goods have been held for days. Others were cleared too quickly to ask questions.\n\n*Bonded storage is where trade waits for bureaucracy to decide whether patience or payment will win.*",
+      "historicalNote": "Bonded warehouses allowed goods to be stored under customs supervision until duties were collected. The system supported trade, but also created opportunities for delay, favoritism, and negotiated access."
+    },
+
+    "quay-service-lantern": {
+      "id": "quay-service-lantern",
+      "name": "Quay Service Lantern",
+      "type": "navigation",
+      "location": "waterfront",
+      "position": { "x": 560, "y": 260 },
+      "sprite": "hanging-oil-lantern",
+      "interaction": "examine",
+      "description": "A low lantern marking the service edge where carts can be unloaded without blocking the quay.",
+      "examineText": "The lantern is positioned where officials, porters, and night laborers all understand the same instruction: move here, not there.\n\n*Good harbors are not only built for ships. They are built for the movement of goods after the ships dock.*",
+      "historicalNote": "Harbor authorities used practical light and landmarks to organize unloading, inspection, and night labor. Lighting helped separate ordinary traffic from controlled service lanes."
+    },
+
+    "dock-tally-board": {
+      "id": "dock-tally-board",
+      "name": "Dock Tally Board",
+      "type": "administration",
+      "location": "waterfront",
+      "position": { "x": 720, "y": 300 },
+      "sprite": "scroll",
+      "interaction": "examine",
+      "description": "A board listing incoming cargo, debts, and dockside assignments.",
+      "examineText": "The tally marks are not elegant, but they are clear. Names of boats, parcels, and laborers stand in lines as if order itself could be hammered into the quay.\n\n*Where cargo moves quickly, paper moves faster still.*",
+      "historicalNote": "Port authorities maintained tallies and rosters to assign labor, track cargo, and reconcile dues. Written control over the quay was as important as physical control."
+    },
+
+    "bonded-chest": {
+      "id": "bonded-chest",
+      "name": "Bonded Chest",
+      "type": "storage",
+      "location": "waterfront",
+      "position": { "x": 840, "y": 360 },
+      "sprite": "chest",
+      "interaction": "examine",
+      "description": "A locked chest used to secure goods that have entered bonded storage.",
+      "examineText": "The lock is newer than the wood, which means the chest has been repaired rather than replaced. Someone intends to use it again and again.\n\n*In the port, a chest like this is never just a box. It is an argument with a lock on it.*",
+      "historicalNote": "Secure storage containers were common in customs-controlled spaces. Chests, strong rooms, and sealed rooms protected goods while officials negotiated clearance and payment."
     },
 
     "jesuit-crucifix": {

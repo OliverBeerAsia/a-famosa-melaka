@@ -40,7 +40,8 @@ npm run package:mac
 3. Walk, stop, and reorient near at least one NPC and one item.
 4. Start the first conversation and verify portrait, prompt, and dialogue flow.
 5. Open inventory and journal once each.
-6. Travel to at least one other location and confirm the transition screen and arrival state feel clean.
+6. Travel to `Waterfront` and `A Famosa Gate` and confirm the transition screen and arrival state feel clean.
+7. Confirm the A Famosa service gate is visible before it is unlocked and becomes usable after customs-related quest state changes.
 
 ## Packaging
 
@@ -73,5 +74,5 @@ npm run validate:art -- --strict
 - `docs/DESIGN_STANDARDS.md`
 - `docs/RPG_EXPANSION_PLAN.md`
 - `docs/ATMOSPHERIC_SYSTEMS.md`
-- `docs/RELEASE_NOTES_v0.6.0.md`
+- `docs/RELEASE_NOTES_v0.7.0.md`
 - `docs/TODO.md`

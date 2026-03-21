@@ -35,6 +35,12 @@ npm run build
 npm run validate:art -- --strict
 ```
 
+For a release candidate, do not stop at automated checks. Also walk the customs spine manually:
+- `Rua Direita`
+- `Waterfront`
+- `A Famosa Gate`
+- `Kampung`
+
 ### Package for Distribution
 ```bash
 npm run package:mac     # Create macOS .dmg and .zip
@@ -160,6 +166,19 @@ Test each location transition:
 - [ ] Quest starts
 - [ ] Follow quest stages (or use F4 to advance)
 
+### 10. Quest: "The Customs Ledger"
+- [ ] Start from `Rua Direita` by talking to `Diogo Almeida`
+- [ ] Verify `Gaspar Mesquita`, `Lin Mei`, and `Pak Salleh` are available in the correct locations
+- [ ] Confirm the branch stage offers four authored routes
+- [ ] Confirm A Famosa <-> Waterfront service gate shows a locked label before unlock state is earned
+- [ ] Confirm at least one customs-related outcome unlocks the service gate
+- [ ] Confirm journal and HUD `City Currents` update without exposing raw faction bars
+
+### 11. Save/Load and Migration
+- [ ] Save mid-quest on the customs spine and reload into the exact location
+- [ ] Confirm tracked objective, world flags, and dialogue state persist
+- [ ] Confirm older saves still load without crashing after the six-faction migration
+
 ### 10. Audio (If Enabled)
 - [ ] Background music plays
 - [ ] Music changes per location
@@ -257,4 +276,4 @@ When reporting bugs, include:
 
 ---
 
-*Last Updated: March 21, 2026*
+*Last Updated: March 21, 2026 for v0.7.0*

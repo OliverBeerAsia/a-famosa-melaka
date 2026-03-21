@@ -322,6 +322,43 @@ describe('Quest Data Integrity', () => {
     expect(brokenBranches).toEqual([]);
   });
 
+  test('customs-ledger keeps four authored, gated resolutions', () => {
+    const quests = loadQuestFiles();
+    const customsLedger = quests.find((quest) => quest.id === 'customs-ledger');
+
+    expect(customsLedger).toBeTruthy();
+
+    const stageById = new Map((customsLedger.stages || []).map((stage) => [stage.id, stage]));
+    const choiceStage = stageById.get('choose-path');
+
+    expect(choiceStage?.isBranching).toBe(true);
+    expect(choiceStage?.availablePaths).toHaveLength(4);
+
+    (choiceStage.availablePaths || []).forEach((path) => {
+      expect(Array.isArray(path.requirements?.talkedTo)).toBe(true);
+      expect(path.requirements?.talkedTo?.length || 0).toBeGreaterThanOrEqual(2);
+      if (path.id !== 'ledger-trail') {
+        expect(Array.isArray(path.requirements?.worldFlagsAny)).toBe(true);
+        expect(path.requirements?.worldFlagsAny?.length || 0).toBeGreaterThan(0);
+      }
+      expect(stageById.has(path.nextStage)).toBe(true);
+      expect(stageById.get(path.nextStage)?.isEnding).toBe(true);
+    });
+  });
+
+  test('customs-spine witness NPCs have live dialogue payloads, not null placeholders', () => {
+    const npcs = JSON.parse(fs.readFileSync(NPC_FILE, 'utf8'));
+    const customsWitnesses = ['gaspar-mesquita', 'diogo-almeida', 'lin-mei', 'pak-salleh'];
+
+    customsWitnesses.forEach((npcId) => {
+      const npc = npcs[npcId];
+      expect(npc).toBeTruthy();
+      expect(npc.dialogue).toBeTruthy();
+      expect(typeof npc.dialogue.greeting).toBe('string');
+      expect(Object.keys(npc.dialogue.topics || {}).length).toBeGreaterThan(0);
+    });
+  });
+
   test('dialogue-driven quest paths are gated and point at real branch ids', () => {
     const quests = loadQuestFiles();
     const npcData = JSON.parse(fs.readFileSync(NPC_FILE, 'utf8'));

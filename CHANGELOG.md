@@ -2,6 +2,47 @@
 
 All notable changes to A Famosa: Streets of Golden Melaka.
 
+## [0.7.0] - 2026-03-21
+
+### Customs Spine and Implicit Faction Pass
+
+This release turns the customs/corruption design plan into the first real reactive RPG layer in the live game. The world is still the same five-location city slice, but `Rua Direita`, `Waterfront`, `A Famosa Gate`, and `Kampung` now participate in an interlocked quest spine with stateful routing, witness chains, and implicit factional consequence.
+
+### Added
+- `src/data/quests/customs-ledger.json` with four authored resolutions
+- Four new named customs-spine NPCs:
+  - `gaspar-mesquita`
+  - `diogo-almeida`
+  - `lin-mei`
+  - `pak-salleh`
+- Six-faction runtime model:
+  - `garrison`
+  - `church`
+  - `portuguese-merchants`
+  - `chinese-merchants`
+  - `kampung-community`
+  - `dockside-network`
+- `City Currents` presentation in the journal/HUD for qualitative faction state
+- Stateful `A Famosa Gate <-> Waterfront` service route with lock-state messaging
+- Runtime asset coverage for the four new NPC sheets and portraits
+- New regression coverage for customs-ledger paths, service-route locking, and live witness dialogue payloads
+- New release document:
+  - `docs/RELEASE_NOTES_v0.7.0.md`
+
+### Changed
+- `The Merchant's Seal`, `Rashid's Cargo`, and `Pirates on the Horizon` now share customs/cove/world-state consequences
+- Dialogue/topic availability now supports location, world flags, completed path outcomes, and reputation bands
+- Save/load now migrates the legacy four-faction model into the six-faction runtime model
+- `HUD.tsx` and `JournalPanel.tsx` now surface narrative currents instead of explicit numerical faction readouts
+- `location-scenes.json` now treats the bonded service gate as an authored access route rather than a permanent connector
+- Customs-era map dressing, world-item affordances, and historical object coverage were expanded across `A Famosa Gate`, `Rua Direita`, and `Waterfront`
+- Version metadata moved to `0.7.0`
+
+### Verification
+- `npm test -- --runInBand`
+- `npm run build`
+- `npm run validate:art -- --strict`
+
 ## [0.6.0] - 2026-03-21
 
 ### World Polish and Presentation Pass

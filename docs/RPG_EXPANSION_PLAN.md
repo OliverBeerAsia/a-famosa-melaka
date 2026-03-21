@@ -100,15 +100,19 @@ This should start small and readable, not as a giant hidden-simulation blob.
 
 ### Phase 1: Foundation
 
-- Add light faction trust or reputation tracking
-- Ensure the journal can represent branching outcomes cleanly
-- Give the core quest lines at least two practical solution paths
+- Status: shipped in `v0.7.0`
+- Six-faction trust model is now live
+- The journal and HUD now represent consequence through `City Currents`
+- The customs spine now gives the core quest layer an interlocked multi-path cluster
 
 ### Phase 2: World Reactivity
 
+- Next active milestone
 - Change dialogue availability based on quest state and faction trust
 - Add small but visible world feedback after major decisions
 - Let locations feel different when the player arrives with different loyalties or outcomes
+- Rebuild `Pirates on the Horizon` as the next full reactive quest cluster
+- Extend stronger reactivity into `St. Paul's Church` and `Kampung`
 
 ### Phase 3: Systemic Depth
 

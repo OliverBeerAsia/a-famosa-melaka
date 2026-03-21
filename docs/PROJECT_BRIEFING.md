@@ -100,13 +100,19 @@ Every release should keep:
 
 ## Current Milestone
 
-The project has moved past prototype status. The current milestone is a broad world-polish and believability program:
+The project has moved past prototype status. The current shipping milestone is the customs-spine foundation:
 
-- keep all five locations at the same density bar
-- redraw the named cast to a stronger runtime silhouette standard
-- improve early flow and conversation staging
-- keep expanding historical believability checks
-- make every release legible in both screenshots and playthroughs
+- a live interlocked quest route across `Rua Direita`, `Waterfront`, `A Famosa Gate`, and `Kampung`
+- six implicit trust blocs instead of the older four-faction placeholder model
+- stateful route access, greeting variation, and path gating driven by quest/world state
+- authored witness NPCs and material evidence spaces instead of isolated quest topics
+
+The next milestone is to deepen that foundation rather than restart elsewhere:
+
+- rebuild `Pirates on the Horizon` into the next full reactive quest cluster
+- push the same standards into `St. Paul's Church` and `Kampung`
+- replace stopgap customs-spine character art with bespoke gameplay sheets and portraits
+- continue improving early flow, conversation pacing, and historical behavior
 
 ## RPG Growth Direction
 

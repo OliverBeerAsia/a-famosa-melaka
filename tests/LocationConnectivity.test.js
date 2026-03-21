@@ -112,4 +112,25 @@ describe('Location connectivity', () => {
     expect(missingReverseLinks).toEqual([]);
     expect([...reachable].sort()).toEqual(locationIds);
   });
+
+  test('the A Famosa <-> Waterfront service route stays visible but locked behind customs world state', () => {
+    const locations = loadLocations();
+    const routePairs = [
+      ['a-famosa-gate', 'waterfront'],
+      ['waterfront', 'a-famosa-gate'],
+    ];
+
+    routePairs.forEach(([sourceId, targetId]) => {
+      const transition = (locations[sourceId].transitions || []).find((entry) => entry.targetLocation === targetId);
+
+      expect(transition).toBeTruthy();
+      expect(transition.showWhenLocked).toBe(true);
+      expect(typeof transition.lockedLabel).toBe('string');
+      expect(transition.lockedLabel.length).toBeGreaterThan(0);
+      expect(typeof transition.blockedMessage).toBe('string');
+      expect(transition.blockedMessage.length).toBeGreaterThan(0);
+      expect(Array.isArray(transition.requirements?.worldFlagsAny)).toBe(true);
+      expect(transition.requirements.worldFlagsAny.length).toBeGreaterThan(0);
+    });
+  });
 });

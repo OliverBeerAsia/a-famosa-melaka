@@ -2783,6 +2783,66 @@
           "height": 16,
           "x": 1824,
           "y": 288
+        },
+        {
+          "gid": 50,
+          "height": 16,
+          "id": 49,
+          "name": "cargo-crate",
+          "rotation": 0,
+          "type": "decoration",
+          "visible": true,
+          "width": 16,
+          "x": 896,
+          "y": 288
+        },
+        {
+          "gid": 53,
+          "height": 16,
+          "id": 50,
+          "name": "maritime-barrel",
+          "rotation": 0,
+          "type": "decoration",
+          "visible": true,
+          "width": 16,
+          "x": 960,
+          "y": 288
+        },
+        {
+          "gid": 54,
+          "height": 16,
+          "id": 51,
+          "name": "rope-coil",
+          "rotation": 0,
+          "type": "decoration",
+          "visible": true,
+          "width": 16,
+          "x": 1008,
+          "y": 296
+        },
+        {
+          "gid": 41,
+          "height": 16,
+          "id": 52,
+          "name": "bench",
+          "rotation": 0,
+          "type": "decoration",
+          "visible": true,
+          "width": 16,
+          "x": 608,
+          "y": 312
+        },
+        {
+          "gid": 64,
+          "height": 16,
+          "id": 53,
+          "name": "hanging-oil-lantern",
+          "rotation": 0,
+          "type": "decoration",
+          "visible": true,
+          "width": 16,
+          "x": 1184,
+          "y": 256
         }
       ],
       "opacity": 1,
@@ -3027,7 +3087,7 @@
     }
   ],
   "nextlayerid": 8,
-  "nextobjectid": 49,
+  "nextobjectid": 54,
   "orientation": "isometric",
   "renderorder": "right-down",
   "tiledversion": "1.10.2",

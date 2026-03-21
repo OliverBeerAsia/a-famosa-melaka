@@ -81,6 +81,38 @@
             { "sprite": "hanging-oil-lantern", "offsetX": 76, "offsetY": -24 },
             { "sprite": "palm-tree", "offsetX": 110, "offsetY": -40 }
           ]
+        },
+        {
+          "id": "customs-inspection-yard",
+          "centerTile": { "x": 17, "y": 13 },
+          "objects": [
+            { "sprite": "balance-scale", "offsetX": 0, "offsetY": 0 },
+            { "sprite": "cargo-crate", "offsetX": 24, "offsetY": 4 },
+            { "sprite": "cargo-crate", "offsetX": 44, "offsetY": -6 },
+            { "sprite": "handcart", "offsetX": -28, "offsetY": 14 },
+            { "sprite": "rope-coil", "offsetX": 64, "offsetY": 10 }
+          ]
+        },
+        {
+          "id": "service-gate-lamp",
+          "centerTile": { "x": 27, "y": 14 },
+          "objects": [
+            { "sprite": "hanging-oil-lantern", "offsetX": 0, "offsetY": -30 },
+            { "sprite": "pelourinho", "offsetX": 22, "offsetY": 6 },
+            { "sprite": "barrel", "offsetX": -24, "offsetY": 12 },
+            { "sprite": "crate", "offsetX": 42, "offsetY": 10 }
+          ]
+        },
+        {
+          "id": "bonded-service-queue",
+          "centerTile": { "x": 22, "y": 19 },
+          "objects": [
+            { "sprite": "bench", "offsetX": -32, "offsetY": 8 },
+            { "sprite": "barrel", "offsetX": -6, "offsetY": 16 },
+            { "sprite": "cargo-crate", "offsetX": 22, "offsetY": 10 },
+            { "sprite": "rope-coil", "offsetX": 54, "offsetY": 14 },
+            { "sprite": "hanging-oil-lantern", "offsetX": 72, "offsetY": -18 }
+          ]
         }
       ]
     },
@@ -276,6 +308,38 @@
             { "sprite": "bush", "offsetX": 74, "offsetY": 12 },
             { "sprite": "flowers", "offsetX": 94, "offsetY": 16 }
           ]
+        },
+        {
+          "id": "petition-frontage",
+          "centerTile": { "x": 12, "y": 9 },
+          "objects": [
+            { "sprite": "balance-scale", "offsetX": 0, "offsetY": 0 },
+            { "sprite": "bench", "offsetX": 24, "offsetY": 8 },
+            { "sprite": "scroll-rack", "offsetX": -26, "offsetY": -6 },
+            { "sprite": "hanging-oil-lantern", "offsetX": 48, "offsetY": -22 },
+            { "sprite": "pelourinho", "offsetX": 70, "offsetY": 10 }
+          ]
+        },
+        {
+          "id": "notary-porch",
+          "centerTile": { "x": 17, "y": 11 },
+          "objects": [
+            { "sprite": "arched-window", "offsetX": 0, "offsetY": -24 },
+            { "sprite": "crate", "offsetX": -20, "offsetY": 12 },
+            { "sprite": "barrel", "offsetX": 14, "offsetY": 16 },
+            { "sprite": "tavern-sign", "offsetX": 46, "offsetY": -28 },
+            { "sprite": "lantern", "offsetX": 70, "offsetY": -18 }
+          ]
+        },
+        {
+          "id": "customs-queue",
+          "centerTile": { "x": 25, "y": 14 },
+          "objects": [
+            { "sprite": "cargo-crate", "offsetX": 0, "offsetY": 0 },
+            { "sprite": "balance-scale", "offsetX": 24, "offsetY": 2 },
+            { "sprite": "bench", "offsetX": 48, "offsetY": 12 },
+            { "sprite": "rope-coil", "offsetX": 74, "offsetY": 10 }
+          ]
         }
       ]
     },
@@ -367,6 +431,38 @@
             { "sprite": "rope-coil", "offsetX": 84, "offsetY": 16 },
             { "sprite": "cargo-crate", "offsetX": 108, "offsetY": 8 },
             { "sprite": "lantern", "offsetX": 126, "offsetY": -20 }
+          ]
+        },
+        {
+          "id": "bonded-warehouse-lane",
+          "centerTile": { "x": 10, "y": 11 },
+          "objects": [
+            { "sprite": "cargo-crate", "offsetX": 0, "offsetY": 0 },
+            { "sprite": "cargo-crate", "offsetX": 22, "offsetY": -4 },
+            { "sprite": "maritime-barrel", "offsetX": 46, "offsetY": 8 },
+            { "sprite": "rope-coil", "offsetX": 68, "offsetY": 4 },
+            { "sprite": "hanging-oil-lantern", "offsetX": 86, "offsetY": -20 }
+          ]
+        },
+        {
+          "id": "rumor-corner",
+          "centerTile": { "x": 6, "y": 15 },
+          "objects": [
+            { "sprite": "bench", "offsetX": -24, "offsetY": 12 },
+            { "sprite": "tavern-sign", "offsetX": 10, "offsetY": -30 },
+            { "sprite": "fishing-net", "offsetX": 34, "offsetY": 8 },
+            { "sprite": "barrel", "offsetX": 54, "offsetY": 16 },
+            { "sprite": "lantern", "offsetX": 72, "offsetY": -18 }
+          ]
+        },
+        {
+          "id": "unloading-edge",
+          "centerTile": { "x": 31, "y": 17 },
+          "objects": [
+            { "sprite": "handcart", "offsetX": 0, "offsetY": 10 },
+            { "sprite": "cargo-crate", "offsetX": 26, "offsetY": 0 },
+            { "sprite": "maritime-barrel", "offsetX": 50, "offsetY": 10 },
+            { "sprite": "anchor", "offsetX": 84, "offsetY": 20 }
           ]
         }
       ]

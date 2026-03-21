@@ -7,7 +7,7 @@
 
 import { useDialogueStore, NPCData, TopicData } from '../stores/dialogueStore';
 import { ITEM_DEFINITIONS } from '../stores/inventoryStore';
-import { useQuestStore, Quest, QuestStage, QuestObjective } from '../stores/questStore';
+import { useQuestStore, Quest, QuestStage, QuestObjective, ReputationFaction, ConditionalRequirements } from '../stores/questStore';
 
 // Import JSON data directly (Vite handles this)
 import npcsData from './npcs.json';
@@ -19,6 +19,11 @@ import merchantsSealQuest from './quests/merchants-seal.json';
 import padresDilemmaQuest from './quests/padres-dilemma.json';
 import piratesRumorQuest from './quests/pirates-rumor.json';
 import rashidsCargoQuest from './quests/rashids-cargo.json';
+import customsLedgerQuest from './quests/customs-ledger.json';
+
+type LegacyReputationFaction = ReputationFaction | 'portuguese' | 'chinese' | 'malay' | 'arab';
+type RawReputationMap = Partial<Record<LegacyReputationFaction, number>>;
+type RawPathRequirements = NonNullable<NonNullable<RawQuestStage['availablePaths']>[number]['requirements']>;
 
 export interface RawQuestData {
   id: string;
@@ -30,7 +35,8 @@ export interface RawQuestData {
   triggerTopic?: string;
   prerequisite?: {
     questComplete?: string;
-    reputation?: Record<'portuguese' | 'chinese' | 'malay' | 'arab', number>;
+    reputation?: RawReputationMap;
+    completedQuestPaths?: string[];
   };
   prerequisites?: string[];
   stages: RawQuestStage[];
@@ -56,20 +62,29 @@ export interface RawQuestStage {
       talkedTo?: string[];
       topic?: string;
       time?: 'dawn' | 'day' | 'dusk' | 'night';
-    };
+      location?: string;
+      itemsAll?: string[];
+      reputation?: RawReputationMap;
+      maxReputation?: RawReputationMap;
+      worldFlagsAll?: string[];
+      worldFlagsAny?: string[];
+      worldFlagsNone?: string[];
+      completedQuests?: string[];
+      completedQuestPaths?: string[];
+    } & ConditionalRequirements;
   }[];
   path?: string;
   isEnding?: boolean;
   reward?: {
     items?: string[];
     money?: number;
-    reputation?: Record<'portuguese' | 'chinese' | 'malay' | 'arab', number>;
+    reputation?: RawReputationMap;
   };
   givesItem?: string;
   warning?: string;
   consequenceText?: string;
   consequences?: {
-    reputation?: Record<'portuguese' | 'chinese' | 'malay' | 'arab', number>;
+    reputation?: RawReputationMap;
     worldChanges?: string[];
     flags?: string[];
     npcReactions?: Record<string, string>;
@@ -205,6 +220,7 @@ function loadQuestData(): void {
     'padres-dilemma': padresDilemmaQuest as unknown as RawQuestData,
     'pirates-rumor': piratesRumorQuest as unknown as RawQuestData,
     'rashids-cargo': rashidsCargoQuest as unknown as RawQuestData,
+    'customs-ledger': customsLedgerQuest as unknown as RawQuestData,
   };
 
   const questIds = ((questIndexData as unknown as { quests?: string[] }).quests || [])
@@ -257,15 +273,18 @@ function convertToQuest(raw: RawQuestData): Quest {
     journalEntry: stage.journalEntry,
     nextStage: stage.nextStage,
     isBranching: stage.isBranching,
-    availablePaths: stage.availablePaths,
+    availablePaths: stage.availablePaths?.map((path) => ({
+      ...path,
+      requirements: normalizeConditionalRequirements(path.requirements),
+    })),
     path: stage.path,
     isEnding: stage.isEnding,
-    reward: stage.reward,
+    reward: normalizeReward(stage.reward),
     givesItem: stage.givesItem,
     warning: stage.warning,
     consequenceText: stage.consequenceText,
-    consequences: stage.consequences,
-    endingVariants: stage.endingVariants,
+    consequences: normalizeConsequences(stage.consequences),
+    endingVariants: normalizeEndingVariants(stage.endingVariants),
     endingType: stage.endingType,
     npcDialogueOverrides: stage.npcDialogueOverrides as QuestStage['npcDialogueOverrides'],
   }));
@@ -276,12 +295,106 @@ function convertToQuest(raw: RawQuestData): Quest {
     description: raw.description,
     giver: raw.giver || raw.questGiver,
     triggerTopic: raw.triggerTopic,
-    prerequisite: raw.prerequisite,
+    prerequisite: raw.prerequisite
+      ? {
+          ...raw.prerequisite,
+          reputation: normalizeReputationMap(raw.prerequisite.reputation),
+        }
+      : undefined,
     prerequisites: raw.prerequisites,
     stages,
     currentStageId: stages[0]?.id || 'start',
     completed: false,
   };
+}
+
+function normalizeReputationMap(
+  raw?: RawReputationMap
+): Partial<Record<ReputationFaction, number>> | undefined {
+  if (!raw) return undefined;
+
+  const normalized: Partial<Record<ReputationFaction, number>> = {};
+  const assign = (faction: ReputationFaction, value: number) => {
+    normalized[faction] = (normalized[faction] || 0) + value;
+  };
+
+  Object.entries(raw).forEach(([faction, value]) => {
+    if (typeof value !== 'number' || !Number.isFinite(value)) return;
+
+    switch (faction) {
+      case 'portuguese':
+        assign('garrison', value);
+        assign('portuguese-merchants', value);
+        break;
+      case 'chinese':
+        assign('chinese-merchants', value);
+        break;
+      case 'malay':
+        assign('kampung-community', value);
+        break;
+      case 'arab':
+        assign('dockside-network', value);
+        break;
+      case 'garrison':
+      case 'church':
+      case 'portuguese-merchants':
+      case 'chinese-merchants':
+      case 'kampung-community':
+      case 'dockside-network':
+        assign(faction, value);
+        break;
+      default:
+        break;
+    }
+  });
+
+  return Object.keys(normalized).length > 0 ? normalized : undefined;
+}
+
+function normalizeConditionalRequirements(
+  requirements?: RawPathRequirements
+): ConditionalRequirements | undefined {
+  if (!requirements) return undefined;
+
+  return {
+    ...requirements,
+    reputation: normalizeReputationMap(requirements.reputation),
+    maxReputation: normalizeReputationMap(requirements.maxReputation),
+  };
+}
+
+function normalizeReward(reward?: RawQuestStage['reward']): RawQuestStage['reward'] | undefined {
+  if (!reward) return undefined;
+  return {
+    ...reward,
+    reputation: normalizeReputationMap(reward.reputation),
+  };
+}
+
+function normalizeConsequences(
+  consequences?: RawQuestStage['consequences']
+): RawQuestStage['consequences'] | undefined {
+  if (!consequences) return undefined;
+  return {
+    ...consequences,
+    reputation: normalizeReputationMap(consequences.reputation),
+  };
+}
+
+function normalizeEndingVariants(
+  endingVariants?: RawQuestStage['endingVariants']
+): RawQuestStage['endingVariants'] | undefined {
+  if (!endingVariants) return undefined;
+
+  return Object.fromEntries(
+    Object.entries(endingVariants).map(([variantId, variantData]) => [
+      variantId,
+      {
+        ...variantData,
+        reward: normalizeReward(variantData.reward),
+      },
+    ])
+  );
 }
 
 /**

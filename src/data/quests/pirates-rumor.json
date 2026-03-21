@@ -1,7 +1,7 @@
 {
   "id": "pirates-rumor",
   "name": "Pirates on the Horizon",
-  "description": "Investigate rumors of pirate activity threatening Melaka's shipping lanes.",
+  "description": "Investigate pirate sightings in the straits and decide whether the rumor is a real threat, a customs misdirection, or the first clue to a larger harbor conspiracy.",
   "giver": "rashid",
   "triggerTopic": "pirates",
   "prerequisites": [],
@@ -11,69 +11,134 @@
       "id": "start",
       "description": "Learn about the pirate threat from Rashid.",
       "objectives": [
-        { 
-          "type": "talk", 
-          "target": "rashid", 
+        {
+          "type": "talk",
+          "target": "rashid",
           "topic": "pirates",
           "description": "Hear Rashid's tale of pirates"
         }
       ],
-      "journalEntry": "Rashid speaks of pirates spotted near the straits. Ships have gone missing. The authorities should be informed.",
+      "journalEntry": "Rashid speaks of pirates spotted near the straits. Ships have gone missing, but the story sounds tangled with harbor rumors and customs talk.",
       "nextStage": "report"
     },
     {
       "id": "report",
       "description": "Report the pirate sightings to Capitão Rodrigues.",
       "objectives": [
-        { 
-          "type": "talk", 
-          "target": "capitao-rodrigues", 
+        {
+          "type": "talk",
+          "target": "capitao-rodrigues",
           "topic": "pirates",
           "description": "Report to Capitão Rodrigues"
         }
       ],
-      "journalEntry": "I should inform the fortress garrison about the pirate threat. Capitão Rodrigues will want to know.",
+      "journalEntry": "I should inform the fortress garrison about the pirate threat. Capitão Rodrigues will want to know whether this is real piracy or something more convenient to the customs office.",
       "nextStage": "gather-info"
     },
     {
       "id": "gather-info",
       "description": "Gather more information about the pirates.",
       "objectives": [
-        { 
-          "type": "talk", 
-          "target": "chen-wei", 
+        {
+          "type": "talk",
+          "target": "chen-wei",
           "topic": "pirates",
           "optional": true,
           "description": "Ask Chen Wei about Chinese shipping losses"
         },
-        { 
-          "type": "talk", 
-          "target": "aminah", 
+        {
+          "type": "talk",
+          "target": "aminah",
           "topic": "pirates",
           "description": "Ask Aminah what the fishermen say"
         }
       ],
-      "journalEntry": "The Capitão wants more details before he can act. The merchants and fishermen may have useful information.",
-      "nextStage": "village-lead"
+      "journalEntry": "The Capitão wants more details before he can act. The merchants, fishermen, and dockside runners may have useful information.",
+      "nextStage": "choose-track"
+    },
+    {
+      "id": "choose-track",
+      "description": "Decide whether to report, follow the cove lead, or let the rumor settle.",
+      "isBranching": true,
+      "journalEntry": "The rumor now points in two directions: the official report, or the harbor side where people keep their real stories. There may also be no clean answer at all.",
+      "availablePaths": [
+        {
+          "id": "file-report",
+          "name": "File the Warning",
+          "description": "Take the concern back into official hands and let the garrison decide the response.",
+          "requirements": { "talkedTo": ["capitao-rodrigues", "aminah"] },
+          "nextStage": "official-report"
+        },
+        {
+          "id": "follow-cove",
+          "name": "Follow the Cove Lead",
+          "description": "Trace the rumor toward the hidden waterline and see whether the ships are really pirate craft.",
+          "requirements": { "talkedTo": ["aminah", "chen-wei"] },
+          "nextStage": "village-lead"
+        },
+        {
+          "id": "let-it-rest",
+          "name": "Let the Rumor Sit",
+          "description": "Do not stir the city further. Keep the rumor as a quiet warning for later.",
+          "requirements": { "talkedTo": ["rashid", "aminah"] },
+          "nextStage": "complete"
+        }
+      ]
+    },
+    {
+      "id": "official-report",
+      "description": "Return the matter to Rodrigues and let the garrison act on it.",
+      "objectives": [
+        {
+          "type": "wait",
+          "days": 1,
+          "completed": false
+        }
+      ],
+      "journalEntry": "The garrison has the warning. If there is a pirate cove, the city will treat it as a security matter instead of a rumor.",
+      "consequenceText": "Rodrigues orders a quiet increase in patrols. The waterfront hears that someone has been asking about cargo lists and customs records as well as pirates.",
+      "consequences": {
+        "reputation": { "portuguese": 5, "malay": 5 },
+        "worldChanges": ["pirate-patrols", "customs-ledger-clue", "pirates-follow-up-ready"],
+        "flags": ["pirates-reported"]
+      },
+      "nextStage": "complete"
     },
     {
       "id": "village-lead",
       "description": "Follow up on the lead in Kampung Quarter.",
       "objectives": [
-        { 
-          "type": "explore", 
+        {
+          "type": "explore",
           "target": "kampung",
           "description": "Visit the Kampung Quarter"
         }
       ],
-      "journalEntry": "Aminah mentioned that fishermen from the kampung saw a suspicious ship anchored in a hidden cove. I should investigate.",
+      "journalEntry": "Aminah mentioned that fishermen from the kampung saw a suspicious ship anchored in a hidden cove. Pak Salleh may know whether the sighting belongs to pirates, smugglers, or something tied to the customs books.",
+      "npcDialogueOverrides": {
+        "pak-salleh": {
+          "cove": {
+            "text": "A ship in a hidden cove is not automatically a pirate ship. It can be a tax dodger, a runner, or a man who pays the right hand and hides from the left.",
+            "questCritical": true,
+            "questPath": "ledger-trail"
+          }
+        },
+        "lin-mei": {
+          "manifest": {
+            "text": "If the cove and the customs tallies line up, then someone is moving cargo off the books. Pirates or not, the pattern is the same.",
+            "questCritical": true,
+            "questPath": "ledger-trail"
+          }
+        }
+      },
       "nextStage": "complete"
     },
     {
       "id": "complete",
       "description": "Quest complete - investigation concluded.",
       "objectives": [],
-      "journalEntry": "I've gathered enough information for the garrison. The pirates seem to be using a cove south of the city. Capitão Rodrigues will send patrols. Perhaps there's more to discover another time...",
+      "isEnding": true,
+      "journalEntry": "I've gathered enough information for the garrison. The pirates may be using a cove south of the city, or the rumor may simply be a mask for customs games. Either way, the next lead points back to the harbor rather than the horizon.",
       "reward": {
         "items": ["coin-pouch"],
         "money": 15,
@@ -87,7 +152,7 @@
         "greeting": "Friend! Have you told the Portuguese about the pirates? They need to know!",
         "topics": {
           "pirates": {
-            "text": "Hurry! Every day more ships are at risk. The Capitão commands the garrison - he can send patrols!"
+            "text": "Hurry! Every day more ships are at risk. The Capitão commands the garrison - he can send patrols! But if the customs books are involved, the story is never only about pirates."
           }
         }
       }
@@ -96,12 +161,10 @@
       "gather-info": {
         "topics": {
           "pirates": {
-            "text": "Pirates, you say? I need more than sailor's tales to mobilize the garrison. Get me details - where were they seen? What ships? Bring me facts!"
+            "text": "Pirates, you say? I need more than sailor's tales to mobilize the garrison. Get me details - where were they seen? What ships? Bring me facts, and if customs slippage is part of it, bring that too."
           }
         }
       }
     }
   }
 }
-
-

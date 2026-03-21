@@ -7,8 +7,25 @@
 
 import { create } from 'zustand';
 import { emitGameEvent } from '../phaser/eventBridge';
+import { useGameStore } from './gameStore';
 import { useInventoryStore } from './inventoryStore';
 import { useQuestStore } from './questStore';
+import type { ConditionalRequirements, ReputationFaction } from './questStore';
+
+interface GreetingVariant {
+  text: string;
+  when?: {
+    reputation?: Partial<Record<ReputationFaction, number>>;
+    maxReputation?: Partial<Record<ReputationFaction, number>>;
+    worldFlagsAll?: string[];
+    worldFlagsAny?: string[];
+    worldFlagsNone?: string[];
+    completedQuests?: string[];
+    completedQuestPaths?: string[];
+    time?: 'dawn' | 'day' | 'dusk' | 'night';
+    location?: string;
+  };
+}
 
 export interface NPCData {
   id: string;
@@ -19,6 +36,7 @@ export interface NPCData {
     greeting: string;
     greetingQuestActive?: string;
     greetingQuestComplete?: string;
+    greetingVariants?: GreetingVariant[];
     farewell?: string;
     topics: Record<string, TopicData>;
   };
@@ -37,6 +55,7 @@ export interface TopicData {
   givesItem?: string;
   takesItem?: string;
   takesMoney?: number;
+  availability?: ConditionalRequirements;
 }
 
 export interface DialogueState {
@@ -114,14 +133,7 @@ export const useDialogueStore = create<DialogueState>((set, get) => ({
     const seededTopics = seedTopicsForDialogue(npcWithOverrides, unlockedTopics[npcId] || []);
     const available = getVisibleTopics(npcWithOverrides, seededTopics);
 
-    const questId = npc.questId;
-    const questStore = useQuestStore.getState();
-    let greeting = mergedDialogue.greeting;
-    if (questId && questStore.isQuestCompleted(questId) && mergedDialogue.greetingQuestComplete) {
-      greeting = mergedDialogue.greetingQuestComplete;
-    } else if (questId && questStore.isQuestActive(questId) && mergedDialogue.greetingQuestActive) {
-      greeting = mergedDialogue.greetingQuestActive;
-    }
+    const greeting = resolveGreeting(npcWithOverrides);
 
     set({
       currentNPC: npcWithOverrides,
@@ -291,10 +303,84 @@ function getEligibleTopics(npc: NPCData, unlockedTopics: string[]): string[] {
       if (!meetsRequirements) continue;
     }
 
+    if (!isConditionalRequirementMet(topic.availability)) continue;
+
     available.push(key);
   }
 
   return available;
+}
+
+function isConditionalRequirementMet(requirements?: ConditionalRequirements): boolean {
+  if (!requirements) return true;
+
+  const questState = useQuestStore.getState();
+  const inventoryState = useInventoryStore.getState();
+  const gameState = useGameStore.getState();
+
+  if (requirements.money && inventoryState.money < requirements.money) return false;
+  if (requirements.itemsAll?.length && !requirements.itemsAll.every((itemId) => inventoryState.hasItem(itemId))) {
+    return false;
+  }
+  if (requirements.talkedTo?.length && !requirements.talkedTo.every((npcId) => questState.talkedToNPCs.includes(npcId))) {
+    return false;
+  }
+  if (requirements.topic && !questState.seenTopics.includes(requirements.topic)) return false;
+  if (requirements.time && gameState.time.timeOfDay !== requirements.time) return false;
+  if (requirements.location && gameState.currentLocation !== requirements.location) return false;
+
+  if (requirements.reputation) {
+    const meetsRep = (Object.entries(requirements.reputation) as Array<[ReputationFaction, number]>)
+      .every(([faction, minValue]) => (questState.reputation[faction] ?? 0) >= minValue);
+    if (!meetsRep) return false;
+  }
+
+  if (requirements.maxReputation) {
+    const underRep = (Object.entries(requirements.maxReputation) as Array<[ReputationFaction, number]>)
+      .every(([faction, maxValue]) => (questState.reputation[faction] ?? 0) <= maxValue);
+    if (!underRep) return false;
+  }
+
+  if (requirements.worldFlagsAll?.length && !requirements.worldFlagsAll.every((flag) => Boolean(questState.worldFlags[flag]))) {
+    return false;
+  }
+
+  if (requirements.worldFlagsAny?.length && !requirements.worldFlagsAny.some((flag) => Boolean(questState.worldFlags[flag]))) {
+    return false;
+  }
+
+  if (requirements.worldFlagsNone?.length && requirements.worldFlagsNone.some((flag) => Boolean(questState.worldFlags[flag]))) {
+    return false;
+  }
+
+  if (requirements.completedQuests?.length && !requirements.completedQuests.every((questId) => questState.completedQuests.includes(questId))) {
+    return false;
+  }
+
+  if (requirements.completedQuestPaths?.length) {
+    const hasPaths = requirements.completedQuestPaths.every((token) => {
+      const [questId, resolution] = token.split(':');
+      return Boolean(questId && resolution && questState.getCompletedQuestResolution(questId) === resolution);
+    });
+    if (!hasPaths) return false;
+  }
+
+  return true;
+}
+
+function resolveGreeting(npc: NPCData): string {
+  const questId = npc.questId;
+  const questState = useQuestStore.getState();
+  if (questId && questState.isQuestCompleted(questId) && npc.dialogue.greetingQuestComplete) {
+    return npc.dialogue.greetingQuestComplete;
+  }
+  if (questId && questState.isQuestActive(questId) && npc.dialogue.greetingQuestActive) {
+    return npc.dialogue.greetingQuestActive;
+  }
+
+  const variants = npc.dialogue.greetingVariants || [];
+  const matchedVariant = variants.find((variant) => isConditionalRequirementMet(variant.when));
+  return matchedVariant?.text || npc.dialogue.greeting;
 }
 
 function prioritizeTopics(npc: NPCData, topics: string[]): string[] {

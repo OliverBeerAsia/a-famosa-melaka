@@ -1,6 +1,6 @@
 {
   "name": "a-famosa-streets-of-golden-melaka",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "A pixel-art adventure RPG set in Portuguese Melaka circa 1580",
   "main": "electron/main.cjs",
   "type": "module",

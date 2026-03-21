@@ -60,6 +60,13 @@ See `ATMOSPHERIC_SYSTEMS.md` for the operational atmosphere bar.
   - sailors
   - villagers
 - Quest content must feel local to Melaka and the Straits trade world.
+- Important quest lines should share consequences, flags, or witnesses where that makes sense. Isolated "mission bubbles" are below standard.
+
+### RPG state and consequence
+
+- Reputation should be mostly implicit and surfaced through access, tone, route permission, witness trust, and journal language.
+- `City Currents` style summaries are acceptable; raw faction meters in the exploration HUD are not the default presentation.
+- Restricted routes, bonded spaces, and service access should open because the city state changed, not because the player touched a generic unlock switch.
 
 ### Experience tone
 

@@ -7,6 +7,7 @@
 import React, { useState, useEffect } from 'react';
 import { useQuestStore, JournalEntry } from '../../stores/questStore';
 import { useGameStore } from '../../stores/gameStore';
+import { useDialogueStore } from '../../stores/dialogueStore';
 
 type TabType = 'quests' | 'notes' | 'discoveries';
 
@@ -16,9 +17,11 @@ export function JournalPanel() {
     journal,
     trackedObjective,
     getQuestStage,
+    getNarrativeCurrents,
     setTrackedObjective,
   } = useQuestStore();
   const setJournalOpen = useGameStore((state) => state.setJournalOpen);
+  const npcData = useDialogueStore((state) => state.allNPCData);
 
   const [currentTab, setCurrentTab] = useState<TabType>('quests');
   const [scrollOffset, setScrollOffset] = useState(0);
@@ -26,6 +29,7 @@ export function JournalPanel() {
   // Filter journal entries by category
   const discoveryEntries = journal.filter((e) => e.category === 'discovery');
   const rumorEntries = journal.filter((e) => e.category === 'rumor');
+  const narrativeCurrents = getNarrativeCurrents();
 
   // Keyboard navigation
   useEffect(() => {
@@ -61,15 +65,7 @@ export function JournalPanel() {
 
   // Format NPC names
   const formatNPCName = (npcId: string) => {
-    const names: Record<string, string> = {
-      'fernao-gomes': 'Fernão Gomes',
-      'capitao-rodrigues': 'Capitão Rodrigues',
-      'padre-tomas': 'Padre Tomás',
-      'aminah': 'Aminah',
-      'chen-wei': 'Chen Wei',
-      'rashid': 'Rashid',
-    };
-    return names[npcId] || npcId;
+    return npcData[npcId]?.name || npcId;
   };
 
   // Format objective text
@@ -109,15 +105,45 @@ export function JournalPanel() {
   const renderQuests = () => {
     if (activeQuests.length === 0) {
       return (
-        <p className="text-sepia-light italic">
-          No active quests.
-          <br />
-          Speak with townsfolk to find work...
-        </p>
+        <>
+          {narrativeCurrents.length > 0 ? (
+            <div className="mb-4 rounded border border-gold/20 bg-parchment-300/35 p-3">
+              <h3 className="font-cinzel text-xs uppercase tracking-wide text-gold mb-2">City Currents</h3>
+              <div className="space-y-2">
+                {narrativeCurrents.slice(0, 3).map((current) => (
+                  <div key={current.id}>
+                    <p className="text-leather-200 text-sm font-semibold">{current.title}</p>
+                    <p className="text-sepia text-xs leading-5">{current.text}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : null}
+          <p className="text-sepia-light italic">
+            No active quests.
+            <br />
+            Speak with townsfolk to find work...
+          </p>
+        </>
       );
     }
 
-    return activeQuests.map((quest) => {
+    return (
+      <>
+        {narrativeCurrents.length > 0 ? (
+          <div className="mb-4 rounded border border-gold/20 bg-parchment-300/35 p-3">
+            <h3 className="font-cinzel text-xs uppercase tracking-wide text-gold mb-2">City Currents</h3>
+            <div className="space-y-2">
+              {narrativeCurrents.slice(0, 3).map((current) => (
+                <div key={current.id}>
+                  <p className="text-leather-200 text-sm font-semibold">{current.title}</p>
+                  <p className="text-sepia text-xs leading-5">{current.text}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : null}
+        {activeQuests.map((quest) => {
       const stage = getQuestStage(quest.id);
 
       return (
@@ -177,7 +203,9 @@ export function JournalPanel() {
           )}
         </div>
       );
-    });
+        })}
+      </>
+    );
   };
 
   // Render journal entries

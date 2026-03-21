@@ -29,7 +29,7 @@
             "requires": ["special-cargo"]
           },
           "accept-job": {
-            "text": "Excellent! I knew you were a practical soul. Here - *hands over wrapped bundle* - take this to the kampung. Find an old woman named Mak Enang near the well. Give her this, she gives you payment, you bring payment to me. Simple! Just... avoid the main streets. Guards ask questions.",
+            "text": "Excellent! I knew you were a practical soul. Here - *hands over wrapped bundle* - take this to the kampung. Find an old woman named Mak Enang near the well. Give her this, she gives you payment, you bring payment to me. Simple! Just... avoid the main streets. Guards ask questions. And if some clerk starts waving papers, it is because the docks and the gate are talking to each other.",
             "requires": ["special-cargo"],
             "givesItem": "wrapped-bundle"
           },
@@ -49,7 +49,7 @@
         { "type": "location", "target": "kampung", "completed": false },
         { "type": "talk", "target": "mak-enang", "topic": "delivery", "completed": false }
       ],
-      "journalEntry": "I need to deliver Rashid's bundle to Mak Enang in the kampung. He suggested avoiding main streets where guards patrol.",
+      "journalEntry": "I need to deliver Rashid's bundle to Mak Enang in the kampung. He suggested avoiding main streets where guards patrol, and said the docks and the gate are talking through their ledgers.",
       "npcDialogueOverrides": {
         "mak-enang": {
           "delivery": {
@@ -82,7 +82,7 @@
         {
           "id": "report-smuggling",
           "name": "Report to Authorities",
-          "description": "Report the smuggling operation to Capitão Rodrigues.",
+          "description": "Report the smuggling operation to Capitão Rodrigues and push the customs trail into the open.",
           "nextStage": "report-path"
         },
         {
@@ -120,7 +120,8 @@
       "nextStage": "complete-job-ending",
       "consequences": {
         "reputation": { "arab": 10 },
-        "worldChanges": ["rashid-trusts-player"]
+        "worldChanges": ["rashid-trusts-player", "customs-cargo-moved", "dockside-trust"],
+        "flags": ["dockside-favor"]
       }
     },
 
@@ -135,7 +136,7 @@
       "npcDialogueOverrides": {
         "capitao-rodrigues": {
           "smuggling-report": {
-          "text": "*listens intently* Smuggling through the kampung? This is useful intelligence. *pauses* You delivered the cargo before reporting? Hmm. I will not charge you - you are cooperating now. But Rashid and this woman Mak Enang... they will be questioned. *grimly* Smuggling undermines crown authority. It cannot be tolerated.",
+          "text": "*listens intently* Smuggling through the kampung? This is useful intelligence. *pauses* You delivered the cargo before reporting? Hmm. I will not charge you - you are cooperating now. But Rashid and this woman Mak Enang... they will be questioned. *grimly* Smuggling undermines crown authority. If it is tied to the customs books, I want that line traced too.",
             "unlocks": ["report-consequences"]
           },
           "report-consequences": {
@@ -160,8 +161,8 @@
       "consequenceText": "Guards raid the kampung. Mak Enang is arrested, her medicine confiscated. Her grandson dies within the week. Rashid's dhow is impounded, though he himself escapes. In the market, Aminah looks at you with cold eyes. The waterfront remembers who informed.",
       "consequences": {
         "reputation": { "portuguese": 10, "arab": -30, "malay": -20 },
-        "worldChanges": ["rashid-fled", "mak-enang-arrested"],
-        "flags": ["informer"]
+        "worldChanges": ["rashid-fled", "mak-enang-arrested", "customs-ledger-clue", "customs-alert"],
+        "flags": ["informer", "customs-questioned"]
       }
     },
 
@@ -175,7 +176,7 @@
       "consequenceText": "You keep the coins. Easy money. But word travels fast on the waterfront. Within days, every merchant on the quay knows you cheated Rashid. Your name is poison in the coffee houses. And Rashid, before he sails, leaves a message: 'Thieves find the sea unforgiving.'",
       "consequences": {
         "reputation": { "arab": -40 },
-        "worldChanges": ["rashid-enemy"],
+        "worldChanges": ["rashid-enemy", "customs-quieted"],
         "flags": ["cheated-rashid"]
       }
     },
@@ -200,7 +201,7 @@
       "nextStage": "complete-blackmail-ending",
       "consequences": {
         "reputation": { "arab": -25 },
-        "worldChanges": ["rashid-wary"],
+        "worldChanges": ["rashid-wary", "customs-pressure"],
         "flags": ["threatened-rashid"]
       }
     },

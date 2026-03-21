@@ -7,12 +7,19 @@
 import { create } from 'zustand';
 import { useGameStore, TimeState, PlayerState } from './gameStore';
 import { useInventoryStore, InventoryItem } from './inventoryStore';
-import { useQuestStore, Quest, JournalEntry, TrackedObjectiveRef } from './questStore';
+import { useQuestStore, Quest, JournalEntry, TrackedObjectiveRef, ReputationFaction, ReputationState } from './questStore';
 import { useDialogueStore } from './dialogueStore';
 import { getLocationName } from '../data/locationNames';
 
 // Save data version for migration support
-const SAVE_VERSION = 3;
+const SAVE_VERSION = 4;
+
+type LegacyReputationState = {
+  portuguese?: number;
+  chinese?: number;
+  malay?: number;
+  arab?: number;
+};
 
 export interface SaveSlotMeta {
   index: number;
@@ -38,12 +45,8 @@ export interface SaveData {
     completedQuests: string[];
     journal: JournalEntry[];
     worldFlags?: Record<string, boolean>;
-    reputation?: {
-      portuguese: number;
-      chinese: number;
-      malay: number;
-      arab: number;
-    };
+    reputation?: Partial<Record<ReputationFaction, number>> & LegacyReputationState;
+    completedQuestResolutions?: Record<string, string>;
     talkedToNPCs?: string[];
     seenTopics?: string[];
     trackedObjective?: TrackedObjectiveRef | null;
@@ -188,6 +191,45 @@ function migrateLegacyQuests(rawQuests: unknown): Quest[] {
   });
 }
 
+function migrateLegacyReputation(
+  rawReputation?: (Partial<Record<ReputationFaction, number>> & LegacyReputationState) | null
+): ReputationState {
+  const next: ReputationState = {
+    garrison: 0,
+    church: 0,
+    'portuguese-merchants': 0,
+    'chinese-merchants': 0,
+    'kampung-community': 0,
+    'dockside-network': 0,
+  };
+
+  if (!rawReputation) return next;
+
+  const typed = rawReputation as Record<string, number>;
+  if (typeof typed.garrison === 'number') next.garrison = typed.garrison;
+  if (typeof typed.church === 'number') next.church = typed.church;
+  if (typeof typed['portuguese-merchants'] === 'number') next['portuguese-merchants'] = typed['portuguese-merchants'];
+  if (typeof typed['chinese-merchants'] === 'number') next['chinese-merchants'] = typed['chinese-merchants'];
+  if (typeof typed['kampung-community'] === 'number') next['kampung-community'] = typed['kampung-community'];
+  if (typeof typed['dockside-network'] === 'number') next['dockside-network'] = typed['dockside-network'];
+
+  if (typeof typed.portuguese === 'number') {
+    next.garrison = next.garrison || typed.portuguese;
+    next['portuguese-merchants'] = next['portuguese-merchants'] || typed.portuguese;
+  }
+  if (typeof typed.chinese === 'number' && next['chinese-merchants'] === 0) {
+    next['chinese-merchants'] = typed.chinese;
+  }
+  if (typeof typed.malay === 'number' && next['kampung-community'] === 0) {
+    next['kampung-community'] = typed.malay;
+  }
+  if (typeof typed.arab === 'number' && next['dockside-network'] === 0) {
+    next['dockside-network'] = typed.arab;
+  }
+
+  return next;
+}
+
 export const useSaveStore = create<SaveState>((set, get) => ({
   slots: [],
   currentSlotIndex: null,
@@ -286,6 +328,7 @@ export const useSaveStore = create<SaveState>((set, get) => ({
           journal: questState.journal,
           worldFlags: questState.worldFlags,
           reputation: questState.reputation,
+          completedQuestResolutions: questState.completedQuestResolutions,
           talkedToNPCs: questState.talkedToNPCs,
           seenTopics: questState.seenTopics,
           trackedObjective: questState.trackedObjective,
@@ -372,7 +415,8 @@ export const useSaveStore = create<SaveState>((set, get) => ({
         saveData.quests.completedQuests,
         saveData.quests.journal,
         saveData.quests.worldFlags,
-        saveData.quests.reputation,
+        migrateLegacyReputation(saveData.quests.reputation),
+        saveData.quests.completedQuestResolutions,
         saveData.quests.talkedToNPCs,
         saveData.quests.seenTopics,
         saveData.quests.trackedObjective

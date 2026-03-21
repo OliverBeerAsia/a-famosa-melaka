@@ -8,7 +8,7 @@ This folder tracks the live state of the project, not the older prototype era. I
 - [PROJECT_SETUP.md](PROJECT_SETUP.md): runtime architecture, asset contract, and release workflow
 - [DESIGN_STANDARDS.md](DESIGN_STANDARDS.md): permanent standards for art, design, atmosphere, storytelling, and player experience
 - [RPG_EXPANSION_PLAN.md](RPG_EXPANSION_PLAN.md): practical roadmap for non-linear RPG depth inspired by Baldur's Gate and Daggerfall
-- [RELEASE_NOTES_v0.6.0.md](RELEASE_NOTES_v0.6.0.md): what shipped in the current release
+- [RELEASE_NOTES_v0.7.0.md](RELEASE_NOTES_v0.7.0.md): what shipped in the current release
 - [LESSONS_LEARNED.md](LESSONS_LEARNED.md): practical takeaways from the recent polish passes
 - [TODO.md](TODO.md): medium-term backlog
 

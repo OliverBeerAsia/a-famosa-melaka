@@ -784,5 +784,316 @@
       "accent": "Malay, elderly and deliberate",
       "gesturesFrequent": false
     }
+  },
+
+  "gaspar-mesquita": {
+    "id": "gaspar-mesquita",
+    "name": "Gaspar Mesquita",
+    "sprite": "gaspar-mesquita",
+    "title": "Customs Inspector",
+    "description": "A polished Portuguese customs inspector at A Famosa who speaks of order, paperwork, and balance while skimming Melaka's duties whenever he can.",
+    "culture": "portuguese",
+    "location": "a-famosa-gate",
+    "position": { "x": 220, "y": 180 },
+    "schedule": [
+      {
+        "startHour": 6,
+        "endHour": 12,
+        "activity": "Inspecting cargo at the gate",
+        "location": "a-famosa-gate",
+        "available": true
+      },
+      {
+        "startHour": 12,
+        "endHour": 15,
+        "activity": "Reviewing papers in the customs room",
+        "location": "a-famosa-gate",
+        "available": true
+      },
+      {
+        "startHour": 15,
+        "endHour": 21,
+        "activity": "Counting fees and favors",
+        "location": "a-famosa-gate",
+        "available": true
+      },
+      {
+        "startHour": 21,
+        "endHour": 6,
+        "activity": "Locked away with the records",
+        "location": "office",
+        "available": false
+      }
+    ],
+    "dialogue": {
+      "greeting": "You are standing in a customs yard, not a tavern. State your business clearly and keep it orderly.",
+      "greetingVariants": [
+        {
+          "text": "The whole city suddenly cares about arithmetic. Curious, considering how few of you cared when the books were balanced by my hand.",
+          "when": {
+            "worldFlagsAny": ["customs-books-opened", "gaspar-under-watch", "gaspar-exposed"]
+          }
+        }
+      ],
+      "topics": {
+        "ledger": {
+          "text": "A ledger is only dangerous when people begin reading it politically. Duties rise, exemptions appear, and suddenly everyone calls ordinary harbor management a scandal."
+        },
+        "customs": {
+          "text": "Customs is not theft. It is the discipline that keeps Melaka profitable for the Crown and predictable for merchants who know how to behave.",
+          "unlocks": ["fees", "service-gate"]
+        },
+        "fees": {
+          "text": "Every cargo begs to be treated as exceptional. Fees exist to remind merchants that the gate decides what counts as urgent, lawful, or costly.",
+          "requires": ["customs"]
+        },
+        "service-gate": {
+          "text": "The service gate is for bonded carts, sealed papers, and people with enough standing to be trusted out of sight of the main queue.",
+          "requires": ["customs"]
+        },
+        "melaka": {
+          "text": "Melaka is a city of cargo disguised as prayer, diplomacy, and rumor. If you want the truth of it, read the ledgers rather than the sermons."
+        }
+      },
+      "farewell": "Come back with paper, proof, or payment. Idle curiosity wastes my hour."
+    },
+    "personality": {
+      "traits": ["self-satisfied", "careful", "bureaucratic", "evasively polite"],
+      "accent": "Portuguese legal",
+      "gesturesFrequent": false
+    }
+  },
+
+  "diogo-almeida": {
+    "id": "diogo-almeida",
+    "name": "Diogo Almeida",
+    "sprite": "diogo-almeida",
+    "title": "Notary Runner",
+    "description": "A nimble Rua Direita notary runner who carries petitions, copies, and whispers between merchants, customs clerks, and the fortress gate.",
+    "culture": "portuguese",
+    "location": "rua-direita",
+    "position": { "x": 260, "y": 200 },
+    "schedule": [
+      {
+        "startHour": 7,
+        "endHour": 11,
+        "activity": "Running papers on Rua Direita",
+        "location": "rua-direita",
+        "available": true
+      },
+      {
+        "startHour": 11,
+        "endHour": 14,
+        "activity": "Copying manifests near the customs alcove",
+        "location": "rua-direita",
+        "available": true
+      },
+      {
+        "startHour": 14,
+        "endHour": 19,
+        "activity": "Returning sealed copies to clients",
+        "location": "rua-direita",
+        "available": true
+      },
+      {
+        "startHour": 19,
+        "endHour": 7,
+        "activity": "Sorting notes at home",
+        "location": "home",
+        "available": false
+      }
+    ],
+    "dialogue": {
+      "greeting": "If you came for a petition, I can carry it. If you came for the truth, that is slower work.",
+      "greetingQuestActive": "Good. You came back before the ink was scrubbed clean. The books are still within reach if we move carefully.",
+      "greetingQuestComplete": "The city heard one version of the ledger in the end. That may be the best Melaka ever permits.",
+      "topics": {
+        "ledger": {
+          "text": "The gate books and quay tallies no longer agree. That is not carelessness. That is profit wearing official handwriting.",
+          "unlocks": ["books", "gaspar", "petitions"]
+        },
+        "books": {
+          "text": "I copy manifests for men who assume a runner sees nothing. The trick is not seeing more. The trick is remembering it later.",
+          "requires": ["ledger"]
+        },
+        "gaspar": {
+          "text": "Gaspar Mesquita smiles like a clerk and thinks like a customs trap. If his figures drift, they drift in a direction that profits him.",
+          "requires": ["ledger"]
+        },
+        "petitions": {
+          "text": "Rua Direita lives on petitions, copies, waivers, and discreet corrections. Every merchant swears his cargo deserves an exception.",
+          "requires": ["ledger"]
+        },
+        "waterfront": {
+          "text": "The waterfront keeps the real tempo of the city. If the gate lies, the quay usually remembers."
+        }
+      },
+      "farewell": "Find me evidence, not outrage. Outrage travels faster, but it proves less."
+    },
+    "questGiver": true,
+    "questId": "customs-ledger",
+    "personality": {
+      "traits": ["quick", "observant", "wry", "cautious"],
+      "accent": "Portuguese clerical",
+      "gesturesFrequent": true
+    }
+  },
+
+  "lin-mei": {
+    "id": "lin-mei",
+    "name": "Lin Mei",
+    "sprite": "lin-mei",
+    "title": "Counting-House Clerk",
+    "description": "A precise Chinese clerk at the waterfront who tallies manifests, receipts, and delays with calm patience and an eye for inconsistencies.",
+    "culture": "chinese",
+    "location": "waterfront",
+    "position": { "x": 230, "y": 170 },
+    "schedule": [
+      {
+        "startHour": 7,
+        "endHour": 12,
+        "activity": "Tallying cargo manifests",
+        "location": "waterfront",
+        "available": true
+      },
+      {
+        "startHour": 12,
+        "endHour": 14,
+        "activity": "Tea and account review",
+        "location": "waterfront",
+        "available": false
+      },
+      {
+        "startHour": 14,
+        "endHour": 18,
+        "activity": "Recording dockside deliveries",
+        "location": "waterfront",
+        "available": true
+      },
+      {
+        "startHour": 18,
+        "endHour": 7,
+        "activity": "Family supper and ledger work",
+        "location": "elsewhere",
+        "available": false
+      }
+    ],
+    "dialogue": {
+      "greeting": "If you need a number checked, ask once and listen carefully. I do not repeat figures for men who were daydreaming.",
+      "greetingVariants": [
+        {
+          "text": "So. The partnership is real after all. Gomes and Chen Wei are both speaking more carefully these days, which I approve of.",
+          "when": {
+            "worldFlagsAny": ["gomes-chen-partnership", "merchant-seal-settled"]
+          }
+        }
+      ],
+      "topics": {
+        "manifest": {
+          "text": "Cargo is honest when it appears the same in every ledger. Here, it prefers to be counted twice and explained three times.",
+          "unlocks": ["chen-wei", "customs", "quay"]
+        },
+        "chen-wei": {
+          "text": "Master Chen trusts balance, not promises. That is why his books survive arguments that would ruin other houses.",
+          "requires": ["manifest"]
+        },
+        "customs": {
+          "text": "The gate likes to believe it controls trade. Usually it controls delay. Merchants still do the harder work of moving the city.",
+          "requires": ["manifest"]
+        },
+        "quay": {
+          "text": "At the quay, errors have hands, faces, and witnesses. In the office, errors become policy.",
+          "requires": ["manifest"]
+        },
+        "rumors": {
+          "text": "Pirate rumors, customs rumors, shortage rumors. The waterfront sells all three before breakfast."
+        }
+      },
+      "farewell": "Bring me figures that disagree. Those are the only ones worth my time."
+    },
+    "personality": {
+      "traits": ["precise", "patient", "discerning", "dry"],
+      "accent": "Chinese with formal Melaka trade phrasing",
+      "gesturesFrequent": false
+    }
+  },
+
+  "pak-salleh": {
+    "id": "pak-salleh",
+    "name": "Pak Salleh",
+    "sprite": "pak-salleh",
+    "title": "Fisherman-Porter",
+    "description": "A Malay fisherman who also hauls crates along the river edge and knows which boats are honest, which are not, and which ones prefer night.",
+    "culture": "malay",
+    "location": "kampung",
+    "position": { "x": 540, "y": 360 },
+    "schedule": [
+      {
+        "startHour": 4,
+        "endHour": 9,
+        "activity": "Netting fish at the waterline",
+        "location": "kampung",
+        "available": true
+      },
+      {
+        "startHour": 9,
+        "endHour": 15,
+        "activity": "Hauling crates between the landing and village",
+        "location": "kampung",
+        "available": true
+      },
+      {
+        "startHour": 15,
+        "endHour": 19,
+        "activity": "Mending boats and talking with neighbors",
+        "location": "kampung",
+        "available": true
+      },
+      {
+        "startHour": 19,
+        "endHour": 4,
+        "activity": "Sleeping by the river",
+        "location": "home",
+        "available": false
+      }
+    ],
+    "dialogue": {
+      "greeting": "If you came from the harbor, wipe the customs dust off your sandals before you call this place clean.",
+      "greetingVariants": [
+        {
+          "text": "The docks say your name with less suspicion than before. That matters more here than any guard's opinion.",
+          "when": {
+            "worldFlagsAny": ["dockside-cover", "dockside-favor", "rashid-trusts-player"]
+          }
+        }
+      ],
+      "topics": {
+        "cove": {
+          "text": "A hidden cove is only suspicious if you believe every boat owes its whole life to the gate. Sometimes men hide because the gate is hungry.",
+          "unlocks": ["boats", "customs", "kampung"]
+        },
+        "boats": {
+          "text": "You learn a boat by how it sits in the water. Honest craft ride one way. Smugglers another. Officials pretend not to notice until they want their share.",
+          "requires": ["cove"]
+        },
+        "customs": {
+          "text": "Customs says it protects Melaka. Maybe. Mostly it protects the men who collect before anyone else can touch the cargo.",
+          "requires": ["cove"]
+        },
+        "kampung": {
+          "text": "The kampung survives because we know which troubles to speak aloud and which ones to leave to the tide.",
+          "requires": ["cove"]
+        },
+        "rashid": {
+          "text": "Rashid talks too much, but he knows medicine, debt, and seawinds all travel faster than permission."
+        }
+      },
+      "farewell": "Walk with your eyes open. The river keeps what careless people drop."
+    },
+    "personality": {
+      "traits": ["practical", "guarded", "warm", "worldly"],
+      "accent": "Malay waterfront",
+      "gesturesFrequent": false
+    }
   }
 }

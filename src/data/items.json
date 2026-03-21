@@ -14,6 +14,13 @@
         "x": 180,
         "y": 150,
         "description": "A small sample of exotic spices from the Moluccas."
+      },
+      {
+        "id": "letter-of-credit-1",
+        "itemId": "letter-of-credit",
+        "x": 310,
+        "y": 210,
+        "description": "A sealed letter of credit useful for reputable trade dealings."
       }
     ],
     "waterfront": [
@@ -23,6 +30,13 @@
         "x": 200,
         "y": 250,
         "description": "A leather pouch containing 50 cruzados."
+      },
+      {
+        "id": "bribe-note-1",
+        "itemId": "bribe-note",
+        "x": 360,
+        "y": 220,
+        "description": "A discreet note hinting at a customs payment."
       }
     ],
     "st-pauls-church": [
@@ -34,7 +48,22 @@
         "description": "Blessed rosary beads left at the altar."
       }
     ],
-    "a-famosa-gate": [],
+    "a-famosa-gate": [
+      {
+        "id": "cargo-manifest-1",
+        "itemId": "cargo-manifest",
+        "x": 260,
+        "y": 170,
+        "description": "A copied manifest listing cargo, port dues, and inspection marks."
+      },
+      {
+        "id": "key-warehouse-1",
+        "itemId": "key-warehouse",
+        "x": 420,
+        "y": 220,
+        "description": "A heavy key for a bonded warehouse door."
+      }
+    ],
     "kampung": [
       {
         "id": "herbs-1",

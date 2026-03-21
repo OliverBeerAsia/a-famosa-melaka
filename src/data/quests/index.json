@@ -3,6 +3,7 @@
   "description": "Quest index for A Famosa: Streets of Golden Melaka",
   "quests": [
     "merchants-seal",
+    "customs-ledger",
     "padres-dilemma",
     "pirates-rumor",
     "rashids-cargo"
@@ -13,9 +14,19 @@
       "type": "main",
       "giver": "fernao-gomes",
       "location": "rua-direita",
-      "description": "Help Fernão Gomes recover his trading seal from Chen Wei.",
-      "themes": ["colonialism", "debt", "honor"],
+      "description": "Help Fernão Gomes recover his trading seal from Chen Wei while the customs office and harbor politics quietly reshape the matter.",
+      "themes": ["colonialism", "debt", "honor", "customs"],
       "paths": ["payment", "diplomatic", "investigate-truth", "theft"]
+    },
+    "customs-ledger": {
+      "name": "The Customs Ledger",
+      "type": "side",
+      "giver": "diogo-almeida",
+      "location": "rua-direita",
+      "description": "Trace a doctored customs ledger through the market, fortress gate, waterfront, and kampung edge to uncover how duty and cargo are being bent.",
+      "themes": ["customs", "corruption", "trade", "paperwork"],
+      "paths": ["ledger-expose", "ledger-broker", "ledger-bury", "ledger-trail"],
+      "prerequisite": "merchants-seal"
     },
     "padres-dilemma": {
       "name": "The Padre's Dilemma",
@@ -32,18 +43,18 @@
       "type": "side",
       "giver": "rashid",
       "location": "waterfront",
-      "description": "Investigate pirate sightings in the straits and report the threat.",
-      "themes": ["security", "trade", "rumors"],
-      "paths": ["report", "investigate"]
+      "description": "Investigate pirate sightings in the straits and decide whether the rumor is a real threat, a customs misdirection, or the first clue to a larger harbor conspiracy.",
+      "themes": ["security", "trade", "rumors", "customs"],
+      "paths": ["file-report", "follow-cove", "let-it-rest"]
     },
     "rashids-cargo": {
       "name": "Rashid's Cargo",
       "type": "side",
       "giver": "rashid",
       "location": "waterfront",
-      "description": "Help Rashid with a smuggling job - but what exactly are you smuggling?",
-      "themes": ["smuggling", "morality", "medicine", "colonialism"],
-      "paths": ["complete-job", "report", "theft", "blackmail"]
+      "description": "Help Rashid move a sealed bundle through the waterfront - and decide whether Melaka's customs, medicine, or greed are the real cargo.",
+      "themes": ["smuggling", "morality", "medicine", "colonialism", "customs"],
+      "paths": ["complete-job", "report-smuggling", "keep-payment", "demand-more"]
     }
   }
 }

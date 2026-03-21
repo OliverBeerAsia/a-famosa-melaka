@@ -21,7 +21,8 @@ import worldItemsData from '../../data/items.json';
 import historicalObjectsData from '../../data/historical-objects.json';
 import { getLocationName } from '../../data/locationNames';
 import { getWorldItemsAtLocation } from '../../data/loader';
-import { ITEM_DEFINITIONS } from '../../stores/inventoryStore';
+import { ITEM_DEFINITIONS, useInventoryStore } from '../../stores/inventoryStore';
+import type { ConditionalRequirements, ReputationFaction } from '../../stores/questStore';
 import {
   LOCATION_VISUAL_PRESETS,
   VISUAL_PROFILES,
@@ -56,6 +57,10 @@ interface TransitionConfig {
   label: string;
   triggerArea: { x: number; y: number; width: number; height: number };
   spawnAt?: { x: number; y: number };
+  requirements?: ConditionalRequirements;
+  showWhenLocked?: boolean;
+  lockedLabel?: string;
+  blockedMessage?: string;
 }
 
 interface AmbientLayerConfig {
@@ -1207,6 +1212,63 @@ export class GameScene extends Phaser.Scene {
     return 'debug-prop-missing';
   }
 
+  private meetsConditionalRequirements(requirements?: ConditionalRequirements): boolean {
+    if (!requirements) return true;
+
+    const questState = useQuestStore.getState();
+    const inventoryState = useInventoryStore.getState();
+    const gameState = useGameStore.getState();
+
+    if (requirements.money && inventoryState.money < requirements.money) return false;
+    if (requirements.itemsAll?.length && !requirements.itemsAll.every((itemId) => inventoryState.hasItem(itemId))) {
+      return false;
+    }
+    if (requirements.talkedTo?.length && !requirements.talkedTo.every((npcId) => questState.talkedToNPCs.includes(npcId))) {
+      return false;
+    }
+    if (requirements.topic && !questState.seenTopics.includes(requirements.topic)) return false;
+    if (requirements.time && gameState.time.timeOfDay !== requirements.time) return false;
+    if (requirements.location && this.currentMap !== requirements.location) return false;
+
+    if (requirements.reputation) {
+      const meetsRep = (Object.entries(requirements.reputation) as Array<[ReputationFaction, number]>)
+        .every(([faction, minValue]) => (questState.reputation[faction] ?? 0) >= minValue);
+      if (!meetsRep) return false;
+    }
+
+    if (requirements.maxReputation) {
+      const underRep = (Object.entries(requirements.maxReputation) as Array<[ReputationFaction, number]>)
+        .every(([faction, maxValue]) => (questState.reputation[faction] ?? 0) <= maxValue);
+      if (!underRep) return false;
+    }
+
+    if (requirements.worldFlagsAll?.length && !requirements.worldFlagsAll.every((flag) => Boolean(questState.worldFlags[flag]))) {
+      return false;
+    }
+    if (requirements.worldFlagsAny?.length && !requirements.worldFlagsAny.some((flag) => Boolean(questState.worldFlags[flag]))) {
+      return false;
+    }
+    if (requirements.worldFlagsNone?.length && requirements.worldFlagsNone.some((flag) => Boolean(questState.worldFlags[flag]))) {
+      return false;
+    }
+    if (requirements.completedQuests?.length && !requirements.completedQuests.every((questId) => questState.completedQuests.includes(questId))) {
+      return false;
+    }
+    if (requirements.completedQuestPaths?.length) {
+      const hasPaths = requirements.completedQuestPaths.every((token) => {
+        const [questId, resolution] = token.split(':');
+        return Boolean(questId && resolution && questState.getCompletedQuestResolution(questId) === resolution);
+      });
+      if (!hasPaths) return false;
+    }
+
+    return true;
+  }
+
+  private isTransitionAvailable(config: TransitionConfig): boolean {
+    return this.meetsConditionalRequirements(config.requirements);
+  }
+
   private createTransitionHotspots() {
     this.transitionHotspots.forEach((hotspot) => {
       hotspot.glow.destroy();
@@ -1218,16 +1280,20 @@ export class GameScene extends Phaser.Scene {
     (this.sceneConfig?.transitions || []).forEach((transition) => {
       const x = transition.triggerArea.x + (transition.triggerArea.width / 2);
       const y = transition.triggerArea.y + (transition.triggerArea.height / 2);
+      const available = this.isTransitionAvailable(transition);
+      const visible = available || Boolean(transition.showWhenLocked);
 
       const glow = this.add.ellipse(x, y, 54, 22, 0xF4B41A, 0.12);
       glow.setDepth(978);
       glow.setBlendMode(Phaser.BlendModes.ADD);
+      glow.setVisible(visible);
 
       const marker = this.add.arc(x, y, 10, 200, 340, false, 0xF4B41A, 0.85);
       marker.setStrokeStyle(2, 0x3b2509, 1);
       marker.setDepth(979);
+      marker.setVisible(visible);
 
-      const label = this.add.text(x, y - 24, transition.label, {
+      const label = this.add.text(x, y - 24, available ? transition.label : (transition.lockedLabel || transition.label), {
         font: 'italic 11px Cinzel, Georgia, serif',
         color: '#F4E6BE',
         stroke: '#000000',
@@ -2756,6 +2822,9 @@ export class GameScene extends Phaser.Scene {
     }
 
     for (const hotspot of this.transitionHotspots) {
+      const available = this.isTransitionAvailable(hotspot.config);
+      if (!available && !hotspot.config.showWhenLocked) continue;
+
       const x = hotspot.config.triggerArea.x + (hotspot.config.triggerArea.width / 2);
       const y = hotspot.config.triggerArea.y + (hotspot.config.triggerArea.height / 2);
       const withinArea = Phaser.Geom.Rectangle.Contains(
@@ -2774,12 +2843,20 @@ export class GameScene extends Phaser.Scene {
       candidates.push({
         type: 'transition',
         id: hotspot.config.targetLocation,
-        label: `Travel to ${getLocationName(hotspot.config.targetLocation)}`,
+        label: available
+          ? `Travel to ${getLocationName(hotspot.config.targetLocation)}`
+          : (hotspot.config.lockedLabel || hotspot.config.label),
         x,
         y,
-        priority: withinArea ? 0 : 3,
+        priority: withinArea ? (available ? 0 : 2) : (available ? 3 : 4),
         score: scored.score,
-        interact: () => this.switchLocation(hotspot.config.targetLocation, hotspot.config.spawnAt),
+        interact: () => {
+          if (!available) {
+            this.showNotification(hotspot.config.blockedMessage || 'That route is not safe or open to you yet.');
+            return;
+          }
+          this.switchLocation(hotspot.config.targetLocation, hotspot.config.spawnAt);
+        },
       });
     }
 
@@ -3432,12 +3509,21 @@ export class GameScene extends Phaser.Scene {
       : null;
 
     this.transitionHotspots.forEach((hotspot) => {
+      const available = this.isTransitionAvailable(hotspot.config);
+      const visible = available || Boolean(hotspot.config.showWhenLocked);
       const nearby = hotspot.config.targetLocation === targetedTransitionId;
 
-      hotspot.label.setVisible(nearby);
-      hotspot.glow.setAlpha(nearby ? 0.2 : 0.08);
+      hotspot.glow.setVisible(visible);
+      hotspot.marker.setVisible(visible);
+      hotspot.label.setVisible(visible && nearby);
+      hotspot.label.setText(available ? hotspot.config.label : (hotspot.config.lockedLabel || hotspot.config.label));
+
+      if (!visible) return;
+
+      hotspot.glow.setAlpha(available ? (nearby ? 0.2 : 0.08) : (nearby ? 0.15 : 0.05));
       hotspot.glow.setScale(nearby ? 1.1 + Math.sin(this.time.now / 260) * 0.06 : 1);
       hotspot.marker.setScale(nearby ? 1 + Math.sin(this.time.now / 210) * 0.15 : 1);
+      hotspot.marker.setAlpha(available ? 0.9 : 0.55);
     });
 
     this.questHotspots.forEach((hotspot) => {
