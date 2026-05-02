@@ -14,6 +14,8 @@ interface TitleScreenProps {
   onCredits?: () => void;
 }
 
+const TITLE_BACKGROUND = 'scenes/opening-screen.png';
+
 export function TitleScreen({ onNewGame, onContinue, onCredits }: TitleScreenProps) {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [hasSavedGame, setHasSavedGame] = useState(false);
@@ -66,8 +68,13 @@ export function TitleScreen({ onNewGame, onContinue, onCredits }: TitleScreenPro
 
   return (
     <div className="w-full h-full flex flex-col items-center justify-center bg-[#0a0806] relative overflow-hidden">
-      {/* Background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#1a0f05] via-[#2a1a0a] to-[#0a0806]" />
+      <div
+        className="absolute inset-0 bg-cover bg-center"
+        style={{ backgroundImage: `url('${TITLE_BACKGROUND}')` }}
+        aria-hidden="true"
+      />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/35 via-[#120b05]/70 to-[#050302]/95" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_38%,transparent_0%,rgba(0,0,0,0.34)_58%,rgba(0,0,0,0.78)_100%)]" />
 
       {/* Decorative corners */}
       <div className="absolute top-4 left-4 w-16 h-16 border-l-2 border-t-2 border-gold/30" />

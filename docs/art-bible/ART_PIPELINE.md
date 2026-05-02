@@ -33,7 +33,7 @@ Use for anything the player traverses, clicks, equips, or reads in the world.
 - Keep silhouette readable at 1x and 3x.
 - Keep source art under 256px on the longest side unless the spec explicitly allows a module.
 - Named characters ship as `64x192` sheets with `4x6` row-major walk/idle/talk layout.
-- Crowd ships as `8x16` silhouettes only.
+- Crowd ships as `16x32` single-frame figures so costume, role, and cultural read match named-character pixel density.
 - Gameplay palette is the approved indexed-ramp canon from `tools/ultima8-graphics/palette.cjs`.
 
 ### Cinematic

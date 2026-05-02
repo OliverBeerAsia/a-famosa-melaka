@@ -4,20 +4,19 @@ A historical pixel-art adventure RPG set in Portuguese Melaka circa 1580, built 
 
 ## Release Snapshot
 
-- Current release: `v0.7.0`
+- Current release: `v0.9.0`
 - Engine: Phaser 3 + React + TypeScript
 - Perspective: 2:1 isometric traversal
 - Native canvas: `960x540`
 - Art bar: historical Melaka first, Ultima VIII minimum
 
-## What v0.7.0 Adds
+## What v0.9.0 Adds
 
-- A new interlocked quest cluster, `The Customs Ledger`, tying `Rua Direita`, `Waterfront`, `A Famosa Gate`, and `Kampung` into one corruption-and-cargo spine
-- A six-faction implicit reputation model with `City Currents` replacing the older coarse four-faction setup
-- A visible-but-locked `A Famosa Gate <-> Waterfront` service route gated by world state instead of being permanently open
-- Four new named customs-spine NPCs: `Gaspar Mesquita`, `Diogo Almeida`, `Lin Mei`, and `Pak Salleh`
-- Expanded customs-era environment dressing, world-item affordances, and fortress/quay paperwork spaces across the live route
-- Save/load migration and regression coverage for quest resolutions, route gating, and witness-driven quest state
+- Period Portuguese cityscape art now drives the title and loading screens, with source art tracked under `docs/art-bible/source-art/`
+- Crowd sprites are upgraded from `8x16` silhouettes to more detailed `16x32` historical role sprites
+- Visual wall art no longer creates invisible broad blockers across walkable isometric tiles
+- Portuguese houses, church, fort, and kampung roof tiles now render as raised connected building masses instead of flat floor tiles
+- The opening dialogue bridge, reset cleanup, and visual-integrity regression coverage were tightened around the live runtime
 
 ## Quick Start
 
@@ -60,7 +59,7 @@ npm run package:mac
 ### Characters and art
 
 - Fourteen named gameplay sheets on the live `64x192` / `4x6` contract
-- Ten crowd-role silhouettes for the runtime background population layer
+- Ten `16x32` crowd-role sprites for the runtime background population layer
 - Unique VGA-style portraits for the named dialogue cast
 - Complete player-facing item icon set in `assets/sprites/ui/items/`
 
@@ -95,7 +94,7 @@ assets/
 docs/
   PROJECT_BRIEFING.md    Product and world vision
   PROJECT_SETUP.md       Runtime, asset, and release workflow
-  RELEASE_NOTES_v0.7.0.md
+  RELEASE_NOTES_v0.9.0.md
   LESSONS_LEARNED.md
   TODO.md
 src/
@@ -109,7 +108,7 @@ tools/                   Art generation and validation scripts
 
 ## Release Verification
 
-`v0.7.0` was verified with:
+`v0.9.0` was verified with:
 
 ```bash
 npm test -- --runInBand
@@ -125,7 +124,7 @@ npm run validate:art -- --strict
 - [docs/DESIGN_STANDARDS.md](docs/DESIGN_STANDARDS.md)
 - [docs/RPG_EXPANSION_PLAN.md](docs/RPG_EXPANSION_PLAN.md)
 - [docs/ATMOSPHERIC_SYSTEMS.md](docs/ATMOSPHERIC_SYSTEMS.md)
-- [docs/RELEASE_NOTES_v0.7.0.md](docs/RELEASE_NOTES_v0.7.0.md)
+- [docs/RELEASE_NOTES_v0.9.0.md](docs/RELEASE_NOTES_v0.9.0.md)
 - [docs/LESSONS_LEARNED.md](docs/LESSONS_LEARNED.md)
 - [docs/TODO.md](docs/TODO.md)
 - [PROJECT_STATUS.md](PROJECT_STATUS.md)

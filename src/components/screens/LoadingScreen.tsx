@@ -12,6 +12,8 @@ interface LoadingScreenProps {
   onComplete: () => void;
 }
 
+const LOADING_BACKGROUND = 'scenes/scene-loading-ribeira.png';
+
 // Location metadata
 const locationData: Record<string, {
   name: string;
@@ -91,11 +93,14 @@ export function LoadingScreen({ locationId, mode = 'arrival', onComplete }: Load
         ${fadeOut ? 'opacity-0' : 'opacity-100'}
       `}
     >
-      {/* Background gradient */}
-      <div className={`absolute inset-0 bg-gradient-to-b ${location.color}`} />
-
-      {/* Vignette overlay */}
-      <div className="absolute inset-0 bg-gradient-radial from-transparent to-black/60" />
+      <div
+        className="absolute inset-0 bg-cover bg-center"
+        style={{ backgroundImage: `url('${LOADING_BACKGROUND}')` }}
+        aria-hidden="true"
+      />
+      <div className={`absolute inset-0 bg-gradient-to-b ${location.color} opacity-70`} />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/35 via-[#150c05]/60 to-black/90" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_42%,transparent_0%,rgba(0,0,0,0.34)_58%,rgba(0,0,0,0.82)_100%)]" />
 
       {/* Content */}
       <div className="relative z-10 text-center max-w-2xl px-8">

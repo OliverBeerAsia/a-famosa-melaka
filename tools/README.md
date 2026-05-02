@@ -58,7 +58,7 @@ Generates 15 files:
 - `scene-*-night.png`
 
 ### `generate-crowd-silhouettes.cjs`
-**Crowd silhouette generator** - Creates approved `8x16` background crowd sprites for the live Phaser runtime.
+**Crowd sprite generator** - Creates approved `16x32` single-frame background crowd sprites for the live Phaser runtime.
 
 ```bash
 node tools/generate-crowd-silhouettes.cjs

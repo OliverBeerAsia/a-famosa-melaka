@@ -407,7 +407,7 @@ async function validate(spec) {
             'error',
             relPath,
             `crowd silhouette ${width}x${height} does not match the spec`,
-            'Keep crowd silhouettes at 8x16 so they remain cheap and readable.',
+            'Keep crowd sprites at 16x32 so they have enough period costume detail while matching named-character density.',
             assetClass
           );
         }

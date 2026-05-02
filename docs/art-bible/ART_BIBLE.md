@@ -160,7 +160,7 @@ Objects have weight and presence. A heavy barrel should look heavy. A light clot
 - **Crowd silhouettes**: 8×16 pixels (background)
 
 ### Pixel Density Rule
-**NEVER mix pixel densities**. A 32×16 ground tile, 16×32 character cell, and 8×16 crowd silhouette must all be authored to the same native pixel density and compositional language.
+**NEVER mix pixel densities**. A 32×16 ground tile and every 16×32 character or crowd cell must all be authored to the same native pixel density and compositional language.
 
 ---
 

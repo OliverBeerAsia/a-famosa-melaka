@@ -44,8 +44,8 @@
       "arab",
       "indian"
     ],
-    "frameWidth": 8,
-    "frameHeight": 16
+    "frameWidth": 16,
+    "frameHeight": 32
   },
   "maps": {
     "base": [
@@ -85,6 +85,13 @@
       "fortress-stone",
       "grass",
       "cobblestone",
+      "cobblestone-v1",
+      "cobblestone-v2",
+      "cobblestone-v3",
+      "cobblestone-grass-h",
+      "cobblestone-grass-v",
+      "cobblestone-dirt-v",
+      "laterite-stone",
       "wall-white",
       "dirt-path",
       "bamboo-floor",

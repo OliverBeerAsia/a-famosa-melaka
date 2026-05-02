@@ -601,6 +601,13 @@ export class GameScene extends Phaser.Scene {
       { name: 'fortress-stone', textureKey: 'fortress-stone-iso' },
       { name: 'grass', textureKey: 'grass-iso' },
       { name: 'cobblestone', textureKey: 'cobblestone-iso' },
+      { name: 'cobblestone-v1', textureKey: 'cobblestone-v1-iso' },
+      { name: 'cobblestone-v2', textureKey: 'cobblestone-v2-iso' },
+      { name: 'cobblestone-v3', textureKey: 'cobblestone-v3-iso' },
+      { name: 'cobblestone-grass-h', textureKey: 'cobblestone-grass-h-iso' },
+      { name: 'cobblestone-grass-v', textureKey: 'cobblestone-grass-v-iso' },
+      { name: 'cobblestone-dirt-v', textureKey: 'cobblestone-dirt-v-iso' },
+      { name: 'laterite-stone', textureKey: 'laterite-stone-iso' },
       { name: 'wall-white', textureKey: 'wall-white-iso' },
       { name: 'dirt-path', textureKey: 'dirt-path-iso' },
       { name: 'bamboo-floor', textureKey: 'bamboo-floor-iso' },
@@ -620,8 +627,8 @@ export class GameScene extends Phaser.Scene {
     const bounds = this.isoRenderer.getWorldBounds();
     this.physics.world.setBounds(0, 0, bounds.width, bounds.height);
 
-    // Add a dark background behind the tilemap
-    const bg = this.add.rectangle(bounds.width / 2, bounds.height / 2, bounds.width, bounds.height, 0x1a0f05);
+    // Neutral void behind the authored tilemap; it should not read as walkable soil.
+    const bg = this.add.rectangle(bounds.width / 2, bounds.height / 2, bounds.width, bounds.height, 0x060504);
     bg.setDepth(-20);
   }
 
@@ -988,17 +995,8 @@ export class GameScene extends Phaser.Scene {
     );
     this.playerShadow.setDepth(this.player.depth - 1);
 
-    // Set up collision with scene colliders (legacy mode)
     if (this.sceneColliders) {
       this.physics.add.collider(this.player, this.sceneColliders);
-    }
-
-    // Set up collision with tilemap walls (isometric mode)
-    if (this.isIsometric && this.isoRenderer) {
-      const wallsLayer = this.isoRenderer.getCollisionLayer();
-      if (wallsLayer) {
-        this.physics.add.collider(this.player, wallsLayer);
-      }
     }
 
     // Play idle animation
@@ -2298,6 +2296,10 @@ export class GameScene extends Phaser.Scene {
     this.cleanupBridgeListeners();
     this.destroyObjectiveMarker();
     this.lastObjectiveSignature = null;
+    if (this.sceneColliders) {
+      this.sceneColliders.clear(true, true);
+      this.sceneColliders = null;
+    }
     this.npcShadowMap.forEach((shadow) => shadow.destroy());
     this.npcShadowMap.clear();
     this.locationLightSources.forEach((glow) => glow.destroy());
@@ -2960,7 +2962,9 @@ export class GameScene extends Phaser.Scene {
     this.activeInteractionTarget = null;
     this.setInteractionPrompt(null);
 
-    // Emit dialogue event to React
+    useDialogueStore.getState().startDialogue(npcData.id);
+    useGameStore.getState().setDialogueOpen(true);
+
     emitGameEvent('dialogue:start', {
       id: npcData.id,
       name: npcData.name,
@@ -2968,9 +2972,6 @@ export class GameScene extends Phaser.Scene {
       portrait: `portrait-${npcData.id}`,
       dialogue: npcData.dialogue,
     });
-
-    // Update game store
-    useGameStore.getState().setDialogueOpen(true);
   }
 
   // Location-specific tint colors for transition flash [R, G, B]
@@ -3394,11 +3395,7 @@ export class GameScene extends Phaser.Scene {
   }
 
   private updateCinematicMotion() {
-    if (this.filmGrainOverlay) {
-      this.filmGrainOverlay.tilePositionX += 0.35;
-      this.filmGrainOverlay.tilePositionY += 0.22;
-    }
-
+    // Keep screen-space grain fixed; motion reads like the exposed terrain base is drifting.
     this.sunShafts.forEach((shaft, index) => {
       const wobble = Math.sin((this.time.now / 1400) + index * 0.6) * 2.2;
       shaft.setAngle(wobble);

@@ -15,9 +15,25 @@ const PORTRAITS_DIR = path.join(__dirname, '..', 'assets', 'sprites', 'portraits
 const ITEM_ICONS_DIR = path.join(__dirname, '..', 'assets', 'sprites', 'ui', 'items');
 const RUNTIME_ASSET_MANIFEST = path.join(__dirname, '..', 'src', 'data', 'runtime-asset-manifest.json');
 const CHARACTER_SHEETS_DIR = path.join(__dirname, '..', 'assets', 'sprites', 'characters');
+const CROWD_SPRITES_DIR = path.join(__dirname, '..', 'assets', 'sprites', 'crowd');
+const GAME_SCENE_FILE = path.join(__dirname, '..', 'src', 'phaser', 'scenes', 'GameScene.ts');
+const ISOMETRIC_RENDERER_FILE = path.join(__dirname, '..', 'src', 'phaser', 'systems', 'IsometricRenderer.ts');
+const TITLE_SCREEN_FILE = path.join(__dirname, '..', 'src', 'components', 'screens', 'TitleScreen.tsx');
+const LOADING_SCREEN_FILE = path.join(__dirname, '..', 'src', 'components', 'screens', 'LoadingScreen.tsx');
+const STYLE_MAP_PATH = path.join(__dirname, '..', 'docs', 'art-bible', 'shipping-asset-style-map.json');
+const SCENES_DIR = path.join(__dirname, '..', 'assets', 'scenes');
+const ISO_MAPS = [RUA_DIREITA_MAP, A_FAMOSA_MAP, ST_PAULS_MAP, WATERFRONT_MAP, KAMPUNG_MAP];
 
 function loadJson(filePath) {
   return JSON.parse(fs.readFileSync(filePath, 'utf8'));
+}
+
+function readPngSize(filePath) {
+  const buffer = fs.readFileSync(filePath);
+  return {
+    width: buffer.readUInt32BE(16),
+    height: buffer.readUInt32BE(20),
+  };
 }
 
 function extractItemDefinitionIds() {
@@ -42,7 +58,166 @@ function expectRichLiveMap(mapPath, minFarRightX) {
   expect(maxX).toBeGreaterThanOrEqual(minFarRightX);
 }
 
+function getUsedTilesetNames(map) {
+  const used = new Set();
+  const tilesets = [...(map.tilesets || [])].sort((a, b) => a.firstgid - b.firstgid);
+
+  (map.layers || []).forEach((layer) => {
+    if (!Array.isArray(layer.data)) return;
+
+    layer.data.forEach((gid) => {
+      if (!gid) return;
+      const tileset = tilesets.reduce((match, candidate) => (
+        gid >= candidate.firstgid ? candidate : match
+      ), null);
+      if (tileset) used.add(tileset.name);
+    });
+  });
+
+  return [...used].sort();
+}
+
 describe('Visual polish integrity', () => {
+  test('sourced menu and loading backdrops are visible and tracked', () => {
+    const titleSource = fs.readFileSync(TITLE_SCREEN_FILE, 'utf8');
+    const loadingSource = fs.readFileSync(LOADING_SCREEN_FILE, 'utf8');
+    const styleMap = loadJson(STYLE_MAP_PATH);
+    const scenes = styleMap.assets?.scenes || {};
+    const failures = [];
+
+    [
+      {
+        id: 'opening-screen',
+        fileName: 'opening-screen.png',
+        componentSource: titleSource,
+        runtimeUrl: 'scenes/opening-screen.png',
+      },
+      {
+        id: 'scene-loading-ribeira',
+        fileName: 'scene-loading-ribeira.png',
+        componentSource: loadingSource,
+        runtimeUrl: 'scenes/scene-loading-ribeira.png',
+      },
+    ].forEach(({ id, fileName, componentSource, runtimeUrl }) => {
+      const assetPath = path.join(SCENES_DIR, fileName);
+      if (!fs.existsSync(assetPath)) {
+        failures.push(`${fileName} is missing from assets/scenes`);
+      }
+      if (!componentSource.includes(runtimeUrl)) {
+        failures.push(`${id} is not referenced by its React screen`);
+      }
+      if (componentSource.includes(`/${runtimeUrl}`)) {
+        failures.push(`${id} uses an absolute scene URL that can break in packaged builds`);
+      }
+      if (scenes[id]?.runtimePath !== `assets/scenes/${fileName}`) {
+        failures.push(`${id} is missing or incorrectly tracked in the style map`);
+      }
+    });
+
+    expect(failures).toEqual([]);
+  });
+
+  test('isometric movement keeps visual wall art out of physics collision', () => {
+    const rendererSource = fs.readFileSync(ISOMETRIC_RENDERER_FILE, 'utf8');
+    const gameSceneSource = fs.readFileSync(GAME_SCENE_FILE, 'utf8');
+    const failures = [];
+
+    ISO_MAPS.forEach((mapPath) => {
+      const map = loadJson(mapPath);
+      const groundLayer = map.layers.find((layer) => layer.name === 'Ground');
+      const groundTileCount = (groundLayer?.data || []).filter(Boolean).length;
+      const expectedTileCount = map.width * map.height;
+      if (groundTileCount !== expectedTileCount) {
+        failures.push(`${path.basename(mapPath)} Ground has ${groundTileCount}/${expectedTileCount} tiles`);
+      }
+    });
+
+    if (rendererSource.includes('setCollisionByExclusion')) {
+      failures.push('IsometricRenderer still makes visual wall tiles collide directly');
+    }
+    if (gameSceneSource.includes('physics.add.collider(this.player, wallsLayer)')) {
+      failures.push('GameScene still attaches the player directly to the visual Walls layer');
+    }
+    if (rendererSource.includes('getBlockingFootprints')) {
+      failures.push('IsometricRenderer still exposes footprint blockers from visual wall tiles');
+    }
+    if (gameSceneSource.includes('createIsometricCollisionFootprints')) {
+      failures.push('GameScene still creates invisible isometric footprint colliders');
+    }
+
+    expect(failures).toEqual([]);
+  });
+
+  test('building tiles render as connected architecture, not concrete box grids', () => {
+    const rendererSource = fs.readFileSync(ISOMETRIC_RENDERER_FILE, 'utf8');
+    const requiredBuildingTiles = [
+      'wall-white',
+      'roof-terracotta',
+      'door-wood',
+      'laterite-stone',
+      'church-stone',
+      'thatch-roof',
+    ];
+    const failures = [];
+
+    if (!rendererSource.includes('createRaisedBuildingTiles')) {
+      failures.push('IsometricRenderer does not create raised building geometry');
+    }
+    if (!rendererSource.includes('collectBuildingComponents')) {
+      failures.push('IsometricRenderer does not group adjacent building tiles into footprints');
+    }
+    if (!rendererSource.includes('getComponentNeighbors')) {
+      failures.push('IsometricRenderer does not skip internal building faces');
+    }
+    if (!rendererSource.includes('roofStyle')) {
+      failures.push('IsometricRenderer does not treat roof materials separately from facade materials');
+    }
+    if (!rendererSource.includes('removeTileAt')) {
+      failures.push('flat building tiles are not removed after extrusion');
+    }
+    requiredBuildingTiles.forEach((tileName) => {
+      if (!rendererSource.includes(`'${tileName}'`)) {
+        failures.push(`${tileName} is not covered by raised building rendering`);
+      }
+    });
+
+    expect(failures).toEqual([]);
+  });
+
+  test('isometric map tiles are loaded and mapped before rendering', () => {
+    const manifest = loadJson(RUNTIME_ASSET_MANIFEST);
+    const registeredIsoTiles = new Set(manifest.tiles?.isometric || []);
+    const gameSceneSource = fs.readFileSync(GAME_SCENE_FILE, 'utf8');
+    const failures = [];
+
+    ISO_MAPS.forEach((mapPath) => {
+      const map = loadJson(mapPath);
+      getUsedTilesetNames(map).forEach((tilesetName) => {
+        const assetPath = path.join(
+          __dirname,
+          '..',
+          'assets',
+          'sprites',
+          'tiles',
+          'iso',
+          `${tilesetName}-iso.png`
+        );
+
+        if (!registeredIsoTiles.has(tilesetName)) {
+          failures.push(`${path.basename(mapPath)} uses unregistered iso tile ${tilesetName}`);
+        }
+        if (!fs.existsSync(assetPath)) {
+          failures.push(`${tilesetName} is registered by map but missing ${path.relative(process.cwd(), assetPath)}`);
+        }
+        if (!gameSceneSource.includes(`name: '${tilesetName}'`)) {
+          failures.push(`${tilesetName} is missing from GameScene tilesetMappings`);
+        }
+      });
+    });
+
+    expect(failures).toEqual([]);
+  });
+
   test('Rua Direita keeps its richer live isometric layering and right-side detail', () => {
     expectRichLiveMap(RUA_DIREITA_MAP, 1900);
   });
@@ -140,6 +315,31 @@ describe('Visual polish integrity', () => {
     expect(missingSheets).toEqual([]);
   });
 
+  test('crowd sprites use named-character pixel density for readable period costume', () => {
+    const manifest = loadJson(RUNTIME_ASSET_MANIFEST);
+    const failures = [];
+
+    (manifest.crowd?.sprites || []).forEach((crowdId) => {
+      const filePath = path.join(CROWD_SPRITES_DIR, `${crowdId}.png`);
+      if (!fs.existsSync(filePath)) {
+        failures.push(`${crowdId} is missing`);
+        return;
+      }
+
+      const size = readPngSize(filePath);
+      if (
+        size.width !== manifest.crowd.frameWidth
+        || size.height !== manifest.crowd.frameHeight
+      ) {
+        failures.push(`${crowdId} is ${size.width}x${size.height}, expected ${manifest.crowd.frameWidth}x${manifest.crowd.frameHeight}`);
+      }
+    });
+
+    expect(manifest.crowd.frameWidth).toBe(16);
+    expect(manifest.crowd.frameHeight).toBe(32);
+    expect(failures).toEqual([]);
+  });
+
   test('player-facing item icons stay complete and world-item ids stay valid', () => {
     const itemDefinitionIds = extractItemDefinitionIds();
     const iconFiles = new Set(
@@ -163,7 +363,6 @@ describe('Visual polish integrity', () => {
   });
 
   test('style map covers all assets referenced by the runtime manifest', () => {
-    const STYLE_MAP_PATH = path.join(__dirname, '..', 'docs', 'art-bible', 'shipping-asset-style-map.json');
     if (!fs.existsSync(STYLE_MAP_PATH)) return;
 
     const manifest = loadJson(RUNTIME_ASSET_MANIFEST);

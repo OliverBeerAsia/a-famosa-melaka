@@ -40,6 +40,7 @@ interface CrowdMember {
   id: string;
   type: string;
   sprite: Phaser.GameObjects.Image;
+  shadow: Phaser.GameObjects.Ellipse;
   path: PathConfig;
   speed: number;
   active: boolean;
@@ -122,8 +123,8 @@ const CROWD_TYPES: Record<string, CrowdTypeConfig> = {
   },
   child: {
     spriteKey: 'crowd-malay-child',
-    speed: 135,  // 45 * 3
-    locations: ['kampung', 'rua-direita'],
+    speed: 84,
+    locations: ['kampung'],
   },
 };
 
@@ -140,7 +141,7 @@ const LOCATION_CONFIGS: Record<string, LocationCrowdConfig> = {
     ],
     crowdTypes: [
       'portuguese_merchant', 'malay_local', 'malay_woman',
-      'chinese_merchant', 'arab_trader', 'indian_merchant', 'child',
+      'chinese_merchant', 'arab_trader', 'indian_merchant',
     ],
   },
   waterfront: {
@@ -254,7 +255,7 @@ export class CrowdSystem {
       const oldest = this.crowdMembers.shift();
       if (oldest) {
         this.scene.tweens.add({
-          targets: oldest.sprite,
+          targets: [oldest.sprite, oldest.shadow],
           alpha: 0,
           duration: 500,
           onComplete: () => {
@@ -330,7 +331,17 @@ export class CrowdSystem {
     sprite.setScale(CHARACTER_SCALE);
     sprite.setOrigin(0.5, 1);
     sprite.setDepth(sprite.y); // depth sort by Y
-    sprite.setAlpha(0.7);
+    sprite.setAlpha(typeName === 'child' ? 1 : 0.92);
+
+    const shadow = this.scene.add.ellipse(
+      path.start.x,
+      path.start.y - 2,
+      typeName === 'child' ? 28 : 38,
+      typeName === 'child' ? 9 : 12,
+      0x000000,
+      typeName === 'child' ? 0.26 : 0.22,
+    );
+    shadow.setDepth(sprite.y - 1);
 
     // Speed variation
     const speedVariation = Phaser.Math.FloatBetween(0.8, 1.2);
@@ -347,6 +358,7 @@ export class CrowdSystem {
       id: `crowd_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
       type: typeName,
       sprite,
+      shadow,
       path,
       speed: actualSpeed,
       active: true,
@@ -362,6 +374,7 @@ export class CrowdSystem {
       onUpdate: () => {
         // Keep depth sorted by Y position as it moves
         sprite.setDepth(sprite.y);
+        this.syncCrowdShadow(crowdMember);
       },
       onComplete: () => {
         this.removeCrowdMember(crowdMember);
@@ -381,12 +394,19 @@ export class CrowdSystem {
     this.crowdMembers.push(crowdMember);
   }
 
+  private syncCrowdShadow(crowdMember: CrowdMember): void {
+    crowdMember.shadow.setPosition(crowdMember.sprite.x, crowdMember.sprite.y - 2);
+    crowdMember.shadow.setDepth(crowdMember.sprite.y - 1);
+  }
+
   /** Remove a crowd member and destroy its sprite. */
   private removeCrowdMember(crowdMember: CrowdMember): void {
     const index = this.crowdMembers.findIndex((c) => c.id === crowdMember.id);
     if (index !== -1) {
       this.scene.tweens.killTweensOf(crowdMember.sprite);
+      this.scene.tweens.killTweensOf(crowdMember.shadow);
       crowdMember.sprite.destroy();
+      crowdMember.shadow.destroy();
       this.crowdMembers.splice(index, 1);
     }
   }
@@ -408,6 +428,9 @@ export class CrowdSystem {
           x: exitX,
           duration: dist * 10,
           ease: 'Quad.easeIn',
+          onUpdate: () => {
+            this.syncCrowdShadow(member);
+          },
           onComplete: () => {
             this.removeCrowdMember(member);
           },
@@ -425,7 +448,9 @@ export class CrowdSystem {
   private clearAllCrowd(): void {
     this.crowdMembers.forEach((member) => {
       this.scene.tweens.killTweensOf(member.sprite);
+      this.scene.tweens.killTweensOf(member.shadow);
       member.sprite.destroy();
+      member.shadow.destroy();
     });
     this.crowdMembers = [];
   }

@@ -99,6 +99,6 @@ export function createGame(parent: HTMLElement): Phaser.Game {
  * Destroy the Phaser game instance
  */
 export function destroyGame(game: Phaser.Game) {
-  eventBridge.clear();
+  eventBridge.clearGame(game);
   game.destroy(true);
 }

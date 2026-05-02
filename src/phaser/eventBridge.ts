@@ -19,6 +19,16 @@ class GameEventBridge {
   }
 
   /**
+   * Clear only the stored Phaser instance. Event listeners are owned by their
+   * subscribers and must survive dev-mode remount probes.
+   */
+  clearGame(game?: Phaser.Game) {
+    if (!game || this.phaserGame === game) {
+      this.phaserGame = null;
+    }
+  }
+
+  /**
    * Get the Phaser game instance
    */
   getGame(): Phaser.Game | null {

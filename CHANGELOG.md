@@ -2,6 +2,64 @@
 
 All notable changes to A Famosa: Streets of Golden Melaka.
 
+## [0.9.0] - 2026-05-02
+
+### Historical Architecture and Period-Art Pass
+
+This release responds to the latest visual QA pass: menu/loading art now uses documented period Portuguese cityscape sources, crowd sprites have enough pixel depth to read as people instead of markers, wall art no longer blocks normal walking tiles, and map buildings render as raised connected structures instead of flat tiles or concrete boxes.
+
+### Added
+- `docs/art-bible/source-art/` with source images, rights notes, URLs, and retired-context references for menu/loading art
+- `tools/create-sourced-screen-art.cjs` to rebuild the title/loading derivatives from documented source art
+- `assets/scenes/scene-loading-ribeira.png` as the new loading backdrop
+- Component-based raised-building rendering for Portuguese houses, church stone, fort laterite, doors, terracotta roofs, and kampung thatch
+- Regression checks for connected building components, sourced backdrops, crowd dimensions, and visual-wall collision behavior
+- New release document:
+  - `docs/RELEASE_NOTES_v0.9.0.md`
+
+### Changed
+- Title and loading screens now use 18th-century Portuguese cityscape/landscape source art instead of generic or map-like placeholders
+- Crowd role sprites are now `16x32` with more detailed Portuguese, Malay, Chinese, Arab, Indian, priest, worker, guard, woman, and child variants
+- Runtime manifest, asset spec, generator docs, and validators now treat `16x32` as the shipping crowd contract
+- Raised building tiles are drawn as connected architectural masses with exposed faces, roof caps, doors, shutters, stone/laterite texture, and thatch/terracotta material cues
+- Crowd shadows were resized to match the deeper character silhouettes
+- Version metadata moved to `0.9.0`
+
+### Fixed
+- Removed the invisible row-run collision footprints that could lock the player on ordinary walkable tiles
+- The Phaser/React event bridge now clears the destroyed game instance without wiping subscribers for the next runtime
+- Dialogue startup now opens the store-backed dialogue state when the Phaser scene begins an NPC conversation
+
+### Verification
+- `npm test -- --runInBand`
+- `npm run build`
+- `npm run validate:art -- --strict`
+
+## [0.8.0] - 2026-03-21
+
+### Ultima VIII Style Enforcement and Art Grading
+
+This release made Ultima VIII: Pagan the enforced visual authority for shipping art, added automated style validation, and introduced the corrective-wave grading workflow used by later art passes.
+
+### Added
+- Automated style validation through `validate:style`
+- Combined structural and style validation through `validate:all`
+- Corrective-wave grading and status commands
+- Shared pixel-analysis tooling for palette, antialiasing, gradient, and shadow checks
+- Procedural VGA portrait generation for the named dialogue cast
+- OpenAI scene-backdrop generation support for future replacement passes
+
+### Changed
+- `pretest` and `prebuild` now run art validation before tests and builds
+- Generation prompts were centralized around a single style header
+- Shipping asset style-map coverage was expanded across characters, portraits, tiles, objects, crowd sprites, and scene backdrops
+- Project status and art-bible docs were updated around the enforced Ultima VIII bar
+
+### Verification
+- `npm test -- --runInBand`
+- `npm run build`
+- `npm run validate:style`
+
 ## [0.7.0] - 2026-03-21
 
 ### Customs Spine and Implicit Faction Pass

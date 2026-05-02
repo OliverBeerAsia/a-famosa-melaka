@@ -101,7 +101,7 @@
       }
     ],
     "crowdSilhouette": [
-      { "width": 8, "height": 16 }
+      { "width": 16, "height": 32 }
     ],
     "particleSprite": [
       { "width": 4, "height": 4 },
@@ -162,7 +162,7 @@
       "File is in an approved gameplay directory.",
       "File name matches the repo naming pattern.",
       "Named character sheets are 64x192 with row-major walk/idle/talk layout.",
-      "Crowd silhouettes are 8x16 and reserved for background atmosphere only.",
+      "Crowd sprites are 16x32 single-frame figures with enough detail to read culture, role, and period clothing.",
       "Frame size or footprint matches the spec.",
       "The asset reads clearly on the 320x180 native canvas.",
       "The asset only uses the approved indexed ramp palette.",

@@ -973,6 +973,170 @@
             "notes": ""
           }
         },
+        "cobblestone-v1": {
+          "assetClass": "iso-tile",
+          "runtimePath": "assets/sprites/tiles/iso/cobblestone-v1-iso.png",
+          "u8References": [
+            "u8-stone-floor"
+          ],
+          "historicalNotes": "Isometric cobblestone paving variant for busier Portuguese Melaka streets.",
+          "status": "tune",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": null,
+            "paletteCompliance": null,
+            "outlineWeight": null,
+            "ditherQuality": null,
+            "shadowConsistency": null,
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": null,
+            "reviewer": null,
+            "reviewDate": null,
+            "notes": ""
+          }
+        },
+        "cobblestone-v2": {
+          "assetClass": "iso-tile",
+          "runtimePath": "assets/sprites/tiles/iso/cobblestone-v2-iso.png",
+          "u8References": [
+            "u8-stone-floor"
+          ],
+          "historicalNotes": "Isometric cobblestone paving variant for breaking up repeated street texture.",
+          "status": "tune",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": null,
+            "paletteCompliance": null,
+            "outlineWeight": null,
+            "ditherQuality": null,
+            "shadowConsistency": null,
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": null,
+            "reviewer": null,
+            "reviewDate": null,
+            "notes": ""
+          }
+        },
+        "cobblestone-v3": {
+          "assetClass": "iso-tile",
+          "runtimePath": "assets/sprites/tiles/iso/cobblestone-v3-iso.png",
+          "u8References": [
+            "u8-stone-floor"
+          ],
+          "historicalNotes": "Isometric cobblestone paving variant used for patchwork street surfaces.",
+          "status": "tune",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": null,
+            "paletteCompliance": null,
+            "outlineWeight": null,
+            "ditherQuality": null,
+            "shadowConsistency": null,
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": null,
+            "reviewer": null,
+            "reviewDate": null,
+            "notes": ""
+          }
+        },
+        "cobblestone-grass-h": {
+          "assetClass": "iso-tile",
+          "runtimePath": "assets/sprites/tiles/iso/cobblestone-grass-h-iso.png",
+          "u8References": [
+            "u8-stone-floor",
+            "u8-vegetation"
+          ],
+          "historicalNotes": "Horizontal transition between cobblestone paving and tropical verge growth.",
+          "status": "tune",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": null,
+            "paletteCompliance": null,
+            "outlineWeight": null,
+            "ditherQuality": null,
+            "shadowConsistency": null,
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": null,
+            "reviewer": null,
+            "reviewDate": null,
+            "notes": ""
+          }
+        },
+        "cobblestone-grass-v": {
+          "assetClass": "iso-tile",
+          "runtimePath": "assets/sprites/tiles/iso/cobblestone-grass-v-iso.png",
+          "u8References": [
+            "u8-stone-floor",
+            "u8-vegetation"
+          ],
+          "historicalNotes": "Vertical transition between cobblestone paving and tropical verge growth.",
+          "status": "tune",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": null,
+            "paletteCompliance": null,
+            "outlineWeight": null,
+            "ditherQuality": null,
+            "shadowConsistency": null,
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": null,
+            "reviewer": null,
+            "reviewDate": null,
+            "notes": ""
+          }
+        },
+        "cobblestone-dirt-v": {
+          "assetClass": "iso-tile",
+          "runtimePath": "assets/sprites/tiles/iso/cobblestone-dirt-v-iso.png",
+          "u8References": [
+            "u8-stone-floor"
+          ],
+          "historicalNotes": "Vertical transition from paved path to packed earth in kampung edges.",
+          "status": "tune",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": null,
+            "paletteCompliance": null,
+            "outlineWeight": null,
+            "ditherQuality": null,
+            "shadowConsistency": null,
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": null,
+            "reviewer": null,
+            "reviewDate": null,
+            "notes": ""
+          }
+        },
+        "laterite-stone": {
+          "assetClass": "iso-tile",
+          "runtimePath": "assets/sprites/tiles/iso/laterite-stone-iso.png",
+          "u8References": [
+            "u8-stone-floor",
+            "u8-wall-tile"
+          ],
+          "historicalNotes": "Isometric laterite stone used around A Famosa fortification surfaces.",
+          "status": "tune",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": null,
+            "paletteCompliance": null,
+            "outlineWeight": null,
+            "ditherQuality": null,
+            "shadowConsistency": null,
+            "historicalAccuracy": null,
+            "densityMatch": null,
+            "overallGrade": null,
+            "reviewer": null,
+            "reviewDate": null,
+            "notes": ""
+          }
+        },
         "wall-white": {
           "assetClass": "iso-tile",
           "runtimePath": "assets/sprites/tiles/iso/wall-white.png",
@@ -3125,21 +3289,45 @@
           "u8-environment-overview",
           "u8-building-facade"
         ],
-        "historicalNotes": "Title screen vista of 1580 Melaka, showing the fortress, strait, and layered cityscape.",
-        "status": "replace",
+        "historicalNotes": "Title screen vista derived from an 18th-century Portuguese landscape/city view, Vista do Terreiro do Paço, preserving the old-painted panorama rather than using a map crop.",
+        "status": "tune",
         "wave": 3,
         "gradeCard": {
           "silhouetteClarity": null,
           "paletteCompliance": null,
-          "outlineWeight": "pass",
-          "ditherQuality": "fail",
-          "shadowConsistency": "pass",
+          "outlineWeight": null,
+          "ditherQuality": null,
+          "shadowConsistency": null,
           "historicalAccuracy": null,
           "densityMatch": null,
-          "overallGrade": "fail",
-          "reviewer": "auto-grader-v1",
-          "reviewDate": "2026-03-21",
-          "notes": "dither: gradient ratio 1.524 exceeds 0.05"
+          "overallGrade": null,
+          "reviewer": null,
+          "reviewDate": null,
+          "notes": "Rebuilt from period source art; needs a fresh style grade after screen-in-context review."
+        }
+      },
+      "scene-loading-ribeira": {
+        "assetClass": "scene-backdrop",
+        "runtimePath": "assets/scenes/scene-loading-ribeira.png",
+        "u8References": [
+          "u8-environment-overview",
+          "u8-building-facade"
+        ],
+        "historicalNotes": "Loading screen derived from an 18th-century Portuguese view of the Ribeira Palace and square in Lisbon, used as proper Portuguese landscape/cityscape art rather than cartographic source material.",
+        "status": "tune",
+        "wave": 3,
+        "gradeCard": {
+          "silhouetteClarity": null,
+          "paletteCompliance": null,
+          "outlineWeight": null,
+          "ditherQuality": null,
+          "shadowConsistency": null,
+          "historicalAccuracy": null,
+          "densityMatch": null,
+          "overallGrade": null,
+          "reviewer": null,
+          "reviewDate": null,
+          "notes": "New sourced loading backdrop; needs a fresh style grade after screen-in-context review."
         }
       },
       "scene-a-famosa": {
