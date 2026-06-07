@@ -5,8 +5,16 @@
     "isoMapKey": "a-famosa-gate-iso",
     "music": "music-fortress",
     "nightMusic": "music-night",
-    "ambientSounds": ["base-tropical", "fortress-ambience", "distant-city"],
-    "nightAmbientSounds": ["fortress-ambience", "distant-city", "night-insects"],
+    "ambientSounds": [
+      "base-tropical",
+      "fortress-ambience",
+      "distant-city"
+    ],
+    "nightAmbientSounds": [
+      "fortress-ambience",
+      "distant-city",
+      "night-insects"
+    ],
     "footstepSurface": "stone",
     "projection": {
       "runtimeMode": "legacy-backdrop",
@@ -22,25 +30,64 @@
       "dusk": "scene-a-famosa-dusk",
       "night": "scene-a-famosa-night"
     },
-    "playerStart": { "x": 20, "y": 20 },
+    "playerStart": {
+      "x": 480,
+      "y": 440
+    },
     "collisionRects": [
-      { "x": 0, "y": 0, "width": 960, "height": 250 },
-      { "x": 0, "y": 0, "width": 120, "height": 540 },
-      { "x": 840, "y": 0, "width": 120, "height": 540 },
-      { "x": 0, "y": 500, "width": 960, "height": 40 }
+      {
+        "x": 0,
+        "y": 0,
+        "width": 960,
+        "height": 170
+      },
+      {
+        "x": 0,
+        "y": 0,
+        "width": 130,
+        "height": 540
+      },
+      {
+        "x": 830,
+        "y": 0,
+        "width": 130,
+        "height": 540
+      },
+      {
+        "x": 0,
+        "y": 505,
+        "width": 960,
+        "height": 35
+      }
     ],
     "transitions": [
       {
         "targetLocation": "rua-direita",
         "label": "To Rua Direita",
-        "triggerArea": { "x": 2080, "y": 560, "width": 120, "height": 60 },
-        "spawnAt": { "x": 200, "y": 380 }
+        "triggerArea": {
+          "x": 2080,
+          "y": 560,
+          "width": 120,
+          "height": 60
+        },
+        "spawnAt": {
+          "x": 200,
+          "y": 380
+        }
       },
       {
         "targetLocation": "waterfront",
         "label": "To The Waterfront Service Gate",
-        "triggerArea": { "x": 1860, "y": 420, "width": 160, "height": 90 },
-        "spawnAt": { "x": 520, "y": 430 },
+        "triggerArea": {
+          "x": 1860,
+          "y": 420,
+          "width": 160,
+          "height": 90
+        },
+        "spawnAt": {
+          "x": 520,
+          "y": 430
+        },
         "requirements": {
           "worldFlagsAny": [
             "customs-questioned",
@@ -55,8 +102,14 @@
       }
     ],
     "npcPositions": {
-      "capitao-rodrigues": { "x": 20, "y": 14 },
-      "gaspar-mesquita": { "x": 24, "y": 13 }
+      "capitao-rodrigues": {
+        "x": 400,
+        "y": 330
+      },
+      "gaspar-mesquita": {
+        "x": 560,
+        "y": 330
+      }
     }
   },
   "rua-direita": {
@@ -65,8 +118,16 @@
     "isoMapKey": "rua-direita-iso",
     "music": "music-market",
     "nightMusic": "music-night",
-    "ambientSounds": ["base-tropical", "market-crowd", "street-life"],
-    "nightAmbientSounds": ["street-life", "distant-city", "cricket-chorus"],
+    "ambientSounds": [
+      "base-tropical",
+      "market-crowd",
+      "street-life"
+    ],
+    "nightAmbientSounds": [
+      "street-life",
+      "distant-city",
+      "cricket-chorus"
+    ],
     "footstepSurface": "stone",
     "projection": {
       "runtimeMode": "legacy-backdrop",
@@ -82,38 +143,97 @@
       "dusk": "scene-rua-direita-dusk",
       "night": "scene-rua-direita-night"
     },
-    "playerStart": { "x": 480, "y": 430 },
+    "playerStart": {
+      "x": 480,
+      "y": 430
+    },
     "collisionRects": [
-      { "x": 0, "y": 0, "width": 960, "height": 175 },
-      { "x": 0, "y": 0, "width": 130, "height": 540 },
-      { "x": 830, "y": 0, "width": 130, "height": 540 },
-      { "x": 0, "y": 502, "width": 960, "height": 38 }
+      {
+        "x": 0,
+        "y": 0,
+        "width": 960,
+        "height": 175
+      },
+      {
+        "x": 0,
+        "y": 0,
+        "width": 130,
+        "height": 540
+      },
+      {
+        "x": 830,
+        "y": 0,
+        "width": 130,
+        "height": 540
+      },
+      {
+        "x": 0,
+        "y": 502,
+        "width": 960,
+        "height": 38
+      }
     ],
     "transitions": [
       {
         "targetLocation": "a-famosa-gate",
         "label": "To A Famosa Service Gate",
-        "triggerArea": { "x": 130, "y": 280, "width": 34, "height": 130 },
-        "spawnAt": { "x": 480, "y": 430 }
+        "triggerArea": {
+          "x": 130,
+          "y": 280,
+          "width": 34,
+          "height": 130
+        },
+        "spawnAt": {
+          "x": 480,
+          "y": 430
+        }
       },
       {
         "targetLocation": "waterfront",
         "label": "To The Waterfront",
-        "triggerArea": { "x": 796, "y": 280, "width": 34, "height": 130 },
-        "spawnAt": { "x": 480, "y": 430 }
+        "triggerArea": {
+          "x": 796,
+          "y": 280,
+          "width": 34,
+          "height": 130
+        },
+        "spawnAt": {
+          "x": 480,
+          "y": 430
+        }
       },
       {
         "targetLocation": "st-pauls-church",
         "label": "Climb to St. Paul's",
-        "triggerArea": { "x": 420, "y": 175, "width": 120, "height": 28 },
-        "spawnAt": { "x": 480, "y": 430 }
+        "triggerArea": {
+          "x": 420,
+          "y": 175,
+          "width": 120,
+          "height": 28
+        },
+        "spawnAt": {
+          "x": 480,
+          "y": 430
+        }
       }
     ],
     "npcPositions": {
-      "fernao-gomes": { "x": 340, "y": 330 },
-      "aminah": { "x": 600, "y": 330 },
-      "alvares": { "x": 470, "y": 260 },
-      "diogo-almeida": { "x": 300, "y": 410 }
+      "fernao-gomes": {
+        "x": 340,
+        "y": 330
+      },
+      "aminah": {
+        "x": 600,
+        "y": 330
+      },
+      "alvares": {
+        "x": 470,
+        "y": 260
+      },
+      "diogo-almeida": {
+        "x": 300,
+        "y": 410
+      }
     }
   },
   "st-pauls-church": {
@@ -122,8 +242,16 @@
     "isoMapKey": "st-pauls-church-iso",
     "music": "music-church",
     "nightMusic": "music-church",
-    "ambientSounds": ["base-tropical", "church-bells", "sacred-calm"],
-    "nightAmbientSounds": ["church-bells", "sacred-calm", "night-insects"],
+    "ambientSounds": [
+      "base-tropical",
+      "church-bells",
+      "sacred-calm"
+    ],
+    "nightAmbientSounds": [
+      "church-bells",
+      "sacred-calm",
+      "night-insects"
+    ],
     "footstepSurface": "stone",
     "projection": {
       "runtimeMode": "legacy-backdrop",
@@ -139,25 +267,61 @@
       "dusk": "scene-st-pauls-dusk",
       "night": "scene-st-pauls-night"
     },
-    "playerStart": { "x": 20, "y": 20 },
+    "playerStart": {
+      "x": 480,
+      "y": 440
+    },
     "collisionRects": [
-      { "x": 0, "y": 0, "width": 960, "height": 200 },
-      { "x": 0, "y": 500, "width": 960, "height": 40 },
-      { "x": 0, "y": 200, "width": 150, "height": 340 },
-      { "x": 810, "y": 200, "width": 150, "height": 340 },
-      { "x": 380, "y": 230, "width": 220, "height": 150 }
+      {
+        "x": 0,
+        "y": 0,
+        "width": 960,
+        "height": 170
+      },
+      {
+        "x": 0,
+        "y": 0,
+        "width": 130,
+        "height": 540
+      },
+      {
+        "x": 830,
+        "y": 0,
+        "width": 130,
+        "height": 540
+      },
+      {
+        "x": 0,
+        "y": 505,
+        "width": 960,
+        "height": 35
+      }
     ],
     "transitions": [
       {
         "targetLocation": "rua-direita",
         "label": "Descend to Rua Direita",
-        "triggerArea": { "x": 1200, "y": 680, "width": 180, "height": 80 },
-        "spawnAt": { "x": 1400, "y": 400 }
+        "triggerArea": {
+          "x": 1200,
+          "y": 680,
+          "width": 180,
+          "height": 80
+        },
+        "spawnAt": {
+          "x": 1400,
+          "y": 400
+        }
       }
     ],
     "npcPositions": {
-      "padre-tomas": { "x": 20, "y": 16 },
-      "siti": { "x": 24, "y": 12 }
+      "padre-tomas": {
+        "x": 470,
+        "y": 330
+      },
+      "siti": {
+        "x": 600,
+        "y": 345
+      }
     }
   },
   "waterfront": {
@@ -166,8 +330,17 @@
     "isoMapKey": "waterfront-iso",
     "music": "music-waterfront",
     "nightMusic": "music-night",
-    "ambientSounds": ["base-tropical", "water-lapping", "harbor-activity", "seagulls"],
-    "nightAmbientSounds": ["water-lapping", "harbor-activity", "night-insects"],
+    "ambientSounds": [
+      "base-tropical",
+      "water-lapping",
+      "harbor-activity",
+      "seagulls"
+    ],
+    "nightAmbientSounds": [
+      "water-lapping",
+      "harbor-activity",
+      "night-insects"
+    ],
     "footstepSurface": "wood",
     "projection": {
       "runtimeMode": "legacy-backdrop",
@@ -183,26 +356,64 @@
       "dusk": "scene-waterfront-dusk",
       "night": "scene-waterfront-night"
     },
-    "playerStart": { "x": 20, "y": 18 },
+    "playerStart": {
+      "x": 480,
+      "y": 440
+    },
     "collisionRects": [
-      { "x": 0, "y": 0, "width": 960, "height": 170 },
-      { "x": 0, "y": 360, "width": 960, "height": 180 },
-      { "x": 0, "y": 0, "width": 140, "height": 360 },
-      { "x": 820, "y": 0, "width": 140, "height": 360 },
-      { "x": 420, "y": 210, "width": 140, "height": 120 }
+      {
+        "x": 0,
+        "y": 0,
+        "width": 960,
+        "height": 170
+      },
+      {
+        "x": 0,
+        "y": 0,
+        "width": 130,
+        "height": 540
+      },
+      {
+        "x": 830,
+        "y": 0,
+        "width": 130,
+        "height": 540
+      },
+      {
+        "x": 0,
+        "y": 505,
+        "width": 960,
+        "height": 35
+      }
     ],
     "transitions": [
       {
         "targetLocation": "rua-direita",
         "label": "To Rua Direita",
-        "triggerArea": { "x": 300, "y": 480, "width": 120, "height": 60 },
-        "spawnAt": { "x": 2000, "y": 540 }
+        "triggerArea": {
+          "x": 300,
+          "y": 480,
+          "width": 120,
+          "height": 60
+        },
+        "spawnAt": {
+          "x": 2000,
+          "y": 540
+        }
       },
       {
         "targetLocation": "a-famosa-gate",
         "label": "To A Famosa Service Gate",
-        "triggerArea": { "x": 1800, "y": 300, "width": 180, "height": 90 },
-        "spawnAt": { "x": 1800, "y": 420 },
+        "triggerArea": {
+          "x": 1800,
+          "y": 300,
+          "width": 180,
+          "height": 90
+        },
+        "spawnAt": {
+          "x": 1800,
+          "y": 420
+        },
         "requirements": {
           "worldFlagsAny": [
             "customs-questioned",
@@ -218,14 +429,31 @@
       {
         "targetLocation": "kampung",
         "label": "To Kampung Quarter",
-        "triggerArea": { "x": 2080, "y": 480, "width": 120, "height": 60 },
-        "spawnAt": { "x": 400, "y": 540 }
+        "triggerArea": {
+          "x": 2080,
+          "y": 480,
+          "width": 120,
+          "height": 60
+        },
+        "spawnAt": {
+          "x": 400,
+          "y": 540
+        }
       }
     ],
     "npcPositions": {
-      "chen-wei": { "x": 26, "y": 16 },
-      "rashid": { "x": 14, "y": 18 },
-      "lin-mei": { "x": 30, "y": 12 }
+      "chen-wei": {
+        "x": 470,
+        "y": 330
+      },
+      "rashid": {
+        "x": 300,
+        "y": 360
+      },
+      "lin-mei": {
+        "x": 650,
+        "y": 330
+      }
     }
   },
   "kampung": {
@@ -234,8 +462,17 @@
     "isoMapKey": "kampung-iso",
     "music": "music-main",
     "nightMusic": "music-night",
-    "ambientSounds": ["base-tropical", "village-life", "jungle-sounds"],
-    "nightAmbientSounds": ["village-life", "jungle-sounds", "cricket-chorus", "night-insects"],
+    "ambientSounds": [
+      "base-tropical",
+      "village-life",
+      "jungle-sounds"
+    ],
+    "nightAmbientSounds": [
+      "village-life",
+      "jungle-sounds",
+      "cricket-chorus",
+      "night-insects"
+    ],
     "footstepSurface": "dirt",
     "projection": {
       "runtimeMode": "legacy-backdrop",
@@ -251,25 +488,61 @@
       "dusk": "scene-kampung-dusk",
       "night": "scene-kampung-night"
     },
-    "playerStart": { "x": 20, "y": 20 },
+    "playerStart": {
+      "x": 480,
+      "y": 440
+    },
     "collisionRects": [
-      { "x": 0, "y": 0, "width": 960, "height": 200 },
-      { "x": 0, "y": 500, "width": 960, "height": 40 },
-      { "x": 0, "y": 0, "width": 140, "height": 540 },
-      { "x": 820, "y": 0, "width": 140, "height": 540 },
-      { "x": 380, "y": 230, "width": 220, "height": 150 }
+      {
+        "x": 0,
+        "y": 0,
+        "width": 960,
+        "height": 170
+      },
+      {
+        "x": 0,
+        "y": 0,
+        "width": 130,
+        "height": 540
+      },
+      {
+        "x": 830,
+        "y": 0,
+        "width": 130,
+        "height": 540
+      },
+      {
+        "x": 0,
+        "y": 505,
+        "width": 960,
+        "height": 35
+      }
     ],
     "transitions": [
       {
         "targetLocation": "waterfront",
         "label": "To The Waterfront",
-        "triggerArea": { "x": 300, "y": 480, "width": 120, "height": 60 },
-        "spawnAt": { "x": 2000, "y": 480 }
+        "triggerArea": {
+          "x": 300,
+          "y": 480,
+          "width": 120,
+          "height": 60
+        },
+        "spawnAt": {
+          "x": 2000,
+          "y": 480
+        }
       }
     ],
     "npcPositions": {
-      "mak-enang": { "x": 24, "y": 16 },
-      "pak-salleh": { "x": 18, "y": 20 }
+      "mak-enang": {
+        "x": 470,
+        "y": 330
+      },
+      "pak-salleh": {
+        "x": 600,
+        "y": 345
+      }
     }
   }
 }
