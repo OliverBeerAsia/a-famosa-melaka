@@ -590,7 +590,7 @@ export class GameScene extends Phaser.Scene {
 
     // Add vignette
     const vignette = this.add.graphics();
-    vignette.fillGradientStyle(0x000000, 0x000000, 0x000000, 0x000000, 0.3, 0.15, 0.15, 0.3);
+    vignette.fillGradientStyle(0x000000, 0x000000, 0x000000, 0x000000, 0.16, 0.07, 0.07, 0.16);
     vignette.fillRect(0, 0, width, height);
     vignette.setScrollFactor(0);
     vignette.setDepth(-10);

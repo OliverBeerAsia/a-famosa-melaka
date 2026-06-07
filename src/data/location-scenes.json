@@ -82,39 +82,38 @@
       "dusk": "scene-rua-direita-dusk",
       "night": "scene-rua-direita-night"
     },
-    "playerStart": { "x": 20, "y": 20 },
+    "playerStart": { "x": 480, "y": 430 },
     "collisionRects": [
-      { "x": 0, "y": 0, "width": 960, "height": 190 },
-      { "x": 0, "y": 480, "width": 960, "height": 60 },
-      { "x": 0, "y": 0, "width": 140, "height": 540 },
-      { "x": 820, "y": 0, "width": 140, "height": 540 },
-      { "x": 360, "y": 240, "width": 240, "height": 120 }
+      { "x": 0, "y": 0, "width": 960, "height": 175 },
+      { "x": 0, "y": 0, "width": 130, "height": 540 },
+      { "x": 830, "y": 0, "width": 130, "height": 540 },
+      { "x": 0, "y": 502, "width": 960, "height": 38 }
     ],
     "transitions": [
       {
         "targetLocation": "a-famosa-gate",
         "label": "To A Famosa Service Gate",
-        "triggerArea": { "x": 300, "y": 560, "width": 120, "height": 60 },
-        "spawnAt": { "x": 1960, "y": 500 }
+        "triggerArea": { "x": 130, "y": 280, "width": 34, "height": 130 },
+        "spawnAt": { "x": 480, "y": 430 }
       },
       {
         "targetLocation": "waterfront",
         "label": "To The Waterfront",
-        "triggerArea": { "x": 2080, "y": 560, "width": 120, "height": 60 },
-        "spawnAt": { "x": 400, "y": 500 }
+        "triggerArea": { "x": 796, "y": 280, "width": 34, "height": 130 },
+        "spawnAt": { "x": 480, "y": 430 }
       },
       {
         "targetLocation": "st-pauls-church",
         "label": "Climb to St. Paul's",
-        "triggerArea": { "x": 1500, "y": 400, "width": 120, "height": 60 },
-        "spawnAt": { "x": 1200, "y": 700 }
+        "triggerArea": { "x": 420, "y": 175, "width": 120, "height": 28 },
+        "spawnAt": { "x": 480, "y": 430 }
       }
     ],
     "npcPositions": {
-      "fernao-gomes": { "x": 14, "y": 18 },
-      "aminah": { "x": 28, "y": 18 },
-      "alvares": { "x": 22, "y": 14 },
-      "diogo-almeida": { "x": 18, "y": 11 }
+      "fernao-gomes": { "x": 340, "y": 330 },
+      "aminah": { "x": 600, "y": 330 },
+      "alvares": { "x": 470, "y": 260 },
+      "diogo-almeida": { "x": 300, "y": 410 }
     }
   },
   "st-pauls-church": {
