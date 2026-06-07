@@ -1143,12 +1143,13 @@ export class GameScene extends Phaser.Scene {
       sprite.setDepth(worldDepth(item.y));
 
       const markerY = item.y - Math.max(22, sprite.displayHeight) - 8;
-      const glow = this.add.ellipse(item.x, item.y - 4, 34, 18, 0xF4B41A, 0.18);
+      const glow = this.add.ellipse(item.x, item.y - 4, 26, 13, 0xF4B41A, 0.1);
       glow.setDepth(979);
       glow.setBlendMode(Phaser.BlendModes.ADD);
 
-      const marker = this.add.circle(item.x, markerY, 7, 0xF4B41A, 0.9);
-      marker.setStrokeStyle(2, 0x3b2509, 1);
+      // Subtle interaction pip (was a big bright disc that read as a coin).
+      const marker = this.add.circle(item.x, markerY, 3.5, 0xF4B41A, 0.7);
+      marker.setStrokeStyle(1, 0x3b2509, 0.8);
       marker.setDepth(sprite.depth + 1);
 
       const itemName = ITEM_DEFINITIONS[item.itemId]?.name || item.itemId;
@@ -1185,19 +1186,28 @@ export class GameScene extends Phaser.Scene {
 
       const x = obj.position?.x || 0;
       const y = obj.position?.y || 0;
+
+      // Legacy painted-plate: skip lore objects authored off the 960x540 plate
+      // (e.g. pelourinho x=1180, pepper x=1660 from the old iso layout).
+      if (x < 24 || x > 936 || y < 24 || y > 528) return;
+
       const spriteKey = this.resolveGameplaySpriteKey(obj.sprite);
+      // Unresolved lore sprites fall back to the (now invisible) placeholder —
+      // skip them entirely so we don't leave floating markers with no object.
+      if (spriteKey === 'debug-prop-missing') return;
       const sprite = this.add.image(x, y, spriteKey);
       sprite.setOrigin(0.5, 1);
-      sprite.setScale(3);
+      sprite.setScale(2); // match prop scale on the plate (3x was oversized)
       sprite.setDepth(worldDepth(y));
 
       const markerY = y - Math.max(22, sprite.displayHeight) - 8;
-      const glow = this.add.ellipse(x, y - 4, 36, 20, 0xD4AF37, 0.12);
+      const glow = this.add.ellipse(x, y - 4, 28, 14, 0xD4AF37, 0.06);
       glow.setDepth(979);
       glow.setBlendMode(Phaser.BlendModes.ADD);
 
-      const marker = this.add.circle(x, markerY, 6, 0xD4AF37, 0.7);
-      marker.setStrokeStyle(2, 0x3b2509, 0.8);
+      // Subtle interaction pip (was a big gold disc that read as a coin).
+      const marker = this.add.circle(x, markerY, 3, 0xD4AF37, 0.55);
+      marker.setStrokeStyle(1, 0x3b2509, 0.7);
       marker.setDepth(sprite.depth + 1);
 
       const label = this.add.text(x, markerY - 12, obj.name, {

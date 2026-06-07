@@ -38,8 +38,20 @@ interface ClusterDef {
   objects: ObjectDef[];
 }
 
+interface LegacyPropDef {
+  sprite: string;
+  x: number;
+  y: number;
+  scale?: number;
+  examineText?: string;
+  particles?: 'smoke' | 'steam' | 'dust';
+}
+
 interface LocationDef {
   clusters: ClusterDef[];
+  // Curated, pixel-positioned props for the legacy painted-plate. When present,
+  // these are the authoritative layout and the iso-grid clusters are ignored.
+  legacyProps?: LegacyPropDef[];
 }
 
 interface PlacedObject {
@@ -65,10 +77,8 @@ const ANIMATED_OBJECTS: Record<string, Array<{
     { type: 'flag', x: 480, y: 120 },
   ],
   'rua-direita': [
-    { type: 'torch', x: 360, y: 450 },
-    { type: 'awning-flutter', x: 400, y: 280 },
-    { type: 'awning-flutter', x: 700, y: 260 },
-    { type: 'smoke', x: 820, y: 200 },
+    { type: 'torch', x: 150, y: 300 },
+    { type: 'smoke', x: 250, y: 150 },
   ],
   'st-pauls-church': [
     { type: 'torch', x: 480, y: 240 },
@@ -124,6 +134,27 @@ export class EnvironmentObjectSystem {
     const locations = (environmentData as { locations: Record<string, LocationDef> }).locations;
     const locationDef = locations[locationId];
     if (!locationDef) return;
+
+    // Legacy painted-plate: if a curated pixel-positioned prop list exists, use
+    // it as the authoritative layout and SKIP the iso-grid clusters (which
+    // mis-place/oversize/duplicate on a fixed 960x540 plate).
+    if (locationDef.legacyProps && locationDef.legacyProps.length > 0) {
+      for (const p of locationDef.legacyProps) {
+        if (!this.scene.textures.exists(p.sprite)) continue;
+        const image = this.scene.add.image(p.x, p.y, p.sprite);
+        image.setOrigin(0.5, 1);
+        image.setDepth(worldDepth(p.y));
+        image.setScale(p.scale ?? 2);
+        const placed: PlacedObject = { image, examineText: p.examineText, clusterId: 'legacy' };
+        if (p.examineText) {
+          image.setInteractive({ useHandCursor: true });
+          image.on('pointerdown', () => this.onExamineObject(placed));
+        }
+        if (p.particles) this.attachParticles(p.x, p.y, p.particles);
+        this.placedObjects.push(placed);
+      }
+      return;
+    }
 
     for (const cluster of locationDef.clusters) {
       // Convert tile coordinates to world position (960x540 space)
