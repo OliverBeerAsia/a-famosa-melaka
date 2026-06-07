@@ -13,3 +13,4 @@ release/
 .env.local
 .playwright-cli/
 *.code-workspace
+.playwright-mcp/

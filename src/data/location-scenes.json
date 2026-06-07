@@ -9,7 +9,7 @@
     "nightAmbientSounds": ["fortress-ambience", "distant-city", "night-insects"],
     "footstepSurface": "stone",
     "projection": {
-      "runtimeMode": "isometric-2:1",
+      "runtimeMode": "legacy-backdrop",
       "targetMode": "isometric-2:1",
       "authoringBasis": "isometric-grid",
       "tileWidth": 64,
@@ -69,7 +69,7 @@
     "nightAmbientSounds": ["street-life", "distant-city", "cricket-chorus"],
     "footstepSurface": "stone",
     "projection": {
-      "runtimeMode": "isometric-2:1",
+      "runtimeMode": "legacy-backdrop",
       "targetMode": "isometric-2:1",
       "authoringBasis": "isometric-grid",
       "tileWidth": 64,
@@ -127,7 +127,7 @@
     "nightAmbientSounds": ["church-bells", "sacred-calm", "night-insects"],
     "footstepSurface": "stone",
     "projection": {
-      "runtimeMode": "isometric-2:1",
+      "runtimeMode": "legacy-backdrop",
       "targetMode": "isometric-2:1",
       "authoringBasis": "isometric-grid",
       "tileWidth": 64,
@@ -171,7 +171,7 @@
     "nightAmbientSounds": ["water-lapping", "harbor-activity", "night-insects"],
     "footstepSurface": "wood",
     "projection": {
-      "runtimeMode": "isometric-2:1",
+      "runtimeMode": "legacy-backdrop",
       "targetMode": "isometric-2:1",
       "authoringBasis": "isometric-grid",
       "tileWidth": 64,
@@ -239,7 +239,7 @@
     "nightAmbientSounds": ["village-life", "jungle-sounds", "cricket-chorus", "night-insects"],
     "footstepSurface": "dirt",
     "projection": {
-      "runtimeMode": "isometric-2:1",
+      "runtimeMode": "legacy-backdrop",
       "targetMode": "isometric-2:1",
       "authoringBasis": "isometric-grid",
       "tileWidth": 64,
