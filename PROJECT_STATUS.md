@@ -2,31 +2,63 @@
 
 ## Current Status
 
-- Date: May 2, 2026
-- Release: `v0.9.0`
-- Status: historical architecture and period-art pass ready for release
-- Overall read: the live isometric runtime now has documented Portuguese screen art, deeper historical crowd sprites, raised connected building masses, and cleaner collision separation between visible architecture and walkable ground
+- Date: June 7, 2026
+- Release: `v0.10.0`
+- Status: graphics cohesion and walkable-plate pass ready for release
+- Overall read: all five locations now ship as cohesive painted pixel-art plates with Y-sorted sprites on top (Ultima VII overlap), actors spawn correctly on walkable ground, and the world reads as a single coherent pixel grid rather than mixed-resolution iso tiles
 
-## v0.9.0 Summary
+## v0.10.0 Summary
 
-This release fixes the latest visual and traversal issues found during live browser review. The menu/loading screens now use sourced 18th-century Portuguese cityscape art, the crowd layer uses larger `16x32` role sprites, visual wall tiles no longer create invisible broad blockers, and buildings are rendered as raised architectural components instead of flat tiles.
+This release moves the shipping renderer to `legacy-backdrop` mode: every location is a hand-cohered pixel-art plate with the player, NPCs, and interactive props drawn as Y-sorted sprites over it. The five location plates plus title/loading were regenerated via Canva MCP and post-processed through `tools/post-process-scene.cjs` (palette-quantize, Bayer dither, `--pixelate 3` to native `320x180`) so the backdrop pixel grid matches the 3x sprites at 0% off-palette and zero anti-aliasing. Spawns and transitions were fixed from broken tile coordinates to pixel coordinates so actors land on walkable ground, perimeter and water-edge collision were added, and the procedural portrait/sprite/UI kit was reworked for clean reads at 3x. The isometric tilemap renderer is retained but is no longer the shipping path. The build was verified in-engine via Playwright across all five locations and dialogue.
 
 ## Live Runtime Baseline
 
 | Area | Current Standard |
 |------|------------------|
-| Traversal | 2:1 isometric Phaser runtime |
-| Named gameplay sheets | `64x192` sheets, `16x32` frames, `4x6` rows |
+| Traversal | Legacy painted-plate + y-sorted sprites (`960x540`) |
+| World art | Per-location cohesive pixel-art plates (native `320x180`, 3x to canvas) |
+| Rendering mode | `legacy-backdrop` shipping; isometric tilemap renderer retained but not shipped |
+| Props | Pixel-positioned `legacyProps` sprites (~2x) curated per location |
+| Named gameplay sheets | `64x192` sheets, `16x32` frames, `4x6` rows, contrast-quantized for 3x |
 | Crowd sprites | `16x32` single-frame historical role sprites |
-| Portraits | Procedural VGA-style Ultima VIII portraits for all named cast |
-| Map stack | `Ground`, `Walls`, `Objects`, `Props`, `Overhang`, `Canopy`, `Highlights` |
-| Building rendering | Raised connected components generated from wall/roof tiles |
-| Collision | Authored colliders only; visual wall art does not create broad blockers |
-| Item art | Every player-facing item has a UI icon |
+| Portraits | Procedural VGA-style portraits, hard value bands, NW light, no hatch bg |
+| Depth sorting | Unified `worldDepth(y)` ordering across both render modes |
+| Spawns | Legacy `playerStart` / `npcPositions` are pixel coords (on-screen, walkable) |
+| Collision | Authored colliders, perimeter bounds, and approximate water-edge bounds |
+| Transitions | On-screen transition triggers and spawns; locations walkable and connected |
+| Palette | Palette canon + tropical sky-blue ramp; all 97 tiles quantized |
+| Item art | Every player-facing item has a UI icon; markers shrunk to subtle pips |
 | RPG state | Six implicit factions surfaced as `City Currents` |
 | Style enforcement | `pretest` and `prebuild` hooks run structural and style validation |
+| Asset provenance | Plate sources recorded in `tools/canva-sources/MANIFEST.json` |
 
 ## What Is Now Working Well
+
+### Cohesive scene plates
+
+- All five location plates plus title/loading are regenerated as cohesive pixel art via Canva MCP and `tools/post-process-scene.cjs`.
+- Post-processing palette-quantizes, applies Bayer dither, and pixelates to native `320x180` so the backdrop grid matches the 3x sprites: 0% off-palette, zero anti-aliasing.
+- Source provenance is recorded in `tools/canva-sources/MANIFEST.json`.
+
+### Walkable plates and overlap
+
+- The shipping renderer is `legacy-backdrop`: painted plate with player/NPCs/props as Y-sorted sprites on top for Ultima VII-style overlap.
+- Interactive props are pixel-positioned sprites via `legacyProps` in `src/data/environment-objects.json`, curated per location at ~2x; iso clusters are skipped on plates.
+- The isometric tilemap renderer is retained but is no longer the shipping path.
+
+### Spawns, depth, and collision
+
+- Legacy `playerStart` and `npcPositions` are now pixel coordinates, fixing the prior tile-coord bug that spawned actors in the corner.
+- A unified `worldDepth(y)` sort governs draw order in both render modes.
+- Perimeter and water-edge collision keep actors on walkable ground; on-screen transition triggers and spawns make locations walkable and connected.
+
+### Sprite and UI readability
+
+- The procedural portrait engine was rewritten with hard value bands, NW lighting, and no hatch background.
+- Character sheets were contrast-quantized to read cleanly at 3x, and carved-chrome UI sprites were regenerated.
+- Engine overlays (vignette, AO, grain, color-grade) were lightened for pre-lit plates; the missing-prop placeholder is now invisible (no yellow-X boxes), and lore/world-item markers were shrunk to subtle pips.
+
+### What Was Working Well
 
 ### Screen art sourcing
 
@@ -58,6 +90,18 @@ This release fixes the latest visual and traversal issues found during live brow
 - `The Merchant's Seal`, `Rashid's Cargo`, and `Pirates on the Horizon` share world-state consequences.
 - Six-faction implicit reputation model remains active.
 - Journal/HUD surfaces narrative currents qualitatively.
+
+## Known limitations / next
+
+- Time-of-day (dawn/dusk/night) variants for the new plates are not yet regenerated; the old variants are still in place.
+- Inter-location transitions are authored but not all walk-tested end to end.
+- Water-edge collision is approximate on the waterfront and kampung plates.
+- Some lore sprite art (for example the "book") reads oddly at its current size.
+- Optional: increase prop density and per-asset prop sizing for richer scenes.
+
+## Production Rule
+
+Art is Claude-managed with no external image-generation API keys: the procedural kit plus Canva MCP only, not Gemini or OpenAI.
 
 ## Verification State
 
@@ -99,10 +143,23 @@ npm run sync:ultima8-refs
 
 | Command | Purpose |
 |---------|---------|
+| `node tools/post-process-scene.cjs --pixelate 3` | Palette-quantize, Bayer-dither, and pixelate scene plates to native `320x180` |
 | `node tools/create-sourced-screen-art.cjs` | Rebuild sourced title/loading screen derivatives |
 | `npm run generate:crowd` | Regenerate the `16x32` crowd role sprites |
 
 ## Release History
+
+### `v0.10.0` - Graphics Cohesion and Walkable Plates Pass
+
+- All five locations moved to `legacy-backdrop` shipping mode: painted plate plus Y-sorted player/NPC/prop sprites
+- Five location plates plus title/loading regenerated via Canva MCP and post-processed to native `320x180` (palette-quantize, Bayer dither, `--pixelate 3`)
+- 0% off-palette, zero anti-aliasing; source provenance recorded in `tools/canva-sources/MANIFEST.json`
+- Interactive props pixel-positioned via `legacyProps`; iso clusters skipped on plates
+- Procedural portraits, character sheets, and carved-chrome UI sprites reworked for clean 3x reads
+- Legacy `playerStart` / `npcPositions` converted to pixel coords; unified `worldDepth(y)` sort; perimeter and water-edge collision; on-screen transitions and spawns
+- Tropical sky-blue palette ramp added; all 97 tiles quantized to palette canon
+- Invisible missing-prop placeholder, subtle marker pips, bounded/downscaled lore objects, lightened engine overlays for pre-lit plates
+- Verified in-engine via Playwright across all five locations and dialogue
 
 ### `v0.9.0` - Historical Architecture and Period-Art Pass
 

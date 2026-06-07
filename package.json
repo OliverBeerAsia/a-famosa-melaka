@@ -1,6 +1,6 @@
 {
   "name": "a-famosa-streets-of-golden-melaka",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "description": "A pixel-art adventure RPG set in Portuguese Melaka circa 1580",
   "main": "electron/main.cjs",
   "type": "module",
@@ -28,6 +28,7 @@
     "generate:particles": "node tools/generate-particle-sprites.cjs",
     "generate:ui": "node tools/generate-ui-assets.cjs",
     "generate:scene-variants": "node tools/generate-time-of-day-variants.cjs",
+    "scenes:rederive": "node tools/rederive-scenes.cjs",
     "generate:openai": "node tools/generate-openai.cjs",
     "generate:portraits": "node tools/generate-portraits-procedural.cjs",
     "generate:animated-objects": "node tools/ultima8-graphics/animated-objects.cjs",

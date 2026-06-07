@@ -8,6 +8,14 @@
 - Improve conversation pacing, topic pruning, and talk open/close staging
 - Increase historical believability in NPC schedules, routines, and space usage
 
+## Graphics Cohesion and Walkable Plates (v0.10.0 follow-on)
+
+- Regenerate time-of-day (dawn/dusk/night) variants for the new plates; the old variants are still in place
+- Walk-test all inter-location transitions end to end (authored but not yet fully traversed)
+- Tighten the approximate water-edge collision on the waterfront and kampung plates
+- Fix lore sprite art that reads oddly at size (for example the "book")
+- Optional: increase prop density and per-asset prop sizing for richer scenes
+
 ## World and Level Design
 
 - Keep reviewing all five locations at dawn, day, dusk, and night

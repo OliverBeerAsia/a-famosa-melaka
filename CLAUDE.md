@@ -31,6 +31,7 @@ melaka-rpg/
 - **Styling**: Tailwind CSS
 - **Tilemap Editor**: Tiled (export to JSON)
 - **Art Tools**: Aseprite for sprites and tiles
+- **Graphics Production**: Claude-managed — procedural code engine (`tools/ultima8-graphics/*`) for the gameplay kit + Canva MCP for scene plates. **No external image-generation API keys** (no Gemini/OpenAI). Claude/Anthropic has no native image generation.
 - **Audio Tools**: Audacity (SFX), LMMS/FamiStudio (chiptune music)
 
 ## Resolution & Scaling Architecture
@@ -40,15 +41,31 @@ melaka-rpg/
 | Layer | Resolution | Notes |
 |-------|------------|-------|
 | Game Canvas | 960×540 | Phaser renders at this size |
-| Scene Backgrounds | ~960×540 | Hand-painted scene images |
+| Scene Plates | 320×180 native → 960×540 | Painted background pixelated to native, nearest-upscaled 3× |
 | Character Sprites | 16×32 native | Scaled 3× at runtime to 48×96 |
-| Tile Sprites | 16×16 native | Used in tilemap mode only |
+| Static Props | sprites | Composited on the plate, scaled ~2× |
+| Tile Sprites | 16×16 native | Iso tilemap path only (not shipping) |
 
 ### Why This Matters
 - **Original spec** was 320×180 native with integer scaling
 - **Current implementation** uses 960×540 canvas with 3× scaled characters
-- **Scene backgrounds** are large painted images, not tilemaps
+- **Shipping world is the painted PLATE, not the isometric tilemap** — as of v0.10.0 all 5 locations ship in `legacy-backdrop` mode: a per-location painted background plate with the player, NPCs, props, and items composited on top as Y-sorted sprites (Ultima VII-style overlap). The isometric tilemap renderer (`src/phaser/systems/IsometricRenderer.ts`) still exists but is no longer the shipping gameplay path.
+- **Plates are pixelated to native 320×180 then nearest-upscaled to 960×540** so the background's pixel grid matches the 3×-scaled sprites — one cohesive chunky pixel-art look, 0% off-palette, no anti-aliasing.
+- **`runtimeMode`** per location lives in `src/data/location-scenes.json` (all set to `"legacy-backdrop"`).
 - **CHARACTER_SCALE constant** in `src/phaser/game.ts` controls sprite scaling
+
+### Scene Plate Pipeline
+1. **Generate**: Canva MCP (Magic Media) produces a TRUE 2:1 isometric, EMPTY plaza/scene — no baked props or people — exported as PNG.
+2. **Post-process**: `tools/post-process-scene.cjs` palette-quantizes + ordered-Bayer-dithers + PIXELATES the export to native 320×180 (`--pixelate 3`, with `--spread`/`--dither` controls), then nearest-upscales to 960×540.
+3. **Install**: the processed plate becomes the location background. Master exports and provenance are tracked in `tools/canva-sources/` (see `MANIFEST.json`).
+
+### Depth & Compositing
+- Unified `worldDepth(y)` Y-sorting applies to player, NPCs, props, and items in both modes (`GameScene.ts`, `EnvironmentObjectSystem.ts`), clamped below the FX/UI depth bands (~800 / ~1001).
+
+### Spawns & Collision (legacy-backdrop)
+- In legacy mode, `playerStart` and `npcPositions` in `location-scenes.json` are PIXEL coordinates (not tile coords).
+- Each plate defines perimeter `collisionRects`, plus water-edge collision for the waterfront and kampung.
+- Location transitions use an on-screen pixel `triggerArea` + `spawnAt`.
 
 ### When Adding New Sprites
 New character/NPC sprites should be:
@@ -58,8 +75,13 @@ New character/NPC sprites should be:
 
 ### Key Files
 - `src/phaser/game.ts` - Contains `CHARACTER_SCALE = 3` constant
-- `src/phaser/scenes/GameScene.ts` - Applies scaling to player/NPCs
-- `src/data/location-scenes.json` - Spawn positions (in 960×540 coordinates)
+- `src/phaser/scenes/GameScene.ts` - Applies scaling + `worldDepth(y)` Y-sorting to player/NPCs
+- `src/phaser/systems/EnvironmentObjectSystem.ts` - `placeStaticObjects` composites props; uses `legacyProps` when present (skips iso-grid `clusters`)
+- `src/phaser/systems/IsometricRenderer.ts` - Iso tilemap renderer (exists, not the shipping path)
+- `src/data/location-scenes.json` - `runtimeMode`, pixel `playerStart`/`npcPositions`, `collisionRects`, `triggerArea`/`spawnAt`
+- `src/data/environment-objects.json` - Per-location `legacyProps` array (pixel-positioned prop sprites, ~2× scale)
+- `tools/post-process-scene.cjs` - Scene quantizer/dither/pixelate (`--pixelate`, `--spread`, `--dither`)
+- `tools/canva-sources/MANIFEST.json` - Plate provenance and master exports
 
 ## Core Architecture
 
@@ -87,7 +109,9 @@ New character/NPC sprites should be:
 - **Tile Size**: 16×16 pixels for ground tiles; 16×32+ for characters/structures
 - **Consistent Pixel Density**: No mixed resolutions across assets
 - **Indexed Color**: Use indexed color palettes for visual cohesion
+- **Palette Canon**: Maintained in `tools/ultima8-graphics/palette.cjs` (includes a tropical sky-blue ramp); all tile/scene PNGs are quantized to it
 - **Animation**: Subtle environmental animation (palm fronds, water, torches, cloth)
+- **Production Rule**: Graphics are Claude-managed via the procedural engine + Canva MCP. Do NOT introduce external image-generation API keys (Gemini/OpenAI).
 
 ### Audio Guidelines
 

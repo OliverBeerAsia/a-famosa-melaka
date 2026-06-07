@@ -2,6 +2,41 @@
 
 All notable changes to A Famosa: Streets of Golden Melaka.
 
+## [0.10.0] - 2026-06-07
+
+### Graphics Cohesion and Walkable Plates
+
+A full visual overhaul: every location now renders as a cohesive pixel-art painted **plate** (legacy-backdrop) with the player, NPCs, and interactive props composited on top as Y-sorted sprites (Ultima VII-style overlap). Backgrounds are pixelated to the sprite grid so the world reads as one chunky pixel-art style instead of a smooth render under chunky sprites. Production is Claude-managed with **no external image-generation API keys** (procedural engine for the gameplay kit + Canva MCP for plates).
+
+### Added
+- `tools/post-process-scene.cjs` — scene quantizer: palette-quantize + ordered Bayer dithering + `--pixelate N` (render at W/N×H/N native, nearest-upscale). 0% off-palette, no anti-aliasing.
+- `tools/rederive-scenes.cjs` + `npm run scenes:rederive` — reproducibly regenerate every plate from its master export per `tools/canva-sources/MANIFEST.json`.
+- `tools/canva-sources/` — master Canva exports + provenance manifest for all 5 plates (re-derivable).
+- `legacyProps` array per location in `src/data/environment-objects.json` — curated, pixel-positioned interactive prop sprites.
+- Tropical sky-blue ramp in `tools/ultima8-graphics/palette.cjs`.
+- Unified `worldDepth(y)` Y-sort helper across `GameScene.ts` and `EnvironmentObjectSystem.ts`.
+- `docs/RELEASE_NOTES_v0.10.0.md`.
+
+### Changed
+- All 5 locations switched to `runtimeMode: "legacy-backdrop"`; the painted plate (not the iso tilemap) is the shipping gameplay world. The `IsometricRenderer` is retained but dormant.
+- All 5 scene plates + title/loading regenerated as empty 2:1 isometric pixel-art plates (native 320×180), props/people are sprites not baked into the art.
+- Procedural portrait engine rewritten (hard value bands, vignette background instead of hatch, NW key light); character sheets contrast-quantized to read at 3×; carved-chrome UI sprites regenerated.
+- Legacy `playerStart`/`npcPositions` are now pixel coordinates; perimeter + water-edge `collisionRects`; on-screen transition `triggerArea`/`spawnAt`.
+- Environment props scaled ~2× (was 3×) and bounded to the plate; lore objects bounded + downscaled; world-item/lore markers reduced to subtle pips.
+- Engine overlays (vignette, ambient occlusion, film grain, color grade) lightened for the pre-lit plates.
+- All 97 tile PNGs quantized to the palette canon.
+- Version metadata moved to `0.10.0`.
+
+### Fixed
+- Player and NPCs were spawning inside the corner wall (iso tile coords read as pixels in legacy mode) — now placed in the open walkable area.
+- Missing-prop placeholder (`debug-prop-missing`) is now invisible instead of a yellow-X box over the scene.
+- Removed off-plate/oversized iso-cluster props that floated outside the 960×540 plate.
+
+### Verification
+- `npm run build` (tsc + vite + asset validation)
+- `npm run validate:all`
+- In-engine (Playwright) walkthrough of all 5 locations + dialogue
+
 ## [0.9.0] - 2026-05-02
 
 ### Historical Architecture and Period-Art Pass

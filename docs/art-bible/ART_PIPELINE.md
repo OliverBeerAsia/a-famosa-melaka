@@ -4,22 +4,47 @@ This is the operational companion to `ART_BIBLE.md`. Use it for production decis
 
 ## Target
 
-- Gameplay: pure Ultima VIII-first 2:1 isometric pixel art for live traversal.
+- Gameplay: per-location painted scene PLATE (legacy-backdrop mode) with player, NPCs, and props as Y-sorted sprites on top (Ultima VII overlap).
 - Cinematic: 16:9 scene art and portraits for interstitials only.
 - Concept: staging only; never ship raw concept renders.
 
 ## Shipping Truth
 
 - The live gameplay runtime is the TypeScript Phaser path under `src/phaser/`.
-- Shipping gameplay world art is the isometric traversal map, not the scene backdrop.
-- Scene PNGs and portraits are cinematic assets; they do not define the gameplay asset contract.
+- Shipping gameplay world art is the per-location painted scene PLATE, not the isometric tilemap. All 5 locations run `runtimeMode: "legacy-backdrop"` in `src/data/location-scenes.json`.
+- The plate is a true 2:1 isometric, empty plaza; the player, NPCs, and interactive props composite over it as Y-sorted sprites (bottom-center anchored) for Ultima VII-style overlap.
+- The isometric tilemap renderer is retained but dormant; it is not the shipping path.
+- Portraits and cinematic-only PNGs are cinematic assets; they do not define the gameplay asset contract.
 - Runtime asset parity is defined in `src/data/runtime-asset-manifest.json`.
+
+## Scene Plate Pipeline
+
+Scene plates are the shipping gameplay world art. They are produced Claude-managed, with no external image-generation API keys.
+
+1. Generate a TRUE 2:1 isometric, EMPTY plaza (no baked props, no baked people) via Canva MCP (Magic Media). Empty plates only — clutter and characters arrive as sprites.
+2. Export the raw render as PNG. Master raw exports and provenance are tracked in `tools/canva-sources/MANIFEST.json`.
+3. Post-process to install. This quantizes to the indexed-ramp palette (`tools/ultima8-graphics/palette.cjs`) with ordered Bayer dithering, pixelates to native 320x180 (`--pixelate 3`, `--spread 26`), then nearest-upscales to 960x540 so the background pixel grid matches the 3x-scaled sprites:
+
+   ```
+   node tools/post-process-scene.cjs <raw> assets/scenes/<scene>.png --width 960 --height 540 --spread 26 --pixelate 3
+   ```
+
+4. Target output: 0% off-palette, 0 anti-aliasing. Verify each plate in-engine across all 5 locations.
+
+## Props as Sprites (legacyProps)
+
+- Interactive props on legacy plates are sprites, not baked paint and not iso clusters.
+- They are curated and pixel-positioned via `legacyProps` in `src/data/environment-objects.json`, read by `EnvironmentObjectSystem`.
+- On legacy plates the system skips the isometric prop clusters and places `legacyProps` instead.
+- Prop scale is ~2x.
 
 ## Commands
 
+- `npm run validate:all`
 - `npm run validate:art`
 - `npm run validate:art -- --report docs/art-bible/art-audit.md`
 - `npm run validate:art -- --report docs/art-bible/art-audit.md --strict`
+- `npm run grade:wave`
 
 ## Asset Classes
 

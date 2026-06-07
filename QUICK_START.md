@@ -42,16 +42,18 @@ npm run generate:animated-objects    # Animated sprite sheets
 npm run generate:crowd               # Crowd silhouettes
 ```
 
-## Art Generation (API required)
+## Regenerating Scene Art
+
+Scene plates are produced by a Claude-managed pipeline with **no external image-generation API keys**. Canva MCP (Magic Media) generates a true 2:1 isometric empty plaza, then `tools/post-process-scene.cjs` palette-quantizes, Bayer-dithers, and pixelates it down to the native `320x180` grid before install to `assets/scenes/`.
+
+To re-bake a plate from a raw Canva master export:
 
 ```bash
-export OPENAI_API_KEY=sk-...         # Set OpenAI key
-npm run generate:openai -- --scenes  # Scene backdrops via DALL-E 3
-npm run generate:openai -- --all     # All scenes + portraits via DALL-E 3
-
-export GEMINI_API_KEY=AIza...        # Set Gemini key
-npm run generate:scenes              # Scenes via Gemini
+node tools/post-process-scene.cjs <raw> assets/scenes/<scene>.png \
+  --width 960 --height 540 --spread 26 --pixelate 3
 ```
+
+Master exports and provenance are tracked in `tools/canva-sources/MANIFEST.json`. The procedural engine under `tools/ultima8-graphics/` produces the gameplay kit (tiles, props, sprites, portraits, UI) via the `npm run generate:*` commands above.
 
 ## Controls
 

@@ -20,6 +20,18 @@ Production rule:
 - Gameplay art is the source of truth for anything the player traverses, clicks, equips, or reads in-world.
 - Cinematic art is limited to scene backdrops, portraits, and interstitials.
 - Concept art stays in staging until it is promoted through review.
+- All art is Claude-managed with NO external image-generation API keys. Claude has no native image generation; the kit is produced by the procedural engine under `tools/ultima8-graphics/*`, and scene plates come from Canva MCP. This is not Gemini, OpenAI, or any third-party image API.
+
+---
+
+## 0.5 ONE-STYLE COHESION PRINCIPLE
+
+Everything on screen must read as ONE pixel-art style. There is no soft painted layer and no high-fidelity background sitting under chunky sprites.
+
+- **One pixel grid**: scene plates are pixelated to the same ~3px grid as the 3x-scaled sprites. A plate is authored at native 320x180 and nearest-upscaled to 960x540, so the background grid matches the characters and props exactly.
+- **Strict indexed palette**: the same ~32-color indexed-ramp canon applies to plates and sprites alike. Target 0% off-palette.
+- **Hard edges, ordered dithering**: no anti-aliasing anywhere; shading is ordered (Bayer) dither or flat blocks, never painterly gradients. (See Section 2.5.)
+- **Empty plates + sprite props**: scene plates are EMPTY plazas — no baked clutter, no baked people. All clutter, interactive props, NPCs, and the player composite on top as Y-sorted sprites. A plate with baked-in objects or characters is a style violation.
 
 ---
 
