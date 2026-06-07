@@ -134,6 +134,13 @@ export class EnvironmentObjectSystem {
         const worldX = baseX + objDef.offsetX;
         const worldY = baseY + objDef.offsetY;
 
+        // Legacy painted-plate is a fixed 960x540 image. Iso-authored clusters
+        // can compute positions off the plate (e.g. tileX 16 * 64 = 1024) — skip
+        // those so props don't float off-screen / mis-place over the backdrop.
+        if (worldX < 24 || worldX > 936 || worldY < 24 || worldY > 528) {
+          continue;
+        }
+
         // Check if the sprite texture exists before creating
         if (!this.scene.textures.exists(objDef.sprite)) {
           // Try with common alternative names
@@ -147,9 +154,10 @@ export class EnvironmentObjectSystem {
         image.setOrigin(0.5, 1); // Bottom-center anchor for depth sorting
         image.setDepth(worldDepth(worldY)); // Y-sort depth (clamped under FX band)
 
-        // Scale if needed (sprites are 16px native, displayed at scene scale)
-        // Objects are already at the right size for 960x540 if we use CHARACTER_SCALE
-        image.setScale(3); // Match CHARACTER_SCALE
+        // Props sit on the painted plate beside 3x characters. 2x keeps tall
+        // props (shelving/stalls) from towering while staying readable; 3x
+        // (tuned for the 64px iso tile world) made them oversized.
+        image.setScale(2);
 
         const placed: PlacedObject = {
           image,

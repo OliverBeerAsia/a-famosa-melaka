@@ -292,13 +292,13 @@ export class BootScene extends Phaser.Scene {
     character.generateTexture('debug-character-missing', 16, 32);
     character.destroy();
 
+    // Prop fallback is intentionally INVISIBLE in-game: an unresolved decorative
+    // prop / world-item / lore sprite should silently vanish, never render as a
+    // glaring placeholder box over the painted plate. (Characters stay visible
+    // above so a missing NPC is still spottable.)
     const prop = this.add.graphics();
-    prop.fillStyle(0x27314f, 1);
+    prop.fillStyle(0x000000, 0);
     prop.fillRect(0, 0, 16, 16);
-    prop.lineStyle(2, 0xf7d354, 1);
-    prop.strokeRect(1, 1, 14, 14);
-    prop.lineBetween(2, 2, 14, 14);
-    prop.lineBetween(14, 2, 2, 14);
     prop.generateTexture('debug-prop-missing', 16, 16);
     prop.destroy();
   }

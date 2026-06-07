@@ -2710,7 +2710,9 @@ export class GameScene extends Phaser.Scene {
   }
 
   private getWorldItemScale(spriteKey: string): number {
-    return spriteKey.startsWith('item-') ? 2.5 : 3;
+    // Pickups sit on the painted plate; keep icons small so they read as
+    // items, not oversized props (was 2.5/3, which dwarfed characters).
+    return spriteKey.startsWith('item-') ? 1.5 : 1.6;
   }
 
   private getFacingVector(): Phaser.Math.Vector2 {
