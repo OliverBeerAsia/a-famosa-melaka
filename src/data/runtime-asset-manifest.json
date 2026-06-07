@@ -104,6 +104,14 @@
       "door-wood"
     ]
   },
+  "tileVariants": {
+    "cobblestone": 8,
+    "fortress": 7,
+    "dirt": 6,
+    "grass": 8,
+    "water": 6,
+    "thatch": 6
+  },
   "objects": {
     "static": [
       "altar",

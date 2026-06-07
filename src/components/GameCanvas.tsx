@@ -37,12 +37,26 @@ export default function GameCanvas() {
 
   return (
     <div
-      ref={containerRef}
-      id="game-container"
-      className="w-full h-full flex items-center justify-center bg-[#0a0806]"
-      style={{
-        imageRendering: 'pixelated',
-      }}
-    />
+      className="w-full h-full relative flex items-center justify-center bg-[#0a0806]"
+    >
+      <div
+        ref={containerRef}
+        id="game-container"
+        className="w-full h-full"
+        style={{ imageRendering: 'pixelated' }}
+      />
+      {/* Atmospheric vignette overlay — darkens edges, focuses centre */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: 'absolute',
+          inset: 0,
+          background:
+            'radial-gradient(ellipse 80% 80% at 50% 50%, transparent 45%, rgba(5,3,1,0.38) 72%, rgba(5,3,1,0.72) 100%)',
+          pointerEvents: 'none',
+          mixBlendMode: 'multiply',
+        }}
+      />
+    </div>
   );
 }

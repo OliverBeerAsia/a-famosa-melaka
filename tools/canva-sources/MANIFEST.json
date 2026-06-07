@@ -1,0 +1,12 @@
+{
+  "note": "Master Canva Magic Media exports (desktop_wallpaper / 16:9) for scene backdrop plates. Re-quantize with: node tools/post-process-scene.cjs <raw> assets/scenes/<scene>.png --width 960 --height 540 --spread 40",
+  "plates": {
+    "rua-direita": {
+      "canva_design_id": "DAHL4f56qDA",
+      "view_url": "https://www.canva.com/d/0HhGd7rLwtIJ98X",
+      "raw_export": "tools/canva-sources/rua-direita-raw.png",
+      "installed": "assets/scenes/scene-rua-direita.png",
+      "generated_utc": "2026-06-07"
+    }
+  }
+}

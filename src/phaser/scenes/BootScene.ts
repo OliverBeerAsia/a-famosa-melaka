@@ -7,6 +7,7 @@
 
 import Phaser from 'phaser';
 import runtimeAssetManifest from '../../data/runtime-asset-manifest.json';
+import type { TileVariantManifest } from '../../systems/TileVariantSystem';
 import { ITEM_DEFINITIONS } from '../../stores/inventoryStore';
 
 const CHARACTER_IDS = runtimeAssetManifest.characters.named as readonly string[];
@@ -15,6 +16,7 @@ const BASE_MAP_IDS = runtimeAssetManifest.maps.base as readonly string[];
 const ISO_MAP_IDS = runtimeAssetManifest.maps.isometric as readonly string[];
 const BASE_TILE_IDS = runtimeAssetManifest.tiles.base as readonly string[];
 const ISO_TILE_IDS = runtimeAssetManifest.tiles.isometric as readonly string[];
+const TILE_VARIANTS = runtimeAssetManifest.tileVariants as TileVariantManifest;
 const STATIC_OBJECT_IDS = runtimeAssetManifest.objects.static as readonly string[];
 const ITEM_ICON_IDS = Object.keys(ITEM_DEFINITIONS);
 
@@ -121,6 +123,17 @@ export class BootScene extends Phaser.Scene {
 
     ISO_TILE_IDS.forEach((tile) => {
       this.load.image(`${tile}-iso`, `sprites/tiles/iso/${tile}-iso.png`);
+    });
+
+    // Load procedurally-generated tile variants (6–8 per surface type)
+    // Keys: "cobblestone-var-0" … "cobblestone-var-7", "fortress-var-0" … etc.
+    Object.entries(TILE_VARIANTS).forEach(([prefix, count]) => {
+      for (let i = 0; i < count; i++) {
+        this.load.image(
+          `${prefix}-var-${i}`,
+          `sprites/tiles/${prefix}${i}.png`
+        );
+      }
     });
   }
 

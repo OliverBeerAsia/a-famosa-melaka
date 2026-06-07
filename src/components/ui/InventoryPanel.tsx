@@ -166,7 +166,7 @@ export function InventoryPanel() {
               </div>
 
               <div className="flex items-center gap-3 ui-money-pill">
-                <img src="/sprites/ui/coin.png" alt="" className="ui-money-coin" />
+                <img src="/sprites/ui/coin-icon.png" alt="" className="ui-money-coin" />
                 <div className="text-right">
                   <div className="font-cinzel text-gold text-lg leading-none">
                     {money}

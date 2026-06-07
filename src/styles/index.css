@@ -23,7 +23,7 @@
   }
 
   .ui-inventory-shell {
-    background-image: url('/sprites/ui/parchment-bg.png');
+    background-image: url('/sprites/ui/panel-parchment.png');
     background-repeat: no-repeat;
     background-size: 100% 100%;
     image-rendering: pixelated;
@@ -47,10 +47,11 @@
     text-shadow: 0 1px 0 rgba(245, 222, 179, 0.22);
   }
 
+  /* Portrait frame — sized to match generated 104×104 PNG */
   .ui-portrait-frame {
-    width: 88px;
-    height: 88px;
-    padding: 8px;
+    width: 104px;
+    height: 104px;
+    padding: 10px;
     background-image: url('/sprites/ui/portrait-frame.png');
     background-repeat: no-repeat;
     background-size: 100% 100%;
@@ -68,8 +69,8 @@
   }
 
   .ui-portrait-fallback {
-    width: 88px;
-    height: 88px;
+    width: 84px;
+    height: 84px;
   }
 
   .ui-topic-panel {
@@ -141,14 +142,74 @@
     background-image: linear-gradient(180deg, rgba(245, 222, 179, 0.4), rgba(222, 184, 135, 0.24));
   }
 
-  /* Parchment panel style */
+  /* Parchment panel style — now uses generated sprite */
   .panel-parchment {
-    @apply bg-parchment-200 border-2 border-gold rounded shadow-parchment;
+    background-image: url('/sprites/ui/panel-parchment.png');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    image-rendering: pixelated;
+    @apply shadow-parchment;
   }
 
   /* Leather panel style */
   .panel-leather {
     @apply bg-leather-200 border-2 border-gold rounded shadow-parchment;
+  }
+
+  /* Button variants using generated sprites */
+  .ui-btn {
+    background-image: url('/sprites/ui/button-default.png');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    image-rendering: pixelated;
+    @apply font-cinzel text-xs tracking-widest uppercase cursor-pointer;
+    width: 120px;
+    height: 28px;
+  }
+  .ui-btn:hover {
+    background-image: url('/sprites/ui/button-hover.png');
+  }
+  .ui-btn:active {
+    background-image: url('/sprites/ui/button-active.png');
+    transform: translateY(1px);
+  }
+
+  /* Coin icon (16×16) */
+  .ui-coin-icon {
+    width: 16px;
+    height: 16px;
+    background-image: url('/sprites/ui/coin-icon.png');
+    background-size: 100% 100%;
+    image-rendering: pixelated;
+    display: inline-block;
+  }
+
+  /* Portrait frame — upgraded to 104×104 slot */
+  .ui-portrait-frame-lg {
+    width: 104px;
+    height: 104px;
+    padding: 8px;
+    background-image: url('/sprites/ui/portrait-frame.png');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    image-rendering: pixelated;
+    flex-shrink: 0;
+  }
+
+  /* HUD orbs */
+  .ui-health-orb {
+    width: 24px;
+    height: 24px;
+    background-image: url('/sprites/ui/health-orb.png');
+    background-size: 100% 100%;
+    image-rendering: pixelated;
+  }
+  .ui-energy-orb {
+    width: 24px;
+    height: 24px;
+    background-image: url('/sprites/ui/energy-orb.png');
+    background-size: 100% 100%;
+    image-rendering: pixelated;
   }
 
   /* Gold text */
