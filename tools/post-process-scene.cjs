@@ -59,7 +59,7 @@ function parseArgs(argv) {
     input: null, output: null,
     width: 960, height: 540,
     spread: 36, nearest: false, dither: true,
-    keepAlpha: false, help: false,
+    keepAlpha: false, help: false, pixelate: 1,
   };
   const positional = [];
   for (let i = 0; i < args.length; i++) {
@@ -71,6 +71,7 @@ function parseArgs(argv) {
     else if (a === '--width') opts.width = parseInt(args[++i], 10);
     else if (a === '--height') opts.height = parseInt(args[++i], 10);
     else if (a === '--spread') opts.spread = parseFloat(args[++i]);
+    else if (a === '--pixelate') opts.pixelate = Math.max(1, parseInt(args[++i], 10));
     else if (a.startsWith('-')) { console.error(`Unknown option "${a}"`); process.exit(1); }
     else positional.push(a);
   }
@@ -117,22 +118,28 @@ async function main() {
   console.log(`[scene] out=${opts.output}  target=${W}x${H}  dither=${opts.dither} spread=${opts.spread} resize=${opts.nearest ? 'nearest' : 'smooth'}`);
 
   const img = await loadImage(opts.input);
-  console.log(`[scene] source=${img.width}x${img.height}`);
+  console.log(`[scene] source=${img.width}x${img.height}  pixelate=${opts.pixelate}`);
 
-  const canvas = createCanvas(W, H);
-  const ctx = canvas.getContext('2d');
-  // Smooth downscale keeps painterly detail; quantization supplies hard edges.
-  ctx.imageSmoothingEnabled = !opts.nearest;
-  if (ctx.imageSmoothingEnabled && ctx.imageSmoothingQuality) ctx.imageSmoothingQuality = 'high';
-  ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, W, H);
+  // Native (chunky) working resolution. --pixelate N renders at W/N x H/N so the
+  // background's pixels match the game's N-px sprite pixels (CHARACTER_SCALE),
+  // making the painterly plate read as cohesive chunky pixel art with the sprites.
+  const N = opts.pixelate;
+  const nW = Math.round(W / N);
+  const nH = Math.round(H / N);
 
-  const id = ctx.getImageData(0, 0, W, H);
+  const work = createCanvas(nW, nH);
+  const wctx = work.getContext('2d');
+  wctx.imageSmoothingEnabled = !opts.nearest;
+  if (wctx.imageSmoothingEnabled && wctx.imageSmoothingQuality) wctx.imageSmoothingQuality = 'high';
+  wctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, nW, nH);
+
+  const id = wctx.getImageData(0, 0, nW, nH);
   const d = id.data;
   const spread = opts.spread;
 
-  for (let y = 0; y < H; y++) {
-    for (let x = 0; x < W; x++) {
-      const i = (y * W + x) * 4;
+  for (let y = 0; y < nH; y++) {
+    for (let x = 0; x < nW; x++) {
+      const i = (y * nW + x) * 4;
       if (!opts.keepAlpha) d[i + 3] = 255;
       else if (d[i + 3] < 128) { d[i + 3] = 0; continue; }
       let r = d[i], g = d[i + 1], b = d[i + 2];
@@ -144,13 +151,19 @@ async function main() {
       d[i] = nr; d[i + 1] = ng; d[i + 2] = nb;
     }
   }
-  ctx.putImageData(id, 0, 0);
+  wctx.putImageData(id, 0, 0);
+
+  // Nearest-neighbour upscale the chunky native plate to full canvas size.
+  const canvas = createCanvas(W, H);
+  const ctx = canvas.getContext('2d');
+  ctx.imageSmoothingEnabled = false;
+  ctx.drawImage(work, 0, 0, nW, nH, 0, 0, W, H);
 
   const outDir = path.dirname(opts.output);
   if (!fs.existsSync(outDir)) fs.mkdirSync(outDir, { recursive: true });
   fs.writeFileSync(opts.output, canvas.toBuffer('image/png'));
   const kb = (fs.statSync(opts.output).size / 1024).toFixed(1);
-  console.log(`[scene] saved ${opts.output} (${W}x${H}, ${kb} KB)`);
+  console.log(`[scene] saved ${opts.output} (${W}x${H} @ native ${nW}x${nH}, ${kb} KB)`);
 }
 
 main().catch(e => { console.error('Error:', e.message || e); process.exit(1); });

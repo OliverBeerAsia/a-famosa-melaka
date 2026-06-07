@@ -1,45 +1,50 @@
 {
-  "note": "Master Canva Magic Media exports (desktop_wallpaper / 16:9, 1920x1080 pro) for scene backdrop plates. Re-derive any plate with: node tools/post-process-scene.cjs <raw> assets/scenes/<scene>.png --width 960 --height 540 --spread <S>. Generated 2026-06-07 for the graphics overhaul (BG2/Skald/Ultima-VIII direction). | All 5 plates regenerated as EMPTY isometric plazas (2026-06-07); interactive props are pixel-positioned sprites via environment-objects.json legacyProps.",
+  "note": "Master Canva Magic Media exports (desktop_wallpaper / 16:9, 1920x1080 pro) for scene backdrop plates. Re-derive any plate with: node tools/post-process-scene.cjs <raw> assets/scenes/<scene>.png --width 960 --height 540 --spread <S>. Generated 2026-06-07 for the graphics overhaul (BG2/Skald/Ultima-VIII direction). | All 5 plates regenerated as EMPTY isometric plazas (2026-06-07); interactive props are pixel-positioned sprites via environment-objects.json legacyProps. | Plates pixelated to native 320x180 (--pixelate 3) so the background pixel grid matches the 3x sprites = cohesive chunky pixel art.",
   "plates": {
     "rua-direita": {
       "canva_design_id": "DAHL5ALY7TM",
       "view_url": "https://www.canva.com/d/Uja6xxmIOlK1TwG",
       "raw_export": "tools/canva-sources/rua-direita-raw.png",
       "installed": "assets/scenes/scene-rua-direita.png",
-      "spread": 36,
-      "style": "true 2:1 isometric, EMPTY walkable centre, features frame edges, no baked props/people (all props are sprites)"
+      "spread": 26,
+      "style": "true 2:1 isometric, EMPTY walkable centre, features frame edges, no baked props/people (all props are sprites)",
+      "pixelate": 3
     },
     "a-famosa": {
       "canva_design_id": "DAHL5NFGdU4",
       "view_url": "https://www.canva.com/d/ytfIBOCq9-ow7Nv",
       "raw_export": "tools/canva-sources/a-famosa-raw.png",
       "installed": "assets/scenes/scene-a-famosa.png",
-      "spread": 36,
-      "style": "true 2:1 isometric, EMPTY walkable centre, features frame edges, no baked props/people (all props are sprites)"
+      "spread": 26,
+      "style": "true 2:1 isometric, EMPTY walkable centre, features frame edges, no baked props/people (all props are sprites)",
+      "pixelate": 3
     },
     "st-pauls": {
       "canva_design_id": "DAHL5GSYvnY",
       "view_url": "https://www.canva.com/d/t1bajeZtjcyzZy1",
       "raw_export": "tools/canva-sources/st-pauls-raw.png",
       "installed": "assets/scenes/scene-st-pauls.png",
-      "spread": 36,
-      "style": "true 2:1 isometric, EMPTY walkable centre, features frame edges, no baked props/people (all props are sprites)"
+      "spread": 26,
+      "style": "true 2:1 isometric, EMPTY walkable centre, features frame edges, no baked props/people (all props are sprites)",
+      "pixelate": 3
     },
     "waterfront": {
       "canva_design_id": "DAHL5Kkj7t0",
       "view_url": "https://www.canva.com/d/a46GqnTNmyFuQLV",
       "raw_export": "tools/canva-sources/waterfront-raw.png",
       "installed": "assets/scenes/scene-waterfront.png",
-      "spread": 36,
-      "style": "true 2:1 isometric, EMPTY walkable centre, features frame edges, no baked props/people (all props are sprites)"
+      "spread": 26,
+      "style": "true 2:1 isometric, EMPTY walkable centre, features frame edges, no baked props/people (all props are sprites)",
+      "pixelate": 3
     },
     "kampung": {
       "canva_design_id": "DAHL5BU7PFI",
       "view_url": "https://www.canva.com/d/WA1KYvkefgYitRg",
       "raw_export": "tools/canva-sources/kampung-raw.png",
       "installed": "assets/scenes/scene-kampung.png",
-      "spread": 36,
-      "style": "true 2:1 isometric, EMPTY walkable centre, features frame edges, no baked props/people (all props are sprites)"
+      "spread": 26,
+      "style": "true 2:1 isometric, EMPTY walkable centre, features frame edges, no baked props/people (all props are sprites)",
+      "pixelate": 3
     }
   }
 }
