@@ -14,6 +14,16 @@ import { ISO_TILE_WIDTH, ISO_TILE_HEIGHT } from '../game';
 import type { ResolvedVisualQuality } from '../visualProfile';
 import environmentData from '../../data/environment-objects.json';
 
+// World Y-sort band — must match GameScene depth bands. World props are sorted
+// by floor(y) and clamped so they never reach the FX/lighting band (>= 800).
+const DEPTH_WORLD_MIN = 0;
+const DEPTH_WORLD_MAX = 780;
+
+/** Quantized, clamped Y-sort depth for a world object at screen-space `y`. */
+function worldDepth(y: number): number {
+  return Math.floor(Phaser.Math.Clamp(y, DEPTH_WORLD_MIN, DEPTH_WORLD_MAX));
+}
+
 interface ObjectDef {
   sprite: string;
   offsetX: number;
@@ -135,7 +145,7 @@ export class EnvironmentObjectSystem {
 
         const image = this.scene.add.image(worldX, worldY, objDef.sprite);
         image.setOrigin(0.5, 1); // Bottom-center anchor for depth sorting
-        image.setDepth(worldY); // Y-sort depth
+        image.setDepth(worldDepth(worldY)); // Y-sort depth (clamped under FX band)
 
         // Scale if needed (sprites are 16px native, displayed at scene scale)
         // Objects are already at the right size for 960x540 if we use CHARACTER_SCALE
@@ -209,7 +219,7 @@ export class EnvironmentObjectSystem {
       const flame = this.scene.add.sprite(x, y, 'torch-flame');
       flame.setOrigin(0.5, 1);
       flame.setScale(3);
-      flame.setDepth(y + 1);
+      flame.setDepth(worldDepth(y));
       flame.play('torch-flicker');
       this.animatedPlacements.push({
         sprite: flame,
@@ -218,7 +228,7 @@ export class EnvironmentObjectSystem {
     }
 
     const glow = this.scene.add.ellipse(x, y, 40, 40, 0xFFAA20, 0.15);
-    glow.setDepth(y - 1);
+    glow.setDepth(worldDepth(y) - 1);
     glow.setBlendMode(Phaser.BlendModes.ADD);
 
     const tween = this.scene.tweens.add({
@@ -484,7 +494,7 @@ export class EnvironmentObjectSystem {
     // Re-sort object depths based on Y position (for proper layering with player)
     for (const obj of this.placedObjects) {
       if (obj.image.active) {
-        obj.image.setDepth(obj.image.y);
+        obj.image.setDepth(worldDepth(obj.image.y));
       }
     }
   }

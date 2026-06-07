@@ -87,6 +87,36 @@ const LOCATION_TO_SCENE: Record<string, string> = {
   'kampung': 'kampung',
 };
 
+/**
+ * Depth bands (shared by legacy-backdrop and isometric modes).
+ *
+ * World objects (player, NPCs, world items, lore objects, environment props)
+ * are Y-sorted: their render depth equals floor(y), so an entity standing
+ * lower on screen (larger y) draws in front of one standing higher (smaller y),
+ * giving Ultima VII-style overlap/occlusion.
+ *
+ * The world band is clamped to [DEPTH_WORLD_MIN, DEPTH_WORLD_MAX]. Scene space
+ * is 960x540 so character/item y maxes out near 540, and the largest authored
+ * environment prop worldY is ~656; the clamp ceiling (780) is purely defensive
+ * so a world depth can never collide with the FX/lighting band which starts at
+ * DEPTH_FX_FLOOR (mist=800, fog=905+, lights/grade/grain=940-961). UI,
+ * indicators and notifications live at 1001+ and must always stay on top.
+ *
+ * IMPORTANT: do not raise DEPTH_WORLD_MAX to or above DEPTH_FX_FLOOR, and do
+ * not change the existing fixed FX/lighting/UI depths elsewhere in this file.
+ */
+const DEPTH_WORLD_MIN = 0;
+const DEPTH_WORLD_MAX = 780;
+const DEPTH_FX_FLOOR = 800;
+
+/**
+ * Quantized, clamped Y-sort depth for a world object at screen-space `y`.
+ * Math.floor avoids z-fighting between near-equal y values.
+ */
+function worldDepth(y: number): number {
+  return Math.floor(Phaser.Math.Clamp(y, DEPTH_WORLD_MIN, DEPTH_WORLD_MAX));
+}
+
 const DEFAULT_LOCATION_AUDIO: Record<string, {
   music: string;
   nightMusic: string;
@@ -978,12 +1008,9 @@ export class GameScene extends Phaser.Scene {
 
     this.player.setCollideWorldBounds(true);
 
-    // In isometric mode, use y-based depth sorting; in legacy mode, fixed high depth
-    if (this.isIsometric) {
-      this.player.setDepth(this.player.y);
-    } else {
-      this.player.setDepth(1000);
-    }
+    // Y-based depth sorting in both modes so the player walks behind/in-front
+    // of props and NPCs (Ultima VII-style overlap). Kept under the FX band.
+    this.player.setDepth(worldDepth(this.player.y));
 
     this.playerShadow = this.add.ellipse(
       this.player.x,
@@ -1048,7 +1075,7 @@ export class GameScene extends Phaser.Scene {
       npc.setScale(CHARACTER_SCALE);
 
       npc.setImmovable(true);
-      npc.setDepth(y);
+      npc.setDepth(worldDepth(y));
 
       const shadow = this.add.ellipse(x, y + 40, 50, 18, 0x000000, 0.24);
       shadow.setDepth(npc.depth - 1);
@@ -1113,7 +1140,7 @@ export class GameScene extends Phaser.Scene {
       const sprite = this.add.image(item.x, item.y, spriteKey);
       sprite.setOrigin(0.5, 1);
       sprite.setScale(this.getWorldItemScale(spriteKey));
-      sprite.setDepth(item.y + 1);
+      sprite.setDepth(worldDepth(item.y));
 
       const markerY = item.y - Math.max(22, sprite.displayHeight) - 8;
       const glow = this.add.ellipse(item.x, item.y - 4, 34, 18, 0xF4B41A, 0.18);
@@ -1162,7 +1189,7 @@ export class GameScene extends Phaser.Scene {
       const sprite = this.add.image(x, y, spriteKey);
       sprite.setOrigin(0.5, 1);
       sprite.setScale(3);
-      sprite.setDepth(y + 1);
+      sprite.setDepth(worldDepth(y));
 
       const markerY = y - Math.max(22, sprite.displayHeight) - 8;
       const glow = this.add.ellipse(x, y - 4, 36, 20, 0xD4AF37, 0.12);
@@ -3060,15 +3087,15 @@ export class GameScene extends Phaser.Scene {
     this.updatePlayerMovement();
     this.updateInteractionTarget();
 
-    // Dynamic depth sorting in isometric mode
-    if (this.isIsometric) {
-      this.player.setDepth(this.player.y);
-      this.npcs.forEach((npc) => {
-        npc.setDepth(npc.y);
-        const shadow = this.npcShadowMap.get(npc);
-        if (shadow) shadow.setDepth(npc.y - 1);
-      });
-    }
+    // Dynamic Y-depth sorting (both legacy-backdrop and isometric modes) so
+    // moving characters occlude/are occluded by props at the correct y.
+    this.player.setDepth(worldDepth(this.player.y));
+    this.npcs.forEach((npc) => {
+      const depth = worldDepth(npc.y);
+      npc.setDepth(depth);
+      const shadow = this.npcShadowMap.get(npc);
+      if (shadow) shadow.setDepth(depth - 1);
+    });
 
     // Update NPC indicators
     this.updateNPCIndicators();

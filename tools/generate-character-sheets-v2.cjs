@@ -18,7 +18,7 @@
 const fs = require('fs');
 const path = require('path');
 const { createCanvas } = require('canvas');
-const { PALETTE } = require('./ultima8-graphics/palette.cjs');
+const { PALETTE, nearestPaletteColor, hexToRgb } = require('./ultima8-graphics/palette.cjs');
 const {
   CHAR_WIDTH,
   CHAR_HEIGHT,
@@ -381,14 +381,112 @@ function applyWalkFrame(srcCanvas, meta, frame) {
   return canvas;
 }
 
+const LUM = (r, g, b) => 0.299 * r + 0.587 * g + 0.114 * b;
+
 /**
- * Scale 24x48 canvas down to 16x32 (nearest-neighbor)
+ * Contrast + quantize pass (run on the 24x48 frame *before* downscaling).
+ *
+ * Problem solved: the source sprites shade with many near-identical dark tones,
+ * so once squeezed to 16x32 and shown at 3x the head/torso/limbs collapse into
+ * one near-black blob.  This pass:
+ *
+ *   1. measures the luminance range of the opaque figure pixels,
+ *   2. stretches each pixel's luminance to the full 0..255 range and lifts the
+ *      floor (so the darkest material no longer reads as pure black),
+ *   3. quantizes the stretched luminance into ~4 hard bands,
+ *   4. rescales the pixel's original RGB to the banded luminance (preserving
+ *      its hue/material) and snaps the result to the nearest palette colour.
+ *
+ * The outline (pure shadow black) and ground shadow (semi-transparent) are left
+ * untouched so the silhouette stays crisp.
+ */
+function contrastQuantize(canvas, bands = 4) {
+  const ctx = canvas.getContext('2d');
+  const img = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  const d = img.data;
+
+  // Pass 1: luminance range of fully-opaque, non-pure-black figure pixels.
+  let lo = 255;
+  let hi = 0;
+  for (let i = 0; i < d.length; i += 4) {
+    if (d[i + 3] < 250) continue;            // skip transparent + soft shadow
+    const l = LUM(d[i], d[i + 1], d[i + 2]);
+    if (l <= 6) continue;                      // skip silhouette outline (black)
+    if (l < lo) lo = l;
+    if (l > hi) hi = l;
+  }
+  if (hi <= lo) return canvas;                 // nothing to stretch
+
+  // Lift the floor so the darkest band keeps material colour (not crushed black)
+  const FLOOR = 0.18;  // darkest band sits at ~18% luminance
+  const range = hi - lo;
+
+  for (let i = 0; i < d.length; i += 4) {
+    if (d[i + 3] < 250) continue;
+    const r = d[i];
+    const g = d[i + 1];
+    const b = d[i + 2];
+    const l = LUM(r, g, b);
+
+    let nr = r;
+    let ng = g;
+    let nb = b;
+
+    // Contrast-stretch + band only the figure body; near-black outline pixels
+    // keep their value (just get snapped to the canon palette below so the
+    // back-view / profile darkening passes can't leave off-ramp colours).
+    if (l > 6) {
+      let t = (l - lo) / range;
+      t = Math.round(t * (bands - 1)) / (bands - 1);
+      const targetL = (FLOOR + t * (1 - FLOOR)) * 255;
+      const scale = targetL / Math.max(1, l);
+      nr = Math.min(255, r * scale);
+      ng = Math.min(255, g * scale);
+      nb = Math.min(255, b * scale);
+    }
+
+    // Snap every opaque pixel to the nearest canon palette colour so the sheet
+    // is fully palette-compliant (matches the shipping pipeline's fix step).
+    const hex = nearestPaletteColor(
+      '#' + [nr, ng, nb].map((v) => Math.round(v).toString(16).padStart(2, '0')).join('')
+    );
+    const snapped = hexToRgb(hex);
+    if (snapped) {
+      d[i] = snapped.r;
+      d[i + 1] = snapped.g;
+      d[i + 2] = snapped.b;
+    }
+  }
+
+  ctx.putImageData(img, 0, 0);
+  return canvas;
+}
+
+/**
+ * Scale 24x48 canvas down to 16x32 (nearest-neighbor).
+ * Applies the contrast/quantize pass first so value zones survive the squeeze.
  */
 function scaleDown(srcCanvas) {
+  // Operate on a copy so the shared directional source canvas is not mutated
+  // across the multiple frames that derive from it.
+  const work = createCanvas(SRC_W, SRC_H);
+  const wctx = work.getContext('2d');
+  wctx.imageSmoothingEnabled = false;
+  wctx.drawImage(srcCanvas, 0, 0);
+  contrastQuantize(work, 4);
+
   const canvas = createCanvas(FRAME_W, FRAME_H);
   const ctx = canvas.getContext('2d');
   ctx.imageSmoothingEnabled = false;
-  ctx.drawImage(srcCanvas, 0, 0, SRC_W, SRC_H, 0, 0, FRAME_W, FRAME_H);
+  ctx.drawImage(work, 0, 0, SRC_W, SRC_H, 0, 0, FRAME_W, FRAME_H);
+
+  // Snap alpha to fully transparent / fully opaque so the silhouette has hard
+  // edges (zero anti-aliasing).  The soft ground-shadow ellipse would otherwise
+  // leave partial-alpha edge pixels that trip the style validator.
+  const fimg = ctx.getImageData(0, 0, FRAME_W, FRAME_H);
+  const fd = fimg.data;
+  for (let i = 3; i < fd.length; i += 4) fd[i] = fd[i] >= 128 ? 255 : 0;
+  ctx.putImageData(fimg, 0, 0);
   return canvas;
 }
 

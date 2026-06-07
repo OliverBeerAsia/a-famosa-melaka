@@ -58,6 +58,113 @@ function saveCanvas(canvas, filePath) {
 }
 
 // ---------------------------------------------------------------------------
+// CARVED-CHROME PRIMITIVES (Skald / Ultima VIII / Dungeon-Keeper direction)
+//
+// All chrome is palette-LOCKED (only colours straight out of palette.cjs),
+// hard-edged (no alpha blending on edges => no anti-aliasing) and lit from
+// the North-West.  A "carved" bevel reads as:
+//   - outer/top-left rim  = brightest ramp shade  (catches the NW light)
+//   - mid frame body      = mid ramp shade
+//   - inner/bottom-right  = darkest ramp shade     (falls into shadow)
+// Convex edges get a 1px highlight inset; concave edges a 1px shadow inset.
+// ---------------------------------------------------------------------------
+
+// Solid (opaque) palette pixel — never partial alpha, so edges stay hard.
+function px(ctx, x, y, hex) {
+  ctx.fillStyle = hex;
+  ctx.fillRect(x, y, 1, 1);
+}
+
+// Horizontal / vertical 1px palette lines (hard edges).
+function hLine(ctx, x, y, len, hex) {
+  ctx.fillStyle = hex;
+  ctx.fillRect(x, y, len, 1);
+}
+function vLine(ctx, x, y, len, hex) {
+  ctx.fillStyle = hex;
+  ctx.fillRect(x, y, 1, len);
+}
+
+/**
+ * Draw a rectangular carved-chrome border ring of thickness `t` around the
+ * rect (x,y,w,h).  Uses a metal ramp (default gold).  NW light source:
+ * top + left rim are bright, bottom + right rim drop into shadow, with a
+ * mid-value body in between.  Returns nothing; leaves the interior untouched
+ * (transparent / caller-filled).
+ *
+ * ramp index plan (8-shade ramp):
+ *   outer light rim   -> bright   (NW) / mid-dark (SE)
+ *   body              -> light    (NW) / mid      (SE)
+ *   inner dark rim    -> mid-dark (NW) / darkest  (SE)
+ */
+function carvedRing(ctx, x, y, w, h, t, ramp) {
+  const x1 = x + w - 1;
+  const y1 = y + h - 1;
+  for (let i = 0; i < t; i++) {
+    // Per-layer shade selection from outer (i=0) to inner (i=t-1).
+    let lightShade, darkShade;
+    if (i === 0) {
+      lightShade = ramp[7]; // brightest catches NW light
+      darkShade = ramp[2];
+    } else if (i === t - 1) {
+      lightShade = ramp[4]; // inner NW edge
+      darkShade = ramp[0];  // inner SE edge = deepest carve shadow
+    } else {
+      lightShade = ramp[6]; // body NW
+      darkShade = ramp[3];  // body SE
+    }
+    // Top edge (NW light) and left edge (NW light)
+    hLine(ctx, x + i, y + i, w - i * 2, lightShade);
+    vLine(ctx, x + i, y + i, h - i * 2, lightShade);
+    // Bottom edge (SE shadow) and right edge (SE shadow)
+    hLine(ctx, x + i, y1 - i, w - i * 2, darkShade);
+    vLine(ctx, x1 - i, y + i, h - i * 2, darkShade);
+  }
+}
+
+/**
+ * Carved gold corner ornament: a small filled diamond/boss.
+ * `bright` = true -> top-left style (bright gold core, dark SE pixel),
+ *            false -> bottom-right style (dark gold core, bright NW pixel).
+ */
+function cornerOrnament(ctx, cx, cy, bright) {
+  const gold = PALETTE.gold;
+  const core = bright ? gold[7] : gold[3];
+  const rim = bright ? gold[4] : gold[1];
+  const glint = bright ? gold[7] : gold[5];
+  // Diamond: center + 4 cardinal pixels
+  px(ctx, cx, cy, core);
+  px(ctx, cx - 1, cy, rim);
+  px(ctx, cx + 1, cy, rim);
+  px(ctx, cx, cy - 1, rim);
+  px(ctx, cx, cy + 1, rim);
+  // NW glint pixel for the carved highlight
+  px(ctx, cx - 1, cy - 1, glint);
+  // SE shadow pixel
+  px(ctx, cx + 1, cy + 1, bright ? gold[1] : gold[0]);
+}
+
+/**
+ * Fill a rect with a vertical 2-step dithered parchment-ish panel using the
+ * provided ramp, NW lit (top lighter). Hard-edged Bayer dither => no AA.
+ */
+function fillBeveledPanel(ctx, x, y, w, h, ramp, topIdx, botIdx) {
+  for (let yy = 0; yy < h; yy++) {
+    const t = h <= 1 ? 0 : yy / (h - 1);
+    // Choose two adjacent ramp indices to dither between for this row.
+    const f = topIdx + (botIdx - topIdx) * t;
+    const lo = Math.floor(f);
+    const hi = clamp(lo + 1, 0, ramp.length - 1);
+    const frac = f - lo;
+    for (let xx = 0; xx < w; xx++) {
+      const threshold = (DITHER_MATRIX[yy % 4][xx % 4]) / 16;
+      const idx = frac > threshold ? hi : lo;
+      px(ctx, x + xx, y + yy, ramp[clamp(idx, 0, ramp.length - 1)]);
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
 // 1. Parchment Background (512×128)
 // ---------------------------------------------------------------------------
 function generateParchment() {
@@ -244,98 +351,391 @@ function generateBorderCorner() {
 }
 
 // ---------------------------------------------------------------------------
-// 3. Portrait Frame (68×68)
+// 3. Portrait Frame (104×104) — carved gold chrome, transparent center
 // ---------------------------------------------------------------------------
 function generatePortraitFrame() {
   console.log('Generating portrait-frame.png ...');
-  const S = 68;
-  const BORDER = 4;
+  const S = 104;          // MUST stay 104×104 (CSS .ui-portrait-frame)
+  const T = 8;            // ring thickness
   const canvas = createCanvas(S, S);
   const ctx = canvas.getContext('2d');
 
   const gold = PALETTE.gold;
+  const wood = PALETTE.wood;
+  const shadow = PALETTE.shadow;
 
-  // Transparent background
-  ctx.clearRect(0, 0, S, S);
+  ctx.clearRect(0, 0, S, S); // transparent center stays transparent
 
-  // Draw frame border
-  for (let y = 0; y < S; y++) {
-    for (let x = 0; x < S; x++) {
-      // Determine if this pixel is in the frame (not the transparent center)
-      const inCenter = x >= BORDER && x < S - BORDER && y >= BORDER && y < S - BORDER;
-      if (inCenter) continue;
+  // Outer dark mounting bezel (1px) so the frame reads as carved metal on wood.
+  carvedRing(ctx, 0, 0, S, S, 1, wood);
 
-      // Distance from edge for bevel effect
-      const distFromOuter = Math.min(x, y, S - 1 - x, S - 1 - y);
-      const distFromInner = BORDER - 1 - distFromOuter;
+  // Main carved gold ring.
+  carvedRing(ctx, 1, 1, S - 2, S - 2, T, gold);
 
-      // Bevel: top-left gets lighter, bottom-right gets darker
-      let shade;
-      const isTopLeft = (x + y) < S;
-      if (distFromOuter === 0) {
-        // Outermost edge
-        shade = isTopLeft ? gold[6] : gold[2];
-      } else if (distFromOuter === BORDER - 1) {
-        // Innermost edge (adjacent to portrait)
-        shade = isTopLeft ? gold[3] : gold[6];
-      } else {
-        // Mid frame
-        shade = isTopLeft ? gold[5] : gold[3];
-      }
+  // Inner shadow lip (concave) — 1px dark line where portrait sits below frame.
+  const inner = 1 + T;
+  carvedRing(ctx, inner, inner, S - inner * 2, S - inner * 2, 1, shadow);
 
-      // Highlight top-left corner specifically
-      if (distFromOuter <= 1 && x < BORDER + 2 && y < BORDER + 2) {
-        shade = gold[7];
-      }
-      // Darken bottom-right corner
-      if (distFromOuter <= 1 && x >= S - BORDER - 2 && y >= S - BORDER - 2) {
-        shade = gold[1];
-      }
+  // 1px bright highlight line inset on the convex outer-top/left edges.
+  hLine(ctx, 2, 1, S - 4, gold[7]);
+  vLine(ctx, 1, 2, S - 4, gold[7]);
 
-      setPixel(ctx, x, y, shade);
+  // Corner ornaments: bright gold NW, dark gold SE.
+  cornerOrnament(ctx, 5, 5, true);            // top-left  (brightest)
+  cornerOrnament(ctx, S - 6, 5, true);        // top-right
+  cornerOrnament(ctx, 5, S - 6, false);       // bottom-left
+  cornerOrnament(ctx, S - 6, S - 6, false);   // bottom-right (darkest)
+
+  // Mid-edge rivet ticks for ornament rhythm (NW lit on top/left).
+  const mid = Math.floor(S / 2);
+  px(ctx, mid, 1, gold[7]); px(ctx, mid, 2, gold[5]);            // top
+  px(ctx, 1, mid, gold[7]); px(ctx, 2, mid, gold[5]);            // left
+  px(ctx, mid, S - 2, gold[1]); px(ctx, mid, S - 3, gold[3]);    // bottom (shadow)
+  px(ctx, S - 2, mid, gold[1]); px(ctx, S - 3, mid, gold[3]);    // right (shadow)
+
+  saveCanvas(canvas, path.join(UI_DIR, 'portrait-frame.png'));
+}
+
+// ---------------------------------------------------------------------------
+// 3b. Dialogue Box (640×160) — carved wood+gold panel, parchment interior
+// ---------------------------------------------------------------------------
+function generateDialogueBox() {
+  console.log('Generating dialogue-box.png ...');
+  const W = 640, H = 160;
+  const canvas = createCanvas(W, H);
+  const ctx = canvas.getContext('2d');
+
+  const wood = PALETTE.wood;
+  const gold = PALETTE.gold;
+  const sand = PALETTE.sand;
+  const shadow = PALETTE.shadow;
+
+  // Parchment interior fill (NW lit, dithered).
+  fillBeveledPanel(ctx, 0, 0, W, H, sand, 6, 4);
+
+  // Outer carved wood frame (4px).
+  carvedRing(ctx, 0, 0, W, H, 4, wood);
+  // Gold inlay ring just inside the wood (2px).
+  carvedRing(ctx, 4, 4, W - 8, H - 8, 2, gold);
+  // Inner shadow lip where text sits.
+  carvedRing(ctx, 6, 6, W - 12, H - 12, 1, shadow);
+
+  // 1px bright highlight line inset along convex top + left of the gold inlay.
+  hLine(ctx, 6, 4, W - 12, gold[7]);
+  vLine(ctx, 4, 6, H - 12, gold[7]);
+
+  // Corner ornaments inside the gold ring.
+  cornerOrnament(ctx, 8, 8, true);
+  cornerOrnament(ctx, W - 9, 8, true);
+  cornerOrnament(ctx, 8, H - 9, false);
+  cornerOrnament(ctx, W - 9, H - 9, false);
+
+  saveCanvas(canvas, path.join(UI_DIR, 'dialogue-box.png'));
+}
+
+// ---------------------------------------------------------------------------
+// 3c. Parchment Panel (320×200) — carved gold edge, parchment field
+// ---------------------------------------------------------------------------
+function generatePanelParchment() {
+  console.log('Generating panel-parchment.png ...');
+  const W = 320, H = 200;
+  const canvas = createCanvas(W, H);
+  const ctx = canvas.getContext('2d');
+
+  const sand = PALETTE.sand;
+  const gold = PALETTE.gold;
+  const wood = PALETTE.wood;
+  const shadow = PALETTE.shadow;
+
+  // Parchment field.
+  fillBeveledPanel(ctx, 0, 0, W, H, sand, 6, 3);
+
+  // Thin wood backing rim, then carved gold ring.
+  carvedRing(ctx, 0, 0, W, H, 2, wood);
+  carvedRing(ctx, 2, 2, W - 4, H - 4, 3, gold);
+  carvedRing(ctx, 5, 5, W - 10, H - 10, 1, shadow);
+
+  // Convex highlight inset (top/left).
+  hLine(ctx, 4, 2, W - 8, gold[7]);
+  vLine(ctx, 2, 4, H - 8, gold[7]);
+
+  // Corner ornaments.
+  cornerOrnament(ctx, 6, 6, true);
+  cornerOrnament(ctx, W - 7, 6, true);
+  cornerOrnament(ctx, 6, H - 7, false);
+  cornerOrnament(ctx, W - 7, H - 7, false);
+
+  saveCanvas(canvas, path.join(UI_DIR, 'panel-parchment.png'));
+}
+
+// ---------------------------------------------------------------------------
+// 3d. Inventory Slot (48×48) — sunken carved socket, transparent center
+// ---------------------------------------------------------------------------
+function generateInventorySlot() {
+  console.log('Generating inventory-slot.png ...');
+  const S = 48, T = 3;
+  const canvas = createCanvas(S, S);
+  const ctx = canvas.getContext('2d');
+
+  const wood = PALETTE.wood;
+  const gold = PALETTE.gold;
+  const shadow = PALETTE.shadow;
+
+  ctx.clearRect(0, 0, S, S); // transparent center for the item icon
+
+  // A socket reads SUNKEN: invert the NW/SE light by drawing a dark outer
+  // rim that lightens toward the inner edge.  We achieve this by stacking
+  // an inverted carved ring (dark top-left, light bottom-right) using wood.
+  for (let i = 0; i < T; i++) {
+    const x1 = S - 1 - i;
+    const y1 = S - 1 - i;
+    const lightShade = i === 0 ? shadow[2] : wood[2]; // top/left = shadow (sunken)
+    const darkShade  = i === 0 ? wood[6] : wood[5];   // bottom/right = lit
+    hLine(ctx, i, i, S - i * 2, lightShade);   // top
+    vLine(ctx, i, i, S - i * 2, lightShade);   // left
+    hLine(ctx, i, y1, S - i * 2, darkShade);   // bottom
+    vLine(ctx, x1, i, S - i * 2, darkShade);   // right
+  }
+
+  // Thin gold inner lip framing the socket opening (carved).
+  carvedRing(ctx, T, T, S - T * 2, S - T * 2, 1, gold);
+
+  // Gold corner studs (bright NW, dark SE).
+  cornerOrnament(ctx, 4, 4, true);
+  cornerOrnament(ctx, S - 5, 4, true);
+  cornerOrnament(ctx, 4, S - 5, false);
+  cornerOrnament(ctx, S - 5, S - 5, false);
+
+  saveCanvas(canvas, path.join(UI_DIR, 'inventory-slot.png'));
+}
+
+// ---------------------------------------------------------------------------
+// 3e. Buttons (120×28) — carved gold-rimmed wood, 3 states
+// ---------------------------------------------------------------------------
+function generateButton(state) {
+  const name = `button-${state}.png`;
+  console.log(`Generating ${name} ...`);
+  const W = 120, H = 28;
+  const canvas = createCanvas(W, H);
+  const ctx = canvas.getContext('2d');
+
+  const wood = PALETTE.wood;
+  const gold = PALETTE.gold;
+  const shadow = PALETTE.shadow;
+
+  // Face fill — hover is a touch brighter, active is pressed/darker.
+  const topIdx = state === 'hover' ? 6 : state === 'active' ? 3 : 5;
+  const botIdx = state === 'hover' ? 4 : state === 'active' ? 1 : 3;
+  fillBeveledPanel(ctx, 0, 0, W, H, wood, topIdx, botIdx);
+
+  if (state === 'active') {
+    // Pressed: invert the bevel (dark top/left, light bottom/right) = sunken.
+    hLine(ctx, 0, 0, W, shadow[2]);
+    vLine(ctx, 0, 0, H, shadow[2]);
+    hLine(ctx, 0, H - 1, W, gold[3]);
+    vLine(ctx, W - 1, 0, H, gold[3]);
+    carvedRing(ctx, 1, 1, W - 2, H - 2, 1, gold);
+  } else {
+    // Raised carved gold rim, NW lit.
+    carvedRing(ctx, 0, 0, W, H, 2, gold);
+    // 1px convex highlight inset on top/left.
+    hLine(ctx, 2, 1, W - 4, gold[7]);
+    vLine(ctx, 1, 2, H - 4, gold[7]);
+    if (state === 'hover') {
+      // Hover glow: brighten the top rim further.
+      hLine(ctx, 1, 0, W - 2, gold[7]);
     }
   }
 
-  // Corner ornaments – small diamond/dot motifs at each corner
-  const ornamentColor = gold[7];
-  const ornamentDark = gold[2];
-  // Top-left ornament
-  setPixel(ctx, 1, 1, ornamentColor);
-  setPixel(ctx, 2, 1, ornamentColor);
-  setPixel(ctx, 1, 2, ornamentColor);
-  // Top-right ornament
-  setPixel(ctx, S - 2, 1, ornamentColor);
-  setPixel(ctx, S - 3, 1, ornamentColor);
-  setPixel(ctx, S - 2, 2, ornamentColor);
-  // Bottom-left ornament
-  setPixel(ctx, 1, S - 2, ornamentDark);
-  setPixel(ctx, 2, S - 2, ornamentDark);
-  setPixel(ctx, 1, S - 3, ornamentDark);
-  // Bottom-right ornament
-  setPixel(ctx, S - 2, S - 2, ornamentDark);
-  setPixel(ctx, S - 3, S - 2, ornamentDark);
-  setPixel(ctx, S - 2, S - 3, ornamentDark);
+  // Corner ornaments.
+  const briNW = state !== 'active';
+  cornerOrnament(ctx, 3, 3, briNW);
+  cornerOrnament(ctx, W - 4, 3, briNW);
+  cornerOrnament(ctx, 3, H - 4, false);
+  cornerOrnament(ctx, W - 4, H - 4, false);
 
-  // Add small decorative ticks along edges (midpoints)
-  const mid = Math.floor(S / 2);
-  // Top edge
-  setPixel(ctx, mid, 0, gold[7]);
-  setPixel(ctx, mid - 1, 0, gold[6]);
-  setPixel(ctx, mid + 1, 0, gold[6]);
-  // Bottom edge
-  setPixel(ctx, mid, S - 1, gold[1]);
-  setPixel(ctx, mid - 1, S - 1, gold[2]);
-  setPixel(ctx, mid + 1, S - 1, gold[2]);
-  // Left edge
-  setPixel(ctx, 0, mid, gold[6]);
-  setPixel(ctx, 0, mid - 1, gold[7]);
-  setPixel(ctx, 0, mid + 1, gold[5]);
-  // Right edge
-  setPixel(ctx, S - 1, mid, gold[2]);
-  setPixel(ctx, S - 1, mid - 1, gold[3]);
-  setPixel(ctx, S - 1, mid + 1, gold[1]);
+  saveCanvas(canvas, path.join(UI_DIR, name));
+}
 
-  saveCanvas(canvas, path.join(UI_DIR, 'portrait-frame.png'));
+// ---------------------------------------------------------------------------
+// 3f. Orbs (24×24) — stepped-bevel sphere, drop shadow.  ramp drives colour.
+// ---------------------------------------------------------------------------
+function generateOrb(name, ramp, accentRamp) {
+  console.log(`Generating ${name} ...`);
+  const S = 24;
+  const canvas = createCanvas(S, S);
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, S, S);
+
+  const shadow = PALETTE.shadow;
+  const spec = PALETTE.specular;
+
+  const cx = 11.5, cy = 11.0, r = 10;
+  // Drop shadow (offset SE), hard-edged dark disc.
+  for (let y = 0; y < S; y++) {
+    for (let x = 0; x < S; x++) {
+      const dx = x - (cx + 2), dy = y - (cy + 3);
+      if (dx * dx + dy * dy <= (r - 1) * (r - 1)) px(ctx, x, y, shadow[1]);
+    }
+  }
+
+  // Sphere: stepped bevel via distance + NW light bands (no AA, palette steps).
+  for (let y = 0; y < S; y++) {
+    for (let x = 0; x < S; x++) {
+      const dx = x - cx, dy = y - cy;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist > r) continue;
+      // Lighting term: NW light (-x,-y), stepped into ramp bands.
+      const nl = (-dx - dy) / (r * 1.4);       // -1..1, bright at NW
+      const edge = 1 - dist / r;               // 0 at rim, 1 at center
+      let lvl = (nl * 0.6 + edge * 0.4);       // combine
+      // Quantize to discrete ramp steps (stepped-bevel look).
+      let idx;
+      if (lvl > 0.62) idx = 7;
+      else if (lvl > 0.42) idx = 6;
+      else if (lvl > 0.24) idx = 5;
+      else if (lvl > 0.08) idx = 4;
+      else if (lvl > -0.06) idx = 3;
+      else if (lvl > -0.22) idx = 2;
+      else idx = 1;
+      // Rim shadow ring for the carved sphere edge.
+      if (dist > r - 1.0) idx = Math.min(idx, 1);
+      px(ctx, x, y, ramp[idx]);
+    }
+  }
+
+  // Specular glint hotspot (NW), accent ramp tint for energy orb.
+  px(ctx, 7, 6, spec[7]);
+  px(ctx, 8, 6, spec[5]);
+  px(ctx, 7, 7, accentRamp ? accentRamp[7] : spec[6]);
+  px(ctx, 6, 7, spec[3]);
+
+  saveCanvas(canvas, path.join(UI_DIR, name));
+}
+
+// ---------------------------------------------------------------------------
+// 3g. Coin Icon (16×16) — carved gold disc, NW lit
+// ---------------------------------------------------------------------------
+function generateCoinIcon() {
+  console.log('Generating coin-icon.png ...');
+  const S = 16;
+  const canvas = createCanvas(S, S);
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, S, S);
+
+  const gold = PALETTE.gold;
+  const shadow = PALETTE.shadow;
+  const cx = 7.5, cy = 7.5, r = 7;
+
+  // Drop shadow.
+  for (let y = 0; y < S; y++) for (let x = 0; x < S; x++) {
+    const dx = x - (cx + 1), dy = y - (cy + 1.5);
+    if (dx * dx + dy * dy <= (r - 1) * (r - 1)) px(ctx, x, y, shadow[2]);
+  }
+  // Disc body with NW-lit stepped bevel.
+  for (let y = 0; y < S; y++) for (let x = 0; x < S; x++) {
+    const dx = x - cx, dy = y - cy;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+    if (dist > r) continue;
+    const nl = (-dx - dy) / (r * 1.4);
+    let idx = nl > 0.4 ? 7 : nl > 0.1 ? 6 : nl > -0.2 ? 5 : 4;
+    if (dist > r - 1) idx = 2;          // dark rim
+    px(ctx, x, y, gold[idx]);
+  }
+  // Embossed center mark (a carved cross / coin face).
+  px(ctx, 7, 5, gold[2]); px(ctx, 7, 6, gold[2]);
+  px(ctx, 7, 9, gold[2]); px(ctx, 7, 10, gold[2]);
+  px(ctx, 5, 7, gold[2]); px(ctx, 6, 7, gold[2]);
+  px(ctx, 9, 8, gold[2]); px(ctx, 10, 8, gold[2]);
+  px(ctx, 7, 7, gold[7]); px(ctx, 8, 7, gold[6]); // NW glint on relief
+  px(ctx, 7, 8, gold[5]); px(ctx, 8, 8, gold[3]);
+
+  saveCanvas(canvas, path.join(UI_DIR, 'coin-icon.png'));
+}
+
+// ---------------------------------------------------------------------------
+// 3h. Journal Icon (16×16) — carved gilt book
+// ---------------------------------------------------------------------------
+function generateJournalIcon() {
+  console.log('Generating journal-icon.png ...');
+  const S = 16;
+  const canvas = createCanvas(S, S);
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, S, S);
+
+  const wood = PALETTE.wood;     // leather cover
+  const gold = PALETTE.gold;     // gilt edge / clasp
+  const sand = PALETTE.sand;     // pages
+  const shadow = PALETTE.shadow;
+
+  // Drop shadow.
+  ctx.fillStyle = shadow[2];
+  ctx.fillRect(4, 14, 9, 1);
+
+  // Cover (leather) with carved bevel.
+  for (let y = 2; y <= 13; y++) {
+    for (let x = 3; x <= 12; x++) {
+      let idx = 4;
+      if (y === 2 || x === 3) idx = 6;        // NW lit edges
+      if (y === 13 || x === 12) idx = 2;      // SE shadow edges
+      px(ctx, x, y, wood[idx]);
+    }
+  }
+  // Page block on the right (fore-edge), NW lit.
+  for (let y = 3; y <= 12; y++) {
+    px(ctx, 12, y, sand[6]);
+    px(ctx, 11, y, sand[5]);
+  }
+  // Spine on left (gilt).
+  vLine(ctx, 4, 3, 10, gold[6]);
+  px(ctx, 4, 3, gold[7]);   // NW glint
+  px(ctx, 4, 12, gold[2]);  // SE shadow
+  // Gilt clasp across center-right.
+  px(ctx, 12, 7, gold[7]); px(ctx, 13, 7, gold[5]);
+  px(ctx, 12, 8, gold[3]); px(ctx, 13, 8, gold[1]);
+  // Carved title line on the cover.
+  hLine(ctx, 6, 6, 5, gold[5]);
+  px(ctx, 6, 6, gold[7]);
+
+  saveCanvas(canvas, path.join(UI_DIR, 'journal-icon.png'));
+}
+
+// ---------------------------------------------------------------------------
+// 3i. Scroll Top (16×16) — carved scroll roller header
+// ---------------------------------------------------------------------------
+function generateScrollTop() {
+  console.log('Generating scroll-top.png ...');
+  const S = 16;
+  const canvas = createCanvas(S, S);
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, S, S);
+
+  const wood = PALETTE.wood;
+  const gold = PALETTE.gold;
+  const sand = PALETTE.sand;
+
+  // Parchment hanging below the roller.
+  for (let y = 7; y <= 15; y++) {
+    for (let x = 3; x <= 12; x++) {
+      let idx = 5;
+      if (x === 3) idx = 6;       // NW lit
+      if (x === 12) idx = 3;      // SE shadow
+      px(ctx, x, y, sand[idx]);
+    }
+  }
+  // The roller (horizontal carved wood dowel) across the top.
+  for (let x = 1; x <= 14; x++) {
+    px(ctx, x, 4, wood[6]);   // NW-lit top
+    px(ctx, x, 5, wood[5]);
+    px(ctx, x, 6, wood[2]);   // SE shadow underside
+  }
+  // Gold end-caps (carved knobs).
+  cornerOrnament(ctx, 2, 5, true);
+  cornerOrnament(ctx, 13, 5, false);
+  // Highlight line along the roller top (convex).
+  hLine(ctx, 2, 3, 13, wood[7]);
+
+  saveCanvas(canvas, path.join(UI_DIR, 'scroll-top.png'));
 }
 
 // ---------------------------------------------------------------------------
@@ -719,6 +1119,20 @@ function main() {
   generateParchment();
   generateBorderCorner();
   generatePortraitFrame();
+
+  console.log('');
+  console.log('--- Carved-Chrome UI ---');
+  generateDialogueBox();
+  generatePanelParchment();
+  generateInventorySlot();
+  generateButton('default');
+  generateButton('hover');
+  generateButton('active');
+  generateOrb('health-orb.png', PALETTE.clothRed, null);
+  generateOrb('energy-orb.png', PALETTE.sky, PALETTE.gold);
+  generateCoinIcon();
+  generateJournalIcon();
+  generateScrollTop();
 
   console.log('');
   console.log('--- Item Icons ---');
