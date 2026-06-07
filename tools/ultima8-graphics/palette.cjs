@@ -113,7 +113,20 @@ const PALETTE = {
     '#254A75', // 6
     '#2A5585', // 7 - surface shimmer
   ],
-  
+
+  // Sky - tropical daylight gradient (horizon shadow -> zenith / cloud light)
+  // Day sky nominal #80C0F0 (lighting-standard.md) quantizes to index 5.
+  sky: [
+    '#182850', // 0 - horizon shadow
+    '#1A3A70', // 1 - deep horizon
+    '#2A4A90', // 2 - mid-high sky
+    '#3A5AB0', // 3 - mid sky
+    '#4A6AC0', // 4 - upper-mid sky
+    '#6A8AD0', // 5 - bright day sky
+    '#8AAADD', // 6 - high sky
+    '#B0C8E8', // 7 - zenith / thin cloud light
+  ],
+
   // Sand/dirt - warm earth tones
   sand: [
     '#1A1510', // 0

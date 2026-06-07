@@ -1,12 +1,40 @@
 {
-  "note": "Master Canva Magic Media exports (desktop_wallpaper / 16:9) for scene backdrop plates. Re-quantize with: node tools/post-process-scene.cjs <raw> assets/scenes/<scene>.png --width 960 --height 540 --spread 40",
+  "note": "Master Canva Magic Media exports (desktop_wallpaper / 16:9, 1920x1080 pro) for scene backdrop plates. Re-derive any plate with: node tools/post-process-scene.cjs <raw> assets/scenes/<scene>.png --width 960 --height 540 --spread <S>. Generated 2026-06-07 for the graphics overhaul (BG2/Skald/Ultima-VIII direction).",
   "plates": {
     "rua-direita": {
       "canva_design_id": "DAHL4f56qDA",
       "view_url": "https://www.canva.com/d/0HhGd7rLwtIJ98X",
       "raw_export": "tools/canva-sources/rua-direita-raw.png",
       "installed": "assets/scenes/scene-rua-direita.png",
-      "generated_utc": "2026-06-07"
+      "spread": 40
+    },
+    "a-famosa": {
+      "canva_design_id": "DAHL4TACFE0",
+      "view_url": "https://www.canva.com/d/GQ5Hao531sTYOBX",
+      "raw_export": "tools/canva-sources/a-famosa-raw.png",
+      "installed": "assets/scenes/scene-a-famosa.png",
+      "spread": 40
+    },
+    "st-pauls": {
+      "canva_design_id": "DAHL4UiIPG4",
+      "view_url": "https://www.canva.com/d/1Rsy9qUWLSGCrMl",
+      "raw_export": "tools/canva-sources/st-pauls-raw.png",
+      "installed": "assets/scenes/scene-st-pauls.png",
+      "spread": 38
+    },
+    "waterfront": {
+      "canva_design_id": "DAHL4QiK2P0",
+      "view_url": "https://www.canva.com/d/nZDiTJpxfksDDLq",
+      "raw_export": "tools/canva-sources/waterfront-raw.png",
+      "installed": "assets/scenes/scene-waterfront.png",
+      "spread": 42
+    },
+    "kampung": {
+      "canva_design_id": "DAHL4QFe4Gg",
+      "view_url": "https://www.canva.com/d/jj99ck74Klzx5AZ",
+      "raw_export": "tools/canva-sources/kampung-raw.png",
+      "installed": "assets/scenes/scene-kampung.png",
+      "spread": 36
     }
   }
 }
