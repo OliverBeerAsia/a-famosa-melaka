@@ -100,43 +100,50 @@
       "sprite": "cooking-fire",
       "x": 100,
       "y": 107,
-      "scale": 2
+      "scale": 2,
+      "examineText": "Three stones, a low fire of coconut husk and mangrove wood, and the smoke kept thin on purpose - husk burns dirty but it burns cheap, and the smoke keeps the mosquitoes off the doorway. Nothing here is only one thing.\n\n*Ash is banked at the edge, still warm. This fire has not been fully out in a long time.*"
     },
     {
       "sprite": "rice-pot",
       "x": 114,
       "y": 111,
-      "scale": 1.7
+      "scale": 1.7,
+      "examineText": "Rice with a knuckle's depth of water above it, set to the edge of the fire where the heat is gentler. The pot's outside is black to the shoulder and the inside is scoured pale - decades of the same meal, cooked the same way.\n\n*Enough for the house, and a little over. In the kampung the little over is not an accident either.*"
     },
     {
       "sprite": "fishing-net",
       "x": 230,
       "y": 100,
-      "scale": 2
+      "scale": 2,
+      "examineText": "A cast net, a jala, gathered in loops on the arm with the lead line running clean. Throwing one so it opens into a full circle takes a boy about two years to learn and a man his whole life to stop being quietly proud of.\n\n*It is folded ready. Someone means to be at the waterline before the light.*"
     },
     {
       "sprite": "pottery",
       "x": 211,
       "y": 110,
-      "scale": 1.7
+      "scale": 1.7,
+      "examineText": "Unglazed earthenware, thrown thick and fired low, sweating faintly in the shade - the sweat is the point, evaporation keeping the water inside cooler than the air. Beside it, one blue-and-white shard from a Chinese jar, kept because it is beautiful.\n\n*Two hundred years of Chinese porcelain has passed through this port. What settles in the kampung is the broken pieces, and they are treasured.*"
     },
     {
       "sprite": "fruit-basket",
       "x": 87,
       "y": 100,
-      "scale": 1.7
+      "scale": 1.7,
+      "examineText": "Rambutan, langsat, a few bananas going over. Woven from split rattan in a hexagonal weave that keeps its shape empty and full alike. The fruit is for the household, or the market, or a neighbour who is short this week - which is decided later.\n\n*In the market this would be priced. Here it is not priced yet. That is the whole difference between the two streets.*"
     },
     {
       "sprite": "woven-mat",
       "x": 167,
       "y": 143,
-      "scale": 1.8
+      "scale": 1.8,
+      "examineText": "Pandan leaf, dried, split, and plaited in a diagonal twill, the border finished with a coloured strip. It is a floor, a table, a bed, and a place for guests to sit, depending on the hour. Rolled up, it is furniture that weighs nothing.\n\n*Portuguese houses in this heat are full of heavy chairs nobody sits in. The kampung solved the problem by declining to have the problem.*"
     },
     {
       "sprite": "water-well",
       "x": 243,
       "y": 150,
-      "scale": 2.4
+      "scale": 2.4,
+      "examineText": "A shallow well, ringed with fitted stone and covered with a board against leaves and children. The water is brackish this near the coast and is used for washing; drinking water comes from further upriver, carried, every day, by somebody.\n\n*The rope has cut a groove into the stone lip perhaps two fingers deep. That groove is measured in generations, not years.*"
     }
   ],
   "animatedProps": [

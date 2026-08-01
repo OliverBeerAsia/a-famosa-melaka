@@ -10,6 +10,7 @@ import { emitGameEvent } from '../phaser/eventBridge';
 import { useGameStore } from './gameStore';
 import { useInventoryStore } from './inventoryStore';
 import { useQuestStore } from './questStore';
+import { meetsDayRequirement } from './questStore';
 import type { ConditionalRequirements, ReputationFaction } from './questStore';
 
 interface GreetingVariant {
@@ -55,6 +56,14 @@ export interface TopicData {
   givesItem?: string;
   takesItem?: string;
   takesMoney?: number;
+  /**
+   * Cruzados paid TO the player when this topic is first selected (sales,
+   * commissions, advances). Granted once only — see `selectTopic`.
+   */
+  givesMoney?: number;
+  /** Journal breadcrumb written the first time this topic is selected. */
+  journalEntry?: string;
+  journalCategory?: 'quest' | 'discovery' | 'rumor';
   availability?: ConditionalRequirements;
 }
 
@@ -168,6 +177,15 @@ export const useDialogueStore = create<DialogueState>((set, get) => ({
 
     const inventoryStore = useInventoryStore.getState();
 
+    // First-selection latch. Payouts and journal breadcrumbs must not repeat
+    // when a player re-reads a topic, so they fire only while questStore has
+    // not yet recorded this topic — it records it on the
+    // 'dialogue:topic:selected' event emitted at the end of this function.
+    // NOTE: seenTopics is keyed by topic id alone, so any topic carrying
+    // `givesMoney`/`journalEntry` must use a key unique across all NPCs
+    // (enforced by tests/EconomyReachability.test.js).
+    const isFirstSelection = !useQuestStore.getState().seenTopics.includes(topic);
+
     if (topicData.takesMoney && topicData.takesMoney > 0 && inventoryStore.money < topicData.takesMoney) {
       set({
         currentText: `I do not have enough cruzados (${topicData.takesMoney} required).`,
@@ -192,6 +210,17 @@ export const useDialogueStore = create<DialogueState>((set, get) => ({
     if (topicData.takesMoney && topicData.takesMoney > 0) {
       inventoryStore.removeMoney(topicData.takesMoney);
       emitGameEvent('dialogue:money:paid', currentNPC.id, topicData.takesMoney);
+    }
+
+    if (isFirstSelection && topicData.givesMoney && topicData.givesMoney > 0) {
+      inventoryStore.addMoney(topicData.givesMoney);
+    }
+
+    if (isFirstSelection && topicData.journalEntry) {
+      useQuestStore.getState().addJournalEntry(
+        topicData.journalEntry,
+        topicData.journalCategory || 'quest'
+      );
     }
 
     // Set the new text and start typing
@@ -233,6 +262,11 @@ export const useDialogueStore = create<DialogueState>((set, get) => ({
     }
 
     emitGameEvent('dialogue:topic:selected', currentNPC.id, topic);
+
+    // Close the first-selection latch ourselves rather than relying on the
+    // App-level listener above having been mounted. recordTalk is idempotent,
+    // so the listener's own call is a no-op after this one.
+    useQuestStore.getState().recordTalk(currentNPC.id, topic);
 
     // Emit topic selection for Phaser debug hooks
     emitGameEvent('ui:topic:select', topic);
@@ -328,6 +362,7 @@ function isConditionalRequirementMet(requirements?: ConditionalRequirements): bo
   }
   if (requirements.topic && !questState.seenTopics.includes(requirements.topic)) return false;
   if (requirements.time && gameState.time.timeOfDay !== requirements.time) return false;
+  if (!meetsDayRequirement(gameState.time.day, requirements)) return false;
   if (requirements.location && gameState.currentLocation !== requirements.location) return false;
 
   if (requirements.reputation) {
@@ -370,6 +405,15 @@ function isConditionalRequirementMet(requirements?: ConditionalRequirements): bo
 }
 
 function resolveGreeting(npc: NPCData): string {
+  // Greeting variants are authored against specific world state (which
+  // resolution the player took, whether they stole, which flags are set), so
+  // they are MORE specific than the coarse quest-active/quest-complete
+  // greetings and win over them. An NPC with no matching variant falls back to
+  // the quest-state greeting, then to the plain greeting.
+  const variants = npc.dialogue.greetingVariants || [];
+  const matchedVariant = variants.find((variant) => isConditionalRequirementMet(variant.when));
+  if (matchedVariant) return matchedVariant.text;
+
   const questId = npc.questId;
   const questState = useQuestStore.getState();
   if (questId && questState.isQuestCompleted(questId) && npc.dialogue.greetingQuestComplete) {
@@ -379,9 +423,7 @@ function resolveGreeting(npc: NPCData): string {
     return npc.dialogue.greetingQuestActive;
   }
 
-  const variants = npc.dialogue.greetingVariants || [];
-  const matchedVariant = variants.find((variant) => isConditionalRequirementMet(variant.when));
-  return matchedVariant?.text || npc.dialogue.greeting;
+  return npc.dialogue.greeting;
 }
 
 function prioritizeTopics(npc: NPCData, topics: string[]): string[] {

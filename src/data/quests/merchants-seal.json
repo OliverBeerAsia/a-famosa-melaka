@@ -46,14 +46,21 @@
       ],
       "journalEntry": "All signs point to Chen Wei at the waterfront counting house. I should speak with him directly.",
       "nextStage": "choose-path",
-      "unlocksPaths": true
+      "unlocksPaths": true,
+      "consequenceText": "Chen Wei did not deny holding the seal, did not raise his voice, and did not offer tea until the account had been stated in full. Coming to him openly appears to have been worth something in that house.",
+      "consequences": {
+        "reputation": { "chinese-merchants": 6 },
+        "worldChanges": ["chen-wei-audience"],
+        "flags": ["chen-wei-audience"]
+      }
     },
 
     {
       "id": "choose-path",
       "description": "Decide how to recover the seal.",
       "isBranching": true,
-      "journalEntry": "Chen Wei admits to holding the seal as collateral for a 500 cruzado debt Gomes owes. I have several options:\n- Pay the debt (500 cruzados)\n- Help Chen Wei with his customs problem\n- Investigate whether Gomes' debt is legitimate\n- Find another way...",
+      "journalEntry": "Chen Wei admits to holding the seal as collateral for a 500 cruzado debt Gomes owes. I have several options:\n- Pay the debt (500 cruzados). I do not have it, but it can be raised: Alvares pays 40 at the signing for a tin-tally contract; Aminah can put me onto a bahar of rain-damp Kedah pepper for 20 that a short counting house will take at 55; Chen Wei will cut a sample of his bonded silk for Rudra Mudaliar, who advances against the lot; and Chen Wei himself will write the remainder as an advance against my signed undertaking, if this house trusts me by then.\n- Help Chen Wei with his customs problem - but his silk is booked onto the Canton junk that clears on the fourth day, and after that there is nothing left to release.\n- Investigate whether Gomes' debt is legitimate\n- Find another way...",
+      "warning": "Chen Wei's silk sails for Canton on the fourth day. The customs favour is worth nothing to him after that.",
       "npcDialogueOverrides": {
         "chen-wei": {
           "settle-debt": {
@@ -80,8 +87,13 @@
         {
           "id": "diplomatic",
           "name": "Diplomatic Solution",
-          "description": "Help Chen Wei with his customs dispute in exchange for the seal.",
-          "requirements": { "talkedTo": ["chen-wei"], "topic": "alternative" },
+          "description": "Help Chen Wei with his customs dispute in exchange for the seal. Only while the silk is still in Melaka.",
+          "requirements": {
+            "talkedTo": ["chen-wei"],
+            "topic": "alternative",
+            "dayBefore": 4,
+            "worldFlagsNone": ["silk-consignment-shipped"]
+          },
           "nextStage": "diplomatic-start"
         },
         {
@@ -109,7 +121,7 @@
       "objectives": [
         { "type": "pay", "target": "chen-wei", "amount": 500, "completed": false }
       ],
-      "journalEntry": "I need to gather 500 cruzados to pay Chen Wei for the return of the seal. A straightforward solution, if I have the funds.",
+      "journalEntry": "I need 500 cruzados for Chen Wei. Straightforward, and I do not have it. The money trail as I understand it: 40 from Alvares for the tin-tally contract, paid at the signing; 20 to Aminah for a bahar of rain-damp Kedah pepper, which a counting house short on its month-end manifest will take at 55; 180 advanced by Rudra Mudaliar against Chen Wei's bonded silk lot, on the strength of a sample Chen Wei will cut himself; and the remainder written as an advance by the counting house against my own undertaking - which Chen Wei will only do once I have carried most of the sum there under my own power.",
       "nextStage": "seal-recovered",
       "consequenceText": "Chen Wei accepts payment with a slight bow. 'Business concluded. The Portuguese understand commerce when pressed.' He produces the seal from a locked drawer.",
       "consequences": {

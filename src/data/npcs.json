@@ -35,6 +35,24 @@
       "greeting": "You caught me at a bad hour, friend. I am Fernão Gomes. My spices are sound, but my seal is not.",
       "greetingQuestActive": "You return at last. Tell me you learned something. Without the seal, every ledger I own is ash.",
       "greetingQuestComplete": "You found it. Good. In Melaka, a seal is not just wax. It is a man's name, credit, and future.",
+      "greetingVariants": [
+        {
+          "text": "*the seal is on the desk between his hands and he has not put it away* You will forgive me if I do not ask how. A man who asks a question of that kind has decided in advance what he wants to hear, and I find I have not decided. It is back. I am grateful. We will speak of other things.",
+          "when": { "worldFlagsAny": ["seal-stolen", "player-is-thief"] }
+        },
+        {
+          "text": "Three parts to two, witnessed and signed, and my name on the smaller share. *almost laughs* My father would have burned the articles. My father also died owing money to men he never named. Sit down, friend. I owe you a great deal more than the wax.",
+          "when": { "worldFlagsAny": ["gomes-chen-partnership"] }
+        },
+        {
+          "text": "The account is closed and every manifest in that chest is lawful again. *turns the seal over once* Five hundred cruzados. I have stopped saying the number aloud. I intend to stop hearing it eventually.",
+          "when": { "worldFlagsAny": ["merchant-seal-settled"] }
+        },
+        {
+          "text": "The silk is still under seal at the gate and the junk has gone without it. Chen Wei will not say so, but that cargo was the whole of his patience. Whatever we do now, we do it with a man who has just lost a season.",
+          "when": { "worldFlagsAny": ["silk-consignment-shipped"] }
+        }
+      ],
       "topics": {
         "seal": {
           "text": "My trading seal vanished after I met Chen Wei. Without it I cannot authorize cargo, and every shipman in Rua Direita knows it.",
@@ -101,6 +119,14 @@
         "rest-night": {
           "text": "Sleep well, friend. Wake when the cool sea breeze sets in after dark.",
           "requires": ["rest"]
+        },
+        "after-the-debt": {
+          "text": "Do you know the part I cannot put down? Not the money. The three days I spent certain that Chen Wei had contrived the whole thing to ruin me. I built the man a character out of nothing but my own shame and then I believed in it. *shakes his head slowly* Cloves I can value at a glance. Myself I appear to value very badly.",
+          "availability": { "completedQuests": ["merchants-seal"] }
+        },
+        "next-voyage": {
+          "text": "Two hulls for Banda in the spring, and this time the accounting is shared and the risk is written down before anyone sails. If I come back rich, I come back half as rich as I would have. *shrugs* Half of a thing that exists is a great deal more than all of a thing that sank.",
+          "availability": { "worldFlagsAny": ["gomes-chen-partnership", "merchant-seal-settled"] }
         }
       },
       "farewell": "Find the seal. Until then, I sleep badly.",
@@ -157,6 +183,20 @@
     "dialogue": {
       "greeting": "State your business. This is A Famosa, the heart of Portuguese Melaka. I am Capitão Rodrigues, and I protect what matters.",
       "greetingNight": "Who approaches at this hour? Speak quickly - the night watch has orders to question all.",
+      "greetingVariants": [
+        {
+          "text": "*does not take his hand from the pommel* A counting house was entered at night and a strongbox opened. No complaint has been laid, which tells me the merchant would rather keep the matter than have justice from us. Understand that I have noticed that. State your business.",
+          "when": { "worldFlagsAny": ["seal-stolen", "player-is-thief"] }
+        },
+        {
+          "text": "Mesquita is on the next ship to Goa with an escort and a sealed report, and half the fidalgos in this fortress will not meet my eye over it. *evenly* Good. Let them be uncomfortable. You brought me paper when you could have brought me gossip, and I have not forgotten which you chose.",
+          "when": { "worldFlagsAny": ["inspector-removed"] }
+        },
+        {
+          "text": "The merchants have settled their business without a blade drawn or a petition filed. That is what order looks like when it is working, and nobody ever notices it. State your business.",
+          "when": { "worldFlagsAny": ["merchant-seal-settled", "gomes-chen-partnership"] }
+        }
+      ],
       "topics": {
         "seal": {
           "text": "Gomes' seal? A security matter indeed. I've heard nothing of organized thieves, but petty theft is... not uncommon. The Chinese merchants see everything - perhaps speak with the counting houses. Though I'd not trust them either."
@@ -199,6 +239,14 @@
         },
         "family": {
           "text": "*long pause* My wife died in Goa, fever took her. My children serve the Crown elsewhere - a son in the army, a daughter married to a judge in Macau. I have no home but this fortress."
+        },
+        "after-the-inspector": {
+          "text": "The new man weighs everything twice and takes nothing and the queue at the gate is twice as long. Merchants complain to me daily. *almost satisfied* Let them. A slow gate that is honest is a fortress. A quick gate that is bought is a door somebody else owns.",
+          "availability": { "worldFlagsAny": ["inspector-removed"] }
+        },
+        "after-the-seal": {
+          "text": "You settled a merchants' quarrel without a garrison, a magistrate, or a corpse. *considers you* I have spent forty years being told the sword holds this city. It holds the walls. It has never once held the street. I am obliged to admit that, and I would take it as a courtesy if you did not repeat it.",
+          "availability": { "completedQuests": ["merchants-seal"] }
         }
       },
       "farewell": "Stay vigilant. The night has ears in Melaka.",
@@ -267,6 +315,20 @@
     "dialogue": {
       "greeting": "Peace be with you, my child. What brings you to the Church of St. Paul? Here, all are welcome in God's house.",
       "greetingMorning": "The Lord's blessings on this new day. Have you come to join us for morning contemplation?",
+      "greetingVariants": [
+        {
+          "text": "*rises, takes both your hands warmly* A Portuguese and a Chinese bound in articles of partnership, witnessed and signed. Do you see what has happened here? Senhor Chen has performed an act of Christian charity while believing himself a follower of the sages. God works through such men constantly, and it is our happy labour to one day tell them whose hand it was.",
+          "when": { "worldFlagsAny": ["gomes-chen-partnership"] }
+        },
+        {
+          "text": "*sets down the breviary and looks at you for a long moment* Something was taken in the night, and the man it was taken from has not cried out. I ask you nothing. I only say - as I would to any soul who came up this hill - that the door of that confessional is open, and that a burden set down early is a smaller burden than one carried into the dry season.",
+          "when": { "worldFlagsAny": ["seal-stolen", "player-is-thief"] }
+        },
+        {
+          "text": "Senhor Gomes came to Mass with his seal on a cord about his neck like a reliquary. *smiles* I did not correct him. God is generous with the forms our gratitude takes, even the vain ones.",
+          "when": { "worldFlagsAny": ["merchant-seal-settled"] }
+        }
+      ],
       "topics": {
         "seal": {
           "text": "Theft is a grave sin against both man and God. I heard Gomes mention his troubles after Mass last Sunday. He seemed... burdened. Perhaps guilt weighs on someone's soul? Confession cleanses all, if the thief would but seek it."
@@ -325,6 +387,14 @@
         "rest-night": {
           "text": "Very well. Rest in sanctuary until the darkness falls over the straits. Go with God.",
           "requires": ["rest"]
+        },
+        "after-the-seal": {
+          "text": "I confess a small vanity: I have told the story twice from the pulpit. A dispute between a Christian and a heathen, settled without violence, on this hill, in this year. *warmly* It is proof of what I have always maintained - that these peoples are entirely capable of right conduct, and want only the light to make it habitual. Some of my brothers in Goa doubt this. I shall write to them about you.",
+          "availability": { "completedQuests": ["merchants-seal"] }
+        },
+        "mercy": {
+          "text": "Senhor Chen forgave a debt he was owed, which is scripture in practice whatever he calls it. *thoughtfully* And yet - and I say this to you and not to him - a good act performed outside the faith is a lamp lit in a sealed room. It gives light. It saves no one. This is not cruelty, my child. It is simply the arithmetic of salvation, and I did not set the terms.",
+          "availability": { "worldFlagsAny": ["gomes-chen-partnership"] }
         }
       },
       "farewell": "Go with God, my child. May His light guide your path.",
@@ -373,6 +443,20 @@
     "dialogue": {
       "greeting": "Selamat datang. Fresh fruit, clean shade, and enough gossip to ruin a merchant's lunch. What do you need?",
       "greetingRain": "Aiyo, rain again. Stand under my awning before the fruit and the customers both get soggy.",
+      "greetingVariants": [
+        {
+          "text": "*keeps her hands on the fruit and her eyes on you* The counting house was opened at night and something was taken out of it. I sell to Chinese houses. I sell to Portuguese houses. A woman who wants to keep selling to both does not become known for her friends.",
+          "when": { "worldFlagsAny": ["seal-stolen", "player-is-thief"] }
+        },
+        {
+          "text": "The whole street is telling it wrong already. By this morning Gomes had confessed on his knees and Chen Wei had wept - neither happened, I asked. But they signed, and that is rarer than weeping. Sit. Eat something.",
+          "when": { "worldFlagsAny": ["gomes-chen-partnership"] }
+        },
+        {
+          "text": "Gomes stamped four manifests before breakfast, just to hear the wax crack. Men are like that. Give them back their name and they must use it in front of everybody.",
+          "when": { "worldFlagsAny": ["merchant-seal-settled"] }
+        }
+      ],
       "topics": {
         "seal": {
           "text": "Gomes was worried, yes. I saw a polished clerk from the counting house arguing with him before the sun climbed high."
@@ -418,6 +502,21 @@
         },
         "advice": {
           "text": "Watch hands before faces. Honest people point to the thing they mean. Liars point at the sky."
+        },
+        "pepper-tip": {
+          "text": "You are counting coins in your head. I can hear it from here. *jerks her chin at the river* There is a boat down from Kedah with one bahar of pepper that took rain three days out. Wet pepper frightens the big houses - they think of mould, of a whole shed spoiled, and they will not touch it at any price. It is not spoiled. It is damp. Two days on mats in this sun and it is pepper again. The boatman wants to be rid of it before he must feed his crew another night.",
+          "unlocks": ["pepper-lot"]
+        },
+        "pepper-lot": {
+          "text": "Twenty cruzados and it is yours, and I will send my eldest to carry it up and turn it on the mats for you - no, do not argue, he is going that way and he is bored. *takes the coin, bites nothing, counts once* Now listen, because this is the part people get wrong. Do not carry it to the market. Carry it to a counting house at the end of the month, when their manifest is short and a clerk must explain a shortfall to a harbour master. They are not buying pepper then. They are buying a quiet afternoon. That is always worth more.",
+          "requires": ["pepper-tip"],
+          "takesMoney": 20,
+          "givesItem": "pepper-pouch",
+          "journalEntry": "Bought a bahar of rain-damp Kedah pepper from Aminah for 20 cruzados - the big houses will not touch damp pepper, but two days on the mats and it is pepper again. Her advice: sell it to a counting house whose month-end manifest runs short, not to the market. They pay for the quiet afternoon, not the weight."
+        },
+        "after-the-seal": {
+          "text": "You did a thing in this street and the street decided what it meant without asking you. That is how it works here. *shrugs* Mine sells fruit. Yours, now - people will bring you their troubles because you carried someone else's and did not drop it. Charge them something. Even a little. Free help is never believed.",
+          "availability": { "completedQuests": ["merchants-seal"] }
         }
       },
       "farewell": "Come back with coin or news. Both spend well here.",
@@ -480,6 +579,28 @@
     "dialogue": {
       "greeting": "Welcome to the counting house. If you need a favor, first tell me what it costs.",
       "greetingReturning": "You return with either news or debt. Both are useful.",
+      "greetingVariants": [
+        {
+          "text": "The seal left this house through a window instead of a door. I have not called the guard. I have simply written your name where I keep the names of people I do not trade with.",
+          "when": { "worldFlagsAny": ["seal-stolen", "player-is-thief"] }
+        },
+        {
+          "text": "Gomes came at dawn to sign the partnership articles, and his hand shook so badly the notary made him write the date twice. Sit. There is tea, and you have earned the better cup.",
+          "when": { "worldFlagsAny": ["gomes-chen-partnership"] }
+        },
+        {
+          "text": "The silk cleared, the inspector did not, and my ledger closed even. You will find I remember arithmetic of that kind for a long time.",
+          "when": { "worldFlagsAny": ["inspector-removed"] }
+        },
+        {
+          "text": "The account is closed and the seal is back on Gomes's desk. Closed accounts are the only kind I enjoy discussing.",
+          "when": { "worldFlagsAny": ["merchant-seal-settled"] }
+        },
+        {
+          "text": "The junk sailed without my silk. Forty bolts sit in a bonded shed until the next northeast wind, which is to say until next year. Do not speak to me of the customs house today.",
+          "when": { "worldFlagsAny": ["silk-consignment-shipped"] }
+        }
+      ],
       "topics": {
         "seal": {
           "text": "Yes. Gomes left the seal here as collateral for five hundred cruzados. Return the debt, and the seal goes back.",
@@ -508,14 +629,39 @@
           "text": "Gomes is not dishonest. He is cornered, and proud men make poor choices when cornered."
         },
         "alternative": {
-          "text": "If you cannot pay, there is another path. The customs office wants a fee I will not accept. Convince the Capitão to intervene.",
+          "text": "If you cannot pay, there is another path. Forty bolts of my silk sit bonded at the gate while Mesquita invents a fee I will not pay. Convince the Capitão to intervene before she must sail.",
           "requires": ["seal"],
-          "unlocks": ["side-deal"]
+          "unlocks": ["side-deal", "silk-consignment"],
+          "availability": { "dayBefore": 4 }
         },
         "side-deal": {
-          "text": "Bring me proof the customs officer will back off, and I will release the seal. Honor for honor.",
+          "text": "Bring me proof the customs officer will back off, and I will release the seal. Honor for honor. Bring it before the junk clears for Canton on the fourth day, or the trade is worthless to us both.",
           "requires": ["alternative"],
-          "questPath": "diplomatic"
+          "questPath": "diplomatic",
+          "availability": { "dayBefore": 4 }
+        },
+        "silk-consignment": {
+          "text": "Forty bolts of patterned Nanking weave, bonded at the gate under a customs seal, booked onto the junk that clears for Canton on the fourth day. Whether the bolts move or rot, my creditors in Macau are paid on the same date. That is the whole of my impatience, and I would rather you understood it than admired it.",
+          "requires": ["alternative"],
+          "unlocks": ["silk-sample-errand"],
+          "journalEntry": "Chen Wei's silk is not merely stock - it is forty bolts of patterned Nanking weave bonded at the customs gate, booked onto a junk that clears for Canton on the fourth day. His creditors in Macau are paid on that date whether the cargo sails or not. His impatience over the seal is arithmetic, not malice."
+        },
+        "silk-sample-errand": {
+          "text": "Since you are short of coin and long on legs: one bolt out of the forty, wrapped, chopped, marked with the lot number. Carry it up Rua Direita to Rudra Mudaliar. He has bought Nanking weave from this house for twenty years and he buys by the hand, not the eye. If the bolt satisfies him he will advance against the whole lot, and the advance is yours to bring back to me against Gomes's account. I lose nothing either way. That is why I can afford to be generous.",
+          "requires": ["silk-consignment"],
+          "givesItem": "chinese-silk",
+          "journalEntry": "Chen Wei gave me a sample bolt out of the consigned forty - chopped and marked with the lot number - to carry to Rudra Mudaliar on Rua Direita. If the Tamil merchant advances against the lot, the coin is mine to bring back against Gomes's debt."
+        },
+        "seal-advance": {
+          "text": "*sets down the brush* You have brought me two hundred and fifty cruzados of coin you did not have on the day we met, and you brought it without theft, insult, or a Portuguese soldier at your shoulder. So. I will write the remainder as an advance from this house, and you will sign the undertaking beneath it. Understand what that means: the debt does not shrink. It moves. Gomes stops owing me five hundred cruzados and you begin owing me two hundred and fifty. I have simply exchanged a debtor who weeps for one who works. Do not ask for mercy where a contract will do.",
+          "requires": ["silk-sample-errand"],
+          "availability": {
+            "money": 200,
+            "reputation": { "chinese-merchants": 6 },
+            "worldFlagsNone": ["player-is-thief", "seal-stolen"]
+          },
+          "givesMoney": 250,
+          "journalEntry": "Chen Wei advanced 250 cruzados from the counting house against my signed undertaking. He was precise about what he had done: the debt has not been forgiven, only moved off Gomes and onto me. I can settle the five hundred now - with his own money, and his own name written beneath mine."
         },
         "philosophy": {
           "text": "Harmony comes from each person holding their place. When merchants, rulers, and laborers fail their part, the city frays."
@@ -531,6 +677,18 @@
         },
         "advice": {
           "text": "Do not ask for mercy where a contract will do. Melaka rewards clear terms."
+        },
+        "settled-account": {
+          "text": "The entry is struck through and initialled, and Gomes has his wax back. I will tell you what I did not tell him: I never wanted the seal. A seal cannot be sold, only refused, and refusing a man his name is a slow, ugly instrument. I held it because five hundred cruzados held nothing else.",
+          "availability": { "completedQuests": ["merchants-seal"] }
+        },
+        "after-the-partnership": {
+          "text": "We share the risk at three parts to two, and the articles are witnessed by a notary neither of us chose. He will find the discipline hard. A man who has been forgiven once tends to believe he has been forgiven in principle. I will disabuse him gently, in writing, twice a season.",
+          "availability": { "worldFlagsAny": ["gomes-chen-partnership"] }
+        },
+        "after-the-inspector": {
+          "text": "Mesquita's replacement weighs everything twice and takes nothing, which is its own kind of expensive. Still. I would rather be delayed by an honest fool than released by a thief. Tell the Capitão that, if he ever asks whether it was worth the trouble.",
+          "availability": { "worldFlagsAny": ["inspector-removed"] }
         }
       },
       "farewell": "I have other accounts to close.",
@@ -565,7 +723,7 @@
       {
         "startHour": 15,
         "endHour": 22,
-        "activity": "Drinking and storytelling at docks",
+        "activity": "Coffee and storytelling at the docks",
         "location": "waterfront",
         "available": true
       },
@@ -578,24 +736,40 @@
       }
     ],
     "dialogue": {
-      "greeting": "As-salamu alaykum, friend! Welcome, welcome! You have the look of one seeking adventure - or perhaps trouble? In Melaka, they are often the same! Ha!",
-      "greetingEvening": "Ah, another night in Melaka! Come, sit! I have palm wine and stories enough for ten nights!",
+      "greeting": "As-salamu alaykum, friend. Come into the shade before the sun makes an argument of you! You have the look of a man seeking adventure - or perhaps trouble. In Melaka they are frequently the same thing.",
+      "greetingEvening": "Ah, the good hour! Sit, sit. There is coffee, there are dates from Muscat that have travelled further than most men, and there are stories enough for ten nights.",
+      "greetingVariants": [
+        {
+          "text": "*does not rise, does not smile* The counting house was opened at night. I have carried cargo out of this harbour for nineteen years on nothing but my name, friend. Sit further along the boards, and we will talk of the weather.",
+          "when": { "worldFlagsAny": ["seal-stolen", "player-is-thief"] }
+        },
+        {
+          "text": "A Portuguese and a Chinese signing articles together, and neither of them robbed. *spreads hands* I have told it four times today and it improves each time. Sit. You will hear the fifth.",
+          "when": { "worldFlagsAny": ["gomes-chen-partnership"] }
+        },
+        {
+          "text": "Gomes has his wax back and the harbour has stopped enjoying his misery, which is a pity, it was free entertainment. Come, sit. You have earned coffee.",
+          "when": { "worldFlagsAny": ["merchant-seal-settled"] }
+        }
+      ],
       "topics": {
         "seal": {
-          "text": "Ha! The Portuguese merchant and his seal? *slaps knee* I saw him arguing with Chen Wei last week! Voices raised, fingers pointed! Something about money and honor - always money and honor with these merchants. I thought they would fight!"
+          "text": "The Portuguese merchant and his seal. *slaps knee once* I saw him arguing with Chen Wei last week - voices up, fingers pointed, something about money and honour. Always money and honour with merchants. I thought they would come to blows, and I was disappointed.",
+          "unlocks": ["witness"]
         },
         "witness": {
-          "text": "I was mending nets when they argued. Gomes was red in the face - 'You cannot do this!' - and Chen Wei, cold as ice - 'Business is business.' Then Gomes stormed away. Next day, I hear his seal is missing. Coincidence? *winks*",
+          "text": "I was mending nets when they argued. Gomes red in the face - 'You cannot do this!' - and Chen Wei cold as a well, 'Business is business.' Then Gomes went off up the quay walking too fast for the heat. Next day I hear the seal is missing. *winks* Coincidence, of course.",
           "requires": ["seal"]
         },
         "stories": {
-          "text": "Once, off the coast of Sumatra, we fought a pirate junk! Twenty men against fifty! I swear on my mother's grave - we prevailed through cunning, prayer, and a very convenient fog! God guards the faithful and the quick-minded!"
+          "text": "Off the coast of Sumatra we fought a pirate junk. Twenty men against fifty! I swear on my mother's grave - we prevailed through cunning, prayer, and a very convenient fog. God guards the faithful and the quick-minded, and that day He was generous with both."
         },
         "travels": {
-          "text": "I have seen wonders, my friend! The pearl divers of Bahrain who hold breath like djinn! The shipyards of Gujarat! The silk markets of Canton! The temples of Ceylon! But Melaka? Melaka is special."
+          "text": "I have seen wonders, my friend. The pearl divers of Bahrain who hold their breath like djinn! The shipyards of Gujarat. The silk markets of Canton, the temples of Ceylon. But Melaka - Melaka is special.",
+          "unlocks": ["why-special"]
         },
         "why-special": {
-          "text": "Because here, everyone comes! Chinese, Gujarati, Tamil, Portuguese, Malay, Siamese, Japanese - and men from the western ports besides! Where else can you hear ten languages before breakfast? This is the center of the world, my friend!",
+          "text": "Because here, everyone comes. Chinese, Gujarati, Tamil, Portuguese, Malay, Siamese, Japanese, and men from the western ports besides. Where else do you hear ten languages before breakfast! This is the centre of the world, and it does not even know it!",
           "requires": ["travels"]
         },
         "dhow": {
@@ -611,29 +785,36 @@
           "text": "I pray five times daily - even at sea! God sees all, knows all. These Portuguese with their crusading talk... men from the western seas have been trading peacefully for centuries. Who are the civilized ones, eh?"
         },
         "gomes": {
-          "text": "Gomes? Good man for a Christian! He does not cheat, does not lie - rare for a Portuguese merchant! *laughs* His problem with Chen Wei? This I know: a man who borrows must repay. Gomes borrowed. Gomes did not repay. Simple."
+          "text": "Gomes? A good man, for a Christian. He does not cheat and he does not lie, which is rarer on this quay than honest weather. *laughs quietly* His trouble with Chen Wei is not complicated. A man who borrows must repay. Gomes borrowed. Gomes did not repay. The rest is decoration."
         },
         "chen-wei": {
           "text": "Chen Wei is sharp-edged - but honest about it. You know where he stands, and that is better than a man who smiles and then bites. At least with Chen Wei, the terms are plain."
         },
-        "women": {
-          "text": "My family remains in Oman, managing our trading accounts while I navigate the trade winds. It is a long separation, but it secures our house's future."
+        "family": {
+          "text": "My wife keeps our accounts in Sur and writes a better hand than any clerk I have hired. Two sons and a daughter. *begins counting on his fingers, then stops* The youngest was walking when I sailed. He will be reading by now, they tell me. *turns the coffee cup a half-turn on the boards* Four thousand miles, and the monsoon gives you back only the way it took you. You cannot hurry home against the wind. You wait for it to turn, and it turns when it turns, and each voyage buys the house another year. That is the arithmetic of it. *looks up* Ask me about the fog off Sumatra instead. That story has an ending."
+        },
+        "navigation": {
+          "text": "We navigate by the stars and the monsoon. The kamal - a wooden card on a knotted cord, held at arm's length, the knot in the teeth - measures Polaris above the horizon. One knot for Aden, another for Diu, another for Melaka. A child could hold it. It has carried me across thousands of miles of open water, and I trust it further than I trust any chart drawn by a man who has not made the passage."
         },
         "drink": {
-          "text": "We navigate by the stars and the monsoon. The Kamal — our wooden card with knotted strings — measures the height of Polaris above the horizon. Simple, yet it guides us across thousands of miles of open water."
+          "text": "Coffee, from Mokha, which my crew consider payment and I consider discipline. *pours* The Portuguese cannot understand why we sit half the night over small cups and no wine. It is because everything a sailor knows he learned by sitting still with other sailors after dark. The wine is on the next boards along. They sing worse than we do!"
         },
         "music": {
-          "text": "Ah, you want entertainment? *pulls out small drum* In Aden, we sing of the sea. Here, listen... *sings a few notes in Arabic* It speaks of the waves, the stars, and the loneliness of blue horizons."
+          "text": "You want entertainment. *pulls out a small drum* In Aden we sing of the sea. Here, listen. *sings a few notes in Arabic, low* It speaks of the waves, the stars, and the loneliness of blue horizons. Every sailing people has this song. Only the words differ."
         },
         "advice": {
-          "text": "Life advice from old Rashid? *thinks* Trust the wind but not the calm. Trust a friend but not his silence. Trust a woman but not her smile. And never, EVER trust a Portuguese who says he won't cheat you! HAHA!"
+          "text": "Advice from old Rashid? *thinks* Trust the wind, but never the calm. Trust a friend, but never his silence. And never trust any man - Portuguese, Arab, or otherwise - who tells you unprompted that he will not cheat you. An honest man does not think of it."
         },
         "future": {
           "text": "There are northern ships everyone whispers about. I met some in Aceh. Cold eyes, calculating. They want what Portugal has. They will get it, I think. The Portuguese are too proud, too few. Change is coming to these waters."
+        },
+        "after-the-seal": {
+          "text": "The whole quay watched you carry that business from one end of the harbour to the other, and the quay does not forget who finished a thing. *taps the boards beside him* When you need a hull going west - Aden, Hormuz, anywhere the wind will take her - you come to me first and we will not discuss the price at length.",
+          "availability": { "completedQuests": ["merchants-seal"] }
         }
       },
-      "farewell": "Ma'a salama! May fair winds find you, friend! Come back with more questions - or better, more wine!",
-      "farewellNight": "Sleep well! Dream of distant shores and beautiful women! It is all a sailor has!"
+      "farewell": "Ma'a salama! May fair winds find you, friend. Come back with more questions - or better, with time to hear the answers.",
+      "farewellNight": "Sleep well. Dream of shorelines you have not seen yet. It costs nothing, and it is most of what a sailor owns."
     },
     "personality": {
       "traits": ["jovial", "boastful", "shrewd", "loyal"],
@@ -745,6 +926,20 @@
         },
         "gomes": {
           "text": "Fernão Gomes sells stories of spice and honor. I sell what the harbor can move. That is the difference."
+        },
+        "warehouse-work": {
+          "text": "You want work. Everyone standing in my doorway wants work. *does not look up* Sixty bahar of Perak tin comes off the lighters this week and every ingot must be weighed, marked, entered and witnessed before it goes under bond. My last tally-man could not hold a column straight past noon. If you can, say so plainly and stop wasting the light.",
+          "unlocks": ["tally-contract"]
+        },
+        "tally-contract": {
+          "text": "Forty cruzados, the whole contract, paid at the signing because I do not haggle twice. In return: every ingot weighed against the book, every sheet initialled, and if shed and book disagree at the end the difference comes out of your forty before it comes out of mine. *counts the coin out in stacks of ten, squares them, pushes them across* There. You will hear it said in the street that I am hard with the men who work for me. I pay the day I promise, to the coin, and no man who has taken my money has gone hungry for taking it. Those who complain mistake discipline for injustice.",
+          "requires": ["warehouse-work"],
+          "givesMoney": 40,
+          "journalEntry": "Alvares paid 40 cruzados at the signing for a tally contract - sixty bahar of Perak tin weighed, marked and witnessed into the bonded shed, with any shortfall coming out of my fee first. He was exact about the money and exact about the terms. He was also, in his way, proud of both."
+        },
+        "servant-girl": {
+          "text": "A girl of mine ran to the priests on the hill and they took her in like a stray cat. *finally looks up* She will say I was cruel. They always say cruelty. What she means is that I required of her precisely what I required of everyone, and she found she had no aptitude for being required of. Padre Tomás may feed her as long as his charity lasts. I have a household to run and a shipment to move.",
+          "availability": { "talkedTo": ["siti"] }
         }
       },
       "farewell": "Move along. Tin does not smelt itself.",
@@ -885,6 +1080,22 @@
         },
         "melaka": {
           "text": "Melaka is a city of cargo disguised as prayer, diplomacy, and rumor. If you want the truth of it, read the ledgers rather than the sermons."
+        },
+        "silk-detention": {
+          "text": "The Chinese silk. Yes. Forty bolts, bonded, detained pending clarification of the declared value - the manifest says one figure and the quality says another, and until that is reconciled the bolts stay under seal. *adjusts a page a quarter-inch* I am aware a junk clears for Canton on the fourth day. I did not schedule the junk. If Senhor Chen finds the timing inconvenient he might reflect that the inconvenience is entirely within his own power to resolve, and has been since Monday.",
+          "requires": ["customs"],
+          "availability": { "dayBefore": 4 }
+        },
+        "gratuities": {
+          "text": "*sets the pen down with great care* Let us use the correct word, since you have chosen the wrong one. There is no bribe at this gate. There are gratuities, which are voluntary; there are expediting fees, which are recorded; and there are donations to fortress maintenance, for which a receipt is issued - I issue them myself, in my own hand, which no thief would do. Every one of those is written somewhere. *thinly* A man who intended theft would be considerably less generous with paper.",
+          "requires": ["fees"]
+        },
+        "himself": {
+          "text": "I came out on the Goa carrack the year of the great fever with a clerk's warrant and forty cruzados. Eleven years. Two men senior to me are dead, one is in Cochin, and the fourth is a fidalgo's son who signs what I place before him. *precisely* I have never once been reprimanded. Whatever else is said of me in the street - and I know what is said, the street is not subtle - not one page of mine has ever failed an audit."
+        },
+        "self-protection": {
+          "text": "If a complaint reaches the Capitão, he will find every duty entered, every exemption countersigned, and every receipt in the hand of the man who paid it. That is not innocence. That is method, which is a great deal more durable. Innocent men are ruined weekly in this city. Methodical ones are promoted.",
+          "requires": ["ledger"]
         }
       },
       "farewell": "Come back with paper, proof, or payment. Idle curiosity wastes my hour."
@@ -958,6 +1169,21 @@
         },
         "waterfront": {
           "text": "The waterfront keeps the real tempo of the city. If the gate lies, the quay usually remembers."
+        },
+        "ambition": {
+          "text": "Notary. Licensed, with a seal of my own and a table under a roof. *quickly* It is not impossible - Sousa began as a runner and he sits in the Casa now. Four more years of copying, then the examination, then a petition to the Ouvidor, and a man must be found to speak for me. That is the difficulty. The copying I can do. Being spoken for is the part you cannot practise.",
+          "unlocks": ["risk", "handwriting"]
+        },
+        "risk": {
+          "text": "*glances past you down the arcade, then back* Understand my position. I am not a merchant with a house behind him. I am a runner with a satchel. If the wrong page is traced to my hand I do not lose a case - I lose the trade, and there is no second trade for a man of my name. So yes, I copy what I am given and I remember what I copy, and I have told you rather more than is prudent already. *steadier* But I am still telling you. Take that for what it is worth.",
+          "requires": ["ambition"]
+        },
+        "handwriting": {
+          "text": "You learn hands the way a fisherman learns boats. Senhor Mesquita writes a fine upright secretary hand, very even - except in the fee column, where the letters lean. Always the fee column, always the same lean, as though the pen were being hurried past something. *shrugs* It proves nothing. I have simply noticed it eleven times, and eleven is no longer a coincidence, it is a habit.",
+          "requires": ["ambition"]
+        },
+        "melaka": {
+          "text": "I was born on this street. My mother still lets rooms above the cooper's. Men come off the carracks talking of Lisbon as though this were a waiting room they must endure before their real lives resume - and they are gone in three years, or dead in two. *evenly* I am not waiting for anything. This is the city. I intend to be somebody in it."
         }
       },
       "farewell": "Find me evidence, not outrage. Outrage travels faster, but it proves less."
@@ -1039,6 +1265,25 @@
         },
         "rumors": {
           "text": "Pirate rumors, customs rumors, shortage rumors. The waterfront sells all three before breakfast."
+        },
+        "short-tally": {
+          "text": "*weighs it, notes the weight, does not comment on the damp* One bahar. Fifty-five cruzados. *counts it out* Before you decide you bargain well: you do not. The Banten manifest is one bahar short and has been since Tuesday, and the difference between paying you over the price and explaining a shortfall to the harbour master is roughly fifty-five cruzados. I am not buying pepper. I am buying an afternoon in which nobody asks me a question I have already answered twice. Whoever told you to bring it here at month's end knows this house better than the men who work in it.",
+          "availability": { "itemsAll": ["pepper-pouch"] },
+          "takesItem": "pepper-pouch",
+          "givesMoney": 55,
+          "journalEntry": "Lin Mei paid 55 cruzados for the bahar of damp pepper without once mentioning the damp. The Banten manifest was short by exactly that weight; she was buying an afternoon free of questions, not pepper. Aminah's read of the counting house was precise."
+        },
+        "silk-clock": {
+          "text": "Forty bolts, bonded at the gate, booked onto the junk that clears for Canton on the fourth day. The junk does not wait; the wind does not negotiate; Macau expects payment on the date whether the cargo moves or not. So there is a clock in this room, and Master Chen listens to it while men talk to him about honour.",
+          "requires": ["manifest"]
+        },
+        "figures": {
+          "text": "My grandfather taught me on an abacus with one bead worn smooth. He said a number never lies but is very easily made to keep quiet - leave a column out, round a weight down, enter a date one day early. So I read for silences now, not errors. An error is a man being tired. A silence is a man being careful.",
+          "unlocks": ["herself"]
+        },
+        "herself": {
+          "text": "Whether I mind sitting in a back room with a brush while ships come and go? *does not look up* I have never been on a ship and I have counted the cargo of four hundred of them. I know what Pegu sends in a dry year and what Banten sends in a wet one. I know which captains lose weight between the quay and the shed and by how much. Master Chen goes out to meet the traders. He is very good at it. He is good at it because he already knows the answer before he asks, and he knows the answer because I wrote it down.",
+          "requires": ["figures"]
         }
       },
       "farewell": "Bring me figures that disagree. Those are the only ones worth my time."
@@ -1118,6 +1363,21 @@
         },
         "rashid": {
           "text": "Rashid talks too much, but he knows medicine, debt, and seawinds all travel faster than permission."
+        },
+        "tides": {
+          "text": "Two tides a day, and neither of them cares who holds the fortress. *keeps mending* Slack water an hour before the turn - that is when the nets go out, that is when the lighters come up, that is when a boat that does not want company crosses the bar. The Portuguese post their guard by the church bell. The bell rings at the same hour all year. The water does not. You could build a whole life in the gap between those two facts, and some men here have.",
+          "unlocks": ["river-talk", "fish"]
+        },
+        "river-talk": {
+          "text": "Everything that happens in this town comes down the river eventually, and most of it comes down at dawn when only fishermen are awake to see it. A lighter riding low that should be riding high. A man washing his hands a long time at the landing. A customs boat that goes out empty and comes back sitting deeper. *shrugs* I do not go looking for these things. I am standing in the water at that hour anyway, and the water shows me.",
+          "requires": ["tides"]
+        },
+        "fish": {
+          "text": "Ikan kembung, selar, tenggiri when the season turns. Enough for the house, enough for the neighbours, sometimes enough for the market. *finally looks up* You ask it as though a man must choose - fisherman or porter. In the kampung a man is whatever the month requires. I carry crates because crates come. I fish because the fish come. Nobody here has one name for what he does all year.",
+          "requires": ["tides"]
+        },
+        "sons": {
+          "text": "Two. The elder pulls the same nets I pull and will do it after me, and there is nothing sad in that whatever the priests suggest. The younger went to the harbour to load Portuguese cargo for Portuguese wages. *pause* He has money now. He also has a cough he did not have last year, and he no longer eats with us. I do not scold him. He will come back to the water or he will not, and the water is patient about it. I am trying to be."
         }
       },
       "farewell": "Walk with your eyes open. The river keeps what careless people drop."
@@ -1180,6 +1440,16 @@
         },
         "chen-wei": {
           "text": "Chen Wei understands exchange rates better than the Notary. We have settled accounts for twenty years without a single weapon drawn."
+        },
+        "silk-lot": {
+          "text": "*unwraps the bolt, rubs the weave between thumb and forefinger, then holds it slack across the back of his hand to watch it fall* Nanking. Not the coarse Huzhou they sell to men who buy with their eyes. Chen Wei's chop, lot of forty, bonded at the gate. *sets it down* One hundred and eighty cruzados, advanced against the lot, and I will take delivery when the customs seal comes off - whichever season that proves to be. It is less than the bolts are worth and more than the risk is worth, which is how you know it is a fair price. Count it here at my table, not in the street.",
+          "availability": { "itemsAll": ["chinese-silk"] },
+          "takesItem": "chinese-silk",
+          "givesMoney": 180,
+          "journalEntry": "Rudra Mudaliar advanced 180 cruzados against Chen Wei's bonded silk lot on the strength of the sample. He took delivery of nothing - only the right to the forty bolts whenever customs releases them. The coin is mine to carry against Gomes's debt."
+        },
+        "credit": {
+          "text": "You misunderstand what a merchant sells. I do not sell cloth. I sell the willingness of other men to wait. A bill drawn on my house is honoured in Pulicat, in Aceh, in Cochin - not because I am rich, but because in forty years no bill of mine has come back unpaid. That is the whole inventory. The cloth is only how it is carried."
         }
       },
       "farewell": "May your credit remain clear."

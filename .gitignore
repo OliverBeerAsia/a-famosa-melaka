@@ -17,3 +17,6 @@ release/
 
 # Claude Code local settings (may contain approved commands with secrets)
 .claude/
+
+# agent verification screenshots (repo root only)
+/*.png

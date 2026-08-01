@@ -143,43 +143,50 @@
       "sprite": "barrel",
       "x": 83,
       "y": 100,
-      "scale": 1.9
+      "scale": 1.9,
+      "examineText": "Palm sugar, by the ants working the seam of the lid in a patient black thread. Gula melaka boiled down in the kampungs, casked here, and shipped north where sugar of this colour fetches a price nobody in the village that made it would believe.\n\n*The ants have found the only opening. Given three days, so will the harbour's thieves.*"
     },
     {
       "sprite": "cargo-crate",
       "x": 96,
       "y": 97,
-      "scale": 2
+      "scale": 2,
+      "examineText": "Bonded stock: sealed, chalked, and marked with a lot number, which means the duty has been assessed but not yet paid and the goods may not lawfully move. Bonding is a polite word for a hostage held against money.\n\n*Whole seasons are lost inside boxes like this one, while two men in different offices disagree about a figure.*"
     },
     {
       "sprite": "crate",
       "x": 107,
       "y": 104,
-      "scale": 1.9
+      "scale": 1.9,
+      "examineText": "Pepper, one bahar to the crate - about three piculs, near four hundred Portuguese pounds - and the crate stinks of it beautifully. Kedah pepper, most likely, come down the coast in a small boat and repacked here for a large one.\n\n*This crate will sell in Lisbon for six or eight times what was paid at the quay. Every hand between here and there takes a little, and the first hand takes least.*"
     },
     {
       "sprite": "rope-coil",
       "x": 73,
       "y": 120,
-      "scale": 1.8
+      "scale": 1.8,
+      "examineText": "Hemp, not coir - imported line for the running rigging where stretch cannot be tolerated, kept coiled off the boards on a wedge of dunnage so the wet does not rot it from beneath.\n\n*A dockhand has left a marlinspike thrust through the coil. He will be back. Nobody leaves a tool like that behind on purpose.*"
     },
     {
       "sprite": "fishing-net",
       "x": 233,
       "y": 100,
-      "scale": 2
+      "scale": 2,
+      "examineText": "A Malay drift net, hung to dry with the floats uppermost, the mesh mended in three places with cord of a slightly different colour. The repairs are neat, small, and unhurried - the work of someone who expects to use it again tomorrow and the day after.\n\n*The Portuguese count this harbour in cargoes. Half the people on it are counting it in fish.*"
     },
     {
       "sprite": "anchor",
       "x": 247,
       "y": 150,
-      "scale": 1.9
+      "scale": 1.9,
+      "examineText": "A sound one, catted and lashed against the quay wall, waiting on a hull. The ring is worn bright where the cable rides - a shine that takes years of hauling to put on iron.\n\n*Sailors touch it going past. Nobody could tell you when that started or what it is supposed to prevent.*"
     },
     {
       "sprite": "fish-trap",
       "x": 207,
       "y": 143,
-      "scale": 1.8
+      "scale": 1.8,
+      "examineText": "Split bamboo lashed into a funnel-and-chamber - a bubu, woven so a fish swims in easily and cannot find the way out. Set at the river mouth on the ebb, lifted on the flood. The design is older than the fortress by a long way and has needed no improvement.\n\n*A trap that works by making the way in easier than the way out. There is a version of that on the quay, in the counting houses, and at the customs gate.*"
     }
   ],
   "animatedProps": [

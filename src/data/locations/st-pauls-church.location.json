@@ -88,37 +88,43 @@
       "sprite": "stone-cross",
       "x": 83,
       "y": 100,
-      "scale": 2
+      "scale": 2,
+      "examineText": "Laterite, cut from the red earth of this hill and hardening in the air after quarrying, as laterite does. A Portuguese cross in Malay stone, weathering to the same rust colour as the ground it stands in.\n\n*It was raised to mark a boundary between the holy and the ordinary. The rain has been steadily arguing the other side for seventy years.*"
     },
     {
       "sprite": "stone-cross",
       "x": 100,
       "y": 110,
-      "scale": 2
+      "scale": 2,
+      "examineText": "Smaller, older, and leaning perhaps three degrees off true where the ground has settled under it. Somebody has packed the base with rubble to correct it, and the ground has settled again.\n\n*Every year the hill takes a little more of it. Every few years someone climbs up here and refuses to let it.*"
     },
     {
       "sprite": "gravestone",
       "x": 77,
       "y": 123,
-      "scale": 1.9
+      "scale": 1.9,
+      "examineText": "Portuguese, cut in Roman capitals, the name gone soft at the edges: a merchant's factor, dead at thirty-one. The date is in the fever season. Most of them are.\n\n*He came out to make a fortune in four years and go home. The ship he intended to go home on is still making the run.*"
     },
     {
       "sprite": "gravestone",
       "x": 237,
       "y": 110,
-      "scale": 1.9
+      "scale": 1.9,
+      "examineText": "This one is a slab, not a stone, laid flat with a worn coat of arms and an inscription that has lost its middle. What survives reads QUI JAZ - here lies - and, at the bottom, EM TERRA ESTRANHA. In a foreign land.\n\n*Whoever chose those words was standing where you are standing, four thousand miles from the churchyard they had in mind.*"
     },
     {
       "sprite": "wooden-pew",
       "x": 187,
       "y": 100,
-      "scale": 2
+      "scale": 2,
+      "examineText": "Chengal wood, dense and oily and almost too hard to work, cut by local carpenters to a Portuguese pattern. Termites have declined it entirely. It will outlast the roof, and has already outlasted two.\n\n*The end nearest the door is worn smooth and pale. That is where the people who are not certain they belong here sit.*"
     },
     {
       "sprite": "candelabra",
       "x": 217,
       "y": 143,
-      "scale": 1.8
+      "scale": 1.8,
+      "examineText": "Brass, seven branches, kept polished by somebody's patient labour, standing in a slow reef of its own wax. The candles are beeswax - expensive, imported, and burned anyway, because tallow smokes and stinks and God is owed the better light.\n\n*Count the guttered stubs. Every one of them was somebody's petition, and the wax remembers nothing at all.*"
     }
   ],
   "animatedProps": [

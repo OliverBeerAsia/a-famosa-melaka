@@ -121,7 +121,8 @@ export const ITEM_DEFINITIONS: Record<string, Omit<InventoryItem, 'instanceId'>>
   'chinese-silk': {
     id: 'chinese-silk',
     name: 'Silk Bolt',
-    description: 'A bolt of fine Chinese silk, smooth as water and lustrous as moonlight.',
+    description:
+      'A bolt of fine patterned Nanking silk, smooth as water and lustrous as moonlight. Chen Wei\'s chop is inked on the wrapper beside a lot number: forty bolts, bonded at the customs gate. A buyer who trusts the bolt advances against the lot.',
     type: 'trade',
     value: 25,
   },

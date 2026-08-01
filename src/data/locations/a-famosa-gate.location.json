@@ -127,43 +127,50 @@
       "sprite": "cannon",
       "x": 83,
       "y": 100,
-      "scale": 2
+      "scale": 2,
+      "examineText": "A gate piece, not a sea piece: short, heavy, and laid to sweep the approach road rather than reach the strait. The elevation screw is seized with rust; nobody has needed to raise it in eleven years, and everybody assumes someone else has checked.\n\n*It is aimed at the road every trader in Melaka must walk to enter the city. That is not an accident of placement. That is the argument.*"
     },
     {
       "sprite": "cannon",
       "x": 233,
       "y": 100,
-      "scale": 2
+      "scale": 2,
+      "examineText": "Its twin, and better kept - the touch hole is clean, the bore has been swabbed, and someone has chalked a powder charge on the carriage cheek in a careful hand. A gun crew's pride is a small thing that becomes very large twice in a century.\n\n*Between the two pieces, a worn patch of stone where the watch stands out of the sun. The guns have never fired in anger. The standing has been continuous.*"
     },
     {
       "sprite": "crate",
       "x": 100,
       "y": 87,
-      "scale": 1.9
+      "scale": 1.9,
+      "examineText": "Pinewood, iron-strapped, Goa marks burned into the end grain and a customs chalk mark over them - a number, a date, and a second number in a different hand. Somewhere a ledger says what is inside. The chalk says only that it was counted, and by whom.\n\n*The second hand is smaller and leans. Someone amended the figure after the counting was done.*"
     },
     {
       "sprite": "cargo-crate",
       "x": 111,
       "y": 91,
-      "scale": 1.9
+      "scale": 1.9,
+      "examineText": "Heavier stock, dovetailed rather than nailed, the kind used for goods that must not shift on a long swell: porcelain, glass, instruments. Slats have been prised and renailed at one corner - opened for inspection, or opened for something else.\n\n*Melaka's wealth spends most of its life in the dark, inside boxes, being carried by men who will never own any of it.*"
     },
     {
       "sprite": "barrel",
       "x": 221,
       "y": 87,
-      "scale": 1.9
+      "scale": 1.9,
+      "examineText": "Salt beef in brine, by the smell and the weight of the stave. Ship's victuals for the garrison, stacked where the shade holds longest against the wall. In this climate the brine is the only thing between the meat and the flies.\n\n*Soldiers here die of fever and bad food far more often than of Acehnese shot. No plaque commemorates that.*"
     },
     {
       "sprite": "rope-coil",
       "x": 207,
       "y": 143,
-      "scale": 1.8
+      "scale": 1.8,
+      "examineText": "Coir line, coiled sunwise and flaked to dry - coconut-husk rope, twisted in the kampungs and sold to every fleet that touches this coast. It swells in seawater, floats, and forgives rough handling, which is why Portuguese carracks rig with it despite calling it a native product.\n\n*The empire's ships are held together by cordage the empire does not know how to make.*"
     },
     {
       "sprite": "anchor",
       "x": 253,
       "y": 150,
-      "scale": 1.9
+      "scale": 1.9,
+      "examineText": "A stocked iron anchor with one fluke snapped clean, dragged up from the quay to await a smith who has not come. The break is old and brown. Iron is expensive here; it will be reforged into something else long before it is thrown away.\n\n*Everything that fails in Melaka is eventually reforged into something else. Ships, fortunes, and men alike.*"
     }
   ],
   "animatedProps": [

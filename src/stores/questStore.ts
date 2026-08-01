@@ -31,6 +31,10 @@ export interface ReputationRequirementMap extends Partial<Record<ReputationFacti
 
 export interface ConditionalRequirements {
   time?: 'dawn' | 'day' | 'dusk' | 'night';
+  /** Earliest in-world day this is available (inclusive). */
+  dayAtLeast?: number;
+  /** Latest in-world day this is available: available while `day < dayBefore`. */
+  dayBefore?: number;
   location?: string;
   money?: number;
   itemsAll?: string[];
@@ -78,6 +82,8 @@ export interface QuestPathRequirements {
   talkedTo?: string[];
   topic?: string;
   time?: 'dawn' | 'day' | 'dusk' | 'night';
+  dayAtLeast?: number;
+  dayBefore?: number;
   location?: string;
   itemsAll?: string[];
   reputation?: ReputationRequirementMap;
@@ -222,6 +228,28 @@ const FACTION_NARRATIVE: Record<ReputationFaction, { favorable: string; wary: st
     hostile: 'The dockside network marks you as unsafe company for smuggling, passage, or quiet work.',
   },
 };
+
+/**
+ * The day Chen Wei's consigned silk leaves Melaka on the Canton junk. After it
+ * sails there is nothing left for the Capitão to release, so the diplomatic
+ * route through customs closes for good.
+ */
+export const SILK_CONSIGNMENT_SHIP_DAY = 4;
+
+/**
+ * Day-window predicate shared by quest paths, dialogue topics, and greeting
+ * variants. `dayAtLeast` is inclusive; `dayBefore` is exclusive, so a thing
+ * authored `{ dayBefore: 4 }` is live on days 1-3 and dead from day 4 onward.
+ */
+export function meetsDayRequirement(
+  day: number,
+  requirements?: Pick<ConditionalRequirements, 'dayAtLeast' | 'dayBefore'>
+): boolean {
+  if (!requirements) return true;
+  if (typeof requirements.dayAtLeast === 'number' && day < requirements.dayAtLeast) return false;
+  if (typeof requirements.dayBefore === 'number' && day >= requirements.dayBefore) return false;
+  return true;
+}
 
 export function getFactionDisplayName(faction: ReputationFaction): string {
   return FACTION_DISPLAY_NAMES[faction];
@@ -370,6 +398,16 @@ function checkConditionalRequirements(
     return { allowed: false, reason: `This path is only available during ${requirements.time}.` };
   }
 
+  if (!meetsDayRequirement(gameState.time.day, requirements)) {
+    const tooEarly = typeof requirements.dayAtLeast === 'number' && gameState.time.day < requirements.dayAtLeast;
+    return {
+      allowed: false,
+      reason: tooEarly
+        ? 'It is too early in the season for this arrangement.'
+        : 'Too many days have passed. That cargo, and that chance, have sailed.',
+    };
+  }
+
   if (requirements.location && gameState.currentLocation !== requirements.location) {
     return { allowed: false, reason: `You need to be in ${requirements.location} to pursue this route.` };
   }
@@ -514,6 +552,41 @@ export const useQuestStore = create<QuestState>((set, get) => {
     });
 
     useDialogueStore.getState().replaceDialogueOverrides(aggregated);
+  };
+
+  /**
+   * Day-driven world events. Currently one: Chen Wei's silk consignment is
+   * booked onto a Canton junk that clears on SILK_CONSIGNMENT_SHIP_DAY. The
+   * player gets one day of warning, then the diplomatic route dies on its own
+   * — the deadline is enforced by `dayBefore` gates on the path and topics;
+   * this only narrates it.
+   */
+  const evaluateTimedWorldEvents = () => {
+    const day = useGameStore.getState().time.day;
+    if (!get().activeQuests.some((quest) => quest.id === 'merchants-seal')) return;
+
+    if (
+      day >= SILK_CONSIGNMENT_SHIP_DAY - 1
+      && day < SILK_CONSIGNMENT_SHIP_DAY
+      && !get().worldFlags['silk-consignment-warned']
+    ) {
+      set((state) => ({ worldFlags: { ...state.worldFlags, 'silk-consignment-warned': true } }));
+      get().addJournalEntry(
+        "Lin Mei was exact about the calendar, as she is about everything. Chen Wei's silk - forty bolts of patterned Nanking weave - is booked onto the junk that clears for Canton on the fourth day. Whatever customs is holding must be released before she sails, or there is nothing left to release, and no favour left to trade for the seal.",
+        'rumor'
+      );
+    }
+
+    if (day >= SILK_CONSIGNMENT_SHIP_DAY && !get().worldFlags['silk-consignment-shipped']) {
+      const alreadyResolved = Boolean(get().worldFlags['inspector-removed']);
+      set((state) => ({ worldFlags: { ...state.worldFlags, 'silk-consignment-shipped': true } }));
+      get().addJournalEntry(
+        alreadyResolved
+          ? "The Canton junk warped out on the morning tide with Chen Wei's silk aboard, released and taxed in order. The counting house is quieter than it has been all week."
+          : "The Canton junk sailed on the morning tide. Chen Wei's silk did not sail with her - it is still in a bonded shed with a customs seal on the door, and the next northeast run is a season away. The counting house has stopped speaking of the customs dispute altogether. Whatever I might have brokered there is finished; the debt is now a matter of coin or of truth.",
+        'quest'
+      );
+    }
   };
 
   const applyReputationChange = (delta: Partial<Record<ReputationFaction, number>> | Record<string, number>) => {
@@ -979,6 +1052,7 @@ export const useQuestStore = create<QuestState>((set, get) => {
     },
 
     recordWait: (days = 1) => {
+      evaluateTimedWorldEvents();
       markMatchingObjectives((objective) => {
         if (objective.type !== 'wait') return false;
         if (objective.days && days < objective.days) return false;
