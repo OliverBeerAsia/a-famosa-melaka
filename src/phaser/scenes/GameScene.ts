@@ -1121,8 +1121,13 @@ export class GameScene extends Phaser.Scene {
     // Original hitbox would be ~12×16 at feet, scaled up proportionally
     // Body size is in world coords, so multiply by scale
     if (this.player.body) {
-      this.player.body.setSize(12 * CHARACTER_SCALE, 16 * CHARACTER_SCALE);
-      this.player.body.setOffset(2 * CHARACTER_SCALE, 16 * CHARACTER_SCALE);
+      // Arcade body size/offset are in SOURCE-TEXTURE pixels; Phaser multiplies
+      // them by the sprite's scale itself. Passing pre-scaled numbers here gave
+      // a 108x144 body around a 48x96 sprite — three times too big, which is
+      // why a spawn near the bottom of the new 1080px-tall world was shoved
+      // 138px north by collideWorldBounds.
+      this.player.body.setSize(12, 16);
+      this.player.body.setOffset(2, 16);
     }
 
     this.player.setCollideWorldBounds(true);
@@ -1601,6 +1606,17 @@ export class GameScene extends Phaser.Scene {
   }
 
   private createLocationLights() {
+    // A Forge-composed plate has its practicals BAKED into the night and dusk
+    // variants at these exact coordinates (relight-plates.cjs light pass), so
+    // the runtime additive glow would be the double-grade bug in a new
+    // costume: seventeen 140px ADD discs stacked on seventeen painted pools.
+    // Where the plate carries the light, the runtime does not add any.
+    if (this.location?.plate.authoringBasis === 'forge-compositor') {
+      this.locationLightSources.forEach((glow) => glow.destroy());
+      this.locationLightSources = [];
+      return;
+    }
+
     // Light type definitions inspired by the archived LightingSystem
     type LightType = 'torch' | 'lantern' | 'cookingFire' | 'window';
 
@@ -3629,12 +3645,18 @@ export class GameScene extends Phaser.Scene {
 
     if (previousTrack) {
       const fadingTrack = previousTrack;
+      // Kill anything still fading this track in: a tween that survives the
+      // destroy() below writes `volume` into a freed WebAudio source, and the
+      // exception it throws aborts the WHOLE tween manager step — which is how
+      // an audio race ends up freezing the time-of-day plate crossfade.
+      this.tweens.killTweensOf(fadingTrack);
       this.tweens.add({
         targets: fadingTrack,
         volume: 0,
         duration: 900,
         ease: 'Sine.easeInOut',
         onComplete: () => {
+          this.tweens.killTweensOf(fadingTrack);
           fadingTrack.stop();
           fadingTrack.destroy();
         },
@@ -3659,6 +3681,7 @@ export class GameScene extends Phaser.Scene {
       const existing = this.ambientLayers.get(layer.key);
 
       if (existing) {
+        this.tweens.killTweensOf(existing);
         this.tweens.add({
           targets: existing,
           volume: targetVolume,
@@ -3688,12 +3711,14 @@ export class GameScene extends Phaser.Scene {
     this.ambientLayers.delete(key);
     this.ambientBaseVolumes.delete(key);
 
+    this.tweens.killTweensOf(sound);
     this.tweens.add({
       targets: sound,
       volume: 0,
       duration: 700,
       ease: 'Sine.easeInOut',
       onComplete: () => {
+        this.tweens.killTweensOf(sound);
         sound.stop();
         sound.destroy();
       },

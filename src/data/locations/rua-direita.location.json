@@ -1865,7 +1865,7 @@
     ]
   },
   "crowd": {
-    "maxCrowd": 7,
+    "maxCrowd": 14,
     "density": 1,
     "crowdTypes": [
       "portuguese_merchant",
@@ -2042,7 +2042,8 @@
           }
         ]
       }
-    ]
+    ],
+    "_note": "maxCrowd is a WORLD budget, not a per-screen one: the composed plate is two viewports wide, so the compositor per-screen figure (7) is doubled to keep the street reading as crowded in view."
   },
   "items": [
     {

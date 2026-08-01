@@ -56,7 +56,7 @@ const LEGACY_ALLOWLIST = [
   { glob: 'assets/scenes/opening-screen.png', stage: 6, why: 'title screen — Stage 6 (UI/portraits pass)' },
   { glob: 'assets/scenes/scene-loading-ribeira.png', stage: 6, why: 'loading screen — Stage 6 (UI/portraits pass)' },
   { glob: 'assets/sprites/portraits/', stage: 6, why: 'VGA portraits — Stage 6 rebuilds all 14' },
-  { glob: 'assets/sprites/ui/', stage: 6, why: 'UI frames/cursors — Stage 6' },
+  { glob: 'assets/sprites/ui/items/', stage: 6, why: 'item icons — Stage 6 (the UI CHROME is migrated; the 27 item icons are not yet)' },
   { glob: 'assets/sprites/objects/', stage: 3, why: 'props — Stage 3 plate compositor re-emits these from the Forge kits' },
   { glob: 'assets/sprites/tiles/', stage: 3, why: 'iso tiles — not the shipping path; Stage 3 decides their fate' },
   { glob: 'assets/sprites/effects/', stage: 5, why: 'particles — Stage 5' },
@@ -141,6 +141,12 @@ async function gateMembership(problems, opts) {
 
   [...listPngs('assets/sprites/crowd'), ...listPngs('assets/sprites/characters', /-sheet\.png$/)]
     .forEach((f) => targets.push({ file: f, allowed: CANON_SET, what: 'sprite' }));
+
+  // UI chrome (tools/forge/ui.cjs). listPngs is non-recursive, so the not-yet-
+  // migrated `items/` icons are naturally out of scope — they stay on the
+  // allowlist above until Stage 6 redraws them.
+  listPngs('assets/sprites/ui')
+    .forEach((f) => targets.push({ file: f, allowed: CANON_SET, what: 'UI chrome' }));
 
   for (const t of targets) {
     if (!fs.existsSync(t.file)) { problems.push(`missing: ${rel(t.file)}`); continue; }

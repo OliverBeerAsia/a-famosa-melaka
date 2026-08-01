@@ -104,6 +104,15 @@ const CROWD_OFFSCREEN_MARGIN = 24;
 // pool it bakes is still mostly on-screen. Further out is a coordinate bug.
 const LIGHT_OFFPLATE_MARGIN = 48;
 
+/**
+ * Characters are positioned by their sprite ORIGIN, but they stand on their
+ * feet: a 16x32 sprite at 3x contacts the ground ~44 world px (≈15 native px)
+ * below its origin. GameScene samples the walk mask there, so the validator
+ * must too — checking the origin instead passes spawns whose feet are inside a
+ * wall, and the engine then quietly snaps them somewhere else.
+ */
+const CONTACT_OFFSET_NATIVE = 15;
+
 const SCENES_DIR = path.join(ROOT, 'assets', 'scenes');
 const MASKS_DIR = path.join(SCENES_DIR, 'masks');
 const OVERLAYS_DIR = path.join(SCENES_DIR, 'overlays');
@@ -217,8 +226,8 @@ for (const [id, loc] of Object.entries(locations)) {
       // With a walk mask the rects are a derived approximation, so the mask is
       // what decides — a spawn that is not on walkable ground is a body stuck
       // in a wall on arrival.
-      if (!mask(p.x, p.y)) {
-        fail(where(`${what}: (${p.x}, ${p.y}) is not on walkable ground in the walk mask`));
+      if (!mask(p.x, p.y + CONTACT_OFFSET_NATIVE)) {
+        fail(where(`${what}: feet at (${p.x}, ${p.y + CONTACT_OFFSET_NATIVE}) are not on walkable ground in the walk mask`));
       }
     } else if (insideCollision(p)) {
       fail(where(`${what}: spawn (${p.x}, ${p.y}) sits inside a collision rect`));
@@ -254,8 +263,8 @@ for (const [id, loc] of Object.entries(locations)) {
       } else {
         const targetMask = walkMaskFor(target);
         if (targetMask) {
-          if (!targetMask(sp.x, sp.y)) {
-            fail(where(`${label}.spawnAt: (${sp.x}, ${sp.y}) is not on walkable ground in ${t.targetLocation}'s walk mask ` +
+          if (!targetMask(sp.x, sp.y + CONTACT_OFFSET_NATIVE)) {
+            fail(where(`${label}.spawnAt: feet at (${sp.x}, ${sp.y + CONTACT_OFFSET_NATIVE}) are not on walkable ground in ${t.targetLocation}'s walk mask ` +
               '(a plate rebuild that changes the native size leaves every INBOUND spawn stale — rescale them)'));
           }
         } else {
