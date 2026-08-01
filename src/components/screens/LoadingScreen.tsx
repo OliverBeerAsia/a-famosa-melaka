@@ -15,41 +15,40 @@ interface LoadingScreenProps {
 const LOADING_BACKGROUND = 'scenes/scene-loading-ribeira.png';
 
 // Location metadata
+// NOTE: these deliberately carry no per-location tint any more. The old
+// `color` field pushed cyan-900 / emerald-900 / slate-700 scrims over the
+// backdrop — five different suns on five different loading screens, and none
+// of them in the canon. One world, one shadow: every interstitial now sits
+// under the same violet shadow-anchor scrim.
 const locationData: Record<string, {
   name: string;
   portugueseName: string;
   description: string;
-  color: string;
 }> = {
   'a-famosa-gate': {
     name: 'A Famosa Fortress',
     portugueseName: 'Fortaleza de A Famosa',
     description: 'The mighty fortress gateway, built by Afonso de Albuquerque in 1511. Its stone walls have witnessed the rise of Portuguese power in the East.',
-    color: 'from-stone-800 to-stone-950',
   },
   'rua-direita': {
     name: 'Rua Direita',
     portugueseName: 'The Main Street',
     description: 'The commercial heart of Portuguese Melaka. Here merchants from three continents haggle over spices, silk, and secrets.',
-    color: 'from-amber-900 to-amber-950',
   },
   'st-pauls-church': {
     name: "St. Paul's Church",
     portugueseName: 'Igreja de São Paulo',
     description: 'Atop the hill overlooking the strait, this stone church stands as a beacon of faith in a land far from home.',
-    color: 'from-slate-700 to-slate-900',
   },
   'waterfront': {
     name: 'The Waterfront',
     portugueseName: 'O Cais',
     description: 'Ships from Arabia, India, and China crowd the harbor. The smell of salt, spice, and opportunity fills the air.',
-    color: 'from-cyan-900 to-cyan-950',
   },
   'kampung': {
     name: 'Kampung Quarter',
     portugueseName: 'Bairro Malaio',
     description: 'The Malay village beyond the fortress walls. Wooden houses on stilts, fishing nets drying in the sun, life continuing as it has for generations.',
-    color: 'from-emerald-900 to-emerald-950',
   },
 };
 
@@ -61,7 +60,6 @@ export function LoadingScreen({ locationId, mode = 'arrival', onComplete }: Load
     name: locationId,
     portugueseName: '',
     description: 'A place of mystery...',
-    color: 'from-slate-800 to-slate-950',
   };
 
   // Simulate loading with atmospheric delay
@@ -95,68 +93,64 @@ export function LoadingScreen({ locationId, mode = 'arrival', onComplete }: Load
     >
       <div
         className="absolute inset-0 bg-cover bg-center"
-        style={{ backgroundImage: `url('${LOADING_BACKGROUND}')` }}
+        style={{ backgroundImage: `url('${LOADING_BACKGROUND}')`, imageRendering: 'pixelated' }}
         aria-hidden="true"
       />
-      <div className={`absolute inset-0 bg-gradient-to-b ${location.color} opacity-70`} />
-      <div className="absolute inset-0 bg-gradient-to-b from-black/35 via-[#150c05]/60 to-black/90" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_42%,transparent_0%,rgba(0,0,0,0.34)_58%,rgba(0,0,0,0.82)_100%)]" />
+      <div className="ui-screen-scrim" aria-hidden="true" />
 
-      {/* Content */}
-      <div className="relative z-10 text-center max-w-2xl px-8">
-        {/* Year badge */}
-        <div className="mb-8">
-          <span className="inline-block px-4 py-1 border border-gold/40 text-gold/80 text-sm font-mono">
-            {mode === 'transition' ? 'CROSSING MELAKA' : 'ANNO DOMINI 1580'}
-          </span>
-        </div>
+      <div className="ui-screen-corner ui-screen-corner--nw" />
+      <div className="ui-screen-corner ui-screen-corner--ne" />
+      <div className="ui-screen-corner ui-screen-corner--sw" />
+      <div className="ui-screen-corner ui-screen-corner--se" />
 
-        {/* Location name */}
-        <h1 className="font-cinzel text-parchment-200 text-4xl font-bold mb-2">
-          {location.name}
-        </h1>
+      {/* The interstitial is a travel document: a sealed page naming where you
+          are about to stand, with the progress gauge as its foot. */}
+      <div className="relative z-10 w-[min(720px,90vw)]">
+        <div className="ui-panel-shell">
+          <div className="ui-parchment-panel text-center">
+            <div className="ui-scroll-rod mb-4" />
 
-        {/* Portuguese name */}
-        {location.portugueseName && (
-          <h2 className="font-crimson text-parchment-400 text-xl italic mb-8">
-            {location.portugueseName}
-          </h2>
-        )}
+            <p className="ui-caption ui-accent">
+              {mode === 'transition' ? 'Crossing Melaka' : 'Anno Domini 1580'}
+            </p>
 
-        {/* Decorative separator */}
-        <div className="flex items-center justify-center gap-4 mb-8">
-          <div className="w-16 h-px bg-gold/40" />
-          <span className="text-gold/60">⚜</span>
-          <div className="w-16 h-px bg-gold/40" />
-        </div>
+            <h1 className="ui-heading text-2xl mt-2 leading-tight">
+              {location.name}
+            </h1>
 
-        {/* Description */}
-        <p className="font-crimson text-parchment-300 text-lg leading-relaxed mb-12">
-          {mode === 'transition'
-            ? `${location.description} Keep your bearings. The next district tells its story before anyone speaks.`
-            : location.description}
-        </p>
+            {location.portugueseName && (
+              <h2 className="font-crimson ui-body-soft text-xl italic mt-1">
+                {location.portugueseName}
+              </h2>
+            )}
 
-        {/* Progress bar */}
-        <div className="w-64 mx-auto">
-          <div className="h-1 bg-leather-300/30 rounded overflow-hidden">
-            <div
-              className="h-full bg-gold transition-all duration-100"
-              style={{ width: `${progress}%` }}
-            />
+            {/* Separator: the wax seal replaces the old 1px gold fleuron */}
+            <div className="flex items-center justify-center gap-4 my-4">
+              <div className="ui-rule flex-1" />
+              <div className="wax-seal shrink-0" />
+              <div className="ui-rule flex-1" />
+            </div>
+
+            <p className="font-crimson ui-body text-lg leading-relaxed px-2">
+              {mode === 'transition'
+                ? `${location.description} Keep your bearings. The next district tells its story before anyone speaks.`
+                : location.description}
+            </p>
+
+            {/* Progress gauge — recessed hardwood channel, brass bar */}
+            <div className="mt-6 mx-auto w-[min(420px,100%)]">
+              <div className="ui-gauge">
+                <div className="ui-gauge-fill" style={{ width: `${Math.min(100, progress)}%` }} />
+              </div>
+              <p className="ui-keys mt-2">
+                {mode === 'transition'
+                  ? `Crossing into ${location.name}...`
+                  : `Entering ${location.name}...`}
+              </p>
+            </div>
+
+            <div className="ui-scroll-rod mt-4" />
           </div>
-          <p className="text-parchment-500 text-xs mt-2 font-mono">
-            {mode === 'transition'
-              ? `Crossing into ${location.name}...`
-              : `Entering ${location.name}...`}
-          </p>
-        </div>
-      </div>
-
-      {/* Compass rose (decorative) */}
-      <div className="absolute bottom-8 right-8 w-16 h-16 opacity-30">
-        <div className="w-full h-full border-2 border-gold/40 rounded-full flex items-center justify-center">
-          <span className="text-gold text-lg">N</span>
         </div>
       </div>
     </div>

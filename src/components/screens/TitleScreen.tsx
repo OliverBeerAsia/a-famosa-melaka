@@ -70,74 +70,64 @@ export function TitleScreen({ onNewGame, onContinue, onCredits }: TitleScreenPro
     <div className="w-full h-full flex flex-col items-center justify-center bg-[#0a0806] relative overflow-hidden">
       <div
         className="absolute inset-0 bg-cover bg-center"
-        style={{ backgroundImage: `url('${TITLE_BACKGROUND}')` }}
+        style={{ backgroundImage: `url('${TITLE_BACKGROUND}')`, imageRendering: 'pixelated' }}
         aria-hidden="true"
       />
-      <div className="absolute inset-0 bg-gradient-to-b from-black/35 via-[#120b05]/70 to-[#050302]/95" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_38%,transparent_0%,rgba(0,0,0,0.34)_58%,rgba(0,0,0,0.78)_100%)]" />
+      <div className="ui-screen-scrim" aria-hidden="true" />
 
-      {/* Decorative corners */}
-      <div className="absolute top-4 left-4 w-16 h-16 border-l-2 border-t-2 border-gold/30" />
-      <div className="absolute top-4 right-4 w-16 h-16 border-r-2 border-t-2 border-gold/30" />
-      <div className="absolute bottom-4 left-4 w-16 h-16 border-l-2 border-b-2 border-gold/30" />
-      <div className="absolute bottom-4 right-4 w-16 h-16 border-r-2 border-b-2 border-gold/30" />
+      {/* Screen brackets — hardwood arms, brass corner plates */}
+      <div className="ui-screen-corner ui-screen-corner--nw" />
+      <div className="ui-screen-corner ui-screen-corner--ne" />
+      <div className="ui-screen-corner ui-screen-corner--sw" />
+      <div className="ui-screen-corner ui-screen-corner--se" />
 
       {/* Content */}
-      <div className="relative z-10 text-center">
-        {/* Title */}
-        <div className="mb-2">
-          <h1 className="font-cinzel text-gold text-5xl font-bold tracking-wide text-shadow-gold">
-            A FAMOSA
-          </h1>
+      <div className="relative z-10 text-center flex flex-col items-center">
+        {/* Title cartouche — a brass-plated board nailed over the view. It also
+            occludes the title baked into the placeholder backdrop, which would
+            otherwise ghost behind this one. */}
+        <div className="ui-dialogue-shell w-[min(680px,86vw)]">
+          <div className="ui-parchment-panel py-4">
+            <h1 className="ui-heading text-4xl tracking-wide leading-none">
+              A FAMOSA
+            </h1>
+            <div className="ui-rule my-3 mx-auto w-[70%]" />
+            <h2 className="font-cinzel text-base tracking-widest ui-body">
+              Streets of Golden Melaka
+            </h2>
+            <p className="font-crimson ui-body-soft text-lg italic mt-2">
+              Portuguese Malacca, Anno Domini 1580
+            </p>
+          </div>
         </div>
-
-        <div className="mb-8">
-          <h2 className="font-cinzel text-parchment-300 text-2xl tracking-widest">
-            Streets of Golden Melaka
-          </h2>
-        </div>
-
-        {/* Subtitle */}
-        <p className="font-crimson text-parchment-400 text-lg italic mb-12">
-          Portuguese Malacca, Anno Domini 1580
-        </p>
 
         {/* Menu */}
-        <div className="space-y-3">
+        <div className="mt-8 space-y-3">
           {menuItems.map((item, index) => (
             <button
               key={item.label}
               onClick={() => item.enabled && item.action()}
-              onMouseEnter={() => setSelectedIndex(index)}
+              onMouseEnter={() => item.enabled && setSelectedIndex(index)}
               disabled={!item.enabled}
-              className={`
-                block w-64 mx-auto py-3 px-6 font-cinzel text-lg transition-all
-                ${
-                  !item.enabled
-                    ? 'text-parchment-500/50 cursor-not-allowed'
-                    : index === selectedIndex
-                    ? 'text-gold border border-gold/50 bg-leather-300/30 shadow-gold-glow'
-                    : 'text-parchment-300 hover:text-gold border border-transparent'
-                }
-              `}
+              className={`ui-btn block w-[264px] mx-auto text-base ${
+                item.enabled && index === selectedIndex ? 'ui-btn--selected' : ''
+              }`}
+              style={{ minHeight: 48 }}
             >
-              {index === selectedIndex && item.enabled && (
-                <span className="text-gold mr-2">▸</span>
-              )}
               {item.label}
             </button>
           ))}
         </div>
 
         {/* Controls hint */}
-        <div className="mt-16 text-parchment-500 text-sm font-mono">
+        <div className="mt-8 ui-keys-dark">
           [↑↓] Select • [Enter] Confirm
         </div>
       </div>
 
       {/* Footer */}
-      <div className="absolute bottom-4 left-0 right-0 text-center">
-        <p className="text-parchment-500/60 text-xs">
+      <div className="absolute bottom-6 left-0 right-0 text-center">
+        <p className="ui-caption" style={{ color: 'var(--wood-hi)' }}>
           A Pixel Art Adventure RPG chasing the density and mood of Ultima VIII
         </p>
       </div>

@@ -317,6 +317,81 @@ function plaque(opts) {
   return { surface: s, slice: border * SCALE };
 }
 
+/**
+ * Screen-framing corner bracket, emitted as a 2x2 atlas (NW / NE / SW / SE).
+ *
+ * A bracket has to follow the two screen edges it sits on, so unlike the panel
+ * corner plate it cannot be the same art four times — it needs four
+ * orientations. It is NOT a mirror though: each of the four is generated with
+ * the real NW key, so the top and left arms are lit and the bottom and right
+ * arms fall away, whichever corner they are standing in. Mirroring would rotate
+ * the sun, which is the one thing the whole palette canon exists to prevent.
+ */
+function screenCornerAtlas() {
+  const N = 24, B = 6;
+  const atlas = new Surface(N * 2, N * 2);
+  const variants = [
+    { ox: 0, oy: 0, left: true, top: true },
+    { ox: N, oy: 0, left: false, top: true },
+    { ox: 0, oy: N, left: true, top: false },
+    { ox: N, oy: N, left: false, top: false },
+  ];
+
+  for (const v of variants) {
+    const s = new Surface(N, N);
+    const profile = railProfile(B, { bead: true, inner: { lit: T[0], dark: T[0] } });
+    for (let y = 0; y < N; y++) {
+      for (let x = 0; x < N; x++) {
+        const du = v.top ? y : N - 1 - y;      // distance from the horizontal edge
+        const dv = v.left ? x : N - 1 - x;     // distance from the vertical edge
+        if (du >= B && dv >= B) continue;      // outside the L
+        const d = Math.min(du, dv);
+        const lit = du === d ? v.top : v.left;
+        const along = du === d ? dv : du;
+        // square off the far end of each arm
+        if (du === N - 1 || dv === N - 1) { s.setHex(x, y, INK); continue; }
+        s.setHex(x, y, profile(d, lit, along, 3307));
+      }
+    }
+    // brass plate at the OUTER corner of the bracket
+    for (let y = 0; y < 6; y++) {
+      for (let x = 0; x < 6; x++) {
+        const c = PLATE6[y][x];
+        if (!c) continue;
+        s.setHex(v.left ? x : N - 1 - x, v.top ? y : N - 1 - y, c);
+      }
+    }
+    atlas.composite(s, v.ox, v.oy);
+  }
+  return atlas;
+}
+
+/**
+ * Progress gauge trough — a recessed hardwood channel with brass end ferrules.
+ * Horizontal 9-slice: `border-image-slice: 0 18 fill`, so it stretches to any
+ * width while the caps stay 1:1. The channel interior is rows 2..5 (4 native px
+ * = 12 css px), which is exactly where the fill bar sits.
+ */
+function gaugeTrough() {
+  const Wd = 24, H = 8, F = 6;
+  const s = new Surface(Wd, H);
+  // A recess inverts the bevel: the light rakes past the top lip into shadow,
+  // and catches the far (bottom) wall of the channel.
+  const woodCol = [INK, WOOD.body, INK, E[0], E[0], WOOD.lit, WOOD.hi, INK];
+  const brassCol = [INK, b2, b1, b0, b0, b2, b4, INK];
+  for (let x = 0; x < Wd; x++) {
+    const ferrule = x < F || x >= Wd - F;
+    for (let y = 0; y < H; y++) {
+      let c = (ferrule ? brassCol : woodCol)[y];
+      if (x === 0 || x === Wd - 1) c = INK;
+      if (!ferrule && y === 1 && grainHit(x - F, y, 907)) c = WOOD.grain;
+      s.setHex(x, y, c);
+    }
+  }
+  for (let y = 1; y < H - 1; y++) { s.setHex(F - 1, y, b1); s.setHex(Wd - F, y, b1); }
+  return { surface: s, slice: F * SCALE };
+}
+
 /** Fixed-size portrait frame. Centre is a dark recess the <img> covers. */
 function portraitFrame(art, border) {
   const size = art + border * 2;
@@ -453,6 +528,8 @@ function build() {
     'button 9-slice, key catches the brass');
   add('button-active.png', plaque({ border: 4, middle: 8, face: WOOD.body, seed: 21, pressed: true }),
     'button 9-slice, pressed (bevel inverted)');
+  add('button-disabled.png', plaque({ border: 4, middle: 8, face: E[0], seed: 21, beadLit: b1, beadDark: b0 }),
+    'button 9-slice, unavailable — brass gone dead, no lit lip');
 
   // --- topic rows ---------------------------------------------------------
   add('topic-row.png', plaque({ border: 4, middle: 8, face: WOOD.body, seed: 57, beadLit: b2, beadDark: b0 }),
@@ -470,6 +547,9 @@ function build() {
   add('inventory-slot.png', inventorySlot(false), 'recessed socket, 16x16 native');
   add('inventory-slot-selected.png', inventorySlot(true), 'recessed socket, brass ring');
   add('scroll-rod.png', scrollRod(), 'journal scroll end — horizontal 9-slice, brass ferrules');
+  add('gauge-trough.png', gaugeTrough(), 'progress channel — horizontal 9-slice, brass ferrules');
+  add('screen-corner.png', screenCornerAtlas(),
+    'title/credits screen bracket — 2x2 atlas: NW, NE / SW, SE (each 24 native = 72 css)');
   add('wax-seal.png', waxSeal(), 'wax seal motif, 20x20 native -> 60 css px');
   add('coin-icon.png', coin(), 'cruzado, 8x8 native -> 24 css px');
 

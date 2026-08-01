@@ -13,65 +13,76 @@ interface CreditsScreenProps {
 export function CreditsScreen({ onClose }: CreditsScreenProps) {
   return (
     <div
-      className="w-full h-full flex flex-col items-center justify-center bg-[#0a0806] relative overflow-hidden"
+      className="w-full h-full flex flex-col items-center justify-center bg-[#0C0C18] relative overflow-hidden"
       onClick={onClose}
     >
-      {/* Background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#1a0f05] via-[#2a1a0a] to-[#0a0806]" />
+      {/* Same night as every other screen. */}
+      <div className="ui-screen-scrim" aria-hidden="true" />
 
-      {/* Content */}
-      <div className="relative z-10 text-center max-w-lg px-8">
-        <h1 className="font-cinzel text-gold text-3xl font-bold mb-8">
-          A FAMOSA
-        </h1>
+      <div className="ui-screen-corner ui-screen-corner--nw" />
+      <div className="ui-screen-corner ui-screen-corner--ne" />
+      <div className="ui-screen-corner ui-screen-corner--sw" />
+      <div className="ui-screen-corner ui-screen-corner--se" />
 
-        <div className="space-y-6 text-parchment-300 font-crimson">
-          <section>
-            <h2 className="font-cinzel text-gold-dark text-lg mb-2">Design & Development</h2>
-            <p>Created with Claude Code</p>
-          </section>
+      {/* The credits are a document, so they live on paper. */}
+      <div className="relative z-10 w-[min(620px,88vw)] max-h-[88vh] overflow-y-auto">
+        <div className="ui-panel-shell">
+          <div className="ui-parchment-panel text-center">
+            <div className="ui-scroll-rod mb-4" />
 
-          <section>
-            <h2 className="font-cinzel text-gold-dark text-lg mb-2">Inspired By</h2>
-            <p>Ultima VII: The Black Gate (1992)</p>
-            <p>Quest for Glory Series</p>
-            <p>Chrono Trigger (1995)</p>
-          </section>
+            <h1 className="ui-heading text-2xl mb-1">A FAMOSA</h1>
+            <p className="ui-caption">Streets of Golden Melaka</p>
 
-          <section>
-            <h2 className="font-cinzel text-gold-dark text-lg mb-2">Historical Acknowledgment</h2>
-            <p className="text-sm leading-relaxed">
-              This game is inspired by the multicultural history of Melaka (Malacca),
-              a UNESCO World Heritage Site. We honor the diverse peoples—Malay,
-              Chinese, Indian, Arab, and Portuguese—who built this remarkable trading port.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="font-cinzel text-gold-dark text-lg mb-2">Technology</h2>
-            <div className="flex justify-center gap-4 text-sm">
-              <span>React</span>
-              <span className="text-gold/50">•</span>
-              <span>Phaser 3</span>
-              <span className="text-gold/50">•</span>
-              <span>TypeScript</span>
-              <span className="text-gold/50">•</span>
-              <span>Electron</span>
+            <div className="flex items-center justify-center gap-4 my-4">
+              <div className="ui-rule flex-1" />
+              <div className="wax-seal shrink-0" />
+              <div className="ui-rule flex-1" />
             </div>
-          </section>
-        </div>
 
-        <div className="mt-12">
-          <p className="text-parchment-500 text-sm font-mono">
-            Click anywhere to return
-          </p>
-        </div>
+            <div className="space-y-5 font-crimson ui-body text-lg">
+              <section>
+                <h2 className="ui-caption ui-accent mb-1">Design &amp; Development</h2>
+                <p>Created with Claude Code</p>
+              </section>
 
-        {/* Year */}
-        <div className="mt-8">
-          <span className="inline-block px-4 py-1 border border-gold/40 text-gold/80 text-sm font-mono">
-            ANNO DOMINI 2026
-          </span>
+              <section>
+                <h2 className="ui-caption ui-accent mb-1">Inspired By</h2>
+                <p>Ultima VII: The Black Gate (1992)</p>
+                <p>Quest for Glory Series</p>
+                <p>Chrono Trigger (1995)</p>
+              </section>
+
+              <section>
+                <h2 className="ui-caption ui-accent mb-1">Historical Acknowledgment</h2>
+                <p className="text-base leading-relaxed ui-body">
+                  This game is inspired by the multicultural history of Melaka (Malacca),
+                  a UNESCO World Heritage Site. We honor the diverse peoples—Malay,
+                  Chinese, Indian, Arab, and Portuguese—who built this remarkable trading port.
+                </p>
+              </section>
+
+              <section>
+                <h2 className="ui-caption ui-accent mb-1">Technology</h2>
+                <div className="flex justify-center gap-3 text-base">
+                  <span>React</span>
+                  <span className="ui-accent">•</span>
+                  <span>Phaser 3</span>
+                  <span className="ui-accent">•</span>
+                  <span>TypeScript</span>
+                  <span className="ui-accent">•</span>
+                  <span>Electron</span>
+                </div>
+              </section>
+            </div>
+
+            <div className="ui-rule mt-5" />
+            <div className="flex items-center justify-between gap-4 pt-2">
+              <span className="ui-keys">Click anywhere to return</span>
+              <span className="ui-caption">Anno Domini 2026</span>
+            </div>
+
+            <div className="ui-scroll-rod mt-4" />
+          </div>
         </div>
       </div>
     </div>

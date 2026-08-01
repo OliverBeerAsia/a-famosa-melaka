@@ -250,23 +250,18 @@ export function HUD() {
             <p className="ui-body-soft text-sm italic leading-relaxed mb-3 px-2 pb-2">
               Year 1580. The Portuguese fortress of A Famosa stands as a golden gateway to the East, but beneath the spice trade lies a web of debt, faith, and secrets...
             </p>
-            <div className="grid grid-cols-2 gap-3 text-left ui-body text-sm my-3 py-2">
-              <div>
-                <span className="ui-accent font-mono font-bold mr-2">[W,A,S,D] / [Arrows]</span>
-                <span>Move Character</span>
-              </div>
-              <div>
-                <span className="ui-accent font-mono font-bold mr-2">[Space] / [Click]</span>
-                <span>Interact / Dialogue</span>
-              </div>
-              <div>
-                <span className="ui-accent font-mono font-bold mr-2">[I] Key</span>
-                <span>Open Inventory</span>
-              </div>
-              <div>
-                <span className="ui-accent font-mono font-bold mr-2">[J] Key</span>
-                <span>Open Quest Journal</span>
-              </div>
+            <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-left ui-body text-sm my-3 py-2">
+              {[
+                ['[W,A,S,D] / [Arrows]', 'Move Character'],
+                ['[Space] / [Click]', 'Interact / Dialogue'],
+                ['[I] Key', 'Open Inventory'],
+                ['[J] Key', 'Open Quest Journal'],
+              ].map(([keys, label]) => (
+                <div key={keys} className="leading-tight">
+                  <span className="ui-accent font-mono font-bold block">{keys}</span>
+                  <span className="ui-body-soft">{label}</span>
+                </div>
+              ))}
             </div>
             <button
               onClick={completeTutorialBanner}
