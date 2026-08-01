@@ -2,6 +2,27 @@
 
 All notable changes to A Famosa: Streets of Golden Melaka.
 
+## [0.11.0] - 2026-08-01
+
+### The Forge Overhaul
+
+The largest release in the project's history — full details in `docs/RELEASE_NOTES_v0.11.0.md`.
+
+### Added
+- **Scrolling world**: all 5 locations are 640×360-native / 1920×1080-world Forge plates with `CameraSystem` (deadzone + lookahead + shake), walkmask-authoritative collision, surface-type footsteps, and relit walk-behind overlays.
+- **Melaka Forge pipeline** (`tools/forge/`): layout JSON → plate + walkmask + overlays + engine data in one deterministic pass; 50-colour hue-shifted palette canon; per-index LUT relighting with baked light pools (night finally reads as night); kits for Portuguese/dock/Malay/fortress/church architecture + nature; strict CI gates (canon membership, byte-determinism, zero AA, bounds/walkability).
+- **Portrait system rebuild**: 15 unique seeded faces at 240×240 (3× native), pairwise silhouette overlap ≤0.82; Rudra Mudaliar gets his own face.
+- **Real audio**: 7 composed 60–90s Renaissance-Gamelan loops, 16 ambient beds, 13 SFX — pure-Node offline synthesis, loop-seam and browser-decode verified; fixed the Vite-HTML-as-ogg decode trap.
+- **UI chrome kit**: parchment/hardwood/brass 9-slice system at native ×3; dialogue with 240px portraits; title/loading/credits reskinned; zero 1px hairlines.
+- **Economy + content depth**: pay-the-debt path genuinely raisable (525 cruzados via in-voice contracts and a letter of credit, farm-proof, simulation-tested); day-4 silk deadline; 4 thin NPCs raised to voice; Rashid dignity pass; 198 painted-prop examine hotspots + 27 authored prop texts; quest-reactive greetings on all principals.
+- 20-item measurable per-screen benchmark spec (researched from Ultima VII/VIII, Commandos, BG, Fallout 2) as the standing acceptance gate; vitest harness (127 tests).
+
+### Fixed
+- Journal never rendered quest narration; dialogue topics beyond 9 unreachable; Rudra mute with wrong portrait; impossible pay path; 18 lore objects silently dropped; crowd walking below the visible screen; ~40% of night lights off-canvas; double-graded time-of-day; baked checkerboard skies; Lisbon-painting title screens; scene-transition cleanup crash; NPC recreate tint bug; worldDepth clamp; oversized player physics body; audio tween race; texture-key/file-stem plate skew.
+
+### Removed
+- Dead parallel JS codebase, webpack path, Gemini/OpenAI generator tools, whole-scene Canva generation, multiply-tint ToD generator, one-template portrait generator, Lisbon source scans.
+
 ## [0.10.0] - 2026-06-07
 
 ### Graphics Cohesion and Walkable Plates
