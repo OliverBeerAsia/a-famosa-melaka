@@ -1,0 +1,1099 @@
+{
+  "id": "a-famosa-gate",
+  "name": "A Famosa Fortress Gate",
+  "notes": [
+    "THIS SCREEN IS ABOUT SCALE. The art critique's finding was that nothing in",
+    "the game is bigger than the player; here that has to be conspicuously false",
+    "in the first half second. The curtain wall stands 112px against a 32px",
+    "player (3.5x), the gatehouse 176px (5.5x) and its parapet leaves the top of",
+    "the frame. The arch is 66px tall and 44 wide — a horseman rides through it —",
+    "and the plaza lies in the wall's shade for the first third of its depth.",
+    "",
+    "MATERIAL. A Famosa was built of LATERITE, quarried red-brown out of the hill",
+    "behind it, dressed with granite at the arch and the string courses. That is",
+    "what stops this screen reading as the same grey as St Paul's and what puts a",
+    "warm mass against the sky.",
+    "",
+    "DEPTH PLANES. 1) the rooftops and the bell tower of the fortress town seen",
+    "OVER the wall, hazed. 2) the wall, the gatehouse, the flanking towers, the",
+    "guns and the plaza. 3) the two houses of the lower town at the bottom",
+    "corners plus the palms, emitted as walk-behind overlays.",
+    "",
+    "CULTURE MARKERS: the Cross of the Order of Christ on the escutcheon and on",
+    "the padrao, the royal banner on the west tower, the pelourinho in the plaza",
+    "(every Portuguese praca had one), and the bronze guns on garrison carriages."
+  ],
+  "canvas": {
+    "width": 640,
+    "height": 360
+  },
+  "iso": {
+    "tileWidth": 32,
+    "tileHeight": 16,
+    "originX": 320,
+    "originY": 0
+  },
+  "horizon": {
+    "skyTo": 58,
+    "skyTop": 1,
+    "skyBottom": 3,
+    "groundFrom": 62
+  },
+  "background": [
+    {
+      "type": "distant-roofline",
+      "baseY": 61,
+      "minH": 8,
+      "maxH": 20,
+      "haze": 0.4,
+      "seed": 71,
+      "x0": 0,
+      "x1": 280
+    },
+    {
+      "type": "distant-roofline",
+      "baseY": 61,
+      "minH": 7,
+      "maxH": 18,
+      "haze": 0.44,
+      "seed": 83,
+      "x0": 366,
+      "x1": 640
+    },
+    {
+      "type": "tower",
+      "x": 214,
+      "w": 22,
+      "baseY": 56,
+      "h": 30,
+      "cap": 12,
+      "haze": 0.22
+    }
+  ],
+  "backdrop": {
+    "texture": "dirt",
+    "material": "stone",
+    "light": 1,
+    "bigScale": 2.6,
+    "smallScale": 1.0,
+    "surface": "none"
+  },
+  "ground": [
+    {
+      "id": "plaza",
+      "shape": {
+        "sFrom": 25.6,
+        "sTo": 48,
+        "ddFrom": -24,
+        "ddTo": 24
+      },
+      "texture": "flagstone",
+      "material": "stone",
+      "light": 3,
+      "n": 1.4,
+      "surface": "stone",
+      "walkable": true,
+      "variance": 0.4
+    },
+    {
+      "id": "gate-threshold",
+      "shape": {
+        "sFrom": 23.6,
+        "sTo": 25.7,
+        "ddFrom": -1.4,
+        "ddTo": 1.4
+      },
+      "texture": "flagstone",
+      "material": "stone",
+      "light": 2,
+      "n": 1.2,
+      "surface": "stone",
+      "walkable": true,
+      "variance": 0.4
+    },
+    {
+      "id": "parade-ground",
+      "shape": {
+        "sFrom": 30,
+        "sTo": 42,
+        "ddFrom": -15,
+        "ddTo": 15
+      },
+      "texture": "trodden",
+      "material": "earth",
+      "light": 3,
+      "ruts": [
+        {
+          "s": 33.4,
+          "w": 0.4
+        },
+        {
+          "s": 35.6,
+          "w": 0.32
+        }
+      ],
+      "hotspots": [
+        {
+          "s": 27.0,
+          "dd": 0.0,
+          "r": 60
+        },
+        {
+          "s": 32.0,
+          "dd": -9.0,
+          "r": 46
+        },
+        {
+          "s": 34.0,
+          "dd": 7.0,
+          "r": 46
+        },
+        {
+          "s": 38.0,
+          "dd": -3.0,
+          "r": 44
+        },
+        {
+          "s": 31.0,
+          "dd": 12.0,
+          "r": 40
+        }
+      ],
+      "surface": "dirt",
+      "walkable": true
+    },
+    {
+      "id": "south-road",
+      "shape": {
+        "sFrom": 42,
+        "sTo": 48,
+        "ddFrom": -6,
+        "ddTo": 6
+      },
+      "texture": "trodden",
+      "material": "earth",
+      "light": 2,
+      "ruts": [
+        {
+          "s": 44.6,
+          "w": 0.42
+        }
+      ],
+      "hotspots": [
+        {
+          "s": 45.0,
+          "dd": 0.0,
+          "r": 52
+        }
+      ],
+      "surface": "dirt",
+      "walkable": true
+    }
+  ],
+  "shade": [
+    {
+      "shape": {
+        "sFrom": 25.6,
+        "sTo": 30.6,
+        "ddFrom": -24,
+        "ddTo": 24
+      },
+      "strength": 0.34
+    },
+    {
+      "shape": {
+        "sFrom": 30.6,
+        "sTo": 32.4,
+        "ddFrom": -24,
+        "ddTo": 24
+      },
+      "strength": 0.18
+    },
+    {
+      "shape": {
+        "sFrom": 32.0,
+        "sTo": 35.0,
+        "ddFrom": -22.5,
+        "ddTo": -16.0
+      },
+      "strength": 0.26
+    },
+    {
+      "shape": {
+        "sFrom": 32.6,
+        "sTo": 35.6,
+        "ddFrom": 16.0,
+        "ddTo": 22.5
+      },
+      "strength": 0.26
+    }
+  ],
+  "buildings": [
+    {
+      "kit": "well",
+      "s": 36.0,
+      "dd": -9.0,
+      "r": 0.66,
+      "wallH": 15,
+      "seed": 5,
+      "key": "praca-well",
+      "label": "The praça well"
+    },
+    {
+      "kit": "pelourinho",
+      "s": 33.0,
+      "dd": 5.0,
+      "height": 60,
+      "seed": 7,
+      "key": "pelourinho",
+      "label": "The pelourinho"
+    },
+    {
+      "kit": "townhouse",
+      "frontS": 47.5,
+      "dd": -16.0,
+      "w": 3.2,
+      "d": 3.0,
+      "floors": 2,
+      "wall": "whitewash",
+      "roof": {
+        "type": "hip",
+        "ridgeAxis": "tx",
+        "rise": 24
+      },
+      "windows": {
+        "perStorey": 2,
+        "litFloors": [
+          1
+        ],
+        "litChance": 0.4
+      },
+      "doors": [
+        {
+          "face": "ty",
+          "at": 0.4,
+          "lamp": true,
+          "litInterior": true
+        }
+      ],
+      "balcony": {
+        "from": 0.2,
+        "to": 0.8
+      },
+      "layer": "overlay",
+      "depthAt": 320,
+      "seed": 11
+    },
+    {
+      "kit": "townhouse",
+      "frontS": 48.0,
+      "dd": 14.5,
+      "w": 3.0,
+      "d": 3.0,
+      "floors": 2,
+      "wall": "terracotta",
+      "roof": {
+        "type": "gable",
+        "ridgeAxis": "ty",
+        "rise": 24
+      },
+      "windows": {
+        "perStorey": 2,
+        "litFloors": [
+          1
+        ],
+        "litChance": 0.35
+      },
+      "layer": "overlay",
+      "depthAt": 322,
+      "seed": 13
+    }
+  ],
+  "props": [
+    {
+      "type": "fortress-wall",
+      "tx": 0.5,
+      "ty": 24.5,
+      "len": 24,
+      "axis": "h",
+      "h": 112,
+      "depth": 1.15,
+      "bay": 158,
+      "seed": 11,
+      "collide": false,
+      "depthAt": -500,
+      "gate": {
+        "at": 0.5,
+        "width": 44,
+        "height": 66,
+        "towerH": 176,
+        "lamps": true
+      },
+      "towers": [
+        {
+          "at": 0.14,
+          "h": 142,
+          "w": 62,
+          "flag": true
+        },
+        {
+          "at": 0.86,
+          "h": 138,
+          "w": 58
+        }
+      ],
+      "key": "a-famosa-wall",
+      "label": "The wall of A Famosa",
+      "examineText": "Laterite cut out of the hill it stands on, two fathoms thick at the base, raised by Albuquerque's men in five months out of the stones of the sultan's mosque and the tombs of his fathers. Nobody in Melaka has forgotten which stones."
+    },
+    {
+      "type": "crate-stack",
+      "s": 33.8,
+      "dd": -8.6,
+      "seed": 101,
+      "examine": false
+    },
+    {
+      "type": "barrel",
+      "s": 36.0,
+      "dd": -14.0,
+      "seed": 103,
+      "examine": false
+    },
+    {
+      "type": "rope-coil",
+      "s": 34.6,
+      "dd": -16.0,
+      "seed": 105,
+      "examine": false
+    },
+    {
+      "type": "sack-pile",
+      "s": 37.6,
+      "dd": -6.8,
+      "seed": 107,
+      "examine": false
+    },
+    {
+      "type": "bench",
+      "s": 35.0,
+      "dd": 17.6,
+      "seed": 109,
+      "examine": false
+    },
+    {
+      "type": "basket",
+      "s": 42.0,
+      "dd": 2.0,
+      "seed": 111,
+      "examine": false
+    },
+    {
+      "type": "amphora",
+      "s": 43.4,
+      "dd": -2.4,
+      "seed": 113,
+      "examine": false
+    },
+    {
+      "type": "step-stone",
+      "s": 40.0,
+      "dd": 16.4,
+      "seed": 115,
+      "examine": false
+    },
+    {
+      "type": "crate",
+      "s": 29.2,
+      "dd": 17.0,
+      "seed": 117,
+      "examine": false
+    },
+    {
+      "type": "crate",
+      "s": 29.6,
+      "dd": -19.6,
+      "seed": 119,
+      "examine": false
+    },
+    {
+      "type": "potted-palm",
+      "s": 38.0,
+      "dd": 6.8,
+      "h": 26,
+      "seed": 121,
+      "examine": false
+    },
+    {
+      "type": "potted-palm",
+      "s": 31.0,
+      "dd": -20.0,
+      "h": 24,
+      "seed": 123,
+      "examine": false
+    },
+    {
+      "type": "sentry-box",
+      "s": 26.8,
+      "dd": -6.4,
+      "h": 42,
+      "seed": 13,
+      "key": "guarita-west",
+      "label": "A sentry box"
+    },
+    {
+      "type": "sentry-box",
+      "s": 26.8,
+      "dd": 6.4,
+      "h": 42,
+      "seed": 15,
+      "examine": false
+    },
+    {
+      "type": "cannon",
+      "s": 29.6,
+      "dd": -14.6,
+      "facing": -1,
+      "seed": 17,
+      "key": "gun-west",
+      "label": "A bronze gun",
+      "examineText": "A demi-culverin cast in Goa, the arms of the Crown on her breech and a name — Sao Jorge — cut under them. She has been fired twice in twelve years, both times in salute."
+    },
+    {
+      "type": "cannon",
+      "s": 30.4,
+      "dd": 13.0,
+      "facing": 1,
+      "seed": 19,
+      "examine": false
+    },
+    {
+      "type": "cannon",
+      "s": 35.2,
+      "dd": -18.4,
+      "facing": -1,
+      "shot": false,
+      "seed": 21,
+      "examine": false
+    },
+    {
+      "type": "arms-rack",
+      "s": 28.6,
+      "dd": -10.0,
+      "seed": 23,
+      "key": "arms-rack",
+      "label": "A rack of pikes"
+    },
+    {
+      "type": "arms-rack",
+      "s": 28.2,
+      "dd": 9.2,
+      "seed": 25,
+      "examine": false
+    },
+    {
+      "type": "powder-store",
+      "s": 31.4,
+      "dd": -17.2,
+      "seed": 27,
+      "key": "powder",
+      "label": "Powder barrels"
+    },
+    {
+      "type": "powder-store",
+      "s": 32.6,
+      "dd": 17.0,
+      "seed": 29,
+      "examine": false
+    },
+    {
+      "type": "padrao",
+      "s": 34.0,
+      "dd": -2.6,
+      "seed": 31,
+      "key": "gate-padrao",
+      "label": "The padrão",
+      "examineText": "A stone pillar cut with the Cross of the Order of Christ. Every governor since Albuquerque has been sworn in beside it, and every one of them has had the same complaint: too few men, too little powder, and a wall too long to hold."
+    },
+    {
+      "type": "step-stone",
+      "s": 32.2,
+      "dd": -6.0,
+      "seed": 33,
+      "examine": false
+    },
+    {
+      "type": "step-stone",
+      "s": 31.8,
+      "dd": 9.6,
+      "seed": 35,
+      "examine": false
+    },
+    {
+      "type": "water-trough",
+      "s": 37.2,
+      "dd": 3.0,
+      "seed": 37,
+      "key": "trough",
+      "label": "A stone trough"
+    },
+    {
+      "type": "bench",
+      "s": 30.0,
+      "dd": -3.2,
+      "seed": 39,
+      "examine": false
+    },
+    {
+      "type": "bench",
+      "s": 29.8,
+      "dd": 2.8,
+      "seed": 41,
+      "examine": false
+    },
+    {
+      "type": "market-stall",
+      "s": 38.6,
+      "dd": -13.0,
+      "culture": "malay",
+      "w": 1.5,
+      "d": 1.0,
+      "seed": 43,
+      "key": "gate-stall",
+      "label": "A stall by the gate",
+      "examineText": "The gate is the only place in Melaka where every road meets, so this is the only place in Melaka where you can buy anything at the wrong price and be glad of it."
+    },
+    {
+      "type": "market-stall",
+      "s": 39.4,
+      "dd": 10.4,
+      "culture": "spice",
+      "w": 1.4,
+      "d": 1.0,
+      "seed": 45,
+      "examine": false
+    },
+    {
+      "type": "cloth-rack",
+      "s": 37.0,
+      "dd": -16.6,
+      "seed": 47,
+      "examine": false
+    },
+    {
+      "type": "handcart",
+      "s": 40.6,
+      "dd": -6.6,
+      "seed": 49,
+      "examine": false
+    },
+    {
+      "type": "handcart",
+      "s": 34.6,
+      "dd": 15.6,
+      "seed": 51,
+      "examine": false
+    },
+    {
+      "type": "crate-stack",
+      "s": 36.4,
+      "dd": 12.8,
+      "seed": 53,
+      "examine": false
+    },
+    {
+      "type": "crate",
+      "s": 35.6,
+      "dd": 14.2,
+      "seed": 55,
+      "examine": false
+    },
+    {
+      "type": "barrel",
+      "s": 33.4,
+      "dd": -12.4,
+      "seed": 57,
+      "examine": false
+    },
+    {
+      "type": "barrel",
+      "s": 34.0,
+      "dd": -11.8,
+      "seed": 59,
+      "examine": false
+    },
+    {
+      "type": "sack-pile",
+      "s": 41.4,
+      "dd": 6.0,
+      "seed": 61,
+      "examine": false
+    },
+    {
+      "type": "spice-sack-row",
+      "s": 42.2,
+      "dd": -9.4,
+      "seed": 63,
+      "examine": false
+    },
+    {
+      "type": "basket",
+      "s": 39.0,
+      "dd": -10.4,
+      "seed": 65,
+      "examine": false
+    },
+    {
+      "type": "basket",
+      "s": 39.6,
+      "dd": -9.6,
+      "seed": 67,
+      "examine": false
+    },
+    {
+      "type": "pot-row",
+      "s": 41.0,
+      "dd": 14.0,
+      "seed": 69,
+      "examine": false
+    },
+    {
+      "type": "amphora",
+      "s": 36.6,
+      "dd": 8.0,
+      "seed": 71,
+      "examine": false
+    },
+    {
+      "type": "rope-coil",
+      "s": 43.0,
+      "dd": -14.0,
+      "seed": 73,
+      "examine": false
+    },
+    {
+      "type": "lantern-post",
+      "s": 28.0,
+      "dd": -18.0,
+      "h": 44,
+      "seed": 75
+    },
+    {
+      "type": "lantern-post",
+      "s": 28.0,
+      "dd": 17.4,
+      "h": 44,
+      "seed": 77
+    },
+    {
+      "type": "lantern-post",
+      "s": 38.0,
+      "dd": -0.6,
+      "h": 44,
+      "seed": 79
+    },
+    {
+      "type": "lantern-post",
+      "s": 44.2,
+      "dd": 9.4,
+      "h": 42,
+      "seed": 81
+    },
+    {
+      "type": "brazier",
+      "s": 30.8,
+      "dd": -0.4,
+      "seed": 83,
+      "key": "guard-brazier",
+      "label": "A guard's brazier"
+    },
+    {
+      "type": "potted-palm",
+      "s": 33.6,
+      "dd": 2.0,
+      "h": 28,
+      "seed": 85,
+      "examine": false
+    },
+    {
+      "type": "palm",
+      "s": 43.0,
+      "dd": -20.4,
+      "h": 74,
+      "lean": -9,
+      "seed": 87,
+      "examine": false
+    },
+    {
+      "type": "palm-cluster",
+      "s": 46.6,
+      "dd": 20.0,
+      "count": 3,
+      "h": 70,
+      "spread": 1.1,
+      "seed": 89,
+      "layer": "overlay",
+      "depthAt": 340,
+      "examine": false
+    },
+    {
+      "type": "scrub",
+      "s": 45.0,
+      "dd": -12.0,
+      "blades": 22,
+      "spreadX": 24,
+      "seed": 91,
+      "examine": false
+    },
+    {
+      "type": "laundry-line",
+      "s": 46.0,
+      "dd": -14.5,
+      "len": 2,
+      "z": 64,
+      "seed": 93,
+      "examine": false
+    }
+  ],
+  "blocked": [],
+  "lights": [
+    {
+      "s": 25.0,
+      "dd": -2.6,
+      "z": 62,
+      "type": "lantern",
+      "radius": 54
+    },
+    {
+      "s": 25.0,
+      "dd": 2.6,
+      "z": 62,
+      "type": "lantern",
+      "radius": 54
+    },
+    {
+      "s": 30.8,
+      "dd": -0.4,
+      "z": 12,
+      "type": "fire",
+      "radius": 50
+    },
+    {
+      "s": 26.6,
+      "dd": -12.0,
+      "z": 30,
+      "type": "lantern",
+      "radius": 40
+    },
+    {
+      "s": 26.6,
+      "dd": 12.0,
+      "z": 30,
+      "type": "lantern",
+      "radius": 40
+    }
+  ],
+  "animatedProps": [
+    {
+      "type": "torch-flicker",
+      "s": 25.0,
+      "dd": -2.6,
+      "z": 62,
+      "period": 900
+    },
+    {
+      "type": "torch-flicker",
+      "s": 25.0,
+      "dd": 2.6,
+      "z": 62,
+      "period": 1100
+    },
+    {
+      "type": "smoke",
+      "s": 30.8,
+      "dd": -0.4,
+      "z": 16,
+      "period": 2600
+    },
+    {
+      "type": "cloth-flutter",
+      "s": 22.0,
+      "dd": -17.0,
+      "z": 150,
+      "period": 1800
+    },
+    {
+      "type": "cloth-flutter",
+      "s": 38.6,
+      "dd": -13.0,
+      "z": 40,
+      "period": 1600
+    },
+    {
+      "type": "cloth-flutter",
+      "s": 39.4,
+      "dd": 10.4,
+      "z": 40,
+      "period": 2000
+    },
+    {
+      "type": "cloth-flutter",
+      "s": 37.0,
+      "dd": -16.6,
+      "z": 34,
+      "period": 2200
+    },
+    {
+      "type": "birds",
+      "x": 120,
+      "y": 40,
+      "period": 3200
+    },
+    {
+      "type": "birds",
+      "x": 470,
+      "y": 32,
+      "period": 2800
+    },
+    {
+      "type": "foliage-sway",
+      "s": 43.0,
+      "dd": -20.4,
+      "z": 74,
+      "period": 2400
+    },
+    {
+      "type": "foliage-sway",
+      "s": 46.6,
+      "dd": 20.0,
+      "z": 70,
+      "period": 2000
+    },
+    {
+      "type": "laundry-sway",
+      "s": 46.0,
+      "dd": -14.5,
+      "z": 64,
+      "period": 2600
+    }
+  ],
+  "spawns": {
+    "player": {
+      "s": 33.0,
+      "dd": 0.0
+    }
+  },
+  "npcs": {
+    "capitao-rodrigues": {
+      "s": 28.8,
+      "dd": -4.6
+    },
+    "gaspar-mesquita": {
+      "s": 31.6,
+      "dd": 8.6
+    }
+  },
+  "transitions": [
+    {
+      "targetLocation": "rua-direita",
+      "label": "To Rua Direita",
+      "s": 24.4,
+      "dd": 0.0,
+      "triggerArea": {
+        "x": 300,
+        "y": 190,
+        "width": 40,
+        "height": 20
+      },
+      "spawnAt": {
+        "x": 320,
+        "y": 336
+      }
+    },
+    {
+      "targetLocation": "rua-direita",
+      "label": "To Rua Direita (Main Street)",
+      "s": 39.0,
+      "dd": 23.0,
+      "triggerArea": {
+        "x": 624,
+        "y": 288,
+        "width": 16,
+        "height": 64
+      },
+      "spawnAt": {
+        "x": 34,
+        "y": 250
+      }
+    },
+    {
+      "targetLocation": "waterfront",
+      "label": "To The Waterfront Service Gate",
+      "s": 46.4,
+      "dd": 0.0,
+      "triggerArea": {
+        "x": 268,
+        "y": 344,
+        "width": 104,
+        "height": 16
+      },
+      "spawnAt": {
+        "x": 132,
+        "y": 348
+      }
+    }
+  ],
+  "crowd": {
+    "maxActors": 6,
+    "paths": [
+      {
+        "id": "gate-queue",
+        "points": [
+          [
+            320,
+            214
+          ],
+          [
+            318,
+            250
+          ],
+          [
+            322,
+            290
+          ],
+          [
+            318,
+            340
+          ]
+        ],
+        "speed": 15
+      },
+      {
+        "id": "plaza-east",
+        "points": [
+          [
+            40,
+            300
+          ],
+          [
+            200,
+            292
+          ],
+          [
+            360,
+            300
+          ],
+          [
+            520,
+            292
+          ],
+          [
+            624,
+            300
+          ]
+        ],
+        "speed": 20
+      },
+      {
+        "id": "plaza-west",
+        "points": [
+          [
+            624,
+            262
+          ],
+          [
+            460,
+            268
+          ],
+          [
+            300,
+            260
+          ],
+          [
+            140,
+            268
+          ],
+          [
+            24,
+            262
+          ]
+        ],
+        "speed": 18
+      },
+      {
+        "id": "guard-round",
+        "points": [
+          [
+            236,
+            232
+          ],
+          [
+            286,
+            244
+          ],
+          [
+            242,
+            258
+          ],
+          [
+            196,
+            246
+          ],
+          [
+            236,
+            232
+          ]
+        ],
+        "speed": 10
+      },
+      {
+        "id": "stall-browse",
+        "points": [
+          [
+            140,
+            318
+          ],
+          [
+            196,
+            330
+          ],
+          [
+            140,
+            342
+          ],
+          [
+            92,
+            328
+          ],
+          [
+            140,
+            318
+          ]
+        ],
+        "speed": 11
+      },
+      {
+        "id": "south-road",
+        "points": [
+          [
+            320,
+            356
+          ],
+          [
+            318,
+            330
+          ],
+          [
+            330,
+            306
+          ],
+          [
+            322,
+            282
+          ]
+        ],
+        "speed": 16
+      }
+    ]
+  }
+}

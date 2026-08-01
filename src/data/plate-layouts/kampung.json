@@ -1,0 +1,1248 @@
+{
+  "id": "kampung",
+  "name": "The Kampung Quarter",
+  "notes": [
+    "COMPOSITION. A village clearing ringed by houses, closed at the back by a",
+    "wall of jungle and opened at the front by the river. The eye enters on the",
+    "path at the top, is stopped by the shade tree and the well at the centre of",
+    "the common, and is then handed left to the water and the beached perahu.",
+    "",
+    "SCALE IS THE POINT HERE. The shipping kampung plate draws stilt houses the",
+    "height of the player. These are 100px to the ridge against a 32px player —",
+    "26px of pile, 36 of wall, 34 of roof — with a metre of eave overhang and a",
+    "black void underneath, which is the single strongest cue that the house is",
+    "lifted off the ground.",
+    "",
+    "DEPTH PLANES. 1) two hazed layers of canopy with palm crowns breaking the",
+    "skyline. 2) the four houses of the back row, the surau, the common. 3) the",
+    "two near houses and the palm cluster at the bottom corners, emitted as",
+    "walk-behind overlays.",
+    "",
+    "CULTURE MARKERS: attap roofs with crossed bargeboards, the surau and its",
+    "finial, kain and sarong on the bamboo drying racks, the rice mortar, the",
+    "perahu on the bank."
+  ],
+  "canvas": {
+    "width": 640,
+    "height": 360
+  },
+  "iso": {
+    "tileWidth": 32,
+    "tileHeight": 16,
+    "originX": 320,
+    "originY": 0
+  },
+  "horizon": {
+    "skyTo": 62,
+    "skyTop": 1,
+    "skyBottom": 3,
+    "groundFrom": 64
+  },
+  "background": [],
+  "backdrop": {
+    "texture": "dirt",
+    "material": "foliage",
+    "light": 1,
+    "bigScale": 2.2,
+    "smallScale": 0.8,
+    "surface": "grass"
+  },
+  "ground": [
+    {
+      "id": "common",
+      "shape": {
+        "sFrom": 19.2,
+        "sTo": 48,
+        "ddFrom": -21,
+        "ddTo": 21
+      },
+      "texture": "sand",
+      "material": "earth",
+      "light": 4,
+      "bigScale": 2.4,
+      "smallScale": 0.8,
+      "surface": "sand",
+      "walkable": true
+    },
+    {
+      "id": "trodden-common",
+      "shape": {
+        "sFrom": 22,
+        "sTo": 42,
+        "ddFrom": -16,
+        "ddTo": 16
+      },
+      "texture": "trodden",
+      "material": "earth",
+      "light": 3,
+      "ruts": [
+        {
+          "s": 31.0,
+          "w": 0.3
+        }
+      ],
+      "hotspots": [
+        {
+          "s": 29.0,
+          "dd": 0.0,
+          "r": 56
+        },
+        {
+          "s": 33.5,
+          "dd": -6.0,
+          "r": 44
+        },
+        {
+          "s": 34.5,
+          "dd": 6.5,
+          "r": 44
+        },
+        {
+          "s": 26.5,
+          "dd": -8.0,
+          "r": 38
+        },
+        {
+          "s": 27.0,
+          "dd": 8.0,
+          "r": 38
+        }
+      ],
+      "surface": "dirt",
+      "walkable": true
+    },
+    {
+      "id": "entry-path",
+      "shape": {
+        "sFrom": 18.8,
+        "sTo": 26,
+        "ddFrom": -3.6,
+        "ddTo": 3.6
+      },
+      "texture": "trodden",
+      "material": "earth",
+      "light": 3,
+      "hotspots": [
+        {
+          "s": 19.0,
+          "dd": 0.0,
+          "r": 42
+        }
+      ],
+      "surface": "dirt",
+      "walkable": true
+    },
+    {
+      "id": "river",
+      "shape": {
+        "sFrom": 41.5,
+        "sTo": 49,
+        "ddFrom": -22,
+        "ddTo": -6
+      },
+      "texture": "dirt",
+      "material": "water",
+      "light": 2,
+      "bigScale": 3.0,
+      "smallScale": 1.4,
+      "surface": "water",
+      "walkable": false
+    }
+  ],
+  "shade": [
+    {
+      "shape": {
+        "sFrom": 22.0,
+        "sTo": 25.4,
+        "ddFrom": -18.6,
+        "ddTo": -11.6
+      },
+      "strength": 0.32
+    },
+    {
+      "shape": {
+        "sFrom": 20.6,
+        "sTo": 24.0,
+        "ddFrom": -10.0,
+        "ddTo": -3.0
+      },
+      "strength": 0.32
+    },
+    {
+      "shape": {
+        "sFrom": 20.0,
+        "sTo": 23.4,
+        "ddFrom": 2.6,
+        "ddTo": 9.6
+      },
+      "strength": 0.32
+    },
+    {
+      "shape": {
+        "sFrom": 22.6,
+        "sTo": 26.0,
+        "ddFrom": 10.4,
+        "ddTo": 17.4
+      },
+      "strength": 0.32
+    },
+    {
+      "shape": {
+        "sFrom": 28.0,
+        "sTo": 33.5,
+        "ddFrom": -4.5,
+        "ddTo": 4.5
+      },
+      "strength": 0.22
+    },
+    {
+      "shape": {
+        "sFrom": 17.0,
+        "sTo": 21.0,
+        "ddFrom": -21.0,
+        "ddTo": 21.0
+      },
+      "strength": 0.2
+    }
+  ],
+  "props": [
+    {
+      "type": "canopy-band",
+      "x0": 0,
+      "x1": 640,
+      "y0": 40,
+      "y1": 150,
+      "layers": 4,
+      "step": 17,
+      "amp": 30,
+      "base": 26,
+      "haze": 0.5,
+      "seed": 61,
+      "depthAt": -900,
+      "crowns": [
+        {
+          "tx": -0.4,
+          "ty": 15.9,
+          "h": 56
+        },
+        {
+          "tx": 3.1,
+          "ty": 11.9,
+          "h": 64
+        },
+        {
+          "tx": 6.6,
+          "ty": 7.9,
+          "h": 58
+        },
+        {
+          "tx": 12.3,
+          "ty": 2.9,
+          "h": 62
+        },
+        {
+          "tx": 16.6,
+          "ty": -0.9,
+          "h": 54
+        }
+      ]
+    },
+    {
+      "type": "water-field",
+      "x0": 0,
+      "x1": 300,
+      "y0": 320,
+      "y1": 360,
+      "horizonY": 316,
+      "nearY": 372,
+      "topStep": 2.6,
+      "botStep": 1.1,
+      "chop": 0.7,
+      "horizonSeam": false,
+      "seed": 83,
+      "depthAt": -890
+    },
+    {
+      "type": "shore-edge",
+      "waterAbove": false,
+      "seed": 9,
+      "depthAt": -880,
+      "points": [
+        [
+          0,
+          336
+        ],
+        [
+          72,
+          332
+        ],
+        [
+          150,
+          336
+        ],
+        [
+          210,
+          330
+        ],
+        [
+          246,
+          338
+        ]
+      ]
+    },
+    {
+      "type": "stilt-house",
+      "s": 21.0,
+      "dd": -15.0,
+      "w": 2.7,
+      "d": 2.2,
+      "ridgeAxis": "tx",
+      "litWindows": true,
+      "doorLit": true,
+      "seed": 11,
+      "collide": false,
+      "key": "house-mak-enang",
+      "label": "Mak Enang's house",
+      "examineText": "Chengal piles, plank walls, attap over all of it, and a ladder that has been mended so often none of the original wood is left. The crossed boards at the gable keep out what the prayers do not."
+    },
+    {
+      "type": "stilt-house",
+      "s": 19.3,
+      "dd": -6.8,
+      "w": 3.4,
+      "d": 2.0,
+      "pileH": 22,
+      "rise": 30,
+      "ridgeAxis": "tx",
+      "roofType": "hip",
+      "wallTexture": "plank",
+      "seed": 13,
+      "collide": false,
+      "key": "house-boatwright",
+      "label": "The boatwright's house",
+      "examineText": "Adzes, a bow drill and half a keel under the house, in the shade where a man can work all day."
+    },
+    {
+      "type": "stilt-house",
+      "s": 18.4,
+      "dd": 5.4,
+      "w": 3.0,
+      "d": 2.6,
+      "pileH": 30,
+      "wallH": 40,
+      "rise": 38,
+      "ridgeAxis": "tx",
+      "litWindows": true,
+      "seed": 17,
+      "collide": false,
+      "key": "house-headman",
+      "label": "The penghulu's house",
+      "examineText": "A little longer than the others and a little higher off the ground. Village business is heard on the verandah, not inside."
+    },
+    {
+      "type": "stilt-house",
+      "s": 22.4,
+      "dd": 17.6,
+      "w": 2.1,
+      "d": 1.8,
+      "pileH": 20,
+      "wallH": 30,
+      "rise": 26,
+      "ridgeAxis": "ty",
+      "roofType": "hip",
+      "seed": 19,
+      "collide": false,
+      "key": "house-east",
+      "label": "A kampung house"
+    },
+    {
+      "type": "surau",
+      "s": 26.6,
+      "dd": 9.6,
+      "w": 2.4,
+      "d": 2.4,
+      "seed": 23,
+      "collide": false,
+      "key": "surau",
+      "label": "The surau",
+      "examineText": "The village prayer house. A drum hangs in the porch; it is beaten for prayer, for a death, and for a boat that has not come back."
+    },
+    {
+      "type": "stilt-house",
+      "s": 33.5,
+      "dd": -16.5,
+      "w": 2.5,
+      "d": 2.1,
+      "ridgeAxis": "tx",
+      "wallTexture": "plank",
+      "seed": 29,
+      "collide": false,
+      "layer": "overlay",
+      "depthAt": 300,
+      "key": "house-river",
+      "label": "The house by the water"
+    },
+    {
+      "type": "stilt-house",
+      "s": 32.5,
+      "dd": 16.5,
+      "w": 2.4,
+      "d": 2.0,
+      "ridgeAxis": "ty",
+      "litWindows": true,
+      "seed": 31,
+      "collide": false,
+      "layer": "overlay",
+      "depthAt": 302,
+      "key": "house-south",
+      "label": "A kampung house"
+    },
+    {
+      "type": "scrub",
+      "s": 18.4,
+      "dd": -20.0,
+      "blades": 34,
+      "spreadX": 34,
+      "h": 10,
+      "seed": 141,
+      "examine": false
+    },
+    {
+      "type": "scrub",
+      "s": 18.2,
+      "dd": -12.0,
+      "blades": 32,
+      "spreadX": 32,
+      "h": 10,
+      "seed": 143,
+      "examine": false
+    },
+    {
+      "type": "scrub",
+      "s": 18.0,
+      "dd": -3.0,
+      "blades": 30,
+      "spreadX": 30,
+      "h": 9,
+      "seed": 145,
+      "examine": false
+    },
+    {
+      "type": "scrub",
+      "s": 18.2,
+      "dd": 6.0,
+      "blades": 32,
+      "spreadX": 32,
+      "h": 10,
+      "seed": 147,
+      "examine": false
+    },
+    {
+      "type": "scrub",
+      "s": 18.6,
+      "dd": 15.0,
+      "blades": 34,
+      "spreadX": 34,
+      "h": 11,
+      "seed": 149,
+      "examine": false
+    },
+    {
+      "type": "banana-plant",
+      "s": 19.0,
+      "dd": -18.0,
+      "h": 40,
+      "count": 2,
+      "seed": 151,
+      "examine": false
+    },
+    {
+      "type": "banana-plant",
+      "s": 18.8,
+      "dd": 11.4,
+      "h": 38,
+      "count": 2,
+      "seed": 153,
+      "examine": false
+    },
+    {
+      "type": "bamboo-clump",
+      "s": 19.4,
+      "dd": 19.0,
+      "h": 52,
+      "count": 7,
+      "seed": 155,
+      "examine": false
+    },
+    {
+      "type": "drying-rack",
+      "s": 31.8,
+      "dd": -1.0,
+      "h": 32,
+      "seed": 111,
+      "examine": false
+    },
+    {
+      "type": "chicken-coop",
+      "s": 36.0,
+      "dd": 2.6,
+      "seed": 113,
+      "examine": false
+    },
+    {
+      "type": "pot-row",
+      "s": 29.2,
+      "dd": 1.4,
+      "seed": 115,
+      "examine": false
+    },
+    {
+      "type": "basket",
+      "s": 35.0,
+      "dd": 6.0,
+      "seed": 117,
+      "examine": false
+    },
+    {
+      "type": "mat-rolls",
+      "s": 27.4,
+      "dd": 6.8,
+      "seed": 119,
+      "examine": false
+    },
+    {
+      "type": "banana-plant",
+      "s": 33.4,
+      "dd": -14.6,
+      "h": 44,
+      "count": 2,
+      "seed": 121,
+      "examine": false
+    },
+    {
+      "type": "bamboo-clump",
+      "s": 30.6,
+      "dd": 19.4,
+      "h": 48,
+      "count": 6,
+      "seed": 123,
+      "examine": false
+    },
+    {
+      "type": "amphora",
+      "s": 32.2,
+      "dd": 11.0,
+      "seed": 125,
+      "examine": false
+    },
+    {
+      "type": "kampung-fence",
+      "s": 33.0,
+      "dd": -20.0,
+      "len": 2.4,
+      "axis": "h",
+      "h": 18,
+      "seed": 127,
+      "examine": false
+    },
+    {
+      "type": "scrub",
+      "s": 36.6,
+      "dd": -8.0,
+      "blades": 22,
+      "spreadX": 22,
+      "seed": 129,
+      "examine": false
+    },
+    {
+      "type": "scrub",
+      "s": 25.0,
+      "dd": 14.4,
+      "blades": 20,
+      "spreadX": 20,
+      "seed": 131,
+      "examine": false
+    },
+    {
+      "type": "palm",
+      "s": 34.4,
+      "dd": 4.2,
+      "h": 88,
+      "lean": 11,
+      "seed": 133,
+      "examine": false
+    },
+    {
+      "type": "shade-tree",
+      "s": 27.0,
+      "dd": -1.6,
+      "h": 68,
+      "seed": 3,
+      "key": "rain-tree",
+      "label": "The rain tree",
+      "examineText": "The whole kampung takes its afternoons under this tree. Every dispute in living memory has been argued out on the roots."
+    },
+    {
+      "type": "kampung-well",
+      "s": 31.6,
+      "dd": 4.6,
+      "seed": 31,
+      "key": "kampung-well",
+      "label": "The village well"
+    },
+    {
+      "type": "cook-fire",
+      "s": 30.4,
+      "dd": -8.4,
+      "seed": 19,
+      "key": "cook-fire-west",
+      "label": "A cooking fire"
+    },
+    {
+      "type": "cook-fire",
+      "s": 34.6,
+      "dd": 9.0,
+      "seed": 37,
+      "key": "cook-fire-east",
+      "label": "A cooking fire"
+    },
+    {
+      "type": "drying-rack",
+      "s": 25.4,
+      "dd": -11.4,
+      "h": 34,
+      "seed": 17,
+      "key": "drying-rack",
+      "label": "Kain drying"
+    },
+    {
+      "type": "drying-rack",
+      "s": 29.0,
+      "dd": 11.6,
+      "h": 32,
+      "seed": 41
+    },
+    {
+      "type": "drying-rack",
+      "s": 36.2,
+      "dd": -5.2,
+      "h": 30,
+      "seed": 43
+    },
+    {
+      "type": "kampung-fence",
+      "s": 24.0,
+      "dd": -19.5,
+      "len": 3.2,
+      "axis": "h",
+      "h": 20,
+      "seed": 13
+    },
+    {
+      "type": "kampung-fence",
+      "s": 23.0,
+      "dd": 17.0,
+      "len": 2.6,
+      "axis": "h",
+      "h": 20,
+      "seed": 15
+    },
+    {
+      "type": "kampung-fence",
+      "s": 37.0,
+      "dd": 12.0,
+      "len": 4.0,
+      "axis": "h",
+      "h": 18,
+      "seed": 21
+    },
+    {
+      "type": "chicken-coop",
+      "s": 32.4,
+      "dd": -12.6,
+      "seed": 23
+    },
+    {
+      "type": "chicken-coop",
+      "s": 27.8,
+      "dd": 16.4,
+      "seed": 25
+    },
+    {
+      "type": "mat-rolls",
+      "s": 29.8,
+      "dd": 8.2,
+      "seed": 29,
+      "key": "mats",
+      "label": "Mats and a rice mortar"
+    },
+    {
+      "type": "mat-rolls",
+      "s": 35.4,
+      "dd": -10.8,
+      "seed": 33
+    },
+    {
+      "type": "pot-row",
+      "s": 26.6,
+      "dd": -13.4,
+      "seed": 35
+    },
+    {
+      "type": "pot-row",
+      "s": 33.0,
+      "dd": 14.2,
+      "seed": 39
+    },
+    {
+      "type": "basket",
+      "s": 31.0,
+      "dd": -5.0,
+      "seed": 45
+    },
+    {
+      "type": "basket",
+      "s": 31.6,
+      "dd": -4.2,
+      "seed": 47
+    },
+    {
+      "type": "basket",
+      "s": 33.8,
+      "dd": 2.2,
+      "seed": 49
+    },
+    {
+      "type": "amphora",
+      "s": 28.4,
+      "dd": 5.6,
+      "seed": 51
+    },
+    {
+      "type": "market-stall",
+      "s": 34.2,
+      "dd": -2.6,
+      "culture": "malay",
+      "w": 1.4,
+      "d": 1.0,
+      "seed": 53,
+      "key": "village-stall",
+      "label": "A cloth stall",
+      "examineText": "Batik in three patterns, all of them made forty paces away, all of them cheaper than anything on the Rua Direita."
+    },
+    {
+      "type": "banana-plant",
+      "s": 22.8,
+      "dd": -20.0,
+      "h": 46,
+      "count": 2,
+      "seed": 55
+    },
+    {
+      "type": "banana-plant",
+      "s": 24.6,
+      "dd": 20.0,
+      "h": 44,
+      "count": 2,
+      "seed": 57
+    },
+    {
+      "type": "banana-plant",
+      "s": 38.2,
+      "dd": 8.0,
+      "h": 42,
+      "count": 2,
+      "seed": 59
+    },
+    {
+      "type": "banana-plant",
+      "s": 27.0,
+      "dd": -18.4,
+      "h": 40,
+      "count": 1,
+      "seed": 63
+    },
+    {
+      "type": "bamboo-clump",
+      "s": 22.0,
+      "dd": -10.6,
+      "h": 58,
+      "count": 8,
+      "seed": 65
+    },
+    {
+      "type": "bamboo-clump",
+      "s": 21.4,
+      "dd": 10.8,
+      "h": 54,
+      "count": 7,
+      "seed": 67
+    },
+    {
+      "type": "bamboo-clump",
+      "s": 36.0,
+      "dd": 17.6,
+      "h": 50,
+      "count": 6,
+      "seed": 69
+    },
+    {
+      "type": "palm",
+      "s": 24.4,
+      "dd": -3.6,
+      "h": 82,
+      "lean": 9,
+      "seed": 71
+    },
+    {
+      "type": "palm",
+      "s": 23.2,
+      "dd": 2.6,
+      "h": 74,
+      "lean": -7,
+      "seed": 73
+    },
+    {
+      "type": "palm",
+      "s": 30.0,
+      "dd": -16.6,
+      "h": 86,
+      "lean": -12,
+      "seed": 75
+    },
+    {
+      "type": "palm",
+      "s": 28.0,
+      "dd": 18.2,
+      "h": 78,
+      "lean": 8,
+      "seed": 77
+    },
+    {
+      "type": "palm-cluster",
+      "s": 39.6,
+      "dd": -12.0,
+      "count": 3,
+      "h": 72,
+      "spread": 1.2,
+      "seed": 79
+    },
+    {
+      "type": "palm-cluster",
+      "s": 45.0,
+      "dd": 15.0,
+      "count": 3,
+      "h": 76,
+      "spread": 1.2,
+      "seed": 81,
+      "layer": "overlay",
+      "depthAt": 320
+    },
+    {
+      "type": "perahu-beached",
+      "s": 40.4,
+      "dd": -8.6,
+      "len": 62,
+      "facing": -1,
+      "seed": 43,
+      "key": "perahu",
+      "label": "A perahu on the bank",
+      "examineText": "Hauled up on rollers above the tideline, seams freshly payed with damar. Whoever owns her has been fishing the strait since before there were Portuguese to sell to."
+    },
+    {
+      "type": "sampan",
+      "x": 96,
+      "y": 348,
+      "len": 46,
+      "facing": 1,
+      "seed": 85,
+      "depthAt": 400,
+      "key": "river-sampan",
+      "label": "A sampan"
+    },
+    {
+      "type": "scrub",
+      "s": 18.6,
+      "dd": -17.0,
+      "blades": 30,
+      "spreadX": 30,
+      "seed": 87
+    },
+    {
+      "type": "scrub",
+      "s": 18.0,
+      "dd": 14.0,
+      "blades": 28,
+      "spreadX": 28,
+      "seed": 89
+    },
+    {
+      "type": "scrub",
+      "s": 39.0,
+      "dd": 3.0,
+      "blades": 26,
+      "spreadX": 26,
+      "seed": 91
+    },
+    {
+      "type": "scrub",
+      "s": 43.0,
+      "dd": -3.0,
+      "blades": 24,
+      "spreadX": 24,
+      "seed": 93
+    },
+    {
+      "type": "scrub",
+      "s": 46.0,
+      "dd": 6.0,
+      "blades": 28,
+      "spreadX": 30,
+      "seed": 95
+    }
+  ],
+  "blocked": [
+    {
+      "tx": 3.0,
+      "ty": 18.0,
+      "w": 2.7,
+      "d": 2.2
+    },
+    {
+      "tx": 6.25,
+      "ty": 13.05,
+      "w": 3.4,
+      "d": 2.0
+    },
+    {
+      "tx": 11.9,
+      "ty": 6.5,
+      "w": 3.0,
+      "d": 2.6
+    },
+    {
+      "tx": 20.0,
+      "ty": 2.4,
+      "w": 2.1,
+      "d": 1.8
+    },
+    {
+      "tx": 18.1,
+      "ty": 8.5,
+      "w": 2.4,
+      "d": 2.4
+    },
+    {
+      "tx": 8.5,
+      "ty": 25.0,
+      "w": 2.5,
+      "d": 2.1
+    },
+    {
+      "tx": 24.5,
+      "ty": 8.0,
+      "w": 2.4,
+      "d": 2.0
+    }
+  ],
+  "lights": [
+    {
+      "s": 30.4,
+      "dd": -8.4,
+      "z": 16,
+      "type": "fire",
+      "radius": 58
+    },
+    {
+      "s": 34.6,
+      "dd": 9.0,
+      "z": 16,
+      "type": "fire",
+      "radius": 58
+    },
+    {
+      "s": 21.0,
+      "dd": -14.0,
+      "z": 44,
+      "type": "window",
+      "radius": 38
+    },
+    {
+      "s": 19.0,
+      "dd": 7.0,
+      "z": 44,
+      "type": "window",
+      "radius": 38
+    },
+    {
+      "s": 26.6,
+      "dd": 10.2,
+      "z": 40,
+      "type": "lantern",
+      "radius": 40
+    },
+    {
+      "s": 32.5,
+      "dd": 16.5,
+      "z": 44,
+      "type": "window",
+      "radius": 36
+    }
+  ],
+  "animatedProps": [
+    {
+      "type": "smoke",
+      "s": 30.4,
+      "dd": -8.4,
+      "z": 26,
+      "period": 2500
+    },
+    {
+      "type": "smoke",
+      "s": 34.6,
+      "dd": 9.0,
+      "z": 26,
+      "period": 2900
+    },
+    {
+      "type": "foliage-sway",
+      "s": 24.4,
+      "dd": -3.6,
+      "z": 82,
+      "period": 2200
+    },
+    {
+      "type": "foliage-sway",
+      "s": 23.2,
+      "dd": 2.6,
+      "z": 74,
+      "period": 1800
+    },
+    {
+      "type": "foliage-sway",
+      "s": 30.0,
+      "dd": -16.6,
+      "z": 86,
+      "period": 2600
+    },
+    {
+      "type": "foliage-sway",
+      "s": 28.0,
+      "dd": 18.2,
+      "z": 78,
+      "period": 2000
+    },
+    {
+      "type": "foliage-sway",
+      "s": 39.6,
+      "dd": -12.0,
+      "z": 72,
+      "period": 2400
+    },
+    {
+      "type": "laundry-sway",
+      "s": 25.4,
+      "dd": -11.4,
+      "z": 32,
+      "period": 2100
+    },
+    {
+      "type": "laundry-sway",
+      "s": 29.0,
+      "dd": 11.6,
+      "z": 30,
+      "period": 2500
+    },
+    {
+      "type": "laundry-sway",
+      "s": 36.2,
+      "dd": -5.2,
+      "z": 28,
+      "period": 1900
+    },
+    {
+      "type": "cloth-flutter",
+      "s": 34.2,
+      "dd": -2.6,
+      "z": 40,
+      "period": 1600
+    },
+    {
+      "type": "birds",
+      "x": 150,
+      "y": 88,
+      "period": 3100
+    },
+    {
+      "type": "birds",
+      "x": 470,
+      "y": 80,
+      "period": 2700
+    }
+  ],
+  "spawns": {
+    "player": {
+      "s": 24.0,
+      "dd": 0.0
+    }
+  },
+  "npcs": {
+    "mak-enang": {
+      "s": 29.4,
+      "dd": -11.0
+    },
+    "pak-salleh": {
+      "s": 33.0,
+      "dd": 6.4
+    }
+  },
+  "transitions": [
+    {
+      "targetLocation": "waterfront",
+      "label": "To The Waterfront",
+      "s": 19.4,
+      "dd": 0.0,
+      "triggerArea": {
+        "x": 268,
+        "y": 156,
+        "width": 104,
+        "height": 18
+      },
+      "spawnAt": {
+        "x": 452,
+        "y": 340
+      }
+    }
+  ],
+  "crowd": {
+    "maxActors": 5,
+    "paths": [
+      {
+        "id": "common-cross",
+        "points": [
+          [
+            320,
+            148
+          ],
+          [
+            318,
+            200
+          ],
+          [
+            300,
+            244
+          ],
+          [
+            286,
+            288
+          ],
+          [
+            270,
+            322
+          ]
+        ],
+        "speed": 14
+      },
+      {
+        "id": "well-round",
+        "points": [
+          [
+            392,
+            254
+          ],
+          [
+            340,
+            268
+          ],
+          [
+            300,
+            254
+          ],
+          [
+            348,
+            238
+          ],
+          [
+            392,
+            254
+          ]
+        ],
+        "speed": 10
+      },
+      {
+        "id": "river-walk",
+        "points": [
+          [
+            240,
+            320
+          ],
+          [
+            180,
+            328
+          ],
+          [
+            120,
+            322
+          ],
+          [
+            64,
+            330
+          ]
+        ],
+        "speed": 13
+      },
+      {
+        "id": "house-row",
+        "points": [
+          [
+            120,
+            232
+          ],
+          [
+            220,
+            244
+          ],
+          [
+            332,
+            238
+          ],
+          [
+            452,
+            250
+          ],
+          [
+            548,
+            240
+          ]
+        ],
+        "speed": 16
+      },
+      {
+        "id": "fire-tend",
+        "points": [
+          [
+            184,
+            244
+          ],
+          [
+            206,
+            262
+          ],
+          [
+            176,
+            272
+          ],
+          [
+            156,
+            254
+          ],
+          [
+            184,
+            244
+          ]
+        ],
+        "speed": 8
+      }
+    ]
+  }
+}

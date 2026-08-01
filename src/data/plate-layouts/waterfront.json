@@ -1,0 +1,1545 @@
+{
+  "id": "waterfront",
+  "name": "The Waterfront Quay",
+  "notes": [
+    "COMPOSITION. One long diagonal shoreline runs from the upper right down to",
+    "the lower left, so the frame splits into a working stone quay (right, two",
+    "thirds) and the harbour basin (left, one third) with the ships in it. The",
+    "junk is the focal mass: 230px of hull with her rig breaking the top of the",
+    "frame, moored where the diagonal meets the top edge, exactly on the third.",
+    "",
+    "WATER is ~34% of the frame before the hulls and the pier cover part of it.",
+    "It is painted by the `water-field` prop rather than by a ground material:",
+    "the layout declares a water `backdrop` (which is what makes the walk mask",
+    "blocked out there), the ground regions carve the land out of it, and the",
+    "prop repaints every remaining backdrop pixel in screen space with the",
+    "sky-reflection ramp, wave banding and the glitter path. See texture.cjs.",
+    "",
+    "DEPTH PLANES. 1) headland + far roofline + distant sails, hazed hard.",
+    "2) the basin, the ships, the pier, the quay and its godowns. 3) the near",
+    "cargo rows and the bottom-left godown, which is emitted as a walk-behind",
+    "overlay so the player can pass in front of and behind it.",
+    "",
+    "CULTURE MARKERS: the Fujian junk with her oculus and stern name-board, the",
+    "guild signboard, the Gujarati dhow's lateen rig, the Portuguese padrao and",
+    "the customs house flying the Cross of Christ."
+  ],
+  "canvas": {
+    "width": 640,
+    "height": 360
+  },
+  "iso": {
+    "tileWidth": 32,
+    "tileHeight": 16,
+    "originX": 320,
+    "originY": 0
+  },
+  "horizon": {
+    "skyTo": 76,
+    "skyTop": 1,
+    "skyBottom": 3,
+    "groundFrom": 78
+  },
+  "background": [
+    {
+      "type": "hill",
+      "cx": 92,
+      "baseY": 80,
+      "rx": 150,
+      "ry": 30,
+      "haze": 0.62
+    },
+    {
+      "type": "hill",
+      "cx": 560,
+      "baseY": 80,
+      "rx": 130,
+      "ry": 24,
+      "haze": 0.66
+    },
+    {
+      "type": "distant-roofline",
+      "baseY": 79,
+      "minH": 6,
+      "maxH": 14,
+      "haze": 0.6,
+      "seed": 91,
+      "x0": 380,
+      "x1": 640
+    },
+    {
+      "type": "tower",
+      "x": 486,
+      "w": 15,
+      "baseY": 68,
+      "h": 20,
+      "cap": 8,
+      "haze": 0.55
+    }
+  ],
+  "backdrop": {
+    "texture": "dirt",
+    "material": "water",
+    "light": 2,
+    "bigScale": 3.0,
+    "smallScale": 1.4,
+    "surface": "water"
+  },
+  "ground": [
+    {
+      "id": "quay",
+      "shape": {
+        "poly": [
+          {
+            "tx": 10,
+            "ty": 11.5
+          },
+          {
+            "tx": 21.5,
+            "ty": 0
+          },
+          {
+            "tx": 34.25,
+            "ty": 12.75
+          },
+          {
+            "tx": 12.75,
+            "ty": 34.25
+          },
+          {
+            "tx": 10,
+            "ty": 31.5
+          }
+        ]
+      },
+      "texture": "flagstone",
+      "material": "stone",
+      "light": 3,
+      "n": 1.5,
+      "surface": "stone",
+      "walkable": true,
+      "variance": 0.36
+    },
+    {
+      "id": "godown-apron",
+      "shape": {
+        "sFrom": 33,
+        "sTo": 41,
+        "ddFrom": 1,
+        "ddTo": 21
+      },
+      "texture": "trodden",
+      "material": "earth",
+      "light": 3,
+      "ruts": [
+        {
+          "s": 36.5,
+          "w": 0.34
+        },
+        {
+          "s": 38.4,
+          "w": 0.28
+        }
+      ],
+      "hotspots": [
+        {
+          "s": 35.2,
+          "dd": 5.5,
+          "r": 44
+        },
+        {
+          "s": 37.0,
+          "dd": 12.0,
+          "r": 46
+        },
+        {
+          "s": 34.6,
+          "dd": 17.5,
+          "r": 40
+        },
+        {
+          "s": 39.4,
+          "dd": 8.0,
+          "r": 38
+        }
+      ],
+      "surface": "dirt",
+      "walkable": true
+    },
+    {
+      "id": "landward-road",
+      "shape": {
+        "sFrom": 41,
+        "sTo": 47,
+        "ddFrom": -22,
+        "ddTo": 22
+      },
+      "texture": "trodden",
+      "material": "earth",
+      "light": 2,
+      "ruts": [
+        {
+          "s": 43.2,
+          "w": 0.4
+        },
+        {
+          "s": 44.8,
+          "w": 0.3
+        }
+      ],
+      "hotspots": [
+        {
+          "s": 42.6,
+          "dd": -14,
+          "r": 46
+        },
+        {
+          "s": 43.8,
+          "dd": 3,
+          "r": 46
+        },
+        {
+          "s": 42.8,
+          "dd": 14,
+          "r": 42
+        }
+      ],
+      "surface": "dirt",
+      "walkable": true
+    },
+    {
+      "id": "slipway-sand",
+      "shape": {
+        "sFrom": 38.5,
+        "sTo": 43,
+        "ddFrom": -21,
+        "ddTo": -12
+      },
+      "texture": "sand",
+      "material": "earth",
+      "light": 4,
+      "surface": "sand",
+      "walkable": true
+    },
+    {
+      "id": "pier",
+      "shape": {
+        "tx": 3,
+        "ty": 19.5,
+        "w": 7,
+        "d": 1.7
+      },
+      "texture": "deck",
+      "material": "timber",
+      "light": 3,
+      "n": 4,
+      "surface": "wood",
+      "walkable": true
+    },
+    {
+      "id": "basin",
+      "shape": {
+        "tx": 11,
+        "ty": 22,
+        "w": 4,
+        "d": 4
+      },
+      "texture": "dirt",
+      "material": "water",
+      "light": 2,
+      "bigScale": 3.0,
+      "smallScale": 1.4,
+      "surface": "water",
+      "walkable": false
+    }
+  ],
+  "shade": [
+    {
+      "shape": {
+        "sFrom": 33.2,
+        "sTo": 36.0,
+        "ddFrom": 3.0,
+        "ddTo": 10.5
+      },
+      "strength": 0.3
+    },
+    {
+      "shape": {
+        "sFrom": 34.2,
+        "sTo": 36.6,
+        "ddFrom": 11.6,
+        "ddTo": 18.1
+      },
+      "strength": 0.3
+    },
+    {
+      "shape": {
+        "sFrom": 41.0,
+        "sTo": 43.4,
+        "ddFrom": -19.0,
+        "ddTo": -12.5
+      },
+      "strength": 0.26
+    }
+  ],
+  "props": [
+    {
+      "type": "junk",
+      "x": 292,
+      "y": 116,
+      "len": 96,
+      "facing": -1,
+      "mastH": 66,
+      "sailW": 32,
+      "topsides": 18,
+      "sternRise": 16,
+      "seed": 121,
+      "depthAt": -840,
+      "examine": false
+    },
+    {
+      "type": "piling-row",
+      "x": 596,
+      "y": 146,
+      "count": 3,
+      "stepTx": 0.5,
+      "stepTy": 0.5,
+      "seed": 22,
+      "depthAt": -856
+    },
+    {
+      "type": "sampan",
+      "x": 268,
+      "y": 158,
+      "len": 40,
+      "facing": -1,
+      "awning": false,
+      "seed": 123,
+      "depthAt": -760,
+      "examine": false
+    },
+    {
+      "type": "bale-stack",
+      "s": 29.4,
+      "dd": -8.8,
+      "seed": 171,
+      "examine": false
+    },
+    {
+      "type": "crate",
+      "s": 28.0,
+      "dd": -10.4,
+      "seed": 173,
+      "examine": false
+    },
+    {
+      "type": "rope-coil",
+      "s": 33.0,
+      "dd": -9.8,
+      "seed": 175,
+      "examine": false
+    },
+    {
+      "type": "amphora",
+      "s": 34.4,
+      "dd": -14.0,
+      "seed": 177,
+      "examine": false
+    },
+    {
+      "type": "net-pile",
+      "s": 35.6,
+      "dd": -16.4,
+      "seed": 179,
+      "examine": false
+    },
+    {
+      "type": "crate-stack",
+      "s": 36.8,
+      "dd": -12.6,
+      "seed": 181,
+      "examine": false
+    },
+    {
+      "type": "barrel",
+      "s": 30.0,
+      "dd": 20.8,
+      "seed": 183,
+      "examine": false
+    },
+    {
+      "type": "rope-coil",
+      "s": 27.4,
+      "dd": 19.0,
+      "seed": 185,
+      "examine": false
+    },
+    {
+      "type": "crate",
+      "s": 26.0,
+      "dd": 16.6,
+      "seed": 187,
+      "examine": false
+    },
+    {
+      "type": "sack-pile",
+      "s": 28.8,
+      "dd": 12.2,
+      "seed": 189,
+      "examine": false
+    },
+    {
+      "type": "anchor-stock",
+      "s": 26.2,
+      "dd": -2.4,
+      "h": 48,
+      "seed": 125,
+      "key": "quay-anchor",
+      "label": "A ship's anchor"
+    },
+    {
+      "type": "anchor-stock",
+      "s": 24.4,
+      "dd": 8.6,
+      "h": 40,
+      "lean": -6,
+      "seed": 127,
+      "examine": false
+    },
+    {
+      "type": "net-pile",
+      "s": 28.6,
+      "dd": -4.6,
+      "seed": 129,
+      "key": "nets",
+      "label": "A heap of nets"
+    },
+    {
+      "type": "net-pile",
+      "s": 38.0,
+      "dd": -10.2,
+      "seed": 131,
+      "examine": false
+    },
+    {
+      "type": "capstan",
+      "s": 27.0,
+      "dd": -0.2,
+      "seed": 133,
+      "examine": false
+    },
+    {
+      "type": "bale-stack",
+      "s": 28.2,
+      "dd": 3.2,
+      "seed": 135,
+      "examine": false
+    },
+    {
+      "type": "crate-stack",
+      "s": 26.6,
+      "dd": 4.4,
+      "seed": 137,
+      "examine": false
+    },
+    {
+      "type": "barrel",
+      "s": 25.6,
+      "dd": -8.0,
+      "seed": 139,
+      "examine": false
+    },
+    {
+      "type": "barrel",
+      "s": 26.2,
+      "dd": -7.4,
+      "seed": 141,
+      "examine": false
+    },
+    {
+      "type": "rope-coil",
+      "s": 23.8,
+      "dd": 0.4,
+      "seed": 143,
+      "examine": false
+    },
+    {
+      "type": "crate",
+      "s": 24.6,
+      "dd": -3.2,
+      "seed": 145,
+      "examine": false
+    },
+    {
+      "type": "crate",
+      "s": 30.8,
+      "dd": -13.0,
+      "seed": 147,
+      "examine": false
+    },
+    {
+      "type": "barrel-open",
+      "s": 31.6,
+      "dd": -12.2,
+      "seed": 149,
+      "examine": false
+    },
+    {
+      "type": "sack-pile",
+      "s": 24.0,
+      "dd": -10.8,
+      "seed": 151,
+      "examine": false
+    },
+    {
+      "type": "crate-stack",
+      "s": 23.4,
+      "dd": -13.8,
+      "seed": 153,
+      "examine": false
+    },
+    {
+      "type": "rope-coil",
+      "s": 22.6,
+      "dd": -16.0,
+      "seed": 155,
+      "examine": false
+    },
+    {
+      "type": "basket",
+      "s": 44.2,
+      "dd": -15.4,
+      "seed": 157,
+      "examine": false
+    },
+    {
+      "type": "pot-row",
+      "s": 44.6,
+      "dd": -4.2,
+      "seed": 159,
+      "examine": false
+    },
+    {
+      "type": "crate",
+      "s": 45.0,
+      "dd": 2.6,
+      "seed": 161,
+      "examine": false
+    },
+    {
+      "type": "barrel",
+      "s": 43.4,
+      "dd": 17.4,
+      "seed": 163,
+      "examine": false
+    },
+    {
+      "type": "handcart",
+      "s": 45.4,
+      "dd": -17.6,
+      "seed": 165,
+      "examine": false
+    },
+    {
+      "type": "bollard",
+      "s": 22.2,
+      "dd": 16.4,
+      "seed": 167,
+      "examine": false
+    },
+    {
+      "type": "bollard",
+      "s": 25.0,
+      "dd": -17.2,
+      "seed": 169,
+      "examine": false
+    },
+    {
+      "type": "water-field",
+      "x0": 0,
+      "x1": 640,
+      "y0": 78,
+      "y1": 360,
+      "horizonY": 80,
+      "nearY": 330,
+      "glintX": 196,
+      "glintW": 62,
+      "seed": 77,
+      "depthAt": -900,
+      "layer": "plate"
+    },
+    {
+      "type": "distant-sails",
+      "depthAt": -880,
+      "haze": 0.6,
+      "seed": 51,
+      "ships": [
+        {
+          "x": 122,
+          "y": 96,
+          "scale": 0.85
+        },
+        {
+          "x": 236,
+          "y": 90,
+          "scale": 0.62
+        },
+        {
+          "x": 402,
+          "y": 93,
+          "scale": 0.7
+        },
+        {
+          "x": 556,
+          "y": 88,
+          "scale": 0.55
+        }
+      ]
+    },
+    {
+      "type": "piling-row",
+      "x": 68,
+      "y": 150,
+      "count": 4,
+      "stepTx": 0.5,
+      "stepTy": 0.5,
+      "seed": 8,
+      "depthAt": -860
+    },
+    {
+      "type": "piling-row",
+      "x": 250,
+      "y": 128,
+      "count": 3,
+      "stepTx": 0.45,
+      "stepTy": 0.45,
+      "seed": 12,
+      "depthAt": -858
+    },
+    {
+      "type": "junk",
+      "x": 186,
+      "y": 168,
+      "len": 232,
+      "facing": 1,
+      "mastH": 150,
+      "sailW": 70,
+      "topsides": 36,
+      "sternRise": 32,
+      "seed": 21,
+      "depthAt": -800,
+      "key": "junk-fu-hai",
+      "label": "The Fujian junk",
+      "examineText": "A Fujian junk of perhaps four hundred tons: eyes painted on her bows so she can see her way home, five bulkheads, and a stern gallery lacquered red and gold. Her master pays the guild, the guild pays the customs house, and nobody pays what the ledger says."
+    },
+    {
+      "type": "dhow",
+      "x": 512,
+      "y": 162,
+      "len": 168,
+      "facing": -1,
+      "mastH": 112,
+      "yard": 132,
+      "seed": 31,
+      "depthAt": -780,
+      "key": "dhow-gujarat",
+      "label": "The Gujarati dhow",
+      "examineText": "Sewn planking, no nail in her below the waterline, and a yard longer than she is. She came down on the north-east monsoon and cannot leave until it turns."
+    },
+    {
+      "type": "quay-edge",
+      "tx": 10,
+      "ty": 11.5,
+      "len": 11.5,
+      "axis": "h",
+      "orientation": "far",
+      "pilings": 11,
+      "seed": 4,
+      "depthAt": -700
+    },
+    {
+      "type": "quay-edge",
+      "tx": 10,
+      "ty": 11.5,
+      "len": 20,
+      "axis": "ty",
+      "orientation": "far",
+      "pilings": 9,
+      "seed": 6,
+      "depthAt": -698
+    },
+    {
+      "type": "quay-edge",
+      "tx": 3,
+      "ty": 19.5,
+      "len": 7,
+      "axis": "tx",
+      "orientation": "far",
+      "pilings": 5,
+      "seed": 9,
+      "depthAt": -696
+    },
+    {
+      "type": "quay-edge",
+      "tx": 3,
+      "ty": 21.2,
+      "len": 7,
+      "axis": "tx",
+      "pilings": 5,
+      "drop": 10,
+      "seed": 14,
+      "depthAt": 41
+    },
+    {
+      "type": "quay-edge",
+      "tx": 11,
+      "ty": 22,
+      "len": 4,
+      "axis": "tx",
+      "pilings": 3,
+      "drop": 11,
+      "seed": 16,
+      "depthAt": 44.5
+    },
+    {
+      "type": "quay-edge",
+      "tx": 11,
+      "ty": 22,
+      "len": 4,
+      "axis": "ty",
+      "pilings": 3,
+      "drop": 11,
+      "seed": 18,
+      "depthAt": 44.4
+    },
+    {
+      "type": "sampan",
+      "x": 128,
+      "y": 300,
+      "len": 52,
+      "facing": 1,
+      "seed": 41,
+      "depthAt": 46,
+      "key": "sampan-basin",
+      "label": "A sampan",
+      "examineText": "A lighter, sculled out to the anchored ships and back forty times a day. The boy who works her sleeps under the awning."
+    },
+    {
+      "type": "sampan",
+      "x": 176,
+      "y": 316,
+      "len": 44,
+      "facing": -1,
+      "awning": false,
+      "seed": 45,
+      "depthAt": 47
+    },
+    {
+      "type": "gangway",
+      "s": 27.5,
+      "dd": -9.0,
+      "dtx": -1.3,
+      "dty": -1.3,
+      "z1": 26,
+      "width": 12,
+      "depthAt": -720
+    },
+    {
+      "type": "godown",
+      "s": 33.0,
+      "dd": 3.2,
+      "w": 4.2,
+      "d": 2.6,
+      "h": 60,
+      "wall": "timber",
+      "roofType": "gable",
+      "ridgeAxis": "tx",
+      "rise": 28,
+      "litWindows": true,
+      "seed": 61,
+      "collide": false,
+      "key": "godown-pepper",
+      "label": "The pepper godown",
+      "examineText": "Bonded pepper, five hundred bahar of it, and a customs seal on the door that has been broken and remade three times this month."
+    },
+    {
+      "type": "godown",
+      "s": 34.2,
+      "dd": 11.6,
+      "w": 3.6,
+      "d": 2.4,
+      "h": 54,
+      "wall": "timber",
+      "roofType": "gable",
+      "ridgeAxis": "tx",
+      "rise": 24,
+      "doorOpen": false,
+      "seed": 67,
+      "collide": false,
+      "key": "godown-tin",
+      "label": "The tin godown",
+      "examineText": "Tin ingots from Perak, stacked like loaves. The door is barred and the bar is new."
+    },
+    {
+      "type": "customs-shed",
+      "s": 29.8,
+      "dd": 15.6,
+      "w": 3.0,
+      "d": 2.4,
+      "h": 52,
+      "rise": 26,
+      "seed": 71,
+      "collide": false,
+      "key": "customs-house",
+      "label": "The customs house",
+      "examineText": "Every bale on this quay is written into a ledger inside, in Portuguese, from a tally kept in Chinese, of goods measured in Malay bahar. Three chances to disagree."
+    },
+    {
+      "type": "quay-crane",
+      "s": 28.4,
+      "dd": -3.4,
+      "h": 62,
+      "reach": -16,
+      "hook": 32,
+      "seed": 7,
+      "key": "shear-legs",
+      "label": "The shear-legs"
+    },
+    {
+      "type": "capstan",
+      "s": 30.2,
+      "dd": 1.4,
+      "seed": 5
+    },
+    {
+      "type": "capstan",
+      "s": 24.6,
+      "dd": 6.2,
+      "seed": 9
+    },
+    {
+      "type": "bale-stack",
+      "s": 32.0,
+      "dd": -2.0,
+      "seed": 3,
+      "key": "bales-goa",
+      "label": "Bales for Goa"
+    },
+    {
+      "type": "bale-stack",
+      "s": 33.4,
+      "dd": 8.6,
+      "seed": 13
+    },
+    {
+      "type": "bale-stack",
+      "s": 36.8,
+      "dd": -6.4,
+      "seed": 19
+    },
+    {
+      "type": "crate-stack",
+      "s": 31.0,
+      "dd": 4.6,
+      "seed": 21
+    },
+    {
+      "type": "crate-stack",
+      "s": 35.6,
+      "dd": 10.4,
+      "seed": 23
+    },
+    {
+      "type": "crate",
+      "s": 30.2,
+      "dd": 6.8,
+      "seed": 25
+    },
+    {
+      "type": "crate",
+      "s": 29.4,
+      "dd": 8.0,
+      "seed": 27
+    },
+    {
+      "type": "crate",
+      "s": 37.8,
+      "dd": 1.2,
+      "seed": 29
+    },
+    {
+      "type": "barrel",
+      "s": 29.0,
+      "dd": -0.8,
+      "seed": 31
+    },
+    {
+      "type": "barrel",
+      "s": 29.6,
+      "dd": -0.2,
+      "seed": 33
+    },
+    {
+      "type": "barrel",
+      "s": 34.2,
+      "dd": 20.0,
+      "seed": 35
+    },
+    {
+      "type": "barrel-open",
+      "s": 33.0,
+      "dd": 19.2,
+      "seed": 37
+    },
+    {
+      "type": "barrel",
+      "s": 42.2,
+      "dd": -8.6,
+      "seed": 39
+    },
+    {
+      "type": "sack-pile",
+      "s": 32.6,
+      "dd": 12.0,
+      "seed": 41,
+      "key": "pepper-sacks",
+      "label": "Sacks of pepper"
+    },
+    {
+      "type": "sack-pile",
+      "s": 38.4,
+      "dd": 4.4,
+      "seed": 43
+    },
+    {
+      "type": "spice-sack-row",
+      "s": 36.2,
+      "dd": 15.4,
+      "seed": 47,
+      "key": "spice-sacks",
+      "label": "Open spice sacks"
+    },
+    {
+      "type": "spice-sack-row",
+      "s": 42.6,
+      "dd": 6.0,
+      "seed": 49
+    },
+    {
+      "type": "rope-coil",
+      "s": 27.6,
+      "dd": -6.0,
+      "seed": 51
+    },
+    {
+      "type": "rope-coil",
+      "s": 31.6,
+      "dd": -7.2,
+      "seed": 53
+    },
+    {
+      "type": "rope-coil",
+      "s": 25.0,
+      "dd": -12.6,
+      "seed": 55
+    },
+    {
+      "type": "bollard",
+      "s": 23.4,
+      "dd": -5.0,
+      "seed": 57
+    },
+    {
+      "type": "bollard",
+      "s": 23.0,
+      "dd": 2.6,
+      "seed": 59
+    },
+    {
+      "type": "bollard",
+      "s": 22.6,
+      "dd": 10.0,
+      "seed": 61
+    },
+    {
+      "type": "bollard",
+      "s": 26.0,
+      "dd": -14.0,
+      "seed": 63
+    },
+    {
+      "type": "drying-rack-fish",
+      "s": 39.6,
+      "dd": -14.6,
+      "seed": 11,
+      "key": "fish-racks",
+      "label": "Fish drying racks"
+    },
+    {
+      "type": "drying-rack-fish",
+      "s": 41.4,
+      "dd": -17.4,
+      "seed": 15
+    },
+    {
+      "type": "handcart",
+      "s": 34.8,
+      "dd": -1.0,
+      "seed": 65
+    },
+    {
+      "type": "handcart",
+      "s": 43.0,
+      "dd": 11.4,
+      "seed": 67
+    },
+    {
+      "type": "market-stall",
+      "s": 40.0,
+      "dd": -3.6,
+      "culture": "fish",
+      "w": 1.5,
+      "d": 1.0,
+      "seed": 69,
+      "key": "fish-stall",
+      "label": "The fish stall",
+      "examineText": "Ikan kembung, prawns the length of a hand, and a woman who has been shouting the same three prices since before the Portuguese came."
+    },
+    {
+      "type": "market-stall",
+      "s": 41.6,
+      "dd": 15.0,
+      "culture": "spice",
+      "w": 1.4,
+      "d": 1.0,
+      "seed": 73
+    },
+    {
+      "type": "signboard-chinese",
+      "s": 32.6,
+      "dd": 19.4,
+      "h": 46,
+      "seed": 75,
+      "key": "guild-board",
+      "label": "The guild board",
+      "examineText": "The board of the Fujian merchants' association. Gilt characters, flaking; below them, in smaller paint, a list of the ships that owe it money."
+    },
+    {
+      "type": "padrao",
+      "s": 27.0,
+      "dd": 12.4,
+      "seed": 77,
+      "key": "quay-padrao",
+      "label": "The padrao",
+      "examineText": "A stone pillar cut with the Cross of the Order of Christ, set here the year the fortress was finished. Sailors touch it going out and coming back."
+    },
+    {
+      "type": "pot-row",
+      "s": 37.0,
+      "dd": 18.4,
+      "seed": 79
+    },
+    {
+      "type": "amphora",
+      "s": 35.0,
+      "dd": -4.2,
+      "seed": 81
+    },
+    {
+      "type": "water-trough",
+      "s": 43.6,
+      "dd": -1.6,
+      "seed": 83
+    },
+    {
+      "type": "basket",
+      "s": 39.0,
+      "dd": 8.2,
+      "seed": 85
+    },
+    {
+      "type": "basket",
+      "s": 39.6,
+      "dd": 9.0,
+      "seed": 87
+    },
+    {
+      "type": "lantern-post",
+      "s": 29.8,
+      "dd": -10.6,
+      "h": 42,
+      "seed": 89
+    },
+    {
+      "type": "lantern-post",
+      "s": 33.6,
+      "dd": 0.4,
+      "h": 42,
+      "seed": 91
+    },
+    {
+      "type": "lantern-post",
+      "s": 32.0,
+      "dd": 20.4,
+      "h": 42,
+      "seed": 93
+    },
+    {
+      "type": "lantern-post",
+      "s": 44.0,
+      "dd": -12.0,
+      "h": 40,
+      "seed": 95
+    },
+    {
+      "type": "brazier",
+      "s": 41.0,
+      "dd": -5.0,
+      "seed": 97,
+      "key": "quay-brazier",
+      "label": "A charcoal brazier"
+    },
+    {
+      "type": "perahu-beached",
+      "s": 41.2,
+      "dd": -18.4,
+      "len": 60,
+      "facing": 1,
+      "seed": 43,
+      "key": "beached-perahu",
+      "label": "A beached perahu"
+    },
+    {
+      "type": "palm",
+      "s": 40.2,
+      "dd": -21.2,
+      "h": 78,
+      "lean": -10,
+      "seed": 101
+    },
+    {
+      "type": "palm-cluster",
+      "s": 45.4,
+      "dd": 19.6,
+      "count": 3,
+      "h": 74,
+      "spread": 1.1,
+      "seed": 103,
+      "layer": "overlay",
+      "depthAt": 300
+    },
+    {
+      "type": "scrub",
+      "s": 44.2,
+      "dd": -19.0,
+      "blades": 30,
+      "spreadX": 26,
+      "seed": 105
+    },
+    {
+      "type": "scrub",
+      "s": 45.0,
+      "dd": 12.0,
+      "blades": 26,
+      "spreadX": 24,
+      "seed": 107
+    },
+    {
+      "type": "godown",
+      "s": 44.6,
+      "dd": -7.0,
+      "w": 3.4,
+      "d": 2.2,
+      "h": 56,
+      "wall": "timber",
+      "roofType": "gable",
+      "ridgeAxis": "tx",
+      "rise": 24,
+      "doorOpen": false,
+      "seed": 109,
+      "collide": false,
+      "layer": "overlay",
+      "depthAt": 320,
+      "key": "godown-near",
+      "label": "The near godown",
+      "examineText": "Sailcloth, cordage and pitch. The smell of it carries two streets inland."
+    }
+  ],
+  "blocked": [
+    {
+      "tx": 18.1,
+      "ty": 14.9,
+      "w": 4.2,
+      "d": 2.6
+    },
+    {
+      "tx": 22.9,
+      "ty": 11.3,
+      "w": 3.6,
+      "d": 2.4
+    },
+    {
+      "tx": 22.7,
+      "ty": 7.1,
+      "w": 3.0,
+      "d": 2.4
+    },
+    {
+      "tx": 18.8,
+      "ty": 25.8,
+      "w": 3.4,
+      "d": 2.2
+    }
+  ],
+  "lights": [
+    {
+      "s": 29.8,
+      "dd": 14.6,
+      "z": 36,
+      "type": "lantern",
+      "radius": 46
+    },
+    {
+      "s": 33.2,
+      "dd": 4.0,
+      "z": 44,
+      "type": "window",
+      "radius": 38
+    },
+    {
+      "s": 27.0,
+      "dd": -8.0,
+      "z": 30,
+      "type": "lantern",
+      "radius": 40
+    },
+    {
+      "s": 24.0,
+      "dd": 4.0,
+      "z": 26,
+      "type": "lantern",
+      "radius": 36
+    }
+  ],
+  "animatedProps": [
+    {
+      "type": "birds",
+      "x": 96,
+      "y": 104,
+      "period": 3000
+    },
+    {
+      "type": "birds",
+      "x": 420,
+      "y": 112,
+      "period": 2600
+    },
+    {
+      "type": "birds",
+      "x": 268,
+      "y": 92,
+      "period": 3300
+    },
+    {
+      "type": "cloth-flutter",
+      "s": 26.0,
+      "dd": -9.0,
+      "z": 120,
+      "period": 1900
+    },
+    {
+      "type": "cloth-flutter",
+      "s": 29.8,
+      "dd": 15.6,
+      "z": 78,
+      "period": 2300
+    },
+    {
+      "type": "cloth-flutter",
+      "s": 40.0,
+      "dd": -3.6,
+      "z": 40,
+      "period": 1500
+    },
+    {
+      "type": "cloth-flutter",
+      "s": 41.6,
+      "dd": 15.0,
+      "z": 40,
+      "period": 2100
+    },
+    {
+      "type": "smoke",
+      "s": 41.0,
+      "dd": -5.0,
+      "z": 14,
+      "period": 2700
+    },
+    {
+      "type": "foliage-sway",
+      "s": 40.2,
+      "dd": -21.2,
+      "z": 78,
+      "period": 2400
+    },
+    {
+      "type": "foliage-sway",
+      "s": 45.4,
+      "dd": 19.6,
+      "z": 74,
+      "period": 2000
+    },
+    {
+      "type": "laundry-sway",
+      "s": 39.6,
+      "dd": -14.6,
+      "z": 26,
+      "period": 2500
+    }
+  ],
+  "spawns": {
+    "player": {
+      "s": 38.0,
+      "dd": -2.0
+    }
+  },
+  "npcs": {
+    "chen-wei": {
+      "s": 31.4,
+      "dd": 14.2
+    },
+    "rashid": {
+      "s": 29.0,
+      "dd": -12.0
+    },
+    "lin-mei": {
+      "s": 35.0,
+      "dd": 6.6
+    }
+  },
+  "transitions": [
+    {
+      "targetLocation": "rua-direita",
+      "label": "To Rua Direita",
+      "s": 43.5,
+      "dd": -20.0,
+      "triggerArea": {
+        "x": 0,
+        "y": 314,
+        "width": 16,
+        "height": 44
+      },
+      "spawnAt": {
+        "x": 606,
+        "y": 250
+      }
+    },
+    {
+      "targetLocation": "a-famosa-gate",
+      "label": "To A Famosa Service Gate",
+      "s": 46.2,
+      "dd": -12.0,
+      "triggerArea": {
+        "x": 78,
+        "y": 344,
+        "width": 110,
+        "height": 16
+      },
+      "spawnAt": {
+        "x": 176,
+        "y": 300
+      }
+    },
+    {
+      "targetLocation": "kampung",
+      "label": "To Kampung Quarter",
+      "s": 46.2,
+      "dd": 8.0,
+      "triggerArea": {
+        "x": 396,
+        "y": 344,
+        "width": 120,
+        "height": 16
+      },
+      "spawnAt": {
+        "x": 320,
+        "y": 132
+      }
+    }
+  ],
+  "crowd": {
+    "maxActors": 7,
+    "paths": [
+      {
+        "id": "quay-walk-west",
+        "points": [
+          [
+            620,
+            296
+          ],
+          [
+            470,
+            300
+          ],
+          [
+            330,
+            294
+          ],
+          [
+            200,
+            302
+          ],
+          [
+            40,
+            330
+          ]
+        ],
+        "speed": 20
+      },
+      {
+        "id": "quay-walk-east",
+        "points": [
+          [
+            30,
+            344
+          ],
+          [
+            220,
+            338
+          ],
+          [
+            400,
+            344
+          ],
+          [
+            600,
+            336
+          ]
+        ],
+        "speed": 22
+      },
+      {
+        "id": "godown-run",
+        "points": [
+          [
+            300,
+            268
+          ],
+          [
+            372,
+            282
+          ],
+          [
+            432,
+            268
+          ],
+          [
+            364,
+            254
+          ],
+          [
+            300,
+            268
+          ]
+        ],
+        "speed": 14
+      },
+      {
+        "id": "crane-gang",
+        "points": [
+          [
+            262,
+            232
+          ],
+          [
+            300,
+            246
+          ],
+          [
+            246,
+            258
+          ],
+          [
+            214,
+            242
+          ],
+          [
+            262,
+            232
+          ]
+        ],
+        "speed": 11
+      },
+      {
+        "id": "customs-queue",
+        "points": [
+          [
+            560,
+            258
+          ],
+          [
+            520,
+            272
+          ],
+          [
+            470,
+            286
+          ],
+          [
+            432,
+            300
+          ]
+        ],
+        "speed": 12
+      },
+      {
+        "id": "pier-walk",
+        "points": [
+          [
+            236,
+            240
+          ],
+          [
+            160,
+            212
+          ],
+          [
+            96,
+            196
+          ],
+          [
+            60,
+            190
+          ]
+        ],
+        "speed": 16
+      },
+      {
+        "id": "fish-market",
+        "points": [
+          [
+            240,
+            322
+          ],
+          [
+            286,
+            334
+          ],
+          [
+            220,
+            344
+          ],
+          [
+            176,
+            330
+          ],
+          [
+            240,
+            322
+          ]
+        ],
+        "speed": 10
+      }
+    ]
+  }
+}

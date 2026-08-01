@@ -280,11 +280,12 @@ function compose(rawLayout, opts) {
 
   items.sort((a, b) => (a.depth - b.depth) || (a.label < b.label ? -1 : 1));
 
+  // A foreground occluder is drawn TWICE: once alone, to learn its silhouette,
+  // and once into the plate so flip-screen mode stays visually complete.
+  // The solo pass is a MASK ONLY — see the cut below.
   const overlayEntries = [];
   items.forEach((it) => {
     if (it.layer === 'overlay') {
-      // draw into BOTH: the plate stays visually complete for flip-screen mode,
-      // and the cropped sprite lets the engine re-draw it above the player.
       const solo = new Surface(W, H);
       it.draw(solo, derived);
       const bounds = solo.opaqueBounds();
@@ -322,6 +323,25 @@ function compose(rawLayout, opts) {
   // stray colours a lone prop drags in (Fallout/BG both did exactly this).
   plate.quantize(P);
   const used = indexScreen(plate, o.screenBudget || 40);
+
+  // ---- 5b. CUT THE FOREGROUND SPRITES OUT OF THE FINISHED PLATE ----------
+  // The solo pass above gives a correct SILHOUETTE but wrong PIXELS: anything
+  // drawn later — a prop in front, the per-screen palette fold, a cast shadow
+  // landing on the occluder — exists on the plate and not in the solo surface.
+  // Cutting from the solo surface therefore shipped an overlay sprite that
+  // disagreed with the plate underneath it (1.65% of pixels on rua-direita),
+  // and the seam showed as the player walked behind it. So the sprite is
+  // stamped from the FINAL plate, using the solo surface purely as an alpha
+  // stencil. By construction the two now agree pixel for pixel.
+  overlayEntries.forEach((oe) => {
+    const cut = new Surface(W, H);
+    const sd = oe.solo.data, cd = cut.data, pd = plate.data;
+    for (let i = 0; i < sd.length; i += 4) {
+      if (sd[i + 3] === 0) continue;
+      cd[i] = pd[i]; cd[i + 1] = pd[i + 1]; cd[i + 2] = pd[i + 2]; cd[i + 3] = 255;
+    }
+    oe.cut = cut;
+  });
 
   // ---- 6. derived engine data -------------------------------------------
   const collisionRects = deriveCollisionRects(walk, o.collisionCell || 8);
@@ -515,7 +535,10 @@ function run(argv) {
   }
 
   res.overlayEntries.forEach((oe, i) => {
-    const cropped = oe.solo.crop(oe.bounds.x, oe.bounds.y, oe.bounds.width, oe.bounds.height);
+    // `cut` is stamped from the finished plate (compose step 5b); it is already
+    // canon-quantized and palette-folded, so re-quantizing is a no-op kept only
+    // for the case where an older caller passes a solo-only entry.
+    const cropped = (oe.cut || oe.solo).crop(oe.bounds.x, oe.bounds.y, oe.bounds.width, oe.bounds.height);
     cropped.quantize(P);
     const key = `${id}-fg-${i}`;
     cropped.writePNG(path.join(outDir, `${key}.png`));

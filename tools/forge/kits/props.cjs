@@ -18,139 +18,15 @@
 const P = require('../palette.cjs');
 const T = require('../texture.cjs');
 const { drawFace, hash2 } = require('../iso.cjs');
+const { PROPS, def } = require('./registry.cjs');
+const PRIM = require('./primitives.cjs');
 
 const step = T.step;
 const clamp = (v, lo, hi) => (v < lo ? lo : v > hi ? hi : v);
 
-// ---------------------------------------------------------------------------
-// primitives
-// ---------------------------------------------------------------------------
-
-function ellipsePts(cx, cy, rx, ry, n) {
-  const pts = [];
-  for (let i = 0; i < (n || 32); i++) {
-    const a = (i / (n || 32)) * Math.PI * 2;
-    pts.push({ x: cx + Math.cos(a) * rx, y: cy + Math.sin(a) * ry });
-  }
-  return pts;
-}
-
-/** Baked contact shadow: elliptical, offset down-right, 2-value checker. */
-function contactShadow(surface, iso, tx, ty, rTiles, strength) {
-  const c = iso.toScreen(tx, ty, 0);
-  const rx = rTiles * iso.tileWidth * 0.5;
-  const ry = rTiles * iso.tileHeight * 0.5;
-  const s = strength === undefined ? 0.40 : strength;
-  surface.fillPoly(ellipsePts(c.x + rx * 0.45, c.y + ry * 0.5, rx * 1.15, ry * 1.15, 24),
-    (u, v, x, y) => { T.shadePixel(surface, x, y, T.checker2(x, y) ? s : s * 0.5); return null; });
-}
-
-/** Axis-aligned iso box: top + lit face + shadow face. */
-function isoBox(surface, iso, o) {
-  const { tx, ty, w, d, h } = o;
-  const mat = o.material || 'timber';
-  const seed = o.seed || 1;
-  const topTex = o.topTex || T.plank({ material: mat, light: 4, plankW: o.plankW || 4, seed });
-  const litTex = o.litTex || T.plank({ material: mat, light: 3, plankW: o.plankW || 4, seed: seed + 1 });
-  const shTex = o.shTex || T.plank({ material: mat, light: 1, plankW: o.plankW || 4, seed: seed + 2 });
-
-  const reg = iso.region(tx, ty, w, d, h + (o.z || 0));
-  surface.fillPara(reg.o, reg.eu, reg.ev, topTex, reg);
-  const fLit = iso.face({ tx, ty: ty + d }, { tx: tx + w, ty: ty + d }, h, o.z || 0);
-  drawFace(surface, fLit, litTex);
-  const fSh = iso.face({ tx: tx + w, ty: ty + d }, { tx: tx + w, ty }, h, o.z || 0);
-  drawFace(surface, fSh, shTex);
-
-  // arris: bright 1px on the lit side of the near corner, dark on the shadow side
-  const C = iso.toScreen(tx + w, ty + d, o.z || 0);
-  const ramp = P.RAMPS[mat];
-  for (let v = 0; v < h; v++) {
-    surface.setHex(Math.round(C.x) - 1, Math.round(C.y) - 1 - v, step(ramp, 4));
-    surface.setHex(Math.round(C.x), Math.round(C.y) - 1 - v, step(ramp, 0));
-  }
-  return { top: h + (o.z || 0), corner: C };
-}
-
-/** Vertical cylinder (barrel, jar, post) with directional shading. */
-function isoCyl(surface, iso, o) {
-  const { tx, ty } = o;
-  const mat = o.material || 'timber';
-  const ramp = P.RAMPS[mat];
-  const seed = o.seed || 1;
-  const h = o.h || 15;
-  const z = o.z || 0;
-  const c = iso.toScreen(tx, ty, z);
-  const rx0 = (o.r || 0.34) * iso.tileWidth * 0.5;
-  const ry0 = (o.r || 0.34) * iso.tileHeight * 0.5;
-  const bulge = o.bulge === undefined ? 0 : o.bulge;
-  const profile = o.profile || ((t) => 1 + bulge * Math.sin(Math.PI * t));
-
-  for (let v = 0; v < h; v++) {
-    const k = profile(v / h);
-    const rx = rx0 * k, ry = ry0 * k;
-    surface.fillPoly(ellipsePts(c.x, c.y - v, rx, ry, 28), (uu, vv, x, y) => {
-      const dx = (x + 0.5 - c.x) / Math.max(1, rx);
-      let sIdx = dx < -0.55 ? 3 : dx < -0.05 ? 4 : dx < 0.45 ? 2 : 1;
-      if (o.stave) {
-        const ang = Math.round((dx + 1) * 6);
-        if (hash2(ang, 0, seed) < 0.28) sIdx -= 1;
-      }
-      if (o.hoops && o.hoops.indexOf(v) >= 0) sIdx = dx < -0.2 ? 4 : 1;
-      return step(ramp, clamp(sIdx, 0, 4));
-    });
-  }
-  // top face
-  const kTop = profile(1);
-  surface.fillPoly(ellipsePts(c.x, c.y - h, rx0 * kTop, ry0 * kTop, 28), (uu, vv, x, y) => {
-    const dx = (x + 0.5 - c.x) / Math.max(1, rx0 * kTop);
-    const dy = (y + 0.5 - (c.y - h)) / Math.max(1, ry0 * kTop);
-    if (o.open && dx * dx + dy * dy < 0.5) return P.ANCHORS['shadow-void'];
-    return step(ramp, dy < -0.15 ? 4 : 3);
-  });
-  return { top: h + z, c };
-}
-
-/** Thin post. */
-function post(surface, iso, o) {
-  const c = iso.toScreen(o.tx, o.ty, 0);
-  const ramp = P.RAMPS[o.material || 'timber'];
-  const w = o.w || 3;
-  for (let v = 0; v < o.h; v++) {
-    for (let dx = 0; dx < w; dx++) {
-      surface.setHex(Math.round(c.x) - Math.floor(w / 2) + dx, Math.round(c.y) - 1 - v,
-        step(ramp, dx === 0 ? 4 : dx === w - 1 ? 1 : 3));
-    }
-  }
-  return c;
-}
-
-/** Cloth panel hanging in the vertical plane (awning, banner, laundry). */
-function cloth(surface, iso, o) {
-  const a = iso.toScreen(o.ax, o.ay, o.z || 0);
-  const b = iso.toScreen(o.bx, o.by, o.z || 0);
-  const ramp = o.ramp || P.RAMPS.terracotta;
-  const h = o.h || 14;
-  const seed = o.seed || 9;
-  const x0 = Math.min(a.x, b.x), x1 = Math.max(a.x, b.x);
-  for (let x = Math.round(x0); x <= Math.round(x1); x++) {
-    const t = (x - x0) / Math.max(1, x1 - x0);
-    const baseY = Math.round(a.y + (b.y - a.y) * (a.x <= b.x ? t : 1 - t));
-    const sag = Math.round(Math.sin(Math.PI * t) * (o.sag === undefined ? 3 : o.sag));
-    const fold = Math.floor((x - x0) / 5);
-    const shade = hash2(fold, 0, seed) < 0.35 ? -1 : 0;
-    for (let v = 0; v < h; v++) {
-      const jag = v === 0 ? Math.floor(hash2(x, 1, seed) * 2) : 0;
-      surface.setHex(x, baseY + sag - v + jag,
-        step(ramp, clamp((v > h - 3 ? 2 : v < 2 ? 2 : 3) + shade + (t < 0.45 ? 1 : 0), 0, 4)));
-    }
-  }
-}
-
-// ---------------------------------------------------------------------------
-// PROP REGISTRY
-// ---------------------------------------------------------------------------
-const PROPS = {};
-function def(key, meta, draw) { PROPS[key] = Object.assign({ key, draw }, meta); }
+// primitives now live in primitives.cjs so every kit can share them without a
+// require cycle through this file.
+const { ellipsePts, contactShadow, isoBox, isoCyl, post, cloth } = PRIM;
 
 // --- cooperage / cargo ------------------------------------------------------
 def('barrel', { collide: 0.55, examine: 'A stout oak barrel, hooped in iron.' }, (s, iso, o) => {
@@ -181,23 +57,94 @@ def('crate-stack', { collide: 0.9, examine: 'Crates stacked two high, roped agai
   isoBox(s, iso, { tx: o.tx + 0.14, ty: o.ty + 0.16, w: 0.6, d: 0.6, h: 12, z: 15, material: 'timber', seed: (o.seed || 1) + 3 });
 });
 
+/**
+ * One hessian sack, standing. THE SILHOUETTE IS THE WHOLE PROP: a sack is a
+ * bulging bottom two thirds, a waisted shoulder and a gathered neck tied with
+ * cord — the moment you draw it as an ellipsoid it becomes a boulder, which is
+ * exactly what the first version of `sack-pile` did.
+ */
+function sackBody(s, iso, tx, ty, z, h, seed, ramp) {
+  const c = iso.toScreen(tx, ty, z);
+  const R = P.RAMPS[ramp || 'earth'];
+  const wMax = 8;
+  for (let v = 0; v < h; v++) {
+    const t = v / h;
+    // profile: wide belly (t~0.3), waisted shoulder (t~0.82), pinched neck
+    let k;
+    if (t < 0.72) k = 0.66 + 0.34 * Math.sin(Math.PI * (0.18 + t * 0.82));
+    else if (t < 0.88) k = 0.62 - (t - 0.72) * 1.6;
+    else k = 0.30;
+    const rx = wMax * k, ry = Math.max(1.2, 4 * k);
+    s.fillPoly(ellipsePts(c.x, c.y - v, rx, ry, 20), (uu, vv, x, y) => {
+      const ddx = (x + 0.5 - c.x) / Math.max(1, rx);
+      let idx = ddx < -0.45 ? 4 : ddx < 0.05 ? 3 : ddx < 0.55 ? 2 : 1;
+      // slack folds: vertical creases that stay put down the whole sack, so
+      // they read as cloth gathers rather than as speckle
+      const crease = Math.floor((ddx + 1) * 3.5);
+      if (hash2(crease, Math.floor(v / 9), seed) < 0.26) idx -= 1;
+      if (v < 2) idx -= 2;                       // sits into its own shadow
+      return step(R, clamp(idx, 0, 4));
+    });
+  }
+  // gathered neck + cord tie + the little ears of surplus cloth above it
+  const ny = Math.round(c.y) - h;
+  for (let dx = -3; dx <= 3; dx++) s.setHex(Math.round(c.x) + dx, ny + 1, step(R, dx < 0 ? 2 : 1));
+  for (let dx = -2; dx <= 2; dx++) s.setHex(Math.round(c.x) + dx, ny, step(R, 0));
+  s.setHex(Math.round(c.x) - 3, ny - 1, step(R, 3));
+  s.setHex(Math.round(c.x) - 2, ny - 2, step(R, 4));
+  s.setHex(Math.round(c.x) + 2, ny - 1, step(R, 2));
+  return { x: Math.round(c.x), y: ny };
+}
+
 def('sack-pile', { collide: 0.75, examine: 'Sacks of pepper, sagging under their own weight.' }, (s, iso, o) => {
-  contactShadow(s, iso, o.tx + 0.3, o.ty + 0.3, 0.85);
-  const ramp = P.RAMPS.earth;
-  const spots = [[0, 0, 12], [0.34, 0.06, 11], [0.16, 0.34, 10], [0.2, 0.18, 9]];
-  spots.forEach(([dx, dy, h], i) => {
-    const c = iso.toScreen(o.tx + dx, o.ty + dy, i === 3 ? 11 : 0);
+  contactShadow(s, iso, o.tx + 0.3, o.ty + 0.3, 0.9);
+  const ramp = o.ramp || 'earth';
+  const seed = o.seed || 1;
+  // back row first, then a sack lying on its side across the front — the mixed
+  // orientation is what stops a stack of sacks reading as a cairn.
+  [[0.02, 0.02, 17], [0.40, 0.10, 15], [0.22, 0.40, 16]].forEach(([dx, dy, h], i) => {
+    sackBody(s, iso, o.tx + dx, o.ty + dy, 0, h, seed + i * 5, ramp);
+  });
+  const c = iso.toScreen(o.tx + 0.30, o.ty + 0.26, 15);
+  const R = P.RAMPS[ramp];
+  for (let dx = -11; dx <= 11; dx++) {
+    const t = dx / 11;
+    const hh = Math.round(5.5 * Math.sqrt(Math.max(0, 1 - t * t * 0.86)));
+    for (let v = -hh; v <= hh; v++) {
+      let idx = v < -hh * 0.35 ? 4 : v < hh * 0.3 ? 3 : 2;
+      if (hash2(Math.floor(dx / 3), 0, seed + 41) < 0.24) idx -= 1;
+      if (Math.abs(dx) > 8) idx -= 1;
+      s.setHex(Math.round(c.x) + dx, Math.round(c.y) + v, step(R, clamp(idx, 0, 4)));
+    }
+  }
+  T.aoBand(s, Math.round(c.x), Math.round(c.y) + 7, 2, 0.3);
+});
+
+def('spice-sack-row', { collide: 1.1, examine: 'Open sacks of pepper, clove and nutmeg, mouths rolled back for the buyer\'s hand.' }, (s, iso, o) => {
+  const seed = o.seed || 1;
+  const ramps = ['earth', 'timber', 'terracotta', 'earth'];
+  [[0, 0], [0.42, 0.08], [0.10, 0.44], [0.52, 0.50]].forEach(([dx, dy], i) => {
+    contactShadow(s, iso, o.tx + dx, o.ty + dy, 0.5, 0.34);
+    const h = 12 + (i % 3) * 2;
+    const c = iso.toScreen(o.tx + dx, o.ty + dy, 0);
+    const R = P.RAMPS[ramps[i]];
+    // squat open sack: rolled-down collar and a heaped cone of spice on top
     for (let v = 0; v < h; v++) {
-      const k = 1 - Math.pow(v / h, 2.2) * 0.35;
-      s.fillPoly(ellipsePts(c.x, c.y - v, 8 * k, 4 * k, 20), (uu, vv, x, y) => {
-        const ddx = (x + 0.5 - c.x) / (8 * k);
-        let idx = ddx < -0.4 ? 4 : ddx < 0.15 ? 3 : ddx < 0.6 ? 2 : 1;
-        if (hash2(Math.floor(x / 4), Math.floor((y + v) / 3), (o.seed || 1) + i) < 0.2) idx -= 1;
-        return step(ramp, clamp(idx, 0, 4));
+      const k = 0.72 + 0.3 * Math.sin(Math.PI * (0.2 + (v / h) * 0.7));
+      s.fillPoly(ellipsePts(c.x, c.y - v, 7 * k, 3.4 * k, 18), (uu, vv, x, y) => {
+        const ddx = (x + 0.5 - c.x) / Math.max(1, 7 * k);
+        let idx = ddx < -0.45 ? 4 : ddx < 0.05 ? 3 : ddx < 0.55 ? 2 : 1;
+        if (hash2(Math.floor((ddx + 1) * 3), Math.floor(v / 7), seed + i) < 0.24) idx -= 1;
+        return step(R, clamp(idx, 0, 4));
       });
     }
-    // tied neck
-    s.setHex(Math.round(c.x), Math.round(c.y) - h, step(ramp, 1));
+    const heap = i === 1 ? P.RAMPS.earth : i === 2 ? P.RAMPS.terracotta : P.RAMPS.timber;
+    for (let v = 0; v < 5; v++) {
+      s.fillPoly(ellipsePts(c.x, c.y - h - v, 6 - v * 1.1, 3 - v * 0.55, 16), (uu, vv, x, y) => {
+        const ddx = (x + 0.5 - c.x) / 6;
+        return step(heap, ddx < -0.2 ? 4 : ddx < 0.4 ? 3 : 2);
+      });
+    }
   });
 });
 
@@ -451,28 +398,67 @@ def('cloth-rack', { collide: 0.8, examine: 'Bolts of Gujarati cloth on a bamboo 
   }
 });
 
-def('handcart', { collide: 1.0, examine: 'A two-wheeled handcart, shafts resting on the cobbles.' }, (s, iso, o) => {
-  contactShadow(s, iso, o.tx + 0.45, o.ty + 0.3, 1.1, 0.32);
-  isoBox(s, iso, { tx: o.tx, ty: o.ty, w: 1.0, d: 0.55, h: 8, z: 7, material: 'timber', seed: o.seed });
-  // wheels: dark rims with spokes, one lit one in shade
-  [[o.tx + 0.08, o.ty + 0.62], [o.tx + 0.86, o.ty + 0.62]].forEach(([wx, wy], i) => {
-    const c = iso.toScreen(wx, wy, 0);
-    for (let a = 0; a < 360; a += 6) {
-      const rad = a * Math.PI / 180;
-      const px = Math.round(c.x + Math.cos(rad) * 8);
-      const py = Math.round(c.y - 8 + Math.sin(rad) * 8);
-      s.setHex(px, py, step(P.RAMPS.timber, i ? 1 : 3));
-      if (a % 45 === 0) {
-        for (let t = 0; t < 8; t++) {
-          s.setHex(Math.round(c.x + Math.cos(rad) * t), Math.round(c.y - 8 + Math.sin(rad) * t), step(P.RAMPS.timber, i ? 1 : 2));
-        }
+/**
+ * A spoked cart wheel standing in the vertical plane at a screen point.
+ * The debt this replaces drew a 360-step circle one pixel at a time with
+ * radial spokes every 45 deg: at r=8 that is a scribbled disc, because the
+ * spokes converge into a solid blob within 3px of the hub and the "rim" is a
+ * one-pixel aliased ring. A wheel at this size has to be built as a RING with
+ * a felloe of real thickness, an iron tyre one step darker, six spokes that
+ * STOP short of the hub, and a hub boss — five elements, no scribble.
+ */
+function cartWheel(s, cx, cy, r, lit, seed) {
+  const timber = P.RAMPS.timber;
+  const iron = P.RAMPS.stone;
+  const ry = r * 0.94;                      // wheels lean a hair into the iso
+  const L = lit ? 0 : -2;
+  for (let dy = -Math.ceil(ry); dy <= Math.ceil(ry); dy++) {
+    for (let dx = -Math.ceil(r); dx <= Math.ceil(r); dx++) {
+      const q = (dx * dx) / (r * r) + (dy * dy) / (ry * ry);
+      if (q > 1.02) continue;
+      const px = Math.round(cx) + dx, py = Math.round(cy) + dy;
+      if (q > 0.80) {                        // iron tyre
+        s.setHex(px, py, step(iron, clamp((dx < 0 ? 3 : 1) + L, 0, 4)));
+        continue;
       }
+      if (q > 0.55) {                        // felloe (timber rim)
+        s.setHex(px, py, step(timber, clamp((dx < -r * 0.3 ? 4 : dx < r * 0.3 ? 3 : 1) + L, 0, 4)));
+        continue;
+      }
+      if (q < 0.055) {                       // hub boss
+        s.setHex(px, py, step(timber, clamp((dx < 0 ? 4 : 2) + L, 0, 4)));
+        continue;
+      }
+      // six spokes, drawn by angle so they never merge into a disc
+      const ang = Math.atan2(dy / ry, dx / r);
+      const k = Math.abs(((ang / Math.PI * 3 + 6.5) % 1) - 0.5);
+      if (k < 0.085) s.setHex(px, py, step(timber, clamp((dx < 0 ? 3 : 1) + L, 0, 4)));
     }
-  });
-  // shafts
-  for (let k = 0; k < 14; k++) {
-    const c = iso.toScreen(o.tx - 0.02 - k * 0.03, o.ty + 0.18 + k * 0.03, 0);
-    s.setHex(Math.round(c.x), Math.round(c.y) - 9 + Math.round(k * 0.5), step(P.RAMPS.timber, 3));
+  }
+  // the shadow the wheel throws on itself where the cart body overhangs it
+  for (let dx = -Math.ceil(r * 0.7); dx <= Math.ceil(r * 0.7); dx++) {
+    T.shadePixel(s, Math.round(cx) + dx, Math.round(cy) - Math.round(ry * 0.72), 0.30);
+  }
+  if (seed !== undefined) { /* seed reserved: wear marks, kept deterministic */ }
+}
+
+def('handcart', { collide: 1.0, examine: 'A two-wheeled handcart, shafts resting on the cobbles.' }, (s, iso, o) => {
+  contactShadow(s, iso, o.tx + 0.45, o.ty + 0.3, 1.15, 0.32);
+  // far wheel first, then the body, then the near wheel: the body must occlude
+  // the top of the far wheel or the cart reads as a box floating between discs
+  const far = iso.toScreen(o.tx + 0.10, o.ty + 0.06, 0);
+  cartWheel(s, far.x, far.y - 8, 8, false, o.seed);
+  isoBox(s, iso, { tx: o.tx, ty: o.ty, w: 1.0, d: 0.55, h: 9, z: 7, material: 'timber', seed: o.seed });
+  const near = iso.toScreen(o.tx + 0.94, o.ty + 0.66, 0);
+  cartWheel(s, near.x, near.y - 8, 8, true, o.seed);
+  // axle stub + shafts sloping down to the ground
+  const ax = iso.toScreen(o.tx + 0.5, o.ty + 0.36, 0);
+  for (let dx = -14; dx <= 14; dx++) s.setHex(Math.round(ax.x) + dx, Math.round(ax.y) - 8, step(P.RAMPS.timber, 1));
+  for (let k = 0; k < 18; k++) {
+    const c = iso.toScreen(o.tx - 0.03 - k * 0.028, o.ty + 0.14 + k * 0.028, 0);
+    const y = Math.round(c.y) - 12 + Math.round(k * 0.62);
+    s.setHex(Math.round(c.x), y, step(P.RAMPS.timber, 4));
+    s.setHex(Math.round(c.x), y + 1, step(P.RAMPS.timber, 2));
   }
 });
 
@@ -561,5 +547,16 @@ def('laundry-line', { collide: 0, examine: 'Washing strung between the upper sto
     }
   }
 });
+
+// ---------------------------------------------------------------------------
+// The rest of the kit. These register into the SAME table (registry.cjs), and
+// are required here because `compose-plate.cjs` only imports this module — so
+// this is where the full prop vocabulary is assembled.
+// ---------------------------------------------------------------------------
+require('./nature.cjs');
+require('./arch-dock.cjs');
+require('./arch-malay.cjs');
+require('./arch-fortress.cjs');
+require('./arch-church.cjs');
 
 module.exports = { PROPS, isoBox, isoCyl, post, cloth, contactShadow, ellipsePts };

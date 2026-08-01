@@ -28,6 +28,7 @@
 const P = require('../palette.cjs');
 const T = require('../texture.cjs');
 const { drawFace, hash2 } = require('../iso.cjs');
+const { footprintRim } = require('./primitives.cjs');
 
 const clamp = (v, lo, hi) => (v < lo ? lo : v > hi ? hi : v);
 const step = T.step;
@@ -313,6 +314,21 @@ function roof(surface, iso, spec) {
       tri([S(x1, y1, z), S(x0, y1, z), S((x0 + x1) / 2, y1, z + rise)],
         T.plank({ material: 'timber', light: 3, plankW: 5, seed: seed + 4 }),
         (x1 - x0) * tw, rise);
+      // barge board down both rakes — the 'tx' gable already had one and the
+      // 'ty' gable did not, so half the gable ends in the game were a bare
+      // triangle of boarding with no edge to stop them.
+      const apex = S((x0 + x1) / 2, y1, z + rise);
+      [[S(x0, y1, z), 3], [S(x1, y1, z), 1]].forEach(([p, idx]) => {
+        const n = Math.max(1, Math.round(Math.abs(apex.x - p.x)));
+        for (let i = 0; i <= n; i++) {
+          const t = i / n;
+          const x = Math.round(p.x + (apex.x - p.x) * t);
+          const y = Math.round(p.y + (apex.y - p.y) * t);
+          surface.setHex(x, y, step(P.RAMPS.timber, idx + 1));
+          surface.setHex(x, y + 1, step(P.RAMPS.timber, idx));
+          surface.setHex(x, y + 2, step(P.RAMPS.timber, 0));
+        }
+      });
     }
     ridgePts.push(R0, R1);
   }
@@ -380,7 +396,7 @@ function townhouse(surface, iso, spec, out) {
   // --- cast shadow on the ground, down-right (sun NW) -----------------------
   if (s.castShadow !== false) {
     const off = { x: Math.round(H * 0.46), y: Math.round(H * 0.23) };
-    T.castShadow(surface, iso.footprintPoly(s.tx, s.ty, s.w, s.d, 0), off, 0.44);
+    T.castShadow(surface, iso.footprintPoly(s.tx, s.ty, s.w, s.d, 0), off, 0.34);
   }
 
   // --- walls ----------------------------------------------------------------
@@ -491,6 +507,10 @@ function townhouse(surface, iso, spec, out) {
       T.aoBand(surface, x0 + u, baseY + 2, 3, 0.40);
     }
   });
+
+  // Benchmark #17: mark the edge of the very rect we are about to block, so a
+  // walkable pixel and the blocked pixel beside it are never the same value.
+  footprintRim(surface, iso, s.tx, s.ty, s.w, s.d, { strength: 0.82, anchor: 'shadow-void' });
 
   derived.blocked.push({ tx: s.tx, ty: s.ty, w: s.w, d: s.d });
   if (out) mergeDerived(out, derived);
@@ -713,6 +733,7 @@ function well(surface, iso, spec, out) {
   }
   T.aoBand(surface, Math.round(c.x), Math.round(c.y + ry), 2, 0.3);
 
+  footprintRim(surface, iso, cx - r, cy - r, r * 2, r * 2, { strength: 0.78, anchor: 'shadow-void' });
   derived.blocked.push({ tx: cx - r, ty: cy - r, w: r * 2, d: r * 2 });
   derived.examinables.push({
     x: Math.round(c.x), y: Math.round(c.y + ry), key: s.key || 'plaza-well',
@@ -768,6 +789,7 @@ function pelourinho(surface, iso, spec, out) {
   for (let v = H + 5; v < H + 13; v++) surface.setHex(Math.round(c.x), base - v, step(stone, 4));
   for (let dx = -3; dx <= 3; dx++) surface.setHex(Math.round(c.x + dx), base - H - 9, step(stone, 4));
 
+  footprintRim(surface, iso, s.tx - 0.5, s.ty - 0.5, 1, 1, { strength: 0.78, anchor: 'shadow-void' });
   derived.blocked.push({ tx: s.tx - 0.5, ty: s.ty - 0.5, w: 1, d: 1 });
   derived.examinables.push({
     x: Math.round(c.x), y: Math.round(c.y), key: s.key || 'pelourinho',
@@ -787,15 +809,63 @@ function stair(surface, iso, spec, out) {
   const steps = s.steps || 6;
   const riseEach = s.riseEach || 4;
   const w = s.w || 2;
+  const dEach = s.depthEach || 0.4;
+  const seed = s.seed || 60;
+  /**
+   * A flight of steps is read entirely from the NOSING: the 1px lit lip where
+   * each tread meets the drop in front of it, and the hard shadow the tread
+   * above throws across the back of the one below. The debt this replaces
+   * alternated two flat values per tread, which at 4px of rise reads as a
+   * striped ramp — you cannot tell how many steps there are or which way they
+   * go. Five parts now: worn tread, back shadow, lit nosing, shadowed riser,
+   * and a cheek wall down each side so the flight is a solid object.
+   */
   for (let i = 0; i < steps; i++) {
     const z = i * riseEach;
-    const ty = s.ty - i * (s.depthEach || 0.4);
-    // tread
-    const reg = iso.region(s.tx, ty, w, s.depthEach || 0.4, z);
-    surface.fillPara(reg.o, reg.eu, reg.ev, (u, v, x, y) => step(stone, i % 2 ? 4 : 3), reg);
-    // riser
-    const f = iso.face({ tx: s.tx, ty: ty + (s.depthEach || 0.4) }, { tx: s.tx + w, ty: ty + (s.depthEach || 0.4) }, riseEach, z);
-    drawFace(surface, f, T.ashlar({ material: 'stone', light: 2, blockW: 9, blockH: 4, seed: 60 + i }));
+    const ty = s.ty - i * dEach;
+    // tread: worn hollow in the middle of the walking line, brighter at the edges
+    const reg = iso.region(s.tx, ty, w, dEach, z);
+    surface.fillPara(reg.o, reg.eu, reg.ev, (u, v, x, y) => {
+      const across = u / (w * iso.tileWidth);
+      const wear = Math.abs(across - 0.5) < 0.30 ? -1 : 0;
+      const grain = hash2(Math.floor(u / 11), i, seed) < 0.22 ? -1 : 0;
+      return step(stone, 4 + wear + grain);
+    }, reg);
+    // the shadow the next tread up throws onto the back of this one
+    {
+      const back = iso.face({ tx: s.tx, ty }, { tx: s.tx + w, ty }, 0, z);
+      const bx0 = Math.round(back.p0.x);
+      for (let u = 0; u < back.lenPx; u++) {
+        const by = back.baseYAt(u + 0.5);
+        for (let k = 0; k < 3; k++) T.shadePixel(surface, bx0 + u, by + k, 0.34 * (1 - k / 3));
+      }
+    }
+    // riser + the lit nosing above it
+    const f = iso.face({ tx: s.tx, ty: ty + dEach }, { tx: s.tx + w, ty: ty + dEach }, riseEach, z);
+    drawFace(surface, f, T.ashlar({ material: 'stone', light: 1, blockW: 9, blockH: 4, seed: seed + i }));
+    const fx0 = Math.round(f.p0.x);
+    for (let u = 0; u < f.lenPx; u++) {
+      const by = f.baseYAt(u + 0.5);
+      surface.setHex(fx0 + u, by - riseEach, step(stone, 4));       // nosing
+      surface.setHex(fx0 + u, by - riseEach + 1, step(stone, 2));
+      surface.setHex(fx0 + u, by - 1, step(stone, 0));              // dark under-line
+    }
+  }
+  // cheek walls: without them a flight floats, because nothing carries it
+  if (s.cheeks !== false) {
+    [0, w].forEach((off, k) => {
+      for (let i = 0; i < steps; i++) {
+        const z = i * riseEach;
+        const ty = s.ty - i * dEach;
+        const cf = iso.face({ tx: s.tx + off, ty: ty + dEach }, { tx: s.tx + off, ty }, riseEach + 3, z);
+        drawFace(surface, cf, T.ashlar({ material: 'stone', light: k === 0 ? 3 : 1, blockW: 8, blockH: 5, seed: seed + 40 + i }));
+      }
+    });
+  }
+  {
+    const base = iso.face({ tx: s.tx, ty: s.ty + dEach }, { tx: s.tx + w, ty: s.ty + dEach }, 0, 0);
+    const bx0 = Math.round(base.p0.x);
+    for (let u = 0; u < base.lenPx; u++) T.aoBand(surface, bx0 + u, base.baseYAt(u + 0.5) + 2, 3, 0.40);
   }
   derived.walkableOverride = { tx: s.tx, ty: s.ty - steps * (s.depthEach || 0.4), w, d: steps * (s.depthEach || 0.4) + 0.4 };
   if (out) mergeDerived(out, derived);

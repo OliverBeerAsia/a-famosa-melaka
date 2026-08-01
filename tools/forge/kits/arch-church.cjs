@@ -1,0 +1,493 @@
+'use strict';
+/**
+ * MELAKA FORGE — KIT: THE CHURCH ON THE HILL
+ * ==========================================
+ * Nossa Senhora da Anunciada, the chapel the Portuguese raised on the summit
+ * in 1521 and which the Dutch later renamed St Paul's.
+ *
+ * THE DEFECT THIS EXISTS TO FIX. The shipping plate draws a church whose nave
+ * is about 80 native px — shorter than the 96px the player renders at. That is
+ * not a small proportion error, it is the single most damaging thing in the
+ * game's art, because a cathedral you can see over stops being a cathedral.
+ *
+ * SCALE CANON (native px, player = 32)
+ *   plinth                 6
+ *   nave wall             96      (3 players to the eaves)
+ *   nave ridge           148      (4.6 players — the benchmark asks for >=140)
+ *   west gable apex      154
+ *   bell tower           196      (6.1 players; it breaks the top of the frame)
+ *   buttress             10 wide, projecting 4, weathered top at 0.62 of the wall
+ *   nave window          16 x 40, round-headed, in a 3px dressed surround
+ *   west door            26 x 46
+ *   gravestone            9-15 tall
+ *
+ * MATERIAL. Melaka laterite rubble rendered in lime — so `whitewash` for the
+ * wall field with `stone` dressings at every opening, quoin and string course.
+ * That reads distinctly against A Famosa's bare laterite two screens away, and
+ * a white mass is what makes the hill read at a distance.
+ */
+
+const P = require('../palette.cjs');
+const T = require('../texture.cjs');
+const { drawFace, hash2 } = require('../iso.cjs');
+const ARCH = require('./arch-portuguese.cjs');
+const { def } = require('./registry.cjs');
+const {
+  ellipsePts, contactShadow, footprintRim, contactBand, isoBox, lineTo, clamp,
+} = require('./primitives.cjs');
+
+const step = T.step;
+
+const C = {
+  PLINTH: 6,
+  NAVE: 96,
+  RIDGE_RISE: 52,
+  TOWER: 196,
+  BUTTRESS_W: 10,
+  WIN_W: 16,
+  WIN_H: 40,
+  DOOR_W: 26,
+  DOOR_H: 46,
+};
+
+/**
+ * A round-headed window with a dressed surround and a central mullion. Tall and
+ * narrow: at 16x40 it is the proportion that says "church" rather than "house",
+ * which is doing more work here than any amount of ornament.
+ */
+function lancet(surface, f, u0, v0, spec) {
+  const s = spec || {};
+  const w = s.width || C.WIN_W;
+  const h = s.height || C.WIN_H;
+  const stone = P.RAMPS.stone;
+  const rect = h - w / 2;
+  const x0 = Math.round(f.p0.x);
+  const glass = s.lit ? P.ACCENTS['lantern-flame'] : P.ANCHORS['shadow-void'];
+  for (let u = u0 - 3; u < u0 + w + 3; u++) {
+    if (u < 0 || u >= f.lenPx) continue;
+    const baseY = f.baseYAt(u + 0.5);
+    const dxc = (u + 0.5) - (u0 + w / 2);
+    const top = rect + Math.sqrt(Math.max(0, (w / 2) * (w / 2) - dxc * dxc));
+    const topOut = rect + Math.sqrt(Math.max(0, (w / 2 + 3) * (w / 2 + 3) - dxc * dxc));
+    const inSpan = u >= u0 && u < u0 + w;
+    for (let v = v0; v < v0 + h + 6; v++) {
+      const lv = v - v0;
+      const y = baseY - 1 - v;
+      if (inSpan && lv < top) {
+        const mullion = Math.abs(dxc) < 1.2 && lv < rect;
+        if (mullion) { surface.setHex(x0 + u, y, step(stone, 3)); continue; }
+        // the glass is not flat: a slow gradient, brighter at the head
+        surface.setHex(x0 + u, y, s.lit
+          ? (hash2(u >> 1, v >> 1, s.seed || 3) > 0.4 ? glass : step(P.RAMPS.terracotta, 3))
+          : (lv > h * 0.72 ? step(P.RAMPS.water, 0) : glass));
+      } else if (Math.abs(dxc) < w / 2 + 3 && lv < topOut) {
+        const jamb = Math.min(u - (u0 - 3), (u0 + w + 3) - u);
+        const lit = dxc < 0;
+        let idx = lit ? 4 : 2;
+        if (jamb <= 1 || lv >= topOut - 1) idx = 1;
+        surface.setHex(x0 + u, y, step(stone, idx));
+      }
+    }
+    // sill + the drip shadow it throws
+    if (Math.abs(dxc) < w / 2 + 3) {
+      surface.setHex(x0 + u, baseY - 1 - (v0 - 1), step(stone, 4));
+      surface.setHex(x0 + u, baseY - 1 - (v0 - 2), step(stone, 2));
+      T.shadePixel(surface, x0 + u, baseY - 1 - (v0 - 3), 0.34);
+    }
+  }
+}
+
+/** A stepped buttress with a weathered sloping top. */
+function buttress(surface, f, u0, h, seed) {
+  const stone = P.RAMPS.stone;
+  const x0 = Math.round(f.p0.x);
+  const w = C.BUTTRESS_W;
+  for (let u = u0; u < u0 + w; u++) {
+    if (u < 0 || u >= f.lenPx) continue;
+    const baseY = f.baseYAt(u + 0.5);
+    const lu = u - u0;
+    const top = Math.round(h * (0.62 + 0.10 * (1 - lu / w)));   // weathering slope
+    for (let v = 0; v < top; v++) {
+      const course = Math.floor(v / 8), block = Math.floor(lu / 6);
+      let idx = lu < w * 0.55 ? 4 : 3;
+      if (hash2(block, course, seed) < 0.22) idx -= 1;
+      if ((v % 8) === 0) idx -= 1;
+      surface.setHex(x0 + u, baseY - 1 - v, step(stone, clamp(idx, 0, 4)));
+    }
+    surface.setHex(x0 + u, baseY - 1 - top, step(stone, 4));     // weathering cap
+    surface.setHex(x0 + u, baseY - top, step(stone, 1));
+  }
+  // the shadow the buttress throws down-right onto the wall
+  for (let k = 1; k < 6; k++) {
+    const u = u0 + w - 1 + k;
+    if (u < 0 || u >= f.lenPx) continue;
+    const baseY = f.baseYAt(u + 0.5);
+    for (let v = 0; v < h * 0.68; v++) T.shadePixel(surface, x0 + u, baseY - 1 - v, 0.36 * (1 - k / 6));
+  }
+  // contact
+  for (let u = u0; u < u0 + w; u++) {
+    if (u < 0 || u >= f.lenPx) continue;
+    const baseY = f.baseYAt(u + 0.5);
+    surface.setHex(x0 + u, baseY - 1, step(stone, 0));
+    surface.setHex(x0 + u, baseY - 2, step(stone, 1));
+  }
+}
+
+/**
+ * THE CHURCH.
+ * spec: { tx, ty, w, d, naveH, rise, tower:{at,w,h}, litWindows, seed }
+ */
+def('church', {
+  collide: false,
+  examine: 'The church on the hill. From its door you can see every ship that enters the strait.',
+}, (s, iso, o) => {
+  const seed = o.seed || 3;
+  const w = o.w || 5.0, d = o.d || 2.8;
+  const H = o.naveH === undefined ? C.NAVE : o.naveH;
+  const rise = o.rise === undefined ? C.RIDGE_RISE : o.rise;
+  const wallMat = o.wall || 'whitewash';
+  const stone = P.RAMPS.stone;
+
+  const A = { tx: o.tx, ty: o.ty };
+  const B = { tx: o.tx + w, ty: o.ty };
+  const Cc = { tx: o.tx + w, ty: o.ty + d };
+  const D = { tx: o.tx, ty: o.ty + d };
+
+  // --- cast shadow: a 148px mass throws a long one --------------------------
+  T.castShadow(s, iso.footprintPoly(o.tx, o.ty, w, d, 0),
+    { x: Math.round((H + rise) * 0.42), y: Math.round((H + rise) * 0.21) }, 0.36);
+
+  const fLit = iso.face(D, Cc, H, 0);
+  const fSh = iso.face(Cc, B, H, 0);
+  drawFace(s, fLit, T.plaster({ material: wallMat, light: 3, height: H, seed, dado: 14 }));
+  drawFace(s, fSh, T.plaster({ material: wallMat, light: 1, height: H, seed: seed + 1, dado: 14 }));
+
+  // --- plinth ---------------------------------------------------------------
+  [[fLit, 3], [fSh, 1]].forEach(([f, li]) => {
+    const x0 = Math.round(f.p0.x);
+    for (let u = 0; u < f.lenPx; u++) {
+      const baseY = f.baseYAt(u + 0.5);
+      for (let v = 0; v < C.PLINTH; v++) {
+        s.setHex(x0 + u, baseY - 1 - v, step(stone, (v === C.PLINTH - 1 ? li + 1 : li)
+          - (hash2(Math.floor(u / 11), v > 2 ? 1 : 0, seed) < 0.22 ? 1 : 0)));
+      }
+    }
+  });
+
+  // --- quoins at the near corner -------------------------------------------
+  {
+    const c = iso.toScreen(Cc.tx, Cc.ty, 0);
+    for (let v = 0; v < H; v++) {
+      const band = Math.floor(v / 9) & 1;
+      s.setHex(Math.round(c.x) - (band ? 2 : 1), Math.round(c.y) - 1 - v, step(stone, 4));
+      s.setHex(Math.round(c.x), Math.round(c.y) - 1 - v, step(stone, 1));
+    }
+  }
+
+  // --- buttresses + lancets on the long lit face ---------------------------
+  const bays = Math.max(2, Math.round(fLit.lenPx / 52));
+  const pitch = fLit.lenPx / bays;
+  for (let i = 0; i <= bays; i++) {
+    buttress(s, fLit, Math.round(i * pitch) - C.BUTTRESS_W / 2, H, seed + 10 + i);
+  }
+  for (let i = 0; i < bays; i++) {
+    const u0 = Math.round((i + 0.5) * pitch - C.WIN_W / 2);
+    if (u0 < 6 || u0 + C.WIN_W > fLit.lenPx - 6) continue;
+    lancet(s, fLit, u0, 34, {
+      lit: (o.litWindows || []).indexOf(i) >= 0, seed: seed + 30 + i,
+    });
+  }
+  // one lancet on the shadow face so the east end is not blank
+  if (fSh.lenPx > 40) {
+    lancet(s, fSh, Math.round(fSh.lenPx / 2 - C.WIN_W / 2), 38, { seed: seed + 60 });
+  }
+
+  // --- string course under the eaves ---------------------------------------
+  ARCH.stringCourse(s, fLit, H - 10, { material: 'stone', thickness: 3 });
+  ARCH.stringCourse(s, fSh, H - 10, { material: 'stone', thickness: 3 });
+
+  // --- the great west door, in the middle of the lit face ------------------
+  {
+    const u0 = Math.round(fLit.lenPx * (o.doorAt === undefined ? 0.5 : o.doorAt) - C.DOOR_W / 2);
+    ARCH.doorway(s, fLit, u0, {
+      width: C.DOOR_W, height: C.DOOR_H, seed: seed + 5, litInterior: true, lit: true,
+    });
+    // a pediment / hood mould over it, and the date stone
+    const x0 = Math.round(fLit.p0.x);
+    for (let u = u0 - 6; u < u0 + C.DOOR_W + 6; u++) {
+      if (u < 0 || u >= fLit.lenPx) continue;
+      const baseY = fLit.baseYAt(u + 0.5);
+      const dxc = Math.abs((u + 0.5) - (u0 + C.DOOR_W / 2));
+      const hood = Math.round(C.DOOR_H + 8 - dxc * 0.22);
+      for (let k = 0; k < 3; k++) s.setHex(x0 + u, baseY - 1 - (hood + k), step(stone, k === 2 ? 4 : 3));
+      if (dxc < 7) {
+        for (let v = hood + 6; v < hood + 14; v++) {
+          s.setHex(x0 + u, baseY - 1 - v, hash2(u, v, seed + 9) > 0.55 ? step(stone, 4) : step(stone, 2));
+        }
+      }
+    }
+  }
+
+  footprintRim(s, iso, o.tx, o.ty, w, d, { strength: 0.82, anchor: 'shadow-void' });
+  contactBand(s, fLit, P.RAMPS[wallMat], { px: 2 });
+  contactBand(s, fSh, P.RAMPS[wallMat], { px: 2 });
+
+  // --- roof -----------------------------------------------------------------
+  ARCH.roof(s, iso, {
+    tx: o.tx, ty: o.ty, w, d, z: H,
+    type: 'gable', ridgeAxis: 'tx', rise,
+    overhang: 0.10, material: 'terracotta', seed: seed + 70,
+  });
+
+  // --- the bell tower -------------------------------------------------------
+  const tw = o.tower && o.tower.w ? o.tower.w : 1.7;
+  const th = o.tower && o.tower.h ? o.tower.h : C.TOWER;
+  const tAt = o.tower && o.tower.at !== undefined ? o.tower.at : 0.0;
+  // The tower stands at the WEST end and projects toward the camera, so it has
+  // the larger ty and is therefore painted after the nave — which is the only
+  // way the occlusion comes out right (a tower drawn behind the nave it is
+  // supposed to stand in front of reads as a chimney).
+  const ttx = o.tx + tAt * (w - tw) - tw * 0.10;
+  const tty = o.ty + d * 0.52;
+  {
+    T.castShadow(s, iso.footprintPoly(ttx, tty, tw, tw, 0),
+      { x: Math.round(th * 0.42), y: Math.round(th * 0.21) }, 0.34);
+    const TA = { tx: ttx, ty: tty };
+    const TB = { tx: ttx + tw, ty: tty };
+    const TC = { tx: ttx + tw, ty: tty + tw };
+    const TD = { tx: ttx, ty: tty + tw };
+    const tLit = iso.face(TD, TC, th, 0);
+    const tSh = iso.face(TC, TB, th, 0);
+    drawFace(s, tLit, T.plaster({ material: wallMat, light: 3, height: th, seed: seed + 80, dado: 14 }));
+    drawFace(s, tSh, T.plaster({ material: wallMat, light: 1, height: th, seed: seed + 81, dado: 14 }));
+    // stone quoins up the near corner
+    const tc = iso.toScreen(TC.tx, TC.ty, 0);
+    for (let v = 0; v < th; v++) {
+      const band = Math.floor(v / 9) & 1;
+      s.setHex(Math.round(tc.x) - (band ? 2 : 1), Math.round(tc.y) - 1 - v, step(stone, 4));
+      s.setHex(Math.round(tc.x), Math.round(tc.y) - 1 - v, step(stone, 1));
+    }
+    // three string courses divide the shaft into stages
+    [0.34, 0.58, 0.80].forEach((k) => {
+      ARCH.stringCourse(s, tLit, Math.round(th * k), { material: 'stone', thickness: 3 });
+      ARCH.stringCourse(s, tSh, Math.round(th * k), { material: 'stone', thickness: 3 });
+    });
+    // belfry: a tall louvred opening on each visible face, with the bell in it
+    [[tLit, true], [tSh, false]].forEach(([f, isLit], fi) => {
+      const bw = Math.max(10, Math.round(f.lenPx * 0.42));
+      const u0 = Math.round(f.lenPx / 2 - bw / 2);
+      const x0 = Math.round(f.p0.x);
+      const v0 = Math.round(th * 0.84);
+      for (let u = u0 - 3; u < u0 + bw + 3; u++) {
+        if (u < 0 || u >= f.lenPx) continue;
+        const baseY = f.baseYAt(u + 0.5);
+        const dxc = (u + 0.5) - (u0 + bw / 2);
+        const hh = 26;
+        const top = hh - 6 + Math.sqrt(Math.max(0, (bw / 2) * (bw / 2) - dxc * dxc));
+        for (let v = v0; v < v0 + top + 4; v++) {
+          const lv = v - v0;
+          const y = baseY - 1 - v;
+          if (Math.abs(dxc) < bw / 2 && lv < top) {
+            // louvre boards, and the bell hanging behind them
+            const bell = fi === 0 && Math.abs(dxc) < bw * 0.22 && lv > 5 && lv < 19;
+            s.setHex(x0 + u, y, bell ? P.ACCENTS['brass-gold']
+              : (lv % 4 === 0 ? step(P.RAMPS.timber, 1) : P.ANCHORS['shadow-void']));
+          } else if (Math.abs(dxc) < bw / 2 + 3 && lv < top + 3) {
+            s.setHex(x0 + u, y, step(stone, isLit ? (dxc < 0 ? 4 : 2) : 1));
+          }
+        }
+      }
+    });
+    // cornice, then the pyramidal cap and the cross
+    [tLit, tSh].forEach((f, fi) => {
+      const x0 = Math.round(f.p0.x);
+      for (let u = -2; u < f.lenPx + 2; u++) {
+        const uu = clamp(u, 0, f.lenPx - 1);
+        const baseY = f.baseYAt(uu + 0.5);
+        for (let k = 0; k < 4; k++) {
+          s.setHex(x0 + u, baseY - 1 - (th + k), step(stone, k === 3 ? 4 : fi ? 1 : 3));
+        }
+      }
+    });
+    const cap = o.tower && o.tower.cap ? o.tower.cap : 30;
+    const apex = iso.toScreen(ttx + tw / 2, tty + tw / 2, th + 4);
+    const halfW = Math.round(tw * iso.tileWidth * 0.5) + 2;
+    for (let k = 0; k < cap; k++) {
+      const t = k / cap;
+      const hw = Math.round(halfW * (1 - t));
+      for (let dx = -hw; dx <= hw; dx++) {
+        const lit = dx < -hw * 0.15;
+        s.setHex(Math.round(apex.x) + dx, Math.round(apex.y) - k,
+          step(P.RAMPS.terracotta, lit ? (((k + dx) % 5) === 0 ? 2 : 4) : (((k + dx) % 5) === 0 ? 0 : 2)));
+      }
+    }
+    const cy = Math.round(apex.y) - cap;
+    for (let k = 0; k < 12; k++) s.setHex(Math.round(apex.x), cy - k, step(stone, 4));
+    for (let k = -4; k <= 4; k++) s.setHex(Math.round(apex.x) + k, cy - 8, step(stone, k < 0 ? 4 : 2));
+    // no footprintRim here: the tower's footprint overlaps the nave's, and a
+    // rim drawn across it would lay a dark diagonal over the nave wall
+    contactBand(s, tLit, P.RAMPS[wallMat], { px: 2 });
+    contactBand(s, tSh, P.RAMPS[wallMat], { px: 2 });
+  }
+});
+
+// ---------------------------------------------------------------------------
+// CHURCHYARD
+// ---------------------------------------------------------------------------
+/**
+ * A Portuguese ledger headstone. Four silhouettes — round-headed, shouldered,
+ * a broken shaft and a plain slab — because a graveyard drawn from one stamp
+ * reads as a fence. Each carries a couple of bright scratches that read as an
+ * inscription at 3x without pretending to be legible letters.
+ */
+def('gravestone', { collide: 0.34, examine: 'A headstone, its Portuguese worn to grooves. EM TERRA ESTRANHA — in a strange land.' }, (s, iso, o) => {
+  const seed = o.seed || 5;
+  const kind = o.kind === undefined ? Math.floor(hash2(seed, 1, 3) * 4) : o.kind;
+  const stone = P.RAMPS.stone;
+  contactShadow(s, iso, o.tx, o.ty, 0.42, 0.34);
+  const c = iso.toScreen(o.tx, o.ty, 0);
+  const h = o.h === undefined ? 11 + Math.round(hash2(seed, 2, 7) * 5) : o.h;
+  const halfW = kind === 3 ? 7 : 5;
+  const lean = Math.round((hash2(seed, 3, 11) - 0.5) * 3);
+  for (let v = 0; v < h; v++) {
+    const t = v / h;
+    let hw = halfW;
+    if (kind === 0) hw = t > 0.78 ? Math.round(halfW * Math.sqrt(Math.max(0, 1 - Math.pow((t - 0.78) / 0.22, 2)))) : halfW;
+    if (kind === 1 && t > 0.72) hw = halfW - 2;
+    if (kind === 2 && t > 0.62) break;                      // broken shaft
+    const dx0 = Math.round(lean * t);
+    for (let dx = -hw; dx <= hw; dx++) {
+      let idx = dx < -hw * 0.3 ? 4 : dx < hw * 0.35 ? 3 : 1;
+      if (hash2(Math.floor(dx / 3), Math.floor(v / 4), seed) < 0.2) idx -= 1;
+      if (v < 2) idx = v === 0 ? 0 : 1;                     // contact band
+      s.setHex(Math.round(c.x) + dx + dx0, Math.round(c.y) - 1 - v, step(stone, clamp(idx, 0, 4)));
+    }
+  }
+  // inscription: three short scratch lines, and a cross incised at the head
+  const topY = Math.round(c.y) - h;
+  for (let i = 0; i < 3; i++) {
+    const lw = 3 + Math.round(hash2(seed, i + 5, 13) * 4);
+    for (let k = 0; k < lw; k++) s.setHex(Math.round(c.x) - 3 + k, topY + 8 + i * 3, step(stone, 0));
+  }
+  if (kind !== 2) {
+    for (let k = -2; k <= 2; k++) s.setHex(Math.round(c.x) + k, topY + 4, step(stone, 0));
+    for (let k = 0; k < 5; k++) s.setHex(Math.round(c.x), topY + 2 + k, step(stone, 0));
+  }
+});
+
+/** A raised ledger slab over a tomb — a horizontal note among the verticals. */
+def('tomb-slab', { collide: 0.9, examine: 'A ledger slab. A Dutch name has been cut across a Portuguese one.' }, (s, iso, o) => {
+  const seed = o.seed || 7;
+  contactShadow(s, iso, o.tx + 0.4, o.ty + 0.25, 1.1, 0.34);
+  isoBox(s, iso, {
+    tx: o.tx, ty: o.ty, w: o.w || 1.0, d: o.d || 0.55, h: 7, material: 'stone', seed,
+    topTex: T.ashlar({ material: 'stone', light: 4, blockW: 15, blockH: 10, seed }),
+    litTex: T.ashlar({ material: 'stone', light: 3, blockW: 15, blockH: 10, seed }),
+    shTex: T.ashlar({ material: 'stone', light: 1, blockW: 15, blockH: 10, seed }),
+  });
+  // an incised cross and two lines of inscription on the top face
+  const reg = iso.region(o.tx + 0.1, o.ty + 0.08, (o.w || 1.0) - 0.2, (o.d || 0.55) - 0.16, 7);
+  s.fillPara(reg.o, reg.eu, reg.ev, (u, v, x, y) => {
+    const cross = (Math.abs(u - 12) < 1.6 && v > 3 && v < 13) || (Math.abs(v - 8) < 1.6 && u > 6 && u < 18);
+    if (cross) return step(P.RAMPS.stone, 1);
+    if (v > 4 && v < 12 && u > 24 && ((Math.floor(v / 3) + Math.floor(u / 7)) & 1) === 0) return step(P.RAMPS.stone, 2);
+    return null;
+  }, reg);
+});
+
+/** A standing stone cross — the churchyard's vertical accent. */
+def('stone-cross', { collide: 0.4, examine: 'A cross of Melaka granite, set up for the sailors the strait kept.' }, (s, iso, o) => {
+  const seed = o.seed || 9;
+  const stone = P.RAMPS.stone;
+  contactShadow(s, iso, o.tx, o.ty, 0.55, 0.36);
+  const c = iso.toScreen(o.tx, o.ty, 0);
+  // stepped base
+  for (let tier = 0; tier < 2; tier++) {
+    const hw = 11 - tier * 4;
+    for (let v = 0; v < 4; v++) {
+      for (let dx = -hw; dx <= hw; dx++) {
+        s.setHex(Math.round(c.x) + dx, Math.round(c.y) - 1 - tier * 4 - v,
+          step(stone, v === 3 ? 4 : dx < -hw * 0.3 ? 3 : dx < hw * 0.3 ? 2 : 1));
+      }
+    }
+  }
+  const H = o.h || 40;
+  const base = Math.round(c.y) - 9;
+  for (let v = 0; v < H; v++) {
+    for (let dx = -3; dx <= 3; dx++) {
+      let idx = dx < -1 ? 4 : dx < 2 ? 3 : 1;
+      if (hash2(dx, Math.floor(v / 7), seed) < 0.2) idx -= 1;
+      s.setHex(Math.round(c.x) + dx, base - v, step(stone, clamp(idx, 0, 4)));
+    }
+  }
+  const ay = base - H;
+  for (let dx = -11; dx <= 11; dx++) {
+    for (let v = 0; v < 6; v++) {
+      s.setHex(Math.round(c.x) + dx, ay + 4 + v, step(stone, dx < -3 ? 4 : dx < 3 ? 3 : 1));
+    }
+  }
+  for (let v = 0; v < 10; v++) {
+    for (let dx = -3; dx <= 3; dx++) s.setHex(Math.round(c.x) + dx, ay - v, step(stone, dx < -1 ? 4 : dx < 2 ? 3 : 1));
+  }
+});
+
+/**
+ * The churchyard terrace wall. THIS IS THE ANTI-FLOATING-ISLAND DEVICE: it
+ * gives the summit a built edge, and the town roofs painted behind it read as
+ * being BELOW that edge rather than floating beside it. Author it along the
+ * crest, with a `gap` where the steps come up.
+ */
+def('terrace-wall', { collide: false, examine: 'The churchyard wall. Below it the roofs of the town go down to the water.' }, (s, iso, o) => {
+  const seed = o.seed || 11;
+  const A = { tx: o.tx, ty: o.ty };
+  const B = o.axis === 'tx' ? { tx: o.tx + o.len, ty: o.ty }
+    : o.axis === 'ty' ? { tx: o.tx, ty: o.ty + o.len }
+      : { tx: o.tx + o.len, ty: o.ty - o.len };
+  const H = o.h === undefined ? 16 : o.h;
+  const f = iso.face(A, B, H, 0);
+  const x0 = Math.round(f.p0.x);
+  const stone = P.RAMPS[o.material || 'stone'];
+  const cap = P.RAMPS.stone;
+  const gapFrom = o.gapFrom === undefined ? -1 : o.gapFrom * f.lenPx;
+  const gapTo = o.gapTo === undefined ? -1 : o.gapTo * f.lenPx;
+
+  // Piers every ~68px. A 640px run of plain coursing reads as a concrete
+  // parapet; buttressed piers with their own cast shadow read as a retaining
+  // wall holding a hill up, which is the whole point of the thing.
+  const pier = o.pier === undefined ? 68 : o.pier;
+  const pierW = 13;
+  for (let u = 0; u < f.lenPx; u++) {
+    if (gapFrom >= 0 && u >= gapFrom && u < gapTo) continue;
+    const baseY = f.baseYAt(u + 0.5);
+    const pu = (u + 24) % pier;
+    const onPier = pu < pierW;
+    const hh = onPier ? H + 5 : H;
+    for (let v = 0; v < hh; v++) {
+      // rubble, not ashlar: the course height and the block width both wobble,
+      // so the wall reads as something built out of what the hill provided
+      const course = Math.floor(v / 6);
+      const jog = Math.floor(hash2(0, course, seed + 3) * 7);
+      const block = Math.floor((u + jog) / (10 + Math.floor(hash2(course, 1, seed) * 7)));
+      const hb = hash2(block, course, seed);
+      let idx = (onPier ? (pu < pierW * 0.55 ? 4 : 3) : 3) + (hb < 0.28 ? -1 : hb > 0.88 ? 1 : 0);
+      if ((v % 6) === 0) idx -= 1;
+      if (((u + jog) % (10 + Math.floor(hash2(course, 1, seed) * 7))) === 0) idx -= 1;
+      s.setHex(x0 + u, baseY - 1 - v, step(stone, clamp(idx, 0, 4)));
+    }
+    if (onPier) {
+      s.setHex(x0 + u, baseY - 1 - hh, step(cap, 4));
+      s.setHex(x0 + u, baseY - hh, step(cap, 1));
+    } else if (pu >= pierW && pu < pierW + 5) {
+      for (let v = 0; v < H; v++) T.shadePixel(s, x0 + u, baseY - 1 - v, 0.34 * (1 - (pu - pierW) / 5));
+    }
+    // coping: a bright capping run, then the dark reveal under it
+    s.setHex(x0 + u, baseY - 1 - H, step(cap, 4));
+    s.setHex(x0 + u, baseY - H, step(cap, 2));
+    // contact with the terrace behind
+    s.setHex(x0 + u, baseY - 1, step(stone, 0));
+    s.setHex(x0 + u, baseY - 2, step(stone, 1));
+    T.aoBand(s, x0 + u, baseY + 2, 2, 0.3);
+  }
+});
+
+module.exports = { C, lancet, buttress };
