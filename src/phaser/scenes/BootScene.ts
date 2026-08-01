@@ -7,8 +7,9 @@
 
 import Phaser from 'phaser';
 import runtimeAssetManifest from '../../data/runtime-asset-manifest.json';
-import type { TileVariantManifest } from '../../systems/TileVariantSystem';
+import type { TileVariantManifest } from '../core/tileVariants';
 import { ITEM_DEFINITIONS } from '../../stores/inventoryStore';
+import { anyLocationUsesIsometric, getLocation, LOCATION_IDS } from '../core/LocationData';
 
 const CHARACTER_IDS = runtimeAssetManifest.characters.named as readonly string[];
 const CROWD_IDS = runtimeAssetManifest.crowd.sprites as readonly string[];
@@ -19,6 +20,14 @@ const ISO_TILE_IDS = runtimeAssetManifest.tiles.isometric as readonly string[];
 const TILE_VARIANTS = runtimeAssetManifest.tileVariants as TileVariantManifest;
 const STATIC_OBJECT_IDS = runtimeAssetManifest.objects.static as readonly string[];
 const ITEM_ICON_IDS = Object.keys(ITEM_DEFINITIONS);
+
+/**
+ * True only if at least one location's plate.runtimeMode is 'isometric'.
+ * Every location currently ships as 'legacy-backdrop' (a painted plate with
+ * Y-sorted sprites composited on top), so the isometric tilemaps and their
+ * ~60 tile textures are dead weight at boot and are skipped.
+ */
+const ISO_ASSETS_NEEDED = anyLocationUsesIsometric();
 
 const ANIMATED_OBJECT_SHEETS = [
   { key: 'torch-flame', file: 'torch-flame-sheet.png', frameWidth: 8, frameHeight: 16 },
@@ -111,6 +120,12 @@ export class BootScene extends Phaser.Scene {
       this.load.tilemapTiledJSON(mapKey, `maps/${mapKey}.json`);
     });
 
+    // Isometric tilemaps are only needed when a location actually runs in
+    // isometric mode. Every shipping location is 'legacy-backdrop', so this
+    // skips 5 tilemap JSONs on boot. Flip a location's plate.runtimeMode to
+    // 'isometric' in its .location.json and these load again automatically.
+    if (!ISO_ASSETS_NEEDED) return;
+
     ISO_MAP_IDS.forEach((mapKey) => {
       this.load.tilemapTiledJSON(`${mapKey}-iso`, `maps/${mapKey}-iso.json`);
     });
@@ -120,6 +135,11 @@ export class BootScene extends Phaser.Scene {
     BASE_TILE_IDS.forEach((tile) => {
       this.load.image(tile, `sprites/tiles/${tile}.png`);
     });
+
+    // Iso tile textures and their procedural variants are only consumed by
+    // IsometricRenderer. Gated for the same reason as the iso tilemaps above —
+    // together that is ~60 textures the legacy-backdrop build never draws.
+    if (!ISO_ASSETS_NEEDED) return;
 
     ISO_TILE_IDS.forEach((tile) => {
       this.load.image(`${tile}-iso`, `sprites/tiles/iso/${tile}-iso.png`);
@@ -179,13 +199,43 @@ export class BootScene extends Phaser.Scene {
         this.load.image(key, `scenes/${key}.png`);
       });
     });
+
+    this.loadPlateCompanions();
+  }
+
+  /**
+   * Walk masks and foreground occluders for plates composed by the Forge.
+   *
+   * Both are declared per-location in `<id>.location.json`, so this loads
+   * exactly what exists — a location with no `plate.walkMask` and no
+   * `overlays` (everything except rua-direita until Stage 4) loads nothing and
+   * boots exactly as before.
+   */
+  private loadPlateCompanions() {
+    LOCATION_IDS.forEach((id) => {
+      const location = getLocation(id);
+      if (!location) return;
+
+      const maskKey = location.plate.walkMask;
+      if (maskKey) this.load.image(maskKey, `scenes/masks/${maskKey}.png`);
+
+      location.overlays.forEach((overlay) => {
+        this.load.image(overlay.key, `scenes/overlays/${overlay.key}.png`);
+        (['dawn', 'dusk', 'night'] as const).forEach((time) => {
+          this.load.image(`${overlay.key}-${time}`, `scenes/overlays/${overlay.key}-${time}.png`);
+        });
+      });
+    });
   }
 
   private loadAudio() {
     // Music tracks
     const music = ['music-main', 'music-market', 'music-church', 'music-waterfront', 'music-night', 'music-tension', 'music-fortress'];
     music.forEach((track) => {
-      this.load.audio(track, [`audio/music/${track}.ogg`, `audio/music/${track}.wav`]);
+      // Ogg only: there is no .wav on disk, and Vite's SPA fallback answers
+      // missing paths with index.html + HTTP 200, which Phaser then feeds to
+      // decodeAudioData ("Unable to decode audio data").
+      this.load.audio(track, `audio/music/${track}.ogg`);
     });
 
     // Ambient sounds
@@ -209,6 +259,13 @@ export class BootScene extends Phaser.Scene {
       'sfx-footstep-wood',
       'sfx-footstep-dirt',
       'sfx-coin-clink',
+      // Location transition stings referenced by audio.transitionSound in
+      // src/data/locations/*.location.json
+      'sfx-gate-creak',
+      'sfx-waves-crash',
+      'sfx-crowd-murmur',
+      'sfx-birds-tropical',
+      'sfx-wind-hilltop',
     ];
     sfx.forEach((sound) => {
       this.load.audio(sound, `audio/sfx/${sound}.wav`);

@@ -1,0 +1,45 @@
+{
+  "$schema": "melaka-forge/relight-runtime@1",
+  "generatedBy": "tools/forge/relight-plates.cjs — regenerate with `npm run forge:relight`, do not hand-edit",
+  "note": "Per-time-of-day multiplicative sprite tint derived from the SAME relight LUTs (docs/art-bible/forge/relight-luts.json) that bake the plates, so composited characters sit in the light their backdrop was lit by. Plate-wide runtime overlays stay OFF wherever a baked variant exists — this tint is the whole runtime lighting pass for characters.",
+  "source": "docs/art-bible/forge/relight-luts.json",
+  "weighting": {
+    "ramps": [
+      "whitewash",
+      "terracotta",
+      "stone",
+      "timber",
+      "foliage",
+      "water",
+      "earth",
+      "skin"
+    ],
+    "skinShare": 0.5
+  },
+  "times": {
+    "day": {
+      "tint": null,
+      "tintHex": "#FFFFFF",
+      "alpha": 1,
+      "lumaRatio": 1
+    },
+    "dawn": {
+      "tint": 11585014,
+      "tintHex": "#B0C5F6",
+      "alpha": 1,
+      "lumaRatio": 0.833
+    },
+    "dusk": {
+      "tint": 14461585,
+      "tintHex": "#DCAA91",
+      "alpha": 1,
+      "lumaRatio": 0.785
+    },
+    "night": {
+      "tint": 4545177,
+      "tintHex": "#455A99",
+      "alpha": 1,
+      "lumaRatio": 0.413
+    }
+  }
+}

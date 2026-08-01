@@ -50,7 +50,21 @@ export function HUD() {
   const isDialogueOpen = useGameStore((state) => state.isDialogueOpen);
   const isPaused = useGameStore((state) => state.isPaused);
   const onboarding = useGameStore((state) => state.onboarding);
+  const completeTutorialBanner = useGameStore((state) => state.completeTutorialBanner);
   const inventoryItemCount = useInventoryStore((state) => state.items.length);
+
+  React.useEffect(() => {
+    if (onboarding && !onboarding.hasCompletedTutorialBanner) {
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === 'Enter' || e.key === ' ' || e.key === 'Escape') {
+          e.preventDefault();
+          completeTutorialBanner();
+        }
+      };
+      window.addEventListener('keydown', handleKeyDown);
+      return () => window.removeEventListener('keydown', handleKeyDown);
+    }
+  }, [onboarding?.hasCompletedTutorialBanner, completeTutorialBanner]);
 
   // Format time string
   const timeString = `${time.hour.toString().padStart(2, '0')}:${time.minute.toString().padStart(2, '0')}`;
@@ -70,10 +84,14 @@ export function HUD() {
   const trackedObjective = trackedObjectiveData?.objective || null;
 
   const tutorialHint = (() => {
-    if (location.id === 'rua-direita' && activeQuestCount === 0 && !onboarding.hasStartedDialogue) {
+    // Fires wherever the player currently stands (they spawn at A Famosa Gate,
+    // not Rua Direita), so the very first screen always states a goal.
+    if (activeQuestCount === 0 && !onboarding.hasStartedDialogue) {
       return {
         title: 'First Lead',
-        text: 'Find Fernão Gomes in Rua Direita and press [Space] to begin the investigation.',
+        text: location.id === 'rua-direita'
+          ? 'Find Fernão Gomes here in Rua Direita and press [Space] to begin the investigation.'
+          : 'Head to Rua Direita, find Fernão Gomes, and press [Space] to begin the investigation.',
       };
     }
 
@@ -221,6 +239,107 @@ export function HUD() {
           </div>
         </div>
       )}
+
+      {!onboarding.hasCompletedTutorialBanner && (
+        <div className="absolute bottom-20 left-0 right-0 mx-auto w-[min(480px,90vw)] z-50 pointer-events-auto">
+          <div className="absolute inset-0 translate-x-1 translate-y-1 bg-black/45 rounded-lg blur-[1px]" />
+          <div className="relative bg-leather-300 border border-gold/45 rounded p-4 shadow-parchment text-center">
+            <h4 className="font-cinzel text-gold text-sm uppercase tracking-wider mb-2">
+              Streets of Melaka — Controls
+            </h4>
+            <p className="text-[11px] text-parchment-300 italic leading-relaxed mb-3 px-2 border-b border-sepia-light/20 pb-2">
+              Year 1580. The Portuguese fortress of A Famosa stands as a golden gateway to the East, but beneath the spice trade lies a web of debt, faith, and secrets...
+            </p>
+            <div className="grid grid-cols-2 gap-3 text-left text-parchment-200 text-xs my-3 border-y border-sepia-light/20 py-2">
+              <div>
+                <span className="text-gold font-mono font-bold mr-2">[W,A,S,D] / [Arrows]</span>
+                <span>Move Character</span>
+              </div>
+              <div>
+                <span className="text-gold font-mono font-bold mr-2">[Space] / [Click]</span>
+                <span>Interact / Dialogue</span>
+              </div>
+              <div>
+                <span className="text-gold font-mono font-bold mr-2">[I] Key</span>
+                <span>Open Inventory</span>
+              </div>
+              <div>
+                <span className="text-gold font-mono font-bold mr-2">[J] Key</span>
+                <span>Open Quest Journal</span>
+              </div>
+            </div>
+            <button
+              onClick={completeTutorialBanner}
+              className="mt-2 px-4 py-1.5 bg-crimson hover:bg-crimson-dark border border-gold/40 text-gold-light text-xs font-cinzel rounded uppercase tracking-wider transition-colors"
+            >
+              Begin Journey
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Choice overlay for branching quest stages */}
+      {(() => {
+        const activeQuests = useQuestStore.getState().activeQuests;
+        const bQuest = activeQuests.find((q) => {
+          const stage = q.stages.find((s) => s.id === q.currentStageId);
+          return stage?.isBranching;
+        });
+        const currentStage = bQuest
+          ? bQuest.stages.find((s) => s.id === bQuest.currentStageId)
+          : null;
+
+        if (!bQuest || !currentStage || !currentStage.availablePaths) return null;
+
+        return (
+          <div className="absolute inset-0 bg-black/75 flex items-center justify-center z-[100] pointer-events-auto">
+            <div className="bg-leather-300 border border-gold rounded-lg p-6 max-w-md w-full shadow-parchment animate-fade-in text-center mx-4 relative">
+              <h3 className="font-cinzel text-gold text-xl mb-2 uppercase tracking-wider">
+                {currentStage.description || 'Make Your Choice'}
+              </h3>
+              <p className="text-parchment-300 text-sm mb-6 italic leading-relaxed">
+                {bQuest.name}
+              </p>
+              <div className="space-y-3">
+                {currentStage.availablePaths.map((path) => {
+                  const check = useQuestStore.getState().canSelectPath(bQuest.id, path.id);
+                  return (
+                    <button
+                      key={path.id}
+                      disabled={!check.allowed}
+                      onClick={() => {
+                        useQuestStore.getState().requestPathSelection(path.id);
+                      }}
+                      className={`w-full py-3 px-4 rounded text-left border transition-all duration-200 block ${
+                        check.allowed
+                          ? 'bg-parchment-800/10 hover:bg-parchment-800/25 border-gold/40 hover:border-gold text-parchment-200 cursor-pointer'
+                          : 'bg-black/45 border-zinc-800 text-zinc-500 cursor-not-allowed opacity-45'
+                      }`}
+                    >
+                      <div className="flex justify-between items-center">
+                        <span className="font-semibold text-base">{path.name}</span>
+                        {!check.allowed && (
+                          <span className="text-xs text-rose-300 uppercase tracking-wider bg-black/60 px-1.5 py-0.5 rounded">
+                            Locked
+                          </span>
+                        )}
+                      </div>
+                      {path.description && (
+                        <p className="text-sm mt-1 text-parchment-400 leading-normal">{path.description}</p>
+                      )}
+                      {!check.allowed && check.reason && (
+                        <p className="text-xs mt-1 text-rose-400/80 italic leading-normal">
+                          Requires: {check.reason}
+                        </p>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        );
+      })()}
     </>
   );
 }

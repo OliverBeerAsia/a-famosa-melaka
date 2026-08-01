@@ -35,6 +35,7 @@ export interface OnboardingState {
   hasStartedDialogue: boolean;
   hasOpenedInventory: boolean;
   hasOpenedJournal: boolean;
+  hasCompletedTutorialBanner: boolean;
 }
 
 export const DEFAULT_TIME_STATE: TimeState = {
@@ -55,6 +56,7 @@ export const DEFAULT_ONBOARDING_STATE: OnboardingState = {
   hasStartedDialogue: false,
   hasOpenedInventory: false,
   hasOpenedJournal: false,
+  hasCompletedTutorialBanner: false,
 };
 
 export interface GameState {
@@ -64,6 +66,7 @@ export interface GameState {
   isJournalOpen: boolean;
   isMessageOpen: boolean;
   isPaused: boolean;
+  isResting: boolean;
 
   // Game time
   time: TimeState;
@@ -94,6 +97,7 @@ export interface GameState {
   setJournalOpen: (open: boolean) => void;
   setMessageOpen: (open: boolean) => void;
   setPaused: (paused: boolean) => void;
+  setResting: (resting: boolean) => void;
   toggleInventory: () => void;
   toggleJournal: () => void;
   togglePause: () => void;
@@ -114,6 +118,8 @@ export interface GameState {
   setDynamicVisualQuality: (enabled: boolean) => void;
 
   setGameReady: (ready: boolean) => void;
+  completeTutorialBanner: () => void;
+  setOnboardingState: (state: OnboardingState) => void;
 }
 
 export const useGameStore = create<GameState>()(
@@ -124,6 +130,7 @@ export const useGameStore = create<GameState>()(
     isJournalOpen: false,
     isMessageOpen: false,
     isPaused: false,
+    isResting: false,
 
     // Initial time state
     time: { ...DEFAULT_TIME_STATE },
@@ -163,7 +170,7 @@ export const useGameStore = create<GameState>()(
           },
         }));
       } else {
-        set({ isDialogueOpen: false });
+        set({ isDialogueOpen: false, isResting: false });
       }
     },
 
@@ -210,6 +217,7 @@ export const useGameStore = create<GameState>()(
     },
 
     setPaused: (paused) => set({ isPaused: paused }),
+    setResting: (resting) => set({ isResting: resting }),
 
     toggleInventory: () => {
       const { isInventoryOpen, isDialogueOpen, isMessageOpen } = get();
@@ -288,6 +296,13 @@ export const useGameStore = create<GameState>()(
 
     // Game ready state
     setGameReady: (ready) => set({ isGameReady: ready }),
+    completeTutorialBanner: () => set((state) => ({
+      onboarding: {
+        ...state.onboarding,
+        hasCompletedTutorialBanner: true,
+      },
+    })),
+    setOnboardingState: (state) => set({ onboarding: state }),
   }))
 );
 

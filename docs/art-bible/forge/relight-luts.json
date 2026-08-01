@@ -1,0 +1,941 @@
+{
+  "$schema": "melaka-forge/relight-luts@1",
+  "generatedBy": "tools/forge/relight.cjs (deterministic — regenerate, do not hand-merge)",
+  "hint": "Values here are hand-tunable for a one-off fix, but the SPECS in relight.cjs are the source of truth. Re-running overwrites this file.",
+  "canonSize": 50,
+  "canon": [
+    {
+      "index": 0,
+      "name": "whitewash-0",
+      "hex": "#302C38",
+      "ramp": "whitewash",
+      "step": 0
+    },
+    {
+      "index": 1,
+      "name": "whitewash-1",
+      "hex": "#6C6464",
+      "ramp": "whitewash",
+      "step": 1
+    },
+    {
+      "index": 2,
+      "name": "whitewash-2",
+      "hex": "#ACA08C",
+      "ramp": "whitewash",
+      "step": 2
+    },
+    {
+      "index": 3,
+      "name": "whitewash-3",
+      "hex": "#DCD0B8",
+      "ramp": "whitewash",
+      "step": 3
+    },
+    {
+      "index": 4,
+      "name": "whitewash-4",
+      "hex": "#FCECCC",
+      "ramp": "whitewash",
+      "step": 4
+    },
+    {
+      "index": 5,
+      "name": "terracotta-0",
+      "hex": "#2C1020",
+      "ramp": "terracotta",
+      "step": 0
+    },
+    {
+      "index": 6,
+      "name": "terracotta-1",
+      "hex": "#581814",
+      "ramp": "terracotta",
+      "step": 1
+    },
+    {
+      "index": 7,
+      "name": "terracotta-2",
+      "hex": "#844020",
+      "ramp": "terracotta",
+      "step": 2
+    },
+    {
+      "index": 8,
+      "name": "terracotta-3",
+      "hex": "#B47844",
+      "ramp": "terracotta",
+      "step": 3
+    },
+    {
+      "index": 9,
+      "name": "terracotta-4",
+      "hex": "#DCB47C",
+      "ramp": "terracotta",
+      "step": 4
+    },
+    {
+      "index": 10,
+      "name": "stone-0",
+      "hex": "#1C1C30",
+      "ramp": "stone",
+      "step": 0
+    },
+    {
+      "index": 11,
+      "name": "stone-1",
+      "hex": "#383C58",
+      "ramp": "stone",
+      "step": 1
+    },
+    {
+      "index": 12,
+      "name": "stone-2",
+      "hex": "#606C80",
+      "ramp": "stone",
+      "step": 2
+    },
+    {
+      "index": 13,
+      "name": "stone-3",
+      "hex": "#94A0A8",
+      "ramp": "stone",
+      "step": 3
+    },
+    {
+      "index": 14,
+      "name": "stone-4",
+      "hex": "#C8CCC0",
+      "ramp": "stone",
+      "step": 4
+    },
+    {
+      "index": 15,
+      "name": "timber-0",
+      "hex": "#24101C",
+      "ramp": "timber",
+      "step": 0
+    },
+    {
+      "index": 16,
+      "name": "timber-1",
+      "hex": "#44201C",
+      "ramp": "timber",
+      "step": 1
+    },
+    {
+      "index": 17,
+      "name": "timber-2",
+      "hex": "#704828",
+      "ramp": "timber",
+      "step": 2
+    },
+    {
+      "index": 18,
+      "name": "timber-3",
+      "hex": "#9C7C4C",
+      "ramp": "timber",
+      "step": 3
+    },
+    {
+      "index": 19,
+      "name": "timber-4",
+      "hex": "#C8B07C",
+      "ramp": "timber",
+      "step": 4
+    },
+    {
+      "index": 20,
+      "name": "foliage-0",
+      "hex": "#10241C",
+      "ramp": "foliage",
+      "step": 0
+    },
+    {
+      "index": 21,
+      "name": "foliage-1",
+      "hex": "#144418",
+      "ramp": "foliage",
+      "step": 1
+    },
+    {
+      "index": 22,
+      "name": "foliage-2",
+      "hex": "#387024",
+      "ramp": "foliage",
+      "step": 2
+    },
+    {
+      "index": 23,
+      "name": "foliage-3",
+      "hex": "#709C44",
+      "ramp": "foliage",
+      "step": 3
+    },
+    {
+      "index": 24,
+      "name": "foliage-4",
+      "hex": "#B0C478",
+      "ramp": "foliage",
+      "step": 4
+    },
+    {
+      "index": 25,
+      "name": "water-0",
+      "hex": "#10142C",
+      "ramp": "water",
+      "step": 0
+    },
+    {
+      "index": 26,
+      "name": "water-1",
+      "hex": "#0C284C",
+      "ramp": "water",
+      "step": 1
+    },
+    {
+      "index": 27,
+      "name": "water-2",
+      "hex": "#185470",
+      "ramp": "water",
+      "step": 2
+    },
+    {
+      "index": 28,
+      "name": "water-3",
+      "hex": "#3C8C94",
+      "ramp": "water",
+      "step": 3
+    },
+    {
+      "index": 29,
+      "name": "water-4",
+      "hex": "#78BCB0",
+      "ramp": "water",
+      "step": 4
+    },
+    {
+      "index": 30,
+      "name": "earth-0",
+      "hex": "#301C20",
+      "ramp": "earth",
+      "step": 0
+    },
+    {
+      "index": 31,
+      "name": "earth-1",
+      "hex": "#643C24",
+      "ramp": "earth",
+      "step": 1
+    },
+    {
+      "index": 32,
+      "name": "earth-2",
+      "hex": "#987438",
+      "ramp": "earth",
+      "step": 2
+    },
+    {
+      "index": 33,
+      "name": "earth-3",
+      "hex": "#C8A860",
+      "ramp": "earth",
+      "step": 3
+    },
+    {
+      "index": 34,
+      "name": "earth-4",
+      "hex": "#F0D498",
+      "ramp": "earth",
+      "step": 4
+    },
+    {
+      "index": 35,
+      "name": "skin-0",
+      "hex": "#341C24",
+      "ramp": "skin",
+      "step": 0
+    },
+    {
+      "index": 36,
+      "name": "skin-1",
+      "hex": "#5C3430",
+      "ramp": "skin",
+      "step": 1
+    },
+    {
+      "index": 37,
+      "name": "skin-2",
+      "hex": "#886044",
+      "ramp": "skin",
+      "step": 2
+    },
+    {
+      "index": 38,
+      "name": "skin-3",
+      "hex": "#B8946C",
+      "ramp": "skin",
+      "step": 3
+    },
+    {
+      "index": 39,
+      "name": "skin-4",
+      "hex": "#E0C89C",
+      "ramp": "skin",
+      "step": 4
+    },
+    {
+      "index": 40,
+      "name": "sky-0",
+      "hex": "#20285C",
+      "ramp": "sky",
+      "step": 0
+    },
+    {
+      "index": 41,
+      "name": "sky-1",
+      "hex": "#28549C",
+      "ramp": "sky",
+      "step": 1
+    },
+    {
+      "index": 42,
+      "name": "sky-2",
+      "hex": "#6098C8",
+      "ramp": "sky",
+      "step": 2
+    },
+    {
+      "index": 43,
+      "name": "sky-3",
+      "hex": "#B8D8D8",
+      "ramp": "sky",
+      "step": 3
+    },
+    {
+      "index": 44,
+      "name": "shadow-violet",
+      "hex": "#181830",
+      "ramp": "anchor",
+      "step": 0
+    },
+    {
+      "index": 45,
+      "name": "shadow-void",
+      "hex": "#0C0C18",
+      "ramp": "anchor",
+      "step": 0
+    },
+    {
+      "index": 46,
+      "name": "flag-crimson",
+      "hex": "#B01C28",
+      "ramp": "accent",
+      "step": 0
+    },
+    {
+      "index": 47,
+      "name": "brass-gold",
+      "hex": "#D8A428",
+      "ramp": "accent",
+      "step": 0
+    },
+    {
+      "index": 48,
+      "name": "lantern-flame",
+      "hex": "#F5C860",
+      "ramp": "accent",
+      "step": 0
+    },
+    {
+      "index": 49,
+      "name": "sun-specular",
+      "hex": "#FFF4D4",
+      "ramp": "accent",
+      "step": 0
+    }
+  ],
+  "sun": {
+    "azimuthDeg": 315,
+    "elevationDeg": 30,
+    "keyHex": "#FFE9B4",
+    "ambientHex": "#181830",
+    "shadowOffset": [
+      1,
+      1
+    ]
+  },
+  "times": {
+    "day": {
+      "label": "Day — high tropical sun, NW key",
+      "gradient": null,
+      "spec": {
+        "label": "Day — high tropical sun, NW key",
+        "vLo": 0,
+        "vHi": 1,
+        "vGamma": 1,
+        "satMul": 1,
+        "ambient": "#3A4A80",
+        "ambientW": 0,
+        "key": "#FFE9B4",
+        "keyW": 0,
+        "haze": "#B8D8D8",
+        "hazeW": 0,
+        "sunBias": 0,
+        "identity": true,
+        "rampOverrides": {}
+      },
+      "variants": {
+        "base": [
+          "#302C38",
+          "#6C6464",
+          "#ACA08C",
+          "#DCD0B8",
+          "#FCECCC",
+          "#2C1020",
+          "#581814",
+          "#844020",
+          "#B47844",
+          "#DCB47C",
+          "#1C1C30",
+          "#383C58",
+          "#606C80",
+          "#94A0A8",
+          "#C8CCC0",
+          "#24101C",
+          "#44201C",
+          "#704828",
+          "#9C7C4C",
+          "#C8B07C",
+          "#10241C",
+          "#144418",
+          "#387024",
+          "#709C44",
+          "#B0C478",
+          "#10142C",
+          "#0C284C",
+          "#185470",
+          "#3C8C94",
+          "#78BCB0",
+          "#301C20",
+          "#643C24",
+          "#987438",
+          "#C8A860",
+          "#F0D498",
+          "#341C24",
+          "#5C3430",
+          "#886044",
+          "#B8946C",
+          "#E0C89C",
+          "#20285C",
+          "#28549C",
+          "#6098C8",
+          "#B8D8D8",
+          "#181830",
+          "#0C0C18",
+          "#B01C28",
+          "#D8A428",
+          "#F5C860",
+          "#FFF4D4"
+        ]
+      }
+    },
+    "dawn": {
+      "label": "Dawn — sea mist, low cool sun rising off the strait",
+      "gradient": {
+        "axis": "x",
+        "from": "base",
+        "to": "sun",
+        "note": "lerp toward the sun side of the frame"
+      },
+      "spec": {
+        "label": "Dawn — sea mist, low cool sun rising off the strait",
+        "vLo": 0.045,
+        "vHi": 0.54,
+        "vGamma": 0.96,
+        "satMul": 0.66,
+        "ambient": "#3A4C7C",
+        "ambientW": 0.6,
+        "ambientLift": 0.05,
+        "key": "#F8CCA4",
+        "keyW": 0.26,
+        "keyLift": 0.09,
+        "haze": "#68809E",
+        "hazeW": 0.13,
+        "sunBias": 0.5,
+        "sunKey": "#FFAE78",
+        "rampOverrides": {
+          "water": {
+            "vLo": 0.14,
+            "vHi": 0.5,
+            "vGamma": 0.76,
+            "satMul": 0.7,
+            "ambientW": 0.3,
+            "key": "#BCCCEC",
+            "keyW": 0.52,
+            "reflectFloor": 0.72,
+            "haze": "#7C96C8",
+            "hazeW": 0.22
+          },
+          "sky": {
+            "vLo": 0.22,
+            "vHi": 0.7,
+            "satMul": 0.62,
+            "ambientW": 0.24,
+            "key": "#D0D8EC",
+            "keyW": 0.54,
+            "reflectFloor": 0.8,
+            "haze": "#93A8C6",
+            "hazeW": 0.2
+          },
+          "foliage": {
+            "vHi": 0.44,
+            "satMul": 0.88,
+            "ambientW": 0.5
+          },
+          "whitewash": {
+            "vHi": 0.62,
+            "keyW": 0.36
+          },
+          "stone": {
+            "vHi": 0.56,
+            "keyW": 0.32
+          },
+          "skin": {
+            "vHi": 0.58,
+            "satMul": 0.82,
+            "keyW": 0.32
+          }
+        }
+      },
+      "variants": {
+        "base": [
+          "#2E3549",
+          "#4F5261",
+          "#7A726C",
+          "#978A7B",
+          "#A79786",
+          "#252738",
+          "#36313D",
+          "#504445",
+          "#6E5C4F",
+          "#847360",
+          "#242B3D",
+          "#353C50",
+          "#4D515F",
+          "#69686B",
+          "#837C73",
+          "#232636",
+          "#2F303E",
+          "#464348",
+          "#615953",
+          "#7B705F",
+          "#1D2832",
+          "#213133",
+          "#314239",
+          "#4A5340",
+          "#63634C",
+          "#373E55",
+          "#37465D",
+          "#40566A",
+          "#4F6778",
+          "#627581",
+          "#282C3B",
+          "#3F3D46",
+          "#5E564E",
+          "#7A6D58",
+          "#8D7F6B",
+          "#2A2C3C",
+          "#3D3946",
+          "#584F4F",
+          "#77685A",
+          "#8F7F6B",
+          "#525870",
+          "#5F6D87",
+          "#7B8A9D",
+          "#99A4AF",
+          "#22293B",
+          "#1C2230",
+          "#81373D",
+          "#CD9F35",
+          "#FFDC6A",
+          "#FFF9D9"
+        ],
+        "sun": [
+          "#323543",
+          "#5A5053",
+          "#906D57",
+          "#B38261",
+          "#C48E6A",
+          "#272734",
+          "#3A3138",
+          "#58443E",
+          "#7B5B47",
+          "#976F53",
+          "#272B39",
+          "#3C3B47",
+          "#5B504F",
+          "#806455",
+          "#9D755B",
+          "#252632",
+          "#323039",
+          "#4E4241",
+          "#705848",
+          "#8F6B52",
+          "#1F282F",
+          "#263030",
+          "#3D3F35",
+          "#5C4F3B",
+          "#795E45",
+          "#4B3F3E",
+          "#514443",
+          "#5F514B",
+          "#736055",
+          "#8E6B56",
+          "#2A2C37",
+          "#463D3F",
+          "#6C5545",
+          "#8D694E",
+          "#A3795B",
+          "#2C2C38",
+          "#42393F",
+          "#634E45",
+          "#88654D",
+          "#A5795A",
+          "#6E554A",
+          "#846757",
+          "#AE7D5E",
+          "#D0946D",
+          "#252937",
+          "#1E222D",
+          "#843B37",
+          "#D29E35",
+          "#FFDC6A",
+          "#FFF8D5"
+        ]
+      }
+    },
+    "dusk": {
+      "label": "Dusk — the golden hour, deep amber key, violet shadows",
+      "gradient": {
+        "axis": "x",
+        "from": "base",
+        "to": "sun",
+        "note": "lerp toward the sun side of the frame"
+      },
+      "spec": {
+        "label": "Dusk — the golden hour, deep amber key, violet shadows",
+        "vLo": 0.02,
+        "vHi": 0.86,
+        "vGamma": 1.55,
+        "satMul": 1.2,
+        "ambient": "#2A1840",
+        "ambientW": 0.62,
+        "ambientLift": 0.02,
+        "key": "#FF9C3C",
+        "keyW": 0.58,
+        "keyLift": 0.14,
+        "haze": "#7A3830",
+        "hazeW": 0.12,
+        "sunBias": 0.28,
+        "sunKey": "#FF7A2C",
+        "rampOverrides": {
+          "water": {
+            "vLo": 0.34,
+            "vHi": 1,
+            "vGamma": 0.55,
+            "satMul": 1.4,
+            "ambientW": 0.18,
+            "keyW": 0.86,
+            "reflectFloor": 0.92,
+            "haze": "#FF8A3A",
+            "hazeW": 0.26
+          },
+          "sky": {
+            "vLo": 0.18,
+            "vHi": 1,
+            "vGamma": 0.7,
+            "satMul": 1.34,
+            "ambientW": 0.3,
+            "keyW": 0.78,
+            "reflectFloor": 0.85,
+            "haze": "#E86A34",
+            "hazeW": 0.28
+          },
+          "whitewash": {
+            "vHi": 0.94,
+            "vGamma": 1.3,
+            "keyW": 0.64,
+            "satMul": 1.24
+          },
+          "stone": {
+            "vHi": 0.88,
+            "vGamma": 1.34,
+            "keyW": 0.6,
+            "satMul": 1.28
+          },
+          "terracotta": {
+            "vHi": 0.86,
+            "keyW": 0.56,
+            "satMul": 1.26
+          },
+          "timber": {
+            "vHi": 0.46,
+            "vGamma": 1.95,
+            "ambientW": 0.8,
+            "keyW": 0.34,
+            "keyLift": 0.06,
+            "satMul": 0.96
+          },
+          "earth": {
+            "vHi": 0.56,
+            "vGamma": 1.75,
+            "ambientW": 0.76,
+            "keyW": 0.42,
+            "keyLift": 0.08,
+            "satMul": 1
+          },
+          "foliage": {
+            "vHi": 0.5,
+            "vGamma": 1.95,
+            "ambientW": 0.7,
+            "satMul": 0.92,
+            "keyW": 0.34
+          },
+          "skin": {
+            "keyW": 0.56
+          }
+        }
+      },
+      "variants": {
+        "base": [
+          "#2E1C30",
+          "#664550",
+          "#B27B50",
+          "#F0A55A",
+          "#FFBD67",
+          "#1C0C14",
+          "#301214",
+          "#572A1B",
+          "#8D5326",
+          "#C5813D",
+          "#1E121F",
+          "#362438",
+          "#60474D",
+          "#9A7157",
+          "#D2965B",
+          "#150A0E",
+          "#1A0D12",
+          "#29171A",
+          "#402A21",
+          "#5E442B",
+          "#150C10",
+          "#1A1114",
+          "#2C211C",
+          "#483924",
+          "#6B532F",
+          "#66402F",
+          "#765237",
+          "#956D41",
+          "#C6924F",
+          "#F8AE57",
+          "#190D13",
+          "#2C181D",
+          "#4D3223",
+          "#74512A",
+          "#986E3F",
+          "#22111A",
+          "#3B1F25",
+          "#653D2F",
+          "#9D6739",
+          "#D3914C",
+          "#613C3A",
+          "#6D4F49",
+          "#B78052",
+          "#FFB961",
+          "#190E18",
+          "#140A0F",
+          "#81221B",
+          "#CE9626",
+          "#F5C860",
+          "#FFEBC4"
+        ],
+        "sun": [
+          "#311C2C",
+          "#724343",
+          "#D16E38",
+          "#FF8D3A",
+          "#FFA041",
+          "#1D0C13",
+          "#321312",
+          "#5F2B18",
+          "#9E4E20",
+          "#E2722E",
+          "#1F121D",
+          "#3C2431",
+          "#71433D",
+          "#B8663C",
+          "#FB813B",
+          "#150A0E",
+          "#1B0D11",
+          "#2D1717",
+          "#49291B",
+          "#6F3F22",
+          "#160C0F",
+          "#1D1112",
+          "#352119",
+          "#5A361E",
+          "#834C25",
+          "#7E3E18",
+          "#974A1C",
+          "#C05E23",
+          "#FB7A2D",
+          "#FF9236",
+          "#1A0D12",
+          "#301919",
+          "#58301D",
+          "#884A22",
+          "#B3632F",
+          "#231118",
+          "#3F1F21",
+          "#723B26",
+          "#B55D2B",
+          "#F67E36",
+          "#793B1F",
+          "#904826",
+          "#E66D29",
+          "#FF9C3A",
+          "#1A0E16",
+          "#140A0F",
+          "#82261A",
+          "#D59226",
+          "#F5C860",
+          "#FFE7BE"
+        ]
+      }
+    },
+    "night": {
+      "label": "Night — moonlit, value-compressed, warm practicals survive",
+      "gradient": null,
+      "spec": {
+        "label": "Night — moonlit, value-compressed, warm practicals survive",
+        "vLo": 0.028,
+        "vHi": 0.27,
+        "vGamma": 1.34,
+        "satMul": 0.55,
+        "ambient": "#101838",
+        "ambientW": 0.7,
+        "ambientLift": 0.03,
+        "key": "#8FA8D8",
+        "keyW": 0.52,
+        "keyLift": 0.04,
+        "haze": "#121A38",
+        "hazeW": 0.26,
+        "sunBias": 0,
+        "coolGuard": 12,
+        "rampOverrides": {
+          "whitewash": {
+            "vHi": 0.44,
+            "keyW": 0.6,
+            "satMul": 0.48
+          },
+          "stone": {
+            "vHi": 0.38,
+            "keyW": 0.56,
+            "satMul": 0.52
+          },
+          "water": {
+            "vLo": 0.05,
+            "vHi": 0.37,
+            "keyW": 0.56,
+            "keyLift": 0.06,
+            "satMul": 0.82,
+            "reflectFloor": 0.5
+          },
+          "sky": {
+            "vLo": 0.05,
+            "vHi": 0.26,
+            "keyW": 0.26,
+            "satMul": 0.72,
+            "ambientW": 0.76
+          },
+          "foliage": {
+            "vHi": 0.18,
+            "ambientW": 0.84,
+            "satMul": 0.46,
+            "keyW": 0.22
+          },
+          "timber": {
+            "vHi": 0.2,
+            "ambientW": 0.76,
+            "coolGuard": 3
+          },
+          "earth": {
+            "vHi": 0.2,
+            "ambientW": 0.76,
+            "coolGuard": 3
+          },
+          "skin": {
+            "vHi": 0.34,
+            "keyW": 0.36,
+            "coolGuard": 0
+          }
+        }
+      },
+      "variants": {
+        "base": [
+          "#101529",
+          "#1F253C",
+          "#3A4051",
+          "#4F5768",
+          "#5C6577",
+          "#0B0E1D",
+          "#111221",
+          "#1A1B28",
+          "#272932",
+          "#33363F",
+          "#0C1122",
+          "#14192E",
+          "#20263B",
+          "#303748",
+          "#404756",
+          "#0A0D1B",
+          "#0C0F1E",
+          "#131523",
+          "#1B1E28",
+          "#242830",
+          "#090E1D",
+          "#0B1020",
+          "#101624",
+          "#181E26",
+          "#20252C",
+          "#0E1220",
+          "#0F1627",
+          "#152032",
+          "#202F41",
+          "#32404E",
+          "#0B0E1D",
+          "#111322",
+          "#1A1D27",
+          "#24272E",
+          "#2B2F37",
+          "#0D1122",
+          "#15182A",
+          "#222433",
+          "#33353E",
+          "#42444B",
+          "#0E1327",
+          "#161E31",
+          "#232C3B",
+          "#303841",
+          "#0B0E1E",
+          "#090C1A",
+          "#531F2B",
+          "#B58E2F",
+          "#FFDC6A",
+          "#F8EED2"
+        ]
+      }
+    }
+  }
+}

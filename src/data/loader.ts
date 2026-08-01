@@ -7,11 +7,11 @@
 
 import { useDialogueStore, NPCData, TopicData } from '../stores/dialogueStore';
 import { ITEM_DEFINITIONS } from '../stores/inventoryStore';
+import { getLocationItems } from '../phaser/core/LocationData';
 import { useQuestStore, Quest, QuestStage, QuestObjective, ReputationFaction, ConditionalRequirements } from '../stores/questStore';
 
 // Import JSON data directly (Vite handles this)
 import npcsData from './npcs.json';
-import worldItemsData from './items.json';
 
 // Quest imports
 import questIndexData from './quests/index.json';
@@ -146,6 +146,43 @@ export async function loadGameData(): Promise<void> {
 }
 
 /**
+ * Normalize an NPC's dialogue block.
+ *
+ * Canonical shape nests greeting/topics/farewell under `dialogue`, but some
+ * authored entries declare them at the top level. Rather than silently loading
+ * a mute NPC (no greeting, zero topics), fall back to the flat shape and warn
+ * so the data file can be fixed.
+ */
+function normalizeDialogue(npcId: string, npc: RuntimeNPCData): NPCData['dialogue'] {
+  if (npc.dialogue) {
+    return {
+      ...npc.dialogue,
+      greeting: npc.dialogue.greeting || '',
+      topics: { ...(npc.dialogue.topics || {}) },
+    };
+  }
+
+  const flat = npc as unknown as Partial<NPCData['dialogue']>;
+
+  if (!flat.greeting && !flat.topics) {
+    console.warn(`[DataLoader] NPC "${npcId}" has no dialogue data; they will be mute.`);
+  } else {
+    console.warn(
+      `[DataLoader] NPC "${npcId}" declares dialogue at the top level; expected a "dialogue" block. Normalizing.`
+    );
+  }
+
+  return {
+    greeting: flat.greeting || '',
+    greetingQuestActive: flat.greetingQuestActive,
+    greetingQuestComplete: flat.greetingQuestComplete,
+    greetingVariants: flat.greetingVariants,
+    farewell: flat.farewell,
+    topics: { ...(flat.topics || {}) },
+  };
+}
+
+/**
  * Load NPC data into dialogue store
  */
 function loadNPCData(): void {
@@ -155,10 +192,7 @@ function loadNPCData(): void {
   Object.entries({ ...baseNPCs, ...QUEST_SUPPORT_NPCS }).forEach(([npcId, npc]) => {
     npcs[npcId] = {
       ...npc,
-      dialogue: {
-        ...npc.dialogue,
-        topics: { ...(npc.dialogue?.topics || {}) },
-      },
+      dialogue: normalizeDialogue(npcId, npc),
     };
   });
 
@@ -194,11 +228,12 @@ function loadItemDefinitions(): void {
 }
 
 /**
- * Get world items at a specific location
+ * Get world items at a specific location, in 960x540 world space.
+ * Positions are authored in native plate px in
+ * `src/data/locations/<id>.location.json` and scaled once by core/LocationData.
  */
 export function getWorldItemsAtLocation(locationId: string): WorldItem[] {
-  const worldItems = worldItemsData as { 'world-items': Record<string, WorldItem[]> };
-  return worldItems['world-items'][locationId] || [];
+  return getLocationItems(locationId);
 }
 
 interface WorldItem {

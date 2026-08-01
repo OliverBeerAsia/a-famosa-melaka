@@ -9,7 +9,8 @@ Supported shipping generators:
 - Gameplay characters: `generate-character-sheets-v2.cjs`
 - Gameplay crowd silhouettes: `generate-crowd-silhouettes.cjs`
 - Gameplay tiles and objects: `ultima8-graphics/generate-all.cjs`
-- Cinematic scene art: `generate-scene-backgrounds.js` and `generate-time-of-day-variants.cjs`
+- Scene plates (day): `rederive-scenes.cjs` -> `post-process-scene.cjs`
+- Scene plates (dawn/dusk/night): `forge/relight-plates.cjs` (LUT relight + baked light pass)
 
 Legacy or experimental generators in this folder should be treated as reference/staging tools unless explicitly promoted.
 
@@ -45,17 +46,33 @@ Generates 6 scene backgrounds (960x540):
 - `scene-waterfront.png` - Harbor with Portuguese carrack, Arab dhow, warehouses
 - `scene-kampung.png` - Malay village with stilted houses, palm trees, attap roofs
 
-### `generate-time-of-day-variants.cjs` (NEW - Feb 2026)
-Generate dawn/dusk/night variants from existing base scene backgrounds:
+### `forge/relight-plates.cjs` (Stage 2 - replaces `generate-time-of-day-variants.cjs`)
+Derives every time-of-day plate from the DAY master through the Forge relight
+LUTs, then bakes each location's `lights[]` as dithered warm light pools.
+
+The retired tool applied a multiply/screen/gradient filter, which moves every
+colour the same way — so its "night" was just "day, dimmer and browner", and it
+read as daylight in-engine once the runtime double-grade was removed. The LUT
+lets each colour behave the way its MATERIAL would.
 
 ```bash
-node tools/generate-time-of-day-variants.cjs
+npm run forge:relight          # all 5 locations + src/data/relight-runtime.json
+npm run forge:relight -- --dry # report only
 ```
 
-Generates 15 files:
-- `scene-*-dawn.png`
-- `scene-*-dusk.png`
-- `scene-*-night.png`
+Input is `tools/forge/plate-masters/` (immutable snapshots of the day plates).
+Output is `assets/scenes/scene-*.png` + `scene-*-{dawn,dusk,night}.png`, plus
+`src/data/relight-runtime.json` (the character tints, derived from the same
+LUTs so sprites and plates cannot drift apart).
+
+### `forge/remap-canon.cjs`
+Remaps the crowd and character sheets onto the 50-colour canon, protecting
+shading separation so contrast never collapses. `npm run forge:remap`.
+
+### `forge/validate-canon.cjs`
+Pretest/prebuild gate: canon membership, relight determinism (byte-identical
+re-render), zero anti-aliasing, and runtime-tint freshness.
+`npm run validate:canon`.
 
 ### `generate-crowd-silhouettes.cjs`
 **Crowd sprite generator** - Creates approved `16x32` single-frame background crowd sprites for the live Phaser runtime.

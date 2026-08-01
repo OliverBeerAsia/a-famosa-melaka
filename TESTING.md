@@ -30,7 +30,7 @@ npm run electron:dev    # Run with dev server (hot reload)
 
 ### Release Gate
 ```bash
-npm test -- --runInBand
+npm test
 npm run build
 npm run validate:art -- --strict
 ```
@@ -207,7 +207,7 @@ Test each location transition:
 
 ```bash
 npm test              # Run all tests
-npm test -- --watch   # Watch mode for development
+npm run test:watch    # Watch mode for development
 ```
 
 Test files are in `/tests/` directory.

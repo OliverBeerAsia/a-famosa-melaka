@@ -15,6 +15,8 @@
 import Phaser from 'phaser';
 import { CHARACTER_SCALE, GAME_WIDTH, GAME_HEIGHT } from '../game';
 import type { ResolvedVisualQuality } from '../visualProfile';
+import { getLocation, getLocationCrowd } from '../core/LocationData';
+import { worldDepth } from '../core/depth';
 
 export type TimeOfDay = 'dawn' | 'day' | 'dusk' | 'night';
 
@@ -27,6 +29,8 @@ interface CrowdTypeConfig {
 interface PathConfig {
   start: { x: number; y: number };
   end: { x: number; y: number };
+  /** Full route. Straight paths are just their two ends. */
+  points?: Array<{ x: number; y: number }>;
 }
 
 interface LocationCrowdConfig {
@@ -128,64 +132,6 @@ const CROWD_TYPES: Record<string, CrowdTypeConfig> = {
   },
 };
 
-/** Location configs with paths scaled to 960x540 (original * 3). */
-const LOCATION_CONFIGS: Record<string, LocationCrowdConfig> = {
-  'rua-direita': {
-    maxCrowd: 12,
-    density: 1.0,
-    paths: [
-      { start: { x: -60, y: 600 }, end: { x: 1980, y: 600 } },
-      { start: { x: 1980, y: 750 }, end: { x: -60, y: 750 } },
-      { start: { x: 900, y: -60 }, end: { x: 900, y: 1500 } },
-      { start: { x: 450, y: 450 }, end: { x: 1500, y: 900 } },
-    ],
-    crowdTypes: [
-      'portuguese_merchant', 'malay_local', 'malay_woman',
-      'chinese_merchant', 'arab_trader', 'indian_merchant',
-    ],
-  },
-  waterfront: {
-    maxCrowd: 10,
-    density: 0.8,
-    paths: [
-      { start: { x: -60, y: 840 }, end: { x: 1980, y: 840 } },
-      { start: { x: 1980, y: 960 }, end: { x: -60, y: 960 } },
-      { start: { x: 600, y: 1200 }, end: { x: 1200, y: 450 } },
-    ],
-    crowdTypes: [
-      'dock_worker', 'chinese_merchant', 'arab_trader',
-      'portuguese_merchant', 'malay_local',
-    ],
-  },
-  'a-famosa-gate': {
-    maxCrowd: 6,
-    density: 0.5,
-    paths: [
-      { start: { x: -60, y: 900 }, end: { x: 1980, y: 900 } },
-      { start: { x: 900, y: 1200 }, end: { x: 900, y: 300 } },
-    ],
-    crowdTypes: ['portuguese_soldier', 'portuguese_merchant', 'malay_local'],
-  },
-  'st-pauls-church': {
-    maxCrowd: 4,
-    density: 0.3,
-    paths: [
-      { start: { x: 900, y: 1200 }, end: { x: 900, y: 450 } },
-      { start: { x: 450, y: 750 }, end: { x: 1350, y: 750 } },
-    ],
-    crowdTypes: ['priest', 'portuguese_merchant', 'malay_local'],
-  },
-  kampung: {
-    maxCrowd: 8,
-    density: 0.7,
-    paths: [
-      { start: { x: -60, y: 750 }, end: { x: 1980, y: 750 } },
-      { start: { x: 600, y: 450 }, end: { x: 1200, y: 1050 } },
-      { start: { x: 1200, y: 450 }, end: { x: 600, y: 1050 } },
-    ],
-    crowdTypes: ['malay_local', 'malay_woman', 'child'],
-  },
-};
 
 /** Time-of-day density multipliers (4-value system matching GameScene). */
 const TIME_DENSITY: Record<TimeOfDay, number> = {
@@ -246,7 +192,7 @@ export class CrowdSystem {
     this.currentTimeOfDay = time;
 
     // Cull crowd if density dropped
-    const config = this.currentLocation ? LOCATION_CONFIGS[this.currentLocation] : null;
+    const config = this.getLocationConfig();
     if (!config) return;
 
     const effectiveMax = this.getEffectiveMax(config);
@@ -273,7 +219,7 @@ export class CrowdSystem {
       this.spawnTimer = null;
     }
 
-    const config = this.currentLocation ? LOCATION_CONFIGS[this.currentLocation] : null;
+    const config = this.getLocationConfig();
     if (!config) return;
 
     const spawnRate = this.baseSpawnRate / config.density;
@@ -294,6 +240,15 @@ export class CrowdSystem {
     }
   }
 
+  /**
+   * Per-location crowd config (paths, density, cast) from
+   * <id>.location.json — already in 960x540 world space.
+   */
+  private getLocationConfig(): LocationCrowdConfig | null {
+    if (!this.currentLocation) return null;
+    return (getLocationCrowd(this.currentLocation) as LocationCrowdConfig | undefined) ?? null;
+  }
+
   /** Compute effective max considering quality cap and time density. */
   private getEffectiveMax(config: LocationCrowdConfig): number {
     const qualityCap = getMaxCrowdCap(this.quality);
@@ -306,7 +261,7 @@ export class CrowdSystem {
   private trySpawnCrowdMember(): void {
     if (this.paused) return;
 
-    const config = this.currentLocation ? LOCATION_CONFIGS[this.currentLocation] : null;
+    const config = this.getLocationConfig();
     if (!config) return;
 
     const effectiveMax = this.getEffectiveMax(config);
@@ -330,7 +285,9 @@ export class CrowdSystem {
 
     sprite.setScale(CHARACTER_SCALE);
     sprite.setOrigin(0.5, 1);
-    sprite.setDepth(sprite.y); // depth sort by Y
+    // worldDepth, not the raw y: on a 1080px-tall scrolling world a raw y
+    // depth climbs straight through the FX band and out the top of the UI one.
+    sprite.setDepth(worldDepth(sprite.y));
     sprite.setAlpha(typeName === 'child' ? 1 : 0.92);
 
     const shadow = this.scene.add.ellipse(
@@ -341,18 +298,18 @@ export class CrowdSystem {
       0x000000,
       typeName === 'child' ? 0.26 : 0.22,
     );
-    shadow.setDepth(sprite.y - 1);
+    shadow.setDepth(worldDepth(sprite.y) - 1);
 
     // Speed variation
     const speedVariation = Phaser.Math.FloatBetween(0.8, 1.2);
     const actualSpeed = typeConfig.speed * speedVariation;
 
-    // Calculate travel time
-    const distance = Phaser.Math.Distance.Between(
-      path.start.x, path.start.y,
-      path.end.x, path.end.y,
-    );
-    const duration = (distance / actualSpeed) * 1000;
+    // A route is a polyline (the Forge compositor routes crowd paths over
+    // walkable ground, so they bend around the well and the stalls); a
+    // pre-Stage-3 straight path is the two-point case of the same thing.
+    const route = (path.points && path.points.length >= 2)
+      ? path.points
+      : [path.start, path.end];
 
     const crowdMember: CrowdMember = {
       id: `crowd_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
@@ -364,18 +321,31 @@ export class CrowdSystem {
       active: true,
     };
 
-    // Movement tween
-    this.scene.tweens.add({
+    // Movement: one chained tween per leg, so the extra keeps a constant speed
+    // along the whole route instead of hurrying the long legs.
+    const legs = route.slice(1).map((point, i) => {
+      const from = route[i];
+      const distance = Phaser.Math.Distance.Between(from.x, from.y, point.x, point.y);
+      return {
+        x: point.x,
+        y: point.y,
+        duration: Math.max(1, (distance / actualSpeed) * 1000),
+      };
+    });
+
+    this.scene.tweens.chain({
       targets: sprite,
-      x: path.end.x,
-      y: path.end.y,
-      duration,
-      ease: 'Linear',
-      onUpdate: () => {
-        // Keep depth sorted by Y position as it moves
-        sprite.setDepth(sprite.y);
-        this.syncCrowdShadow(crowdMember);
-      },
+      tweens: legs.map((leg) => ({
+        x: leg.x,
+        y: leg.y,
+        duration: leg.duration,
+        ease: 'Linear',
+        onUpdate: () => {
+          // Keep depth sorted by Y position as it moves
+          sprite.setDepth(worldDepth(sprite.y));
+          this.syncCrowdShadow(crowdMember);
+        },
+      })),
       onComplete: () => {
         this.removeCrowdMember(crowdMember);
       },
@@ -396,7 +366,7 @@ export class CrowdSystem {
 
   private syncCrowdShadow(crowdMember: CrowdMember): void {
     crowdMember.shadow.setPosition(crowdMember.sprite.x, crowdMember.sprite.y - 2);
-    crowdMember.shadow.setDepth(crowdMember.sprite.y - 1);
+    crowdMember.shadow.setDepth(worldDepth(crowdMember.sprite.y) - 1);
   }
 
   /** Remove a crowd member and destroy its sprite. */
@@ -420,7 +390,8 @@ export class CrowdSystem {
       this.crowdMembers.forEach((member) => {
         this.scene.tweens.killTweensOf(member.sprite);
 
-        const exitX = member.sprite.x < GAME_WIDTH / 2 ? -150 : GAME_WIDTH + 150;
+        const worldWidth = (this.currentLocation ? getLocation(this.currentLocation)?.size.width : null) ?? GAME_WIDTH;
+        const exitX = member.sprite.x < worldWidth / 2 ? -150 : worldWidth + 150;
         const dist = Math.abs(exitX - member.sprite.x);
 
         this.scene.tweens.add({

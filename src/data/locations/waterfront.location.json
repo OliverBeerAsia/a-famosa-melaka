@@ -1,0 +1,475 @@
+{
+  "id": "waterfront",
+  "name": "The Waterfront",
+  "world": {
+    "scale": 3,
+    "nativeWidth": 320,
+    "nativeHeight": 180
+  },
+  "plate": {
+    "background": "scene-waterfront",
+    "variants": {
+      "dawn": "scene-waterfront-dawn",
+      "dusk": "scene-waterfront-dusk",
+      "night": "scene-waterfront-night"
+    },
+    "runtimeMode": "legacy-backdrop",
+    "targetMode": "isometric-2:1",
+    "authoringBasis": "isometric-grid",
+    "anchor": "bottom-center",
+    "depthStrategy": "screen-y",
+    "tileWidth": 64,
+    "tileHeight": 32,
+    "isoMapKey": "waterfront-iso",
+    "mapFile": "maps/waterfront.json"
+  },
+  "collision": {
+    "rects": [
+      {
+        "x": 0,
+        "y": 0,
+        "width": 320,
+        "height": 57
+      },
+      {
+        "x": 0,
+        "y": 0,
+        "width": 43,
+        "height": 180
+      },
+      {
+        "x": 277,
+        "y": 0,
+        "width": 43,
+        "height": 180
+      },
+      {
+        "x": 0,
+        "y": 167,
+        "width": 320,
+        "height": 13
+      },
+      {
+        "x": 230,
+        "y": 117,
+        "width": 90,
+        "height": 63
+      },
+      {
+        "x": 183,
+        "y": 153,
+        "width": 137,
+        "height": 27
+      }
+    ]
+  },
+  "spawns": {
+    "player": {
+      "x": 160,
+      "y": 147
+    }
+  },
+  "npcs": {
+    "chen-wei": {
+      "x": 157,
+      "y": 110
+    },
+    "rashid": {
+      "x": 100,
+      "y": 120
+    },
+    "lin-mei": {
+      "x": 217,
+      "y": 110
+    }
+  },
+  "transitions": [
+    {
+      "targetLocation": "rua-direita",
+      "label": "To Rua Direita",
+      "triggerArea": {
+        "x": 45,
+        "y": 93,
+        "width": 14,
+        "height": 53
+      },
+      "spawnAt": {
+        "x": 614,
+        "y": 248
+      }
+    },
+    {
+      "targetLocation": "a-famosa-gate",
+      "label": "To A Famosa Service Gate",
+      "triggerArea": {
+        "x": 136,
+        "y": 57,
+        "width": 48,
+        "height": 13
+      },
+      "spawnAt": {
+        "x": 160,
+        "y": 147
+      },
+      "requirements": {
+        "worldFlagsAny": [
+          "customs-questioned",
+          "customs-brokered",
+          "dockside-cover",
+          "quest-complete:customs-ledger"
+        ]
+      },
+      "showWhenLocked": true,
+      "lockedLabel": "Guarded Service Gate",
+      "blockedMessage": "The service gate is for bonded cargo and trusted hands. You need standing in the customs dispute before they wave you through."
+    },
+    {
+      "targetLocation": "kampung",
+      "label": "To Kampung Quarter",
+      "triggerArea": {
+        "x": 136,
+        "y": 156,
+        "width": 48,
+        "height": 13
+      },
+      "spawnAt": {
+        "x": 160,
+        "y": 73
+      }
+    }
+  ],
+  "props": [
+    {
+      "sprite": "barrel",
+      "x": 83,
+      "y": 100,
+      "scale": 1.9
+    },
+    {
+      "sprite": "cargo-crate",
+      "x": 96,
+      "y": 97,
+      "scale": 2
+    },
+    {
+      "sprite": "crate",
+      "x": 107,
+      "y": 104,
+      "scale": 1.9
+    },
+    {
+      "sprite": "rope-coil",
+      "x": 73,
+      "y": 120,
+      "scale": 1.8
+    },
+    {
+      "sprite": "fishing-net",
+      "x": 233,
+      "y": 100,
+      "scale": 2
+    },
+    {
+      "sprite": "anchor",
+      "x": 247,
+      "y": 150,
+      "scale": 1.9
+    },
+    {
+      "sprite": "fish-trap",
+      "x": 207,
+      "y": 143,
+      "scale": 1.8
+    }
+  ],
+  "animatedProps": [
+    {
+      "type": "seagull",
+      "x": 100,
+      "y": 33
+    },
+    {
+      "type": "seagull",
+      "x": 200,
+      "y": 27
+    },
+    {
+      "type": "seagull",
+      "x": 283,
+      "y": 40
+    },
+    {
+      "type": "flag",
+      "x": 240,
+      "y": 53
+    }
+  ],
+  "lights": [
+    {
+      "type": "window",
+      "x": 18,
+      "y": 24
+    },
+    {
+      "type": "window",
+      "x": 55,
+      "y": 20
+    },
+    {
+      "type": "lantern",
+      "x": 145,
+      "y": 28
+    },
+    {
+      "type": "lantern",
+      "x": 230,
+      "y": 74
+    },
+    {
+      "type": "lantern",
+      "x": 252,
+      "y": 97
+    },
+    {
+      "type": "lantern",
+      "x": 60,
+      "y": 60
+    }
+  ],
+  "fires": [
+    {
+      "x": 60,
+      "y": 60
+    }
+  ],
+  "audio": {
+    "music": "music-waterfront",
+    "nightMusic": "music-night",
+    "ambientSounds": [
+      {
+        "key": "base-tropical",
+        "volume": 0.18
+      },
+      {
+        "key": "water-lapping",
+        "volume": 0.44
+      },
+      {
+        "key": "harbor-activity",
+        "volume": 0.34
+      },
+      {
+        "key": "seagulls",
+        "volume": 0.24
+      }
+    ],
+    "nightAmbientSounds": [
+      {
+        "key": "water-lapping",
+        "volume": 0.4
+      },
+      {
+        "key": "harbor-activity",
+        "volume": 0.24
+      },
+      {
+        "key": "night-insects",
+        "volume": 0.18
+      }
+    ],
+    "footstepSurface": "wood",
+    "transitionSound": "sfx-waves-crash"
+  },
+  "visual": {
+    "transitionTint": [
+      10,
+      30,
+      50
+    ],
+    "fogTint": 10467528,
+    "fogSpeed": 0.6,
+    "hazeTint": 13490654,
+    "sunAnchor": {
+      "x": 120,
+      "y": 25
+    },
+    "aoZones": [
+      {
+        "x": 0,
+        "y": 0,
+        "width": 320,
+        "height": 57,
+        "alpha": 0.15
+      },
+      {
+        "x": 130,
+        "y": 63,
+        "width": 63,
+        "height": 47,
+        "alpha": 0.18
+      }
+    ],
+    "canopyShadows": [
+      {
+        "x": -7,
+        "y": -7,
+        "width": 107,
+        "height": 47,
+        "alpha": 0.08
+      },
+      {
+        "x": 233,
+        "y": -7,
+        "width": 93,
+        "height": 43,
+        "alpha": 0.08
+      }
+    ]
+  },
+  "crowd": {
+    "maxCrowd": 10,
+    "density": 0.8,
+    "crowdTypes": [
+      "dock_worker",
+      "chinese_merchant",
+      "arab_trader",
+      "portuguese_merchant",
+      "malay_local"
+    ],
+    "paths": [
+      {
+        "start": {
+          "x": -15,
+          "y": 75
+        },
+        "end": {
+          "x": 200,
+          "y": 75
+        }
+      },
+      {
+        "start": {
+          "x": 200,
+          "y": 95
+        },
+        "end": {
+          "x": -15,
+          "y": 95
+        }
+      },
+      {
+        "start": {
+          "x": 30,
+          "y": 40
+        },
+        "end": {
+          "x": 170,
+          "y": 140
+        }
+      },
+      {
+        "start": {
+          "x": 150,
+          "y": 145
+        },
+        "end": {
+          "x": 40,
+          "y": 60
+        }
+      }
+    ]
+  },
+  "items": [
+    {
+      "id": "coin-pouch-2",
+      "itemId": "coin-pouch",
+      "x": 67,
+      "y": 83,
+      "description": "A leather pouch containing 10 cruzados."
+    },
+    {
+      "id": "bribe-note-1",
+      "itemId": "bribe-note",
+      "x": 120,
+      "y": 73,
+      "description": "A discreet note hinting at a customs payment."
+    }
+  ],
+  "loreObjects": [
+    {
+      "id": "portuguese-carrack-model",
+      "x": 110,
+      "y": 67
+    },
+    {
+      "id": "chinese-abacus",
+      "x": 52,
+      "y": 72
+    },
+    {
+      "id": "bonded-warehouse-ledger",
+      "x": 153,
+      "y": 73
+    },
+    {
+      "id": "quay-service-lantern",
+      "x": 187,
+      "y": 87
+    },
+    {
+      "id": "dock-tally-board",
+      "x": 240,
+      "y": 100
+    },
+    {
+      "id": "bonded-chest",
+      "x": 263,
+      "y": 100
+    },
+    {
+      "id": "chinese-junk-anchor",
+      "x": 127,
+      "y": 100
+    },
+    {
+      "id": "porcelain-vase",
+      "x": 83,
+      "y": 65
+    },
+    {
+      "id": "incense-burner",
+      "x": 67,
+      "y": 83
+    },
+    {
+      "id": "dhow-sail",
+      "x": 77,
+      "y": 130
+    },
+    {
+      "id": "tin-ingots",
+      "x": 107,
+      "y": 83
+    },
+    {
+      "id": "carrack-rigging",
+      "x": 233,
+      "y": 67
+    },
+    {
+      "id": "harbor-customs-ledger",
+      "x": 200,
+      "y": 133
+    },
+    {
+      "id": "junk-batten-sail",
+      "x": 143,
+      "y": 143
+    },
+    {
+      "id": "quay-pilot-lantern",
+      "x": 50,
+      "y": 147
+    }
+  ]
+}

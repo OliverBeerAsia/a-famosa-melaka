@@ -40,8 +40,8 @@ export default {
         },
       },
       fontFamily: {
-        cinzel: ['Cinzel', 'Georgia', 'serif'],
-        crimson: ['Crimson Text', 'Georgia', 'serif'],
+        cinzel: ['"Press Start 2P"', 'monospace'],
+        crimson: ['"VT323"', 'monospace'],
       },
       boxShadow: {
         'parchment': '4px 4px 8px rgba(0, 0, 0, 0.5)',

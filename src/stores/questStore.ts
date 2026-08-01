@@ -516,13 +516,31 @@ export const useQuestStore = create<QuestState>((set, get) => {
     useDialogueStore.getState().replaceDialogueOverrides(aggregated);
   };
 
-  const applyReputationChange = (delta: Partial<Record<ReputationFaction, number>>) => {
+  const applyReputationChange = (delta: Partial<Record<ReputationFaction, number>> | Record<string, number>) => {
     set((state) => {
       const reputation: ReputationState = { ...state.reputation };
-      (Object.keys(delta) as ReputationFaction[]).forEach((faction) => {
-        const change = delta[faction] ?? 0;
-        reputation[faction] = clampReputation((reputation[faction] ?? 0) + change);
+      const legacyAliases: Record<string, ReputationFaction[]> = {
+        portuguese: ['garrison', 'portuguese-merchants'],
+        chinese: ['chinese-merchants'],
+        malay: ['kampung-community'],
+        arab: ['dockside-network'],
+      };
+
+      Object.entries(delta).forEach(([rawFaction, change]) => {
+        if (typeof change !== 'number') return;
+        
+        const faction = rawFaction as ReputationFaction;
+        if (faction in DEFAULT_REPUTATION) {
+          reputation[faction] = clampReputation((reputation[faction] ?? 0) + change);
+          return;
+        }
+
+        const mappedFactions = legacyAliases[rawFaction] || [];
+        mappedFactions.forEach((mappedFaction) => {
+          reputation[mappedFaction] = clampReputation((reputation[mappedFaction] ?? 0) + change);
+        });
       });
+      
       return { reputation };
     });
   };

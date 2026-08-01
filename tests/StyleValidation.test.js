@@ -1,5 +1,10 @@
-const fs = require('fs');
-const path = require('path');
+import fs from "node:fs";
+import path from "node:path";
+import { createRequire } from "node:module";
+import { fileURLToPath } from "node:url";
+
+const require = createRequire(import.meta.url);
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const REFERENCE_MANIFEST_PATH = path.join(__dirname, '..', 'docs', 'art-bible', 'ultima8-reference-manifest.json');
 const STYLE_MAP_PATH = path.join(__dirname, '..', 'docs', 'art-bible', 'shipping-asset-style-map.json');
@@ -313,8 +318,15 @@ describe('Pixel-level style compliance', () => {
     expect(failures).toEqual([]);
   });
 
-  test('Wave 1 character sheets use only approved palette colors', async () => {
-    const paletteSet = new Set(getAllPaletteColors().map((c) => c.hex.toUpperCase()));
+  // Stage 2 migrated the character sheets onto the Forge canon
+  // (tools/forge/remap-canon.cjs), so the assertion tightened from "a legacy
+  // ramp colour" to "one of the 50 canon colours" — the whole point of the
+  // canon is that a sprite and the plate it stands on share a palette. The
+  // legacy set is deliberately NOT unioned in here: an off-canon pixel in a
+  // migrated sheet is a regression, not a leftover.
+  test('Wave 1 character sheets use only Forge canon colors', async () => {
+    const forgeCanon = require('../tools/forge/palette.cjs');
+    const paletteSet = new Set(forgeCanon.CANON.map((c) => c.hex.toUpperCase()));
     const failures = [];
 
     for (const id of manifest.characters.named) {

@@ -31,7 +31,7 @@ End commit messages with the co-author trailer used in this repo.
 
 ```bash
 npm run build         # tsc + vite + asset validation (prebuild)
-npm test              # jest (pretest runs validators)
+npm test              # vitest (pretest runs validators incl. location data)
 npm run validate:all  # art structural + style compliance
 ```
 

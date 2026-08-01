@@ -1,0 +1,427 @@
+{
+  "id": "a-famosa-gate",
+  "name": "A Famosa Fortress Gate",
+  "world": {
+    "scale": 3,
+    "nativeWidth": 320,
+    "nativeHeight": 180
+  },
+  "plate": {
+    "background": "scene-a-famosa-gate",
+    "variants": {
+      "dawn": "scene-a-famosa-dawn",
+      "dusk": "scene-a-famosa-dusk",
+      "night": "scene-a-famosa-night"
+    },
+    "runtimeMode": "legacy-backdrop",
+    "targetMode": "isometric-2:1",
+    "authoringBasis": "isometric-grid",
+    "anchor": "bottom-center",
+    "depthStrategy": "screen-y",
+    "tileWidth": 64,
+    "tileHeight": 32,
+    "isoMapKey": "a-famosa-gate-iso",
+    "mapFile": "maps/a-famosa-gate.json"
+  },
+  "collision": {
+    "rects": [
+      {
+        "x": 0,
+        "y": 0,
+        "width": 320,
+        "height": 57
+      },
+      {
+        "x": 0,
+        "y": 0,
+        "width": 43,
+        "height": 180
+      },
+      {
+        "x": 277,
+        "y": 0,
+        "width": 43,
+        "height": 180
+      },
+      {
+        "x": 0,
+        "y": 168,
+        "width": 320,
+        "height": 12
+      }
+    ]
+  },
+  "spawns": {
+    "player": {
+      "x": 160,
+      "y": 147
+    }
+  },
+  "npcs": {
+    "capitao-rodrigues": {
+      "x": 133,
+      "y": 110
+    },
+    "gaspar-mesquita": {
+      "x": 187,
+      "y": 110
+    }
+  },
+  "transitions": [
+    {
+      "targetLocation": "rua-direita",
+      "label": "To Rua Direita",
+      "triggerArea": {
+        "x": 136,
+        "y": 57,
+        "width": 48,
+        "height": 13
+      },
+      "spawnAt": {
+        "x": 320,
+        "y": 326
+      }
+    },
+    {
+      "targetLocation": "rua-direita",
+      "label": "To Rua Direita (Main Street)",
+      "triggerArea": {
+        "x": 261,
+        "y": 93,
+        "width": 14,
+        "height": 53
+      },
+      "spawnAt": {
+        "x": 26,
+        "y": 248
+      }
+    },
+    {
+      "targetLocation": "waterfront",
+      "label": "To The Waterfront Service Gate",
+      "triggerArea": {
+        "x": 136,
+        "y": 156,
+        "width": 48,
+        "height": 13
+      },
+      "spawnAt": {
+        "x": 160,
+        "y": 73
+      },
+      "requirements": {
+        "worldFlagsAny": [
+          "customs-questioned",
+          "customs-brokered",
+          "dockside-cover",
+          "quest-complete:customs-ledger"
+        ]
+      },
+      "showWhenLocked": true,
+      "lockedLabel": "Guarded Service Gate",
+      "blockedMessage": "The service gate stays closed until customs, dockside, or the garrison has a reason to trust your passage."
+    }
+  ],
+  "props": [
+    {
+      "sprite": "cannon",
+      "x": 83,
+      "y": 100,
+      "scale": 2
+    },
+    {
+      "sprite": "cannon",
+      "x": 233,
+      "y": 100,
+      "scale": 2
+    },
+    {
+      "sprite": "crate",
+      "x": 100,
+      "y": 87,
+      "scale": 1.9
+    },
+    {
+      "sprite": "cargo-crate",
+      "x": 111,
+      "y": 91,
+      "scale": 1.9
+    },
+    {
+      "sprite": "barrel",
+      "x": 221,
+      "y": 87,
+      "scale": 1.9
+    },
+    {
+      "sprite": "rope-coil",
+      "x": 207,
+      "y": 143,
+      "scale": 1.8
+    },
+    {
+      "sprite": "anchor",
+      "x": 253,
+      "y": 150,
+      "scale": 1.9
+    }
+  ],
+  "animatedProps": [
+    {
+      "type": "torch",
+      "x": 100,
+      "y": 100
+    },
+    {
+      "type": "torch",
+      "x": 227,
+      "y": 103
+    },
+    {
+      "type": "flag",
+      "x": 160,
+      "y": 40
+    }
+  ],
+  "lights": [
+    {
+      "type": "torch",
+      "x": 144,
+      "y": 52
+    },
+    {
+      "type": "torch",
+      "x": 176,
+      "y": 52
+    },
+    {
+      "type": "torch",
+      "x": 83,
+      "y": 16
+    },
+    {
+      "type": "torch",
+      "x": 237,
+      "y": 16
+    },
+    {
+      "type": "torch",
+      "x": 55,
+      "y": 64
+    },
+    {
+      "type": "torch",
+      "x": 292,
+      "y": 95
+    }
+  ],
+  "fires": [
+    {
+      "x": 144,
+      "y": 52
+    },
+    {
+      "x": 176,
+      "y": 52
+    }
+  ],
+  "audio": {
+    "music": "music-fortress",
+    "nightMusic": "music-night",
+    "ambientSounds": [
+      {
+        "key": "base-tropical",
+        "volume": 0.32
+      },
+      {
+        "key": "fortress-ambience",
+        "volume": 0.5
+      },
+      {
+        "key": "distant-city",
+        "volume": 0.24
+      }
+    ],
+    "nightAmbientSounds": [
+      {
+        "key": "fortress-ambience",
+        "volume": 0.35
+      },
+      {
+        "key": "distant-city",
+        "volume": 0.2
+      },
+      {
+        "key": "night-insects",
+        "volume": 0.24
+      }
+    ],
+    "footstepSurface": "stone",
+    "transitionSound": "sfx-gate-creak"
+  },
+  "visual": {
+    "transitionTint": [
+      40,
+      30,
+      20
+    ],
+    "fogTint": 12101515,
+    "fogSpeed": 0.45,
+    "hazeTint": 14993043,
+    "sunAnchor": {
+      "x": 87,
+      "y": 30
+    },
+    "aoZones": [
+      {
+        "x": 0,
+        "y": 0,
+        "width": 320,
+        "height": 73,
+        "alpha": 0.2
+      },
+      {
+        "x": 100,
+        "y": 63,
+        "width": 120,
+        "height": 37,
+        "alpha": 0.18
+      }
+    ],
+    "canopyShadows": [
+      {
+        "x": -7,
+        "y": -13,
+        "width": 140,
+        "height": 73,
+        "alpha": 0.16
+      },
+      {
+        "x": 230,
+        "y": -10,
+        "width": 113,
+        "height": 63,
+        "alpha": 0.12
+      }
+    ]
+  },
+  "crowd": {
+    "maxCrowd": 6,
+    "density": 0.5,
+    "crowdTypes": [
+      "portuguese_soldier",
+      "portuguese_merchant",
+      "malay_local"
+    ],
+    "paths": [
+      {
+        "start": {
+          "x": 50,
+          "y": 110
+        },
+        "end": {
+          "x": 275,
+          "y": 110
+        }
+      },
+      {
+        "start": {
+          "x": 275,
+          "y": 130
+        },
+        "end": {
+          "x": 50,
+          "y": 130
+        }
+      },
+      {
+        "start": {
+          "x": 160,
+          "y": 62
+        },
+        "end": {
+          "x": 160,
+          "y": 160
+        }
+      },
+      {
+        "start": {
+          "x": 70,
+          "y": 80
+        },
+        "end": {
+          "x": 250,
+          "y": 150
+        }
+      }
+    ]
+  },
+  "items": [
+    {
+      "id": "cargo-manifest-1",
+      "itemId": "cargo-manifest",
+      "x": 87,
+      "y": 59,
+      "description": "A copied manifest listing cargo, port dues, and inspection marks."
+    },
+    {
+      "id": "key-warehouse-1",
+      "itemId": "key-warehouse",
+      "x": 140,
+      "y": 73,
+      "description": "A heavy key for a bonded warehouse door."
+    }
+  ],
+  "loreObjects": [
+    {
+      "id": "portuguese-coat-of-arms",
+      "x": 160,
+      "y": 65
+    },
+    {
+      "id": "albuquerque-plaque",
+      "x": 110,
+      "y": 68
+    },
+    {
+      "id": "cannon-bronze",
+      "x": 67,
+      "y": 100
+    },
+    {
+      "id": "powder-magazine-cask",
+      "x": 57,
+      "y": 127
+    },
+    {
+      "id": "fortress-watch-lantern",
+      "x": 233,
+      "y": 83
+    },
+    {
+      "id": "fortress-banner-line",
+      "x": 187,
+      "y": 67
+    },
+    {
+      "id": "gate-customs-ledger",
+      "x": 207,
+      "y": 72
+    },
+    {
+      "id": "service-route-lantern",
+      "x": 263,
+      "y": 113
+    },
+    {
+      "id": "seized-goods-chest",
+      "x": 250,
+      "y": 137
+    },
+    {
+      "id": "inspection-scale",
+      "x": 227,
+      "y": 100
+    }
+  ]
+}

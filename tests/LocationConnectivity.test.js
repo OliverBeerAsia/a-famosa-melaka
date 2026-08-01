@@ -1,10 +1,15 @@
-const fs = require('fs');
-const path = require('path');
+import fs from "node:fs";
+import path from "node:path";
+import { createRequire } from "node:module";
+import { fileURLToPath } from "node:url";
 
-const LOCATION_FILE = path.join(__dirname, '..', 'src', 'data', 'location-scenes.json');
+const require = createRequire(import.meta.url);
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+import { loadLocationsScreenSpace } from './helpers/locations.js';
 
 function loadLocations() {
-  return JSON.parse(fs.readFileSync(LOCATION_FILE, 'utf8'));
+  return loadLocationsScreenSpace();
 }
 
 function isNumber(value) {

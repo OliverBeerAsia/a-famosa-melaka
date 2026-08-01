@@ -4,12 +4,17 @@
  * Displays quest log, notes, and discoveries in an explorer's journal style.
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
 import { useQuestStore, JournalEntry } from '../../stores/questStore';
 import { useGameStore } from '../../stores/gameStore';
 import { useDialogueStore } from '../../stores/dialogueStore';
 
 type TabType = 'quests' | 'notes' | 'discoveries';
+
+/** Maximum journal entries rendered per tab (most recent kept). */
+const MAX_RENDERED_ENTRIES = 50;
+/** Pixels moved per arrow-key press. */
+const SCROLL_STEP = 25;
 
 export function JournalPanel() {
   const {
@@ -26,10 +31,28 @@ export function JournalPanel() {
   const [currentTab, setCurrentTab] = useState<TabType>('quests');
   const [scrollOffset, setScrollOffset] = useState(0);
 
+  // Scroll clamping: the content pane is translated upward, so the offset must
+  // never exceed the amount of content that actually overflows the viewport.
+  const viewportRef = useRef<HTMLDivElement | null>(null);
+  const contentRef = useRef<HTMLDivElement | null>(null);
+  const maxScrollRef = useRef(0);
+
   // Filter journal entries by category
+  const questEntries = journal.filter((e) => e.category === 'quest');
   const discoveryEntries = journal.filter((e) => e.category === 'discovery');
   const rumorEntries = journal.filter((e) => e.category === 'rumor');
   const narrativeCurrents = getNarrativeCurrents();
+
+  // Measure overflow after every render that can change content height
+  useLayoutEffect(() => {
+    const viewport = viewportRef.current;
+    const content = contentRef.current;
+    if (!viewport || !content) return;
+
+    const max = Math.max(0, content.scrollHeight - viewport.clientHeight);
+    maxScrollRef.current = max;
+    setScrollOffset((prev) => Math.min(prev, max));
+  }, [currentTab, journal, activeQuests, narrativeCurrents.length]);
 
   // Keyboard navigation
   useEffect(() => {
@@ -50,11 +73,16 @@ export function JournalPanel() {
           setCurrentTab('notes');
           setScrollOffset(0);
           break;
+        case 'd':
+        case 'D':
+          setCurrentTab('discoveries');
+          setScrollOffset(0);
+          break;
         case 'ArrowUp':
-          setScrollOffset((prev) => Math.max(0, prev - 25));
+          setScrollOffset((prev) => Math.max(0, prev - SCROLL_STEP));
           break;
         case 'ArrowDown':
-          setScrollOffset((prev) => prev + 25);
+          setScrollOffset((prev) => Math.min(maxScrollRef.current, prev + SCROLL_STEP));
           break;
       }
     };
@@ -101,6 +129,38 @@ export function JournalPanel() {
     }
   };
 
+  // Render the narrative quest log (category 'quest' journal entries).
+  // These are written by questStore on quest start, stage advance, path choice
+  // and completion, and were previously never displayed anywhere.
+  const renderQuestChronicle = () => {
+    if (questEntries.length === 0) return null;
+
+    const entries = questEntries.slice(-MAX_RENDERED_ENTRIES);
+
+    return (
+      <div className="mt-5 pt-3 border-t border-sepia-light/30">
+        <h3 className="font-cinzel text-xs uppercase tracking-wide text-gold mb-2">
+          Chronicle
+        </h3>
+        {questEntries.length > entries.length && (
+          <p className="text-sepia-light/70 text-[11px] italic mb-2">
+            Showing the most recent {entries.length} of {questEntries.length} entries.
+          </p>
+        )}
+        {entries.map((entry) => (
+          <div key={entry.id} className="mb-3">
+            <span className="text-sepia-light text-xs font-mono">
+              [{entry.timeString}]
+            </span>
+            <p className="text-leather-200 font-crimson text-sm mt-1 whitespace-pre-line">
+              {entry.text}
+            </p>
+          </div>
+        ))}
+      </div>
+    );
+  };
+
   // Render quest list
   const renderQuests = () => {
     if (activeQuests.length === 0) {
@@ -124,6 +184,7 @@ export function JournalPanel() {
             <br />
             Speak with townsfolk to find work...
           </p>
+          {renderQuestChronicle()}
         </>
       );
     }
@@ -204,6 +265,7 @@ export function JournalPanel() {
         </div>
       );
         })}
+        {renderQuestChronicle()}
       </>
     );
   };
@@ -220,12 +282,12 @@ export function JournalPanel() {
       );
     }
 
-    return [...entries].reverse().slice(0, 10).map((entry) => (
+    return [...entries].reverse().slice(0, MAX_RENDERED_ENTRIES).map((entry) => (
       <div key={entry.id} className="mb-3">
         <span className="text-sepia-light text-xs font-mono">
           [{entry.timeString}]
         </span>
-        <p className="text-leather-200 font-crimson text-sm mt-1">
+        <p className="text-leather-200 font-crimson text-sm mt-1 whitespace-pre-line">
           {entry.text}
         </p>
       </div>
@@ -303,19 +365,22 @@ export function JournalPanel() {
             </div>
 
             {/* Content */}
-            <div
-              className="flex-1 overflow-hidden px-4 py-3"
-              style={{ transform: `translateY(-${scrollOffset}px)` }}
-            >
-              {currentTab === 'quests' && renderQuests()}
-              {currentTab === 'notes' && renderJournal(rumorEntries)}
-              {currentTab === 'discoveries' && renderJournal(discoveryEntries)}
+            <div ref={viewportRef} className="flex-1 overflow-hidden">
+              <div
+                ref={contentRef}
+                className="px-4 py-3"
+                style={{ transform: `translateY(-${scrollOffset}px)` }}
+              >
+                {currentTab === 'quests' && renderQuests()}
+                {currentTab === 'notes' && renderJournal(rumorEntries)}
+                {currentTab === 'discoveries' && renderJournal(discoveryEntries)}
+              </div>
             </div>
 
             {/* Instructions */}
             <div className="text-center py-2 border-t border-sepia-light/20">
               <span className="text-sepia text-xs font-mono">
-                [J] close • [Q/E] tabs • [↑↓] scroll
+                [J] close • [Q/E/D] tabs • [↑↓] scroll
               </span>
             </div>
           </div>

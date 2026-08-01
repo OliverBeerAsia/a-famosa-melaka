@@ -5,11 +5,12 @@
  */
 
 import { create } from 'zustand';
-import { useGameStore, TimeState, PlayerState } from './gameStore';
+import { useGameStore, TimeState, PlayerState, OnboardingState } from './gameStore';
 import { useInventoryStore, InventoryItem } from './inventoryStore';
 import { useQuestStore, Quest, JournalEntry, TrackedObjectiveRef, ReputationFaction, ReputationState } from './questStore';
 import { useDialogueStore } from './dialogueStore';
 import { getLocationName } from '../data/locationNames';
+import { getLocation } from '../phaser/core/LocationData';
 
 // Save data version for migration support
 const SAVE_VERSION = 4;
@@ -34,8 +35,19 @@ export interface SaveData {
   version: number;
   timestamp: number;
   playtime: number;
+  /**
+   * Coordinate-space version of the location the player was saved in.
+   *
+   * A plate rebuild can move the whole world (rua-direita went from a 320x180
+   * flip-screen to a 640x360 scrolling street in Stage 3), which makes every
+   * stored x/y meaningless — restoring one would drop the player inside a
+   * building. Saves whose version no longer matches keep everything except the
+   * position, and the player is placed at the location's own spawn.
+   */
+  coordVersion?: number;
   player: PlayerState;
   time: TimeState;
+  onboarding?: OnboardingState;
   inventory: {
     items: InventoryItem[];
     money: number;
@@ -316,8 +328,10 @@ export const useSaveStore = create<SaveState>((set, get) => ({
         version: SAVE_VERSION,
         timestamp: Date.now(),
         playtime: newPlaytime,
+        coordVersion: getLocation(gameState.player.location)?.coordVersion ?? 1,
         player: gameState.player,
         time: gameState.time,
+        onboarding: gameState.onboarding,
         inventory: {
           items: inventoryState.items,
           money: inventoryState.money,
@@ -396,12 +410,26 @@ export const useSaveStore = create<SaveState>((set, get) => ({
       const gameStore = useGameStore.getState();
       gameStore.updatePlayer(saveData.player);
       gameStore.updateTime(saveData.time);
+      if (saveData.onboarding && gameStore.setOnboardingState) {
+        gameStore.setOnboardingState(saveData.onboarding);
+      }
       gameStore.setLocation(saveData.player.location, getLocationName(saveData.player.location));
-      gameStore.queuePendingSpawnPoint({
-        mapKey: saveData.player.location,
-        x: saveData.player.x,
-        y: saveData.player.y,
-      });
+
+      const currentCoordVersion = getLocation(saveData.player.location)?.coordVersion ?? 1;
+      const savedCoordVersion = saveData.coordVersion ?? 1;
+      if (savedCoordVersion === currentCoordVersion) {
+        gameStore.queuePendingSpawnPoint({
+          mapKey: saveData.player.location,
+          x: saveData.player.x,
+          y: saveData.player.y,
+        });
+      } else {
+        // Stale coordinates: let GameScene use the location's default spawn.
+        console.warn(
+          `[saveStore] ${saveData.player.location} coordinates are from v${savedCoordVersion} `
+          + `(now v${currentCoordVersion}) — snapping to the location spawn`);
+        gameStore.clearPendingSpawnPoint();
+      }
       gameStore.closeAllPanels();
 
       // Restore inventory

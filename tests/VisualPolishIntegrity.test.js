@@ -1,5 +1,12 @@
-const fs = require('fs');
-const path = require('path');
+import fs from "node:fs";
+import path from "node:path";
+import { createRequire } from "node:module";
+import { fileURLToPath } from "node:url";
+
+import { loadLocationsScreenSpace } from './helpers/locations.js';
+
+const require = createRequire(import.meta.url);
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const RUA_DIREITA_MAP = path.join(__dirname, '..', 'assets', 'maps', 'rua-direita-iso.json');
 const A_FAMOSA_MAP = path.join(__dirname, '..', 'assets', 'maps', 'a-famosa-gate-iso.json');
@@ -10,7 +17,6 @@ const ENVIRONMENT_OBJECTS = path.join(__dirname, '..', 'src', 'data', 'environme
 const HISTORICAL_OBJECTS = path.join(__dirname, '..', 'src', 'data', 'historical-objects.json');
 const NPCS_FILE = path.join(__dirname, '..', 'src', 'data', 'npcs.json');
 const INVENTORY_STORE_FILE = path.join(__dirname, '..', 'src', 'stores', 'inventoryStore.ts');
-const WORLD_ITEMS_FILE = path.join(__dirname, '..', 'src', 'data', 'items.json');
 const PORTRAITS_DIR = path.join(__dirname, '..', 'assets', 'sprites', 'portraits');
 const ITEM_ICONS_DIR = path.join(__dirname, '..', 'assets', 'sprites', 'ui', 'items');
 const RUNTIME_ASSET_MANIFEST = path.join(__dirname, '..', 'src', 'data', 'runtime-asset-manifest.json');
@@ -234,34 +240,42 @@ describe('Visual polish integrity', () => {
 
   test('hero slices keep their added Melaka-era environment clusters and hotspot spread', () => {
     const environment = loadJson(ENVIRONMENT_OBJECTS);
-    const historical = loadJson(HISTORICAL_OBJECTS);
+    const locations = loadLocationsScreenSpace();
+
+    // The shipping world is a single 960x540 legacy-backdrop plate. Lore-object
+    // POSITIONS now live in src/data/locations/<id>.location.json (native px,
+    // scaled here into screen space); historical-objects.json owns the prose.
+    // These thresholds assert lore objects still reach the right half and lower
+    // band of the actual screen rather than clustering in the middle.
+    const farRightX = 700;
+    const farBottomY = 400;
 
     const expectations = {
       'rua-direita': {
         requiredClusters: ['market-frontage', 'merchant-corridor', 'civic-crossing', 'dock-funnel'],
         minClusters: 9,
-        farRightX: 1200,
+        farRightX,
       },
       waterfront: {
         requiredClusters: ['guild-frontage', 'customs-lane', 'jetty-chokepoint', 'east-pier-payoff'],
         minClusters: 8,
-        farRightX: 1100,
+        farRightX,
       },
       kampung: {
         requiredClusters: ['stilt-courtyard', 'herbal-verandah', 'surau-edge', 'river-mouth-landing'],
         minClusters: 9,
-        farRightX: 900,
+        farRightX,
       },
       'a-famosa-gate': {
         requiredClusters: ['artillery-yard', 'banner-wall', 'gate-machinery', 'east-gate-handoff'],
         minClusters: 8,
-        farRightX: 1500,
+        farRightX,
       },
       'st-pauls-church': {
         requiredClusters: ['forecourt-steps', 'devotional-side-garden', 'padres-work-edge', 'lower-path-markers'],
         minClusters: 8,
-        farRightX: 900,
-        farBottomY: 620,
+        farRightX,
+        farBottomY,
       },
     };
 
@@ -270,12 +284,11 @@ describe('Visual polish integrity', () => {
       expect(locationClusters).toEqual(expect.arrayContaining(config.requiredClusters));
       expect(locationClusters.length).toBeGreaterThanOrEqual(config.minClusters);
 
-      const locationObjects = Object.values(historical.objects)
-        .filter((obj) => obj.location === locationId);
-      const farRightObject = locationObjects.some((obj) => (obj.position?.x || 0) >= config.farRightX);
+      const locationObjects = locations[locationId].loreObjects;
+      const farRightObject = locationObjects.some((obj) => obj.x >= config.farRightX);
       expect(farRightObject).toBe(true);
       if (config.farBottomY) {
-        const farBottomObject = locationObjects.some((obj) => (obj.position?.y || 0) >= config.farBottomY);
+        const farBottomObject = locationObjects.some((obj) => obj.y >= config.farBottomY);
         expect(farBottomObject).toBe(true);
       }
     });
@@ -289,10 +302,15 @@ describe('Visual polish integrity', () => {
         .map((file) => file.replace(/\.png$/, ''))
     );
 
+    // NPCs whose portrait art is still owed. They must NOT alias another
+    // character's face in the meantime (the UI falls back to a neutral wax
+    // seal instead). Remove entries here as the art lands.
+    const PENDING_PORTRAIT_ART = ['rudra-mudaliar'];
+
     const missingPortraitAssets = Object.values(npcs)
       .filter((npc) => npc.dialogue)
       .map((npc) => npc.id)
-      .filter((id) => !portraitFiles.has(id));
+      .filter((id) => !portraitFiles.has(id) && !PENDING_PORTRAIT_ART.includes(id));
 
     const aliasPortraits = Object.values(npcs)
       .filter((npc) => npc.dialogue && npc.portrait && npc.portrait !== npc.id)
@@ -347,7 +365,9 @@ describe('Visual polish integrity', () => {
         .filter((file) => file.endsWith('.png'))
         .map((file) => file.replace(/\.png$/, ''))
     );
-    const worldItems = loadJson(WORLD_ITEMS_FILE)['world-items'];
+    const worldItems = Object.fromEntries(
+      Object.entries(loadLocationsScreenSpace()).map(([id, loc]) => [id, loc.items])
+    );
 
     expect(itemDefinitionIds.length).toBeGreaterThanOrEqual(20);
 

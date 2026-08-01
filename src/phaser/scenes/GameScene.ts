@@ -15,16 +15,23 @@ import { IsometricRenderer } from '../systems/IsometricRenderer';
 import { CrowdSystem } from '../systems/CrowdSystem';
 import { WeatherSystem } from '../systems/WeatherSystem';
 import { EnvironmentObjectSystem } from '../systems/EnvironmentObjectSystem';
-import locationScenesData from '../../data/location-scenes.json';
+import { CameraSystem } from '../systems/CameraSystem';
+import { configureWorldDepth, worldDepth } from '../core/depth';
+import { WalkMask, resolveMove } from '../core/WalkMask';
+import {
+  getLocation,
+  getLocationItems,
+  getLocationVisual,
+  LOCATION_IDS,
+  type LocationRuntime,
+} from '../core/LocationData';
+import relightRuntime from '../../data/relight-runtime.json';
 import objectiveMarkersData from '../../data/objective-markers.json';
-import worldItemsData from '../../data/items.json';
 import historicalObjectsData from '../../data/historical-objects.json';
 import { getLocationName } from '../../data/locationNames';
-import { getWorldItemsAtLocation } from '../../data/loader';
 import { ITEM_DEFINITIONS, useInventoryStore } from '../../stores/inventoryStore';
 import type { ConditionalRequirements, ReputationFaction } from '../../stores/questStore';
 import {
-  LOCATION_VISUAL_PRESETS,
   VISUAL_PROFILES,
   type ResolvedVisualQuality,
   type VisualProfile,
@@ -69,13 +76,9 @@ interface AmbientLayerConfig {
 }
 
 interface ProjectionConfig {
-  runtimeMode?: 'legacy-backdrop' | 'isometric-2:1';
-  targetMode?: 'isometric-2:1';
-  authoringBasis?: 'screen-space' | 'isometric-grid';
+  runtimeMode?: 'legacy-backdrop' | 'isometric';
   tileWidth?: number;
   tileHeight?: number;
-  anchor?: 'bottom-center';
-  depthStrategy?: 'fixed-stage' | 'screen-y';
 }
 
 // Map location keys to scene background prefixes
@@ -87,120 +90,6 @@ const LOCATION_TO_SCENE: Record<string, string> = {
   'kampung': 'kampung',
 };
 
-/**
- * Depth bands (shared by legacy-backdrop and isometric modes).
- *
- * World objects (player, NPCs, world items, lore objects, environment props)
- * are Y-sorted: their render depth equals floor(y), so an entity standing
- * lower on screen (larger y) draws in front of one standing higher (smaller y),
- * giving Ultima VII-style overlap/occlusion.
- *
- * The world band is clamped to [DEPTH_WORLD_MIN, DEPTH_WORLD_MAX]. Scene space
- * is 960x540 so character/item y maxes out near 540, and the largest authored
- * environment prop worldY is ~656; the clamp ceiling (780) is purely defensive
- * so a world depth can never collide with the FX/lighting band which starts at
- * DEPTH_FX_FLOOR (mist=800, fog=905+, lights/grade/grain=940-961). UI,
- * indicators and notifications live at 1001+ and must always stay on top.
- *
- * IMPORTANT: do not raise DEPTH_WORLD_MAX to or above DEPTH_FX_FLOOR, and do
- * not change the existing fixed FX/lighting/UI depths elsewhere in this file.
- */
-const DEPTH_WORLD_MIN = 0;
-const DEPTH_WORLD_MAX = 780;
-const DEPTH_FX_FLOOR = 800;
-
-/**
- * Quantized, clamped Y-sort depth for a world object at screen-space `y`.
- * Math.floor avoids z-fighting between near-equal y values.
- */
-function worldDepth(y: number): number {
-  return Math.floor(Phaser.Math.Clamp(y, DEPTH_WORLD_MIN, DEPTH_WORLD_MAX));
-}
-
-const DEFAULT_LOCATION_AUDIO: Record<string, {
-  music: string;
-  nightMusic: string;
-  ambientSounds: AmbientLayerConfig[];
-  nightAmbientSounds: AmbientLayerConfig[];
-  footstepSurface: FootstepSurface;
-}> = {
-  'a-famosa-gate': {
-    music: 'music-fortress',
-    nightMusic: 'music-night',
-    ambientSounds: [
-      { key: 'base-tropical', volume: 0.32 },
-      { key: 'fortress-ambience', volume: 0.5 },
-      { key: 'distant-city', volume: 0.24 },
-    ],
-    nightAmbientSounds: [
-      { key: 'fortress-ambience', volume: 0.35 },
-      { key: 'distant-city', volume: 0.2 },
-      { key: 'night-insects', volume: 0.24 },
-    ],
-    footstepSurface: 'stone',
-  },
-  'rua-direita': {
-    music: 'music-market',
-    nightMusic: 'music-night',
-    ambientSounds: [
-      { key: 'base-tropical', volume: 0.24 },
-      { key: 'market-crowd', volume: 0.48 },
-      { key: 'street-life', volume: 0.4 },
-    ],
-    nightAmbientSounds: [
-      { key: 'street-life', volume: 0.22 },
-      { key: 'distant-city', volume: 0.2 },
-      { key: 'cricket-chorus', volume: 0.18 },
-    ],
-    footstepSurface: 'stone',
-  },
-  'st-pauls-church': {
-    music: 'music-church',
-    nightMusic: 'music-church',
-    ambientSounds: [
-      { key: 'base-tropical', volume: 0.18 },
-      { key: 'church-bells', volume: 0.34 },
-      { key: 'sacred-calm', volume: 0.42 },
-    ],
-    nightAmbientSounds: [
-      { key: 'church-bells', volume: 0.18 },
-      { key: 'sacred-calm', volume: 0.32 },
-      { key: 'night-insects', volume: 0.14 },
-    ],
-    footstepSurface: 'stone',
-  },
-  'waterfront': {
-    music: 'music-waterfront',
-    nightMusic: 'music-night',
-    ambientSounds: [
-      { key: 'base-tropical', volume: 0.18 },
-      { key: 'water-lapping', volume: 0.44 },
-      { key: 'harbor-activity', volume: 0.34 },
-      { key: 'seagulls', volume: 0.24 },
-    ],
-    nightAmbientSounds: [
-      { key: 'water-lapping', volume: 0.4 },
-      { key: 'harbor-activity', volume: 0.24 },
-      { key: 'night-insects', volume: 0.18 },
-    ],
-    footstepSurface: 'wood',
-  },
-  'kampung': {
-    music: 'music-main',
-    nightMusic: 'music-night',
-    ambientSounds: [
-      { key: 'base-tropical', volume: 0.2 },
-      { key: 'village-life', volume: 0.42 },
-      { key: 'jungle-sounds', volume: 0.34 },
-    ],
-    nightAmbientSounds: [
-      { key: 'village-life', volume: 0.18 },
-      { key: 'jungle-sounds', volume: 0.34 },
-      { key: 'cricket-chorus', volume: 0.24 },
-    ],
-    footstepSurface: 'dirt',
-  },
-};
 
 interface NPCData {
   id: string;
@@ -316,12 +205,37 @@ const TIME_COLOR_GRADE = {
   night: { multiply: 0x1C2D52, multiplyAlpha: 0.22, screen: 0x6F8CB8, screenAlpha: 0.045 },
 } as const;
 
-const TIME_CHARACTER_LIGHTING = {
-  dawn: { tint: 0xF6D5AE, alpha: 0.98 },
-  day: { tint: null, alpha: 1 },
-  dusk: { tint: 0xEDC08A, alpha: 0.97 },
-  night: { tint: 0x93A8D5, alpha: 0.9 },
-} as const;
+// Player opacity while sneaking on the theft path (composited with lighting alpha)
+const STEALTH_ALPHA = 0.4;
+
+/**
+ * Distance from the player sprite's origin down to its ground contact point.
+ * The sprite is 16x32 at 3x with a centred origin, so its feet sit ~44px below
+ * the origin — that is the point the walk mask is sampled at, and the point
+ * `worldDepth` sorts on.
+ */
+const WALK_FOOT_OFFSET = 44;
+
+/**
+ * Per-time character tint, DERIVED from the Forge relight LUTs.
+ *
+ * Generated into src/data/relight-runtime.json by `npm run forge:relight` from
+ * exactly the tables that bake the plates (docs/art-bible/forge/relight-luts.json),
+ * so a sprite composited onto a night plate is lit by the same night. Hand-picked
+ * tints here were the double-grade in miniature: the backdrop said 0.36x day and
+ * the characters said 0.9 alpha and a taste-picked blue.
+ *
+ * Do not hand-edit — fix the specs in tools/forge/relight.cjs and regenerate.
+ */
+const TIME_CHARACTER_LIGHTING: Record<
+  TimeOfDay,
+  { tint: number | null; alpha: number }
+> = {
+  dawn: relightRuntime.times.dawn,
+  day: relightRuntime.times.day,
+  dusk: relightRuntime.times.dusk,
+  night: relightRuntime.times.night,
+};
 
 // Time ranges (24-hour format)
 const TIME_RANGES = {
@@ -366,9 +280,12 @@ export class GameScene extends Phaser.Scene {
   private cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
   private keys!: Record<string, Phaser.Input.Keyboard.Key>;
   private sceneConfig: SceneConfig | null = null;
+  private location: LocationRuntime | undefined;
   private sceneColliders: Phaser.Physics.Arcade.StaticGroup | null = null;
   private lightingOverlay!: Phaser.GameObjects.Rectangle;
   private currentHour: number = 10;
+  private currentMinute: number = 0;
+  private clockTickAccumulator: number = 0;
   private timeOfDay: TimeOfDay = 'day';
   private isTransitioningTime: boolean = false;
   private currentMusic: Phaser.Sound.BaseSound | null = null;
@@ -385,6 +302,14 @@ export class GameScene extends Phaser.Scene {
   private fireflyEmitter: Phaser.GameObjects.Particles.ParticleEmitter | null = null;
   private mistEmitter: Phaser.GameObjects.Particles.ParticleEmitter | null = null;
   private currentBackground: Phaser.GameObjects.Image | null = null;
+  private cameraSystem: CameraSystem | null = null;
+  /** Authoritative walkable surface for plates that ship a mask. */
+  private walkMask: WalkMask | null = null;
+  /** Last position the player was legally standing at (walk-mask rollback). */
+  private lastWalkableX = 0;
+  private lastWalkableY = 0;
+  /** Foreground occluders cut from the plate, keyed for time-of-day swaps. */
+  private plateOverlays: Phaser.GameObjects.Image[] = [];
   private worldItems: WorldItemInstance[] = [];
   private loreObjects: LoreObjectInstance[] = [];
   private transitionHotspots: TransitionHotspot[] = [];
@@ -413,6 +338,11 @@ export class GameScene extends Phaser.Scene {
   private frameDeltas: number[] = [];
   private frameSampleCooldown: number = 0;
   private lastCharacterLightingSignature: string | null = null;
+  // Character alpha is composed from independent factors (time-of-day lighting ×
+  // stealth mode) and written in exactly one place: applyCompositedCharacterAlpha().
+  // Never call player.setAlpha()/npc.setAlpha() directly — set a factor instead.
+  private lightingAlpha: number = 1;
+  private stealthAlpha: number = 1;
   private objectiveMarker: {
     definition: ObjectiveMarkerDefinition;
     beam: Phaser.GameObjects.Ellipse;
@@ -422,6 +352,9 @@ export class GameScene extends Phaser.Scene {
   } | null = null;
   private lastObjectiveSignature: string | null = null;
   private bridgeUnsubscribers: Array<() => void> = [];
+  private playerHistory: Array<{ x: number; y: number; facing: string; walking: boolean }> = [];
+  private followerColliderAdded: boolean = false;
+  private isResting: boolean = false;
 
   constructor() {
     super({ key: 'GameScene' });
@@ -449,6 +382,7 @@ export class GameScene extends Phaser.Scene {
     }
 
     this.currentHour = state.time.hour;
+    this.currentMinute = state.time.minute || 0;
     this.visualQualityMode = state.visualQualityMode;
     this.dynamicVisualQualityEnabled = state.dynamicVisualQuality;
     this.resolvedVisualQuality = resolveVisualQualityMode(this.visualQualityMode, state.resolvedVisualQuality);
@@ -458,9 +392,34 @@ export class GameScene extends Phaser.Scene {
   create() {
     console.log('GameScene started - Loading:', this.currentMap);
 
-    // Load scene config
-    const sceneDefinitions = locationScenesData as Record<string, SceneConfig>;
-    this.sceneConfig = sceneDefinitions[this.currentMap] || null;
+    // Load location data. src/data/locations/<id>.location.json is the single
+    // source of truth; core/LocationData has already scaled every native plate
+    // coordinate into this scene's 960x540 world space.
+    this.location = getLocation(this.currentMap);
+    this.sceneConfig = this.location ? {
+      background: this.location.plate.background,
+      variants: this.location.plate.variants as SceneConfig['variants'],
+      mapFile: this.location.plate.mapFile,
+      isoMapKey: this.location.plate.isoMapKey,
+      music: this.location.audio.music,
+      nightMusic: this.location.audio.nightMusic,
+      ambientSounds: this.location.audio.ambientSounds,
+      nightAmbientSounds: this.location.audio.nightAmbientSounds,
+      footstepSurface: this.location.audio.footstepSurface,
+      projection: {
+        runtimeMode: this.location.plate.runtimeMode,
+        tileWidth: this.location.plate.tileWidth,
+        tileHeight: this.location.plate.tileHeight,
+      },
+      playerStart: this.location.playerStart,
+      npcPositions: this.location.npcPositions,
+      collisionRects: this.location.collisionRects,
+      transitions: this.location.transitions as TransitionConfig[],
+    } : null;
+
+    // The depth band is fixed but the world is not: tell it how tall this
+    // location is BEFORE anything Y-sorted is created.
+    configureWorldDepth(this.worldBounds().height);
 
     // Create scene background
     this.createSceneBackdrop();
@@ -478,6 +437,24 @@ export class GameScene extends Phaser.Scene {
 
     // Create player
     this.createPlayer();
+
+    this.playerHistory = [];
+    this.followerColliderAdded = false;
+    this.isResting = false;
+
+    // Pre-fill history to prevent follower snapping on spawn/scene transition
+    const tracked = useQuestStore.getState().getTrackedObjective();
+    if (tracked && tracked.objective && tracked.objective.type === 'escort' && tracked.objective.target === 'siti') {
+      const playerState = useGameStore.getState().player;
+      for (let i = 0; i < 15; i++) {
+        this.playerHistory.push({
+          x: this.player.x,
+          y: this.player.y,
+          facing: playerState.facing || 'down',
+          walking: false
+        });
+      }
+    }
 
     // Create NPCs
     this.createNPCs();
@@ -533,22 +510,68 @@ export class GameScene extends Phaser.Scene {
     this.refreshObjectiveMarker(true);
     this.createInteractionPrompt();
 
+    // Subscribe to quest changes to handle stealth mode opacity on theft path
+    const unsubQuest = useQuestStore.subscribe((state) => {
+      const stage = state.getQuestStage('merchants-seal');
+      if (stage?.id === 'theft-success') {
+        if (this.player && this.stealthAlpha !== STEALTH_ALPHA) {
+          // Claim the stealth factor immediately so a re-fired subscription
+          // can't restart the fade; it is composited once the screen is black.
+          this.stealthAlpha = STEALTH_ALPHA;
+          this.isResting = true;
+          this.cameras.main.fadeOut(500, 0, 0, 0);
+          this.cameras.main.once('camerafadeoutcomplete', () => {
+            if (this.player) {
+              this.applyCompositedCharacterAlpha();
+              this.player.setPosition(620, 250);
+            }
+            this.cameras.main.fadeIn(500, 0, 0, 0);
+            this.cameras.main.once('camerafadeincomplete', () => {
+              this.isResting = false;
+            });
+          });
+        }
+      } else if (this.stealthAlpha !== 1.0) {
+        this.stealthAlpha = 1.0;
+        this.applyCompositedCharacterAlpha();
+      }
+    });
+    this.bridgeUnsubscribers.push(unsubQuest);
+
     // Emit game ready
     emitGameEvent('game:ready');
+
+    // Walk-mask collision has to run after Arcade physics has moved the body,
+    // which is POST_UPDATE — resolving in update() would always be one frame
+    // stale and let the player's feet cross into a wall before being pushed out.
+    this.events.on(Phaser.Scenes.Events.POST_UPDATE, this.applyWalkMaskCollision, this);
 
     this.events.once(Phaser.Scenes.Events.SHUTDOWN, this.cleanup, this);
     this.events.once(Phaser.Scenes.Events.DESTROY, this.cleanup, this);
   }
 
+  /**
+   * The size of the world the player can move through, in world px.
+   *
+   * Pre-Stage-3 plates are 320x180 native = exactly the 960x540 viewport, so
+   * this returns the viewport and every camera/particle/bounds calculation
+   * behaves exactly as it did. A Forge-composed plate (640x360 native) returns
+   * 1920x1080 and the same calculations start scrolling.
+   */
+  private worldBounds(): { width: number; height: number } {
+    if (this.isIsometric && this.isoRenderer) return this.isoRenderer.getWorldBounds();
+    if (this.location) return this.location.size;
+    return { width: GAME_WIDTH, height: GAME_HEIGHT };
+  }
+
   private createSceneBackdrop() {
     const runtimeMode = this.sceneConfig?.projection?.runtimeMode || 'legacy-backdrop';
-    if (runtimeMode === 'isometric-2:1') {
+    if (runtimeMode === 'isometric') {
       this.createIsometricWorld();
       return;
     }
 
-    const width = GAME_WIDTH;
-    const height = GAME_HEIGHT;
+    const { width, height } = this.worldBounds();
 
     // Clear existing colliders
     if (this.sceneColliders) {
@@ -561,25 +584,14 @@ export class GameScene extends Phaser.Scene {
 
     // Draw background with time-of-day variant support
     const backgroundKey = this.getBackgroundKeyForTime();
-    if (backgroundKey && this.textures.exists(backgroundKey)) {
-      const bg = this.add.image(width / 2, height / 2, backgroundKey);
-      const scaleX = width / bg.width;
-      const scaleY = height / bg.height;
-      const scale = Math.max(scaleX, scaleY);
-      bg.setScale(scale);
-      bg.setScrollFactor(0);
-      bg.setDepth(-20);
-      this.currentBackground = bg;
-    } else if (this.sceneConfig?.background) {
-      // Fallback to base background
-      const bg = this.add.image(width / 2, height / 2, this.sceneConfig.background);
-      const scaleX = width / bg.width;
-      const scaleY = height / bg.height;
-      const scale = Math.max(scaleX, scaleY);
-      bg.setScale(scale);
-      bg.setScrollFactor(0);
-      bg.setDepth(-20);
-      this.currentBackground = bg;
+    const plateKey = (backgroundKey && this.textures.exists(backgroundKey))
+      ? backgroundKey
+      : (this.sceneConfig?.background && this.textures.exists(this.sceneConfig.background)
+        ? this.sceneConfig.background
+        : null);
+
+    if (plateKey) {
+      this.currentBackground = this.placePlate(plateKey);
     } else {
       // Fallback gradient background
       const graphics = this.add.graphics();
@@ -588,15 +600,20 @@ export class GameScene extends Phaser.Scene {
       graphics.setDepth(-20);
     }
 
-    // Add vignette
+    // Add vignette — screen space, so it frames the VIEW rather than the world.
     const vignette = this.add.graphics();
     vignette.fillGradientStyle(0x000000, 0x000000, 0x000000, 0x000000, 0.16, 0.07, 0.07, 0.16);
-    vignette.fillRect(0, 0, width, height);
+    vignette.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
     vignette.setScrollFactor(0);
     vignette.setDepth(-10);
 
-    // Create collision rects if defined
-    if (this.sceneConfig?.collisionRects?.length) {
+    this.createWalkMask();
+    this.createPlateOverlays();
+
+    // Collision rects are the fallback for plates with no walk mask. Where a
+    // mask exists it is authoritative (the rects are a coarse 8px cover of it),
+    // and building both would block the player twice with different edges.
+    if (!this.walkMask && this.sceneConfig?.collisionRects?.length) {
       this.sceneColliders = this.physics.add.staticGroup();
       this.sceneConfig.collisionRects.forEach((rect) => {
         const collider = this.add.rectangle(
@@ -611,6 +628,94 @@ export class GameScene extends Phaser.Scene {
         this.sceneColliders!.add(collider);
       });
     }
+  }
+
+  /**
+   * Put a plate into the world at 1:1 world pixels, top-left anchored.
+   *
+   * The plate is world-space (scroll factor 1) even when it exactly fills the
+   * viewport: at that size scrolling is clamped to (0,0) so the two are
+   * identical, and having ONE placement rule is what stops the flip-screen and
+   * scrolling paths from drifting apart.
+   */
+  private placePlate(textureKey: string, depth = -20): Phaser.GameObjects.Image {
+    const { width, height } = this.worldBounds();
+    const plate = this.add.image(0, 0, textureKey);
+    plate.setOrigin(0, 0);
+    plate.setScale(width / plate.width, height / plate.height);
+    plate.setScrollFactor(1);
+    plate.setDepth(depth);
+    return plate;
+  }
+
+  /** Load the location's walk mask into a sampler, if it ships one. */
+  private createWalkMask() {
+    this.walkMask = null;
+    const key = this.location?.plate.walkMask;
+    if (!key || !this.textures.exists(key)) return;
+
+    const source = this.textures.get(key).getSourceImage() as HTMLImageElement | HTMLCanvasElement;
+    const canvas = this.textures.createCanvas(`${key}-sampler`, source.width, source.height);
+    if (!canvas) return;
+    canvas.context.imageSmoothingEnabled = false;
+    canvas.context.drawImage(source as CanvasImageSource, 0, 0);
+    const rgba = canvas.context.getImageData(0, 0, source.width, source.height).data;
+    this.walkMask = WalkMask.fromRGBA(rgba, source.width, source.height, this.location!.world.scale);
+    this.textures.remove(`${key}-sampler`);
+  }
+
+  /**
+   * Foreground occluders: the pieces of the plate a character can walk BEHIND.
+   *
+   * They are drawn at the exact pixels they were cut from, so while nothing is
+   * behind them they are invisible (they reproduce the plate underneath), and
+   * `worldDepth(depthY)` puts them in front of any character standing further
+   * up the street. Relit per time of day by the same LUT as the plate.
+   */
+  private createPlateOverlays() {
+    this.plateOverlays.forEach((o) => o.destroy());
+    this.plateOverlays = [];
+
+    (this.location?.overlays ?? []).forEach((overlay) => {
+      const key = this.overlayTextureKey(overlay.key);
+      if (!this.textures.exists(key)) return;
+      const image = this.add.image(overlay.x, overlay.y, key);
+      image.setOrigin(0, 0);
+      image.setScrollFactor(1);
+      image.setDepth(worldDepth(overlay.depthY));
+      image.setData('overlayKey', overlay.key);
+      this.plateOverlays.push(image);
+    });
+  }
+
+  private overlayTextureKey(baseKey: string): string {
+    return this.timeOfDay === 'day' ? baseKey : `${baseKey}-${this.timeOfDay}`;
+  }
+
+  /** Crossfade the occluders alongside the plate when the hour changes. */
+  private updatePlateOverlaysForTime() {
+    this.plateOverlays.forEach((image) => {
+      const baseKey = image.getData('overlayKey') as string;
+      const key = this.overlayTextureKey(baseKey);
+      if (!this.textures.exists(key) || image.texture.key === key) return;
+
+      const replacement = this.add.image(image.x, image.y, key);
+      replacement.setOrigin(0, 0);
+      replacement.setScrollFactor(1);
+      replacement.setDepth(image.depth);
+      replacement.setData('overlayKey', baseKey);
+      replacement.setAlpha(0);
+      this.tweens.add({ targets: replacement, alpha: 1, duration: 2000, ease: 'Sine.easeInOut' });
+      this.tweens.add({
+        targets: image,
+        alpha: 0,
+        duration: 2000,
+        ease: 'Sine.easeInOut',
+        onComplete: () => image.destroy(),
+      });
+      const index = this.plateOverlays.indexOf(image);
+      if (index !== -1) this.plateOverlays[index] = replacement;
+    });
   }
 
   private createIsometricWorld() {
@@ -683,6 +788,24 @@ export class GameScene extends Phaser.Scene {
     return `scene-${scenePrefix}-${this.timeOfDay}`;
   }
 
+  /**
+   * True when the visible backdrop is a pre-baked time-of-day plate variant
+   * (scene-<location>-dawn/dusk/night).
+   *
+   * Those plates already carry the time-of-day grade, so the full-screen
+   * plate-wide overlays (TIME_COLORS lighting tint + TIME_COLOR_GRADE
+   * multiply/screen) must be suppressed — otherwise the scene is graded twice
+   * and nights turn into crushed blue mud. Character lighting is unaffected:
+   * sprites are not baked, so they still need the runtime tint/alpha pass.
+   */
+  private hasBakedTimeVariant(): boolean {
+    if (this.isIsometric) return false;
+    // 'day' uses the base plate, which carries no baked grade.
+    if (this.timeOfDay === 'day') return false;
+    const key = this.getBackgroundKeyForTime();
+    return !!key && this.textures.exists(key);
+  }
+
   private updateBackgroundForTime() {
     const newBackgroundKey = this.getBackgroundKeyForTime();
 
@@ -693,16 +816,7 @@ export class GameScene extends Phaser.Scene {
 
     if (this.currentBackground) {
       // Crossfade to new background
-      const width = GAME_WIDTH;
-      const height = GAME_HEIGHT;
-
-      const newBg = this.add.image(width / 2, height / 2, newBackgroundKey);
-      const scaleX = width / newBg.width;
-      const scaleY = height / newBg.height;
-      const scale = Math.max(scaleX, scaleY);
-      newBg.setScale(scale);
-      newBg.setScrollFactor(0);
-      newBg.setDepth(-21); // Behind current
+      const newBg = this.placePlate(newBackgroundKey, -21); // -21: behind current
       newBg.setAlpha(0);
 
       // Fade in new, fade out old
@@ -726,13 +840,13 @@ export class GameScene extends Phaser.Scene {
           this.currentBackground = newBg;
         }
       });
+
+      this.updatePlateOverlaysForTime();
     }
   }
 
   private createAtmosphere() {
-    const worldBounds = this.isIsometric && this.isoRenderer
-      ? this.isoRenderer.getWorldBounds()
-      : { width: GAME_WIDTH, height: GAME_HEIGHT };
+    const worldBounds = this.worldBounds();
 
     // Dust motes - intensity varies by time of day
     const dustParticles = this.add.particles(0, 0, 'particle', {
@@ -767,7 +881,7 @@ export class GameScene extends Phaser.Scene {
       blendMode: 'ADD',
       emitting: true,
     });
-    heatHazeParticles.setDepth(500);
+    heatHazeParticles.setDepth(850);
     this.heatHazeEmitter = heatHazeParticles;
 
     // Create firefly texture for night
@@ -847,9 +961,7 @@ export class GameScene extends Phaser.Scene {
   private updateFireflies() {
     const showFireflies = this.timeOfDay === 'night';
     const isKampung = this.currentMap === 'kampung';
-    const worldBounds = this.isIsometric && this.isoRenderer
-      ? this.isoRenderer.getWorldBounds()
-      : { width: GAME_WIDTH, height: GAME_HEIGHT };
+    const worldBounds = this.worldBounds();
 
     if (showFireflies) {
       if (!this.fireflyEmitter) {
@@ -880,9 +992,7 @@ export class GameScene extends Phaser.Scene {
   private updateMist() {
     const showMist = this.timeOfDay === 'dawn';
     const isWaterfront = this.currentMap === 'waterfront';
-    const worldBounds = this.isIsometric && this.isoRenderer
-      ? this.isoRenderer.getWorldBounds()
-      : { width: GAME_WIDTH, height: GAME_HEIGHT };
+    const worldBounds = this.worldBounds();
 
     if (showMist) {
       if (!this.mistEmitter) {
@@ -912,9 +1022,7 @@ export class GameScene extends Phaser.Scene {
 
   private createWaterAnimations() {
     if (this.currentMap !== 'waterfront') return;
-    const worldBounds = this.isIsometric && this.isoRenderer
-      ? this.isoRenderer.getWorldBounds()
-      : { width: GAME_WIDTH, height: GAME_HEIGHT };
+    const worldBounds = this.worldBounds();
 
     this.waterEmitter = this.add.particles(0, 0, 'particle', {
       x: { min: 0, max: worldBounds.width },
@@ -944,15 +1052,7 @@ export class GameScene extends Phaser.Scene {
     this.fireEmitters = [];
     const lightAlpha = this.visualProfile.pointLightAlphaMultiplier;
 
-    const firePositions: Record<string, Array<{ x: number; y: number }>> = {
-      'a-famosa-gate': [{ x: 420, y: 240 }, { x: 540, y: 240 }],
-      'rua-direita': [{ x: 300, y: 300 }, { x: 680, y: 310 }],
-      'st-pauls-church': [{ x: 470, y: 230 }, { x: 560, y: 240 }],
-      'waterfront': [{ x: 210, y: 260 }, { x: 730, y: 250 }],
-      'kampung': [{ x: 260, y: 300 }, { x: 600, y: 300 }],
-    };
-
-    const positions = firePositions[this.currentMap] || [];
+    const positions = this.location?.fires ?? [];
     const isDark = this.timeOfDay === 'night' || this.timeOfDay === 'dusk';
 
     positions.forEach((pos) => {
@@ -977,12 +1077,31 @@ export class GameScene extends Phaser.Scene {
     let spawnX = GAME_WIDTH / 2;
     let spawnY = GAME_HEIGHT - 48;
 
+    const defaultStart = this.sceneConfig?.playerStart;
     if (this.spawnOverride) {
       spawnX = this.spawnOverride.x;
       spawnY = this.spawnOverride.y;
-    } else if (this.sceneConfig?.playerStart) {
-      spawnX = this.sceneConfig.playerStart.x;
-      spawnY = this.sceneConfig.playerStart.y;
+    } else if (defaultStart) {
+      spawnX = defaultStart.x;
+      spawnY = defaultStart.y;
+    }
+
+    // Snap-to-spawn safety net. A saved position (or a transition authored
+    // against an older plate) can point anywhere; if it is off the world or
+    // inside geometry, fall back to the location's own spawn rather than
+    // loading the player into a wall. This is the runtime half of
+    // `coordVersion` — saveStore drops stale positions, and this catches
+    // anything that still lands badly.
+    const bounds = this.worldBounds();
+    const offWorld = spawnX < 0 || spawnY < 0 || spawnX > bounds.width || spawnY > bounds.height;
+    const unwalkable = !!this.walkMask
+      && !this.walkMask.canStand(spawnX, spawnY + WALK_FOOT_OFFSET, 6 * CHARACTER_SCALE);
+    if ((offWorld || unwalkable) && defaultStart) {
+      console.warn(
+        `[GameScene] spawn (${Math.round(spawnX)}, ${Math.round(spawnY)}) is `
+        + `${offWorld ? 'outside the world' : 'not walkable'} — snapping to ${this.currentMap}'s default spawn`);
+      spawnX = defaultStart.x;
+      spawnY = defaultStart.y;
     }
 
     // In isometric mode, playerStart is in tile coordinates — convert to world
@@ -1007,10 +1126,12 @@ export class GameScene extends Phaser.Scene {
     }
 
     this.player.setCollideWorldBounds(true);
+    this.lastWalkableX = this.player.x;
+    this.lastWalkableY = this.player.y;
 
     // Y-based depth sorting in both modes so the player walks behind/in-front
     // of props and NPCs (Ultima VII-style overlap). Kept under the FX band.
-    this.player.setDepth(worldDepth(this.player.y));
+    this.player.setDepth(worldDepth(this.player.y + 48));
 
     this.playerShadow = this.add.ellipse(
       this.player.x,
@@ -1049,13 +1170,25 @@ export class GameScene extends Phaser.Scene {
     const npcOverrides = this.sceneConfig?.npcPositions || {};
 
     Object.values(npcData).forEach((data) => {
-      if (data.location !== this.currentMap) return;
-      if (!this.isNpcAvailableAtCurrentTime(data)) return;
+      let isFollower = false;
+      if (data.id === 'siti') {
+        const tracked = useQuestStore.getState().getTrackedObjective();
+        if (tracked && tracked.objective && tracked.objective.type === 'escort' && tracked.objective.target === 'siti') {
+          isFollower = true;
+        }
+      }
+
+      if (!isFollower && data.location !== this.currentMap) return;
+      if (!isFollower && !this.isNpcAvailableAtCurrentTime(data)) return;
 
       let x = data.position?.x || GAME_WIDTH / 2;
       let y = data.position?.y || GAME_HEIGHT / 2;
 
-      if (npcOverrides[data.id]) {
+      if (isFollower && data.location !== this.currentMap) {
+        // Spawn follower near the player
+        x = this.player.x - 30;
+        y = this.player.y;
+      } else if (npcOverrides[data.id]) {
         x = npcOverrides[data.id].x;
         y = npcOverrides[data.id].y;
       }
@@ -1074,8 +1207,8 @@ export class GameScene extends Phaser.Scene {
       // Scale up NPC to match scene backgrounds (same as player)
       npc.setScale(CHARACTER_SCALE);
 
-      npc.setImmovable(true);
-      npc.setDepth(worldDepth(y));
+      npc.setImmovable(!isFollower);
+      npc.setDepth(worldDepth(y + 48));
 
       const shadow = this.add.ellipse(x, y + 40, 50, 18, 0x000000, 0.24);
       shadow.setDepth(npc.depth - 1);
@@ -1102,6 +1235,34 @@ export class GameScene extends Phaser.Scene {
 
       console.log(`Created NPC: ${data.name} at (${x}, ${y})`);
     });
+  }
+
+  private recreateNPCs() {
+    this.npcs.forEach((npc) => {
+      const ind = (npc as any).indicator;
+      if (ind) ind.destroy();
+      const shadow = this.npcShadowMap.get(npc);
+      if (shadow) shadow.destroy();
+      npc.destroy();
+    });
+
+    this.npcs = [];
+    this.npcDataMap.clear();
+    this.npcSpriteById.clear();
+    this.npcAnimationPrefixMap.clear();
+    this.npcFacingMap.clear();
+    this.npcShadowMap.clear();
+    this.followerColliderAdded = false;
+
+    this.createNPCs();
+
+    // Freshly-spawned sprites carry no tint, and this runs at every schedule
+    // change — including the one advanceTime() fires AFTER updateTimeOfDay().
+    // Without this, the NPCs that appear when the clock rolls over stand on a
+    // night plate at full daylight brightness while the player is correctly
+    // tinted: the double-grade, inverted. Forced, because the lighting
+    // signature has not changed and the early-out would otherwise skip it.
+    this.applyCharacterLighting(true);
   }
 
   private getNpcAnimationPrefix(data: NPCData): string | null {
@@ -1132,7 +1293,7 @@ export class GameScene extends Phaser.Scene {
   }
 
   private createWorldItems() {
-    const worldItems = getWorldItemsAtLocation(this.currentMap) as WorldItemData[];
+    const worldItems = (this.location?.items ?? []) as WorldItemData[];
     this.worldItems = [];
 
     worldItems.forEach((item) => {
@@ -1178,18 +1339,20 @@ export class GameScene extends Phaser.Scene {
   }
 
   private createLoreObjects() {
+    // Positions come from <id>.location.json (native px, already scaled by
+    // LocationData); the prose/sprite/historical note stay in
+    // historical-objects.json. tools/validate-location-data.cjs guarantees every
+    // id resolves and every coordinate is on the plate, so there is no runtime
+    // bounds filter here any more — an off-plate lore object is a build failure.
     const objects = (historicalObjectsData as any).objects || {};
     this.loreObjects = [];
 
-    Object.values(objects).forEach((obj: any) => {
-      if (obj.location !== this.currentMap) return;
+    (this.location?.loreObjects ?? []).forEach((placement) => {
+      const obj = objects[placement.id];
+      if (!obj) return;
 
-      const x = obj.position?.x || 0;
-      const y = obj.position?.y || 0;
-
-      // Legacy painted-plate: skip lore objects authored off the 960x540 plate
-      // (e.g. pelourinho x=1180, pepper x=1660 from the old iso layout).
-      if (x < 24 || x > 936 || y < 24 || y > 528) return;
+      const x = placement.x;
+      const y = placement.y;
 
       const spriteKey = this.resolveGameplaySpriteKey(obj.sprite);
       // Unresolved lore sprites fall back to the (now invisible) placeholder —
@@ -1365,16 +1528,15 @@ export class GameScene extends Phaser.Scene {
       radius: 90,
       isAvailable: () => this.isMerchantsSealTheftEntryAvailable(),
       onInteract: () => {
-        emitGameEvent('quest:path:request', 'theft');
-        useQuestStore.getState().recordLocation(this.currentMap);
-        useQuestStore.getState().recordStealth('counting-house');
-
-        const stage = useQuestStore.getState().getQuestStage('merchants-seal');
-        if (stage?.id === 'theft-choice') {
-          emitGameEvent('quest:path:request', 'proceed-theft');
+        const quest = useQuestStore.getState().activeQuests.find(q => q.id === 'merchants-seal');
+        if (quest) {
+          if (quest.currentStageId === 'choose-path') {
+            emitGameEvent('quest:path:request', 'theft');
+          }
+          useQuestStore.getState().recordLocation(this.currentMap);
+          useQuestStore.getState().recordStealth('counting-house');
+          this.showNotification('You sneak close to the counting house door...');
         }
-
-        this.showNotification('You slip into the counting house.');
       },
     }));
 
@@ -1491,49 +1653,7 @@ export class GameScene extends Phaser.Scene {
       },
     };
 
-    // Location light definitions (coordinates already in 960x540 space)
-    const LOCATION_LIGHTS: Record<string, Array<{ x: number; y: number; type: LightType }>> = {
-      'rua-direita': [
-        { x: 300, y: 300, type: 'lantern' },
-        { x: 680, y: 310, type: 'lantern' },
-        { x: 360, y: 450, type: 'lantern' },
-        { x: 900, y: 540, type: 'torch' },
-        { x: 600, y: 1050, type: 'window' },
-        { x: 1200, y: 1050, type: 'window' },
-        { x: 480, y: 660, type: 'torch' },
-      ],
-      'a-famosa-gate': [
-        { x: 420, y: 240, type: 'torch' },
-        { x: 540, y: 240, type: 'torch' },
-        { x: 600, y: 450, type: 'torch' },
-        { x: 900, y: 900, type: 'torch' },
-        { x: 300, y: 750, type: 'torch' },
-        { x: 1500, y: 750, type: 'torch' },
-      ],
-      'st-pauls-church': [
-        { x: 470, y: 230, type: 'lantern' },
-        { x: 560, y: 240, type: 'lantern' },
-        { x: 750, y: 600, type: 'lantern' },
-        { x: 1050, y: 600, type: 'lantern' },
-        { x: 900, y: 900, type: 'window' },
-      ],
-      waterfront: [
-        { x: 210, y: 260, type: 'lantern' },
-        { x: 730, y: 250, type: 'lantern' },
-        { x: 450, y: 900, type: 'lantern' },
-        { x: 1050, y: 840, type: 'lantern' },
-        { x: 1650, y: 900, type: 'lantern' },
-        { x: 750, y: 450, type: 'torch' },
-      ],
-      kampung: [
-        { x: 260, y: 300, type: 'cookingFire' },
-        { x: 600, y: 300, type: 'cookingFire' },
-        { x: 1350, y: 900, type: 'cookingFire' },
-        { x: 900, y: 540, type: 'torch' },
-      ],
-    };
-
-    const lightDefs = LOCATION_LIGHTS[this.currentMap] || [];
+    const lightDefs = this.location?.lights ?? [];
     const lightAlpha = this.visualProfile.pointLightAlphaMultiplier;
 
     // Clean up any previous light graphics (they are stored separately from the Arc array)
@@ -1622,7 +1742,7 @@ export class GameScene extends Phaser.Scene {
   }
 
   private createAOOverlays() {
-    const preset = LOCATION_VISUAL_PRESETS[this.currentMap];
+    const preset = getLocationVisual(this.currentMap);
     if (!preset) return;
 
     this.aoOverlays = [];
@@ -1652,13 +1772,15 @@ export class GameScene extends Phaser.Scene {
       );
       rect.setDepth(941);
       rect.setBlendMode(Phaser.BlendModes.MULTIPLY);
-      rect.setScrollFactor(0);
+      // Authored in plate coordinates, so it belongs to the WORLD; on a
+      // viewport-sized plate this is identical to the old scrollFactor(0).
+      rect.setScrollFactor(1);
       this.aoOverlays.push(rect);
     });
   }
 
   private createCanopyShadows() {
-    const preset = LOCATION_VISUAL_PRESETS[this.currentMap];
+    const preset = getLocationVisual(this.currentMap);
     this.canopyShadows.forEach((shadow) => shadow.destroy());
     this.canopyShadows = [];
     if (!preset) return;
@@ -1674,7 +1796,7 @@ export class GameScene extends Phaser.Scene {
       );
       shadow.setDepth(942);
       shadow.setBlendMode(Phaser.BlendModes.MULTIPLY);
-      shadow.setScrollFactor(0);
+      shadow.setScrollFactor(1);   // canopy sits over a place, not over the view
       this.canopyShadows.push(shadow);
     });
   }
@@ -1700,7 +1822,7 @@ export class GameScene extends Phaser.Scene {
   }
 
   private createSunShafts() {
-    const preset = LOCATION_VISUAL_PRESETS[this.currentMap];
+    const preset = getLocationVisual(this.currentMap);
     this.sunShafts.forEach((shaft) => shaft.destroy());
     this.sunShafts = [];
     if (!preset || this.visualProfile.sunShaftCount <= 0) return;
@@ -1714,7 +1836,7 @@ export class GameScene extends Phaser.Scene {
       const shaft = this.add.ellipse(x, y, width, height, preset.hazeTint, this.visualProfile.sunShaftAlpha);
       shaft.setDepth(903 + i);
       shaft.setBlendMode(Phaser.BlendModes.SCREEN);
-      shaft.setScrollFactor(0);
+      shaft.setScrollFactor(1);    // anchored to the plate's sun, not the view
       shaft.setAngle(Phaser.Math.Between(-9, 9));
       this.sunShafts.push(shaft);
 
@@ -1733,7 +1855,7 @@ export class GameScene extends Phaser.Scene {
   }
 
   private createCinematicLayers() {
-    const preset = LOCATION_VISUAL_PRESETS[this.currentMap];
+    const preset = getLocationVisual(this.currentMap);
     if (!preset) return;
 
     this.createFilmGrainTexture();
@@ -1792,11 +1914,12 @@ export class GameScene extends Phaser.Scene {
   }
 
   private updateCinematicForTime() {
-    const preset = LOCATION_VISUAL_PRESETS[this.currentMap];
+    const preset = getLocationVisual(this.currentMap);
     if (!preset) return;
 
     const grade = TIME_COLOR_GRADE[this.timeOfDay];
-    const strength = this.visualProfile.colorGradeStrength;
+    // Baked time-of-day plates already contain this grade — don't apply it twice.
+    const strength = this.hasBakedTimeVariant() ? 0 : this.visualProfile.colorGradeStrength;
 
     if (this.colorGradeMultiplyOverlay) {
       this.colorGradeMultiplyOverlay.setFillStyle(grade.multiply, grade.multiplyAlpha * strength);
@@ -1823,7 +1946,7 @@ export class GameScene extends Phaser.Scene {
   }
 
   private createFogLayers() {
-    const preset = LOCATION_VISUAL_PRESETS[this.currentMap];
+    const preset = getLocationVisual(this.currentMap);
     if (!preset) return;
 
     this.fogLayers.forEach((layer) => layer.destroy());
@@ -1994,7 +2117,8 @@ export class GameScene extends Phaser.Scene {
     const objective = tracked.objective;
     const anchors = this.getObjectiveAnchors();
     const npcData = useDialogueStore.getState().allNPCData as Record<string, { location?: string }>;
-    const worldItems = (worldItemsData as { 'world-items': Record<string, Array<{ itemId: string; x: number; y: number }>> })['world-items'] || {};
+    const worldItems: Record<string, Array<{ itemId: string; x: number; y: number }>> =
+      Object.fromEntries(LOCATION_IDS.map((id) => [id, getLocationItems(id)]));
 
     let locationId: string | null = null;
     let anchorKey: string | null = null;
@@ -2128,17 +2252,9 @@ export class GameScene extends Phaser.Scene {
   }
 
   private setupCamera() {
-    // Reset zoom in case we arrived via a transition that zoomed in
-    this.cameras.main.setZoom(1.0);
-
-    this.cameras.main.startFollow(this.player, true, 0.1, 0.1);
-
-    if (this.isIsometric && this.isoRenderer) {
-      const bounds = this.isoRenderer.getWorldBounds();
-      this.cameras.main.setBounds(0, 0, bounds.width, bounds.height);
-    } else {
-      this.cameras.main.setBounds(0, 0, GAME_WIDTH, GAME_HEIGHT);
-    }
+    this.cameraSystem = new CameraSystem(this);
+    this.cameraSystem.setWorld(this.worldBounds());
+    this.cameraSystem.follow(this.player);
   }
 
   private setupInput() {
@@ -2240,6 +2356,46 @@ export class GameScene extends Phaser.Scene {
 
       // Play dialogue sound effect
       this.playSfx('sfx-dialogue-blip', 0.28);
+
+      // Handle rest/sleeping action
+      if (topicKey === 'rest-dawn' || topicKey === 'rest-noon' || topicKey === 'rest-night') {
+        const targetHour = topicKey === 'rest-dawn' ? 6 : (topicKey === 'rest-noon' ? 12 : 21);
+        const diff = (targetHour - this.currentHour + 24) % 24;
+        const finalHours = diff === 0 ? 24 : diff;
+        
+        // Lock player inputs instantly
+        this.isResting = true;
+        useGameStore.getState().setResting(true);
+        if (this.player) {
+          this.player.setVelocity(0, 0);
+          const facing = useGameStore.getState().player.facing || 'down';
+          // Player anims are registered UNPREFIXED in BootScene ('idle-down' etc.)
+          this.player.anims.play(`idle-${facing}`, true);
+        }
+
+        // Wait 1.5 seconds for player to read the dialogue before fading to black and advancing time
+        this.time.delayedCall(1500, () => {
+          this.cameras.main.fadeOut(1000, 0, 0, 0);
+          this.cameras.main.once('camerafadeoutcomplete', () => {
+            // Close dialogue
+            useDialogueStore.getState().endDialogue();
+            useGameStore.getState().setDialogueOpen(false);
+            this.stopDialogueAnimation();
+            
+            // Set exact minute to 0, advance time without crossfade transition (instant lighting)
+            this.currentMinute = 0;
+            this.advanceTime(finalHours, false);
+            
+            // Fade back in
+            this.cameras.main.fadeIn(1000, 0, 0, 0);
+            this.cameras.main.once('camerafadeincomplete', () => {
+              // Unlock player inputs
+              this.isResting = false;
+              useGameStore.getState().setResting(false);
+            });
+          });
+        });
+      }
     });
 
     on('ui:travel:to', (...args: unknown[]) => {
@@ -2334,7 +2490,19 @@ export class GameScene extends Phaser.Scene {
     this.destroyObjectiveMarker();
     this.lastObjectiveSignature = null;
     if (this.sceneColliders) {
-      this.sceneColliders.clear(true, true);
+      // Arcade Physics registers its SHUTDOWN listener when the scene BOOTS;
+      // ours is registered in create(). So by the time this runs, the physics
+      // world — and the static tree this group removes itself from — is already
+      // gone, and clear() throws `Cannot read properties of undefined (reading
+      // 'size')`. That exception aborted the REST of cleanup() and left the
+      // scene half-shut-down, so scene.restart() never completed — and every
+      // in-game location transition goes through scene.restart().
+      // Phaser destroys the group with the scene regardless, so dropping the
+      // reference is the whole job here; the explicit clear only matters while
+      // the world is still alive (the two mid-scene rebuild sites above).
+      if (this.physics?.world) {
+        this.sceneColliders.clear(true, true);
+      }
       this.sceneColliders = null;
     }
     this.npcShadowMap.forEach((shadow) => shadow.destroy());
@@ -2534,7 +2702,7 @@ export class GameScene extends Phaser.Scene {
     this.applyLightingForTime(false);
   }
 
-  private updateTimeOfDay() {
+  private updateTimeOfDay(animate: boolean = true) {
     const hour = this.currentHour;
     let newTime: typeof this.timeOfDay;
 
@@ -2551,7 +2719,7 @@ export class GameScene extends Phaser.Scene {
     if (newTime !== this.timeOfDay) {
       const previousTime = this.timeOfDay;
       this.timeOfDay = newTime;
-      this.applyLightingForTime(true);
+      this.applyLightingForTime(animate);
       this.updateParticlesForTime();
       this.updateBackgroundForTime();
       this.updateLocationLightsForTime();
@@ -2572,7 +2740,12 @@ export class GameScene extends Phaser.Scene {
   private applyLightingForTime(animate: boolean = true) {
     if (this.isTransitioningTime) return;
 
-    const config = TIME_COLORS[this.timeOfDay];
+    const baseConfig = TIME_COLORS[this.timeOfDay];
+    // Baked time-of-day plates already carry this tint — applying it again
+    // double-grades the backdrop, so the overlay goes fully transparent.
+    const config = this.hasBakedTimeVariant()
+      ? { color: baseConfig.color, alpha: 0 }
+      : baseConfig;
 
     if (animate) {
       this.isTransitioningTime = true;
@@ -2618,7 +2791,7 @@ export class GameScene extends Phaser.Scene {
     }
   }
 
-  private advanceTime(hours: number) {
+  private advanceTime(hours: number, animate: boolean = true) {
     const previousHour = this.currentHour;
     const currentDay = useGameStore.getState().time.day;
     const rawHour = previousHour + hours;
@@ -2626,14 +2799,15 @@ export class GameScene extends Phaser.Scene {
     const normalizedHour = ((rawHour % 24) + 24) % 24;
 
     this.currentHour = normalizedHour;
-    this.updateTimeOfDay();
+    this.updateTimeOfDay(animate);
 
     // Update game store with new time
     const nextDay = Math.max(1, currentDay + dayDelta);
     useGameStore.getState().updateTime({
       hour: this.currentHour,
       day: nextDay,
-      timeOfDay: this.timeOfDay
+      timeOfDay: this.timeOfDay,
+      minute: this.currentMinute
     });
 
     if (dayDelta > 0) {
@@ -2647,7 +2821,26 @@ export class GameScene extends Phaser.Scene {
       dusk: 'Golden Hour',
       night: 'Night'
     };
-    this.showNotification(`Time: ${this.currentHour}:00 - ${timeNames[this.timeOfDay]}`);
+    const minStr = this.currentMinute.toString().padStart(2, '0');
+    this.showNotification(`Time: ${this.currentHour}:${minStr} - ${timeNames[this.timeOfDay]}`);
+
+    // Refresh NPC scheduled layouts
+    this.recreateNPCs();
+  }
+
+  private advanceMinutes(minutes: number) {
+    let nextMinute = this.currentMinute + minutes;
+    let hourDelta = Math.floor(nextMinute / 60);
+    this.currentMinute = nextMinute % 60;
+    
+    if (hourDelta > 0) {
+      this.advanceTime(hourDelta);
+    } else {
+      // Just update game store minutes
+      useGameStore.getState().updateTime({
+        minute: this.currentMinute
+      });
+    }
   }
 
   private updateLocationState() {
@@ -2967,7 +3160,7 @@ export class GameScene extends Phaser.Scene {
 
   private isAnyUIOpen(): boolean {
     const state = useGameStore.getState();
-    return state.isDialogueOpen || state.isInventoryOpen || state.isJournalOpen || state.isMessageOpen || state.isPaused;
+    return this.isResting || state.isDialogueOpen || state.isInventoryOpen || state.isJournalOpen || state.isMessageOpen || state.isPaused;
   }
 
   private tryInteract() {
@@ -3013,31 +3206,13 @@ export class GameScene extends Phaser.Scene {
     });
   }
 
-  // Location-specific tint colors for transition flash [R, G, B]
-  private static readonly LOCATION_TINT: Record<string, number[]> = {
-    'a-famosa-gate': [40, 30, 20],
-    'rua-direita': [50, 40, 10],
-    'st-pauls-church': [30, 30, 40],
-    'waterfront': [10, 30, 50],
-    'kampung': [10, 40, 15],
-  };
-
-  // Location-specific transition sound keys
-  private static readonly TRANSITION_SOUNDS: Record<string, string> = {
-    'a-famosa-gate': 'sfx-gate-creak',
-    'rua-direita': 'sfx-crowd-murmur',
-    'st-pauls-church': 'sfx-wind-hilltop',
-    'waterfront': 'sfx-waves-crash',
-    'kampung': 'sfx-birds-tropical',
-  };
-
   private switchLocation(mapKey: string, spawnPoint?: { x: number; y: number }) {
     if (mapKey === this.currentMap) return;
 
     console.log('Switching to:', mapKey);
 
     // Location-specific color tint flash before fade-to-black
-    const tint = GameScene.LOCATION_TINT[mapKey] || [0, 0, 0];
+    const tint = getLocation(mapKey)?.visual.transitionTint ?? [0, 0, 0];
     const tintOverlay = this.add.rectangle(
       GAME_WIDTH / 2, GAME_HEIGHT / 2, GAME_WIDTH, GAME_HEIGHT,
       Phaser.Display.Color.GetColor(tint[0], tint[1], tint[2]), 0
@@ -3063,7 +3238,7 @@ export class GameScene extends Phaser.Scene {
       tintOverlay.destroy();
 
       // Play location-specific transition sound if available
-      const sfxKey = GameScene.TRANSITION_SOUNDS[mapKey];
+      const sfxKey = getLocation(mapKey)?.audio.transitionSound;
       if (sfxKey && this.cache.audio.exists(sfxKey)) {
         this.sound.play(sfxKey, { volume: 0.4 });
       }
@@ -3087,6 +3262,15 @@ export class GameScene extends Phaser.Scene {
     this.weatherSystem?.update(time, delta);
     this.environmentObjects?.update(time, delta);
 
+    // Tick game clock: 1 game minute every 2.5 real seconds (2500ms)
+    if (!this.isAnyUIOpen()) {
+      this.clockTickAccumulator += delta;
+      if (this.clockTickAccumulator >= 2500) {
+        this.clockTickAccumulator -= 2500;
+        this.advanceMinutes(1);
+      }
+    }
+
     // Don't update if UI is open
     if (this.isAnyUIOpen()) {
       this.player.setVelocity(0, 0);
@@ -3097,13 +3281,22 @@ export class GameScene extends Phaser.Scene {
 
     // Player movement
     this.updatePlayerMovement();
+    this.updateFollowers();
+
+    const body = this.player.body as Phaser.Physics.Arcade.Body | null;
+    this.cameraSystem?.update(delta, body?.velocity.x ?? 0, body?.velocity.y ?? 0);
+
+    if (this.isIsometric && this.isoRenderer) {
+      this.isoRenderer.update(this.player.x, this.player.y);
+    }
+
     this.updateInteractionTarget();
 
     // Dynamic Y-depth sorting (both legacy-backdrop and isometric modes) so
     // moving characters occlude/are occluded by props at the correct y.
-    this.player.setDepth(worldDepth(this.player.y));
+    this.player.setDepth(worldDepth(this.player.y + 48));
     this.npcs.forEach((npc) => {
-      const depth = worldDepth(npc.y);
+      const depth = worldDepth(npc.y + 48);
       npc.setDepth(depth);
       const shadow = this.npcShadowMap.get(npc);
       if (shadow) shadow.setDepth(depth - 1);
@@ -3119,6 +3312,44 @@ export class GameScene extends Phaser.Scene {
       x: this.player.x,
       y: this.player.y,
     });
+  }
+
+  /**
+   * Walk-mask collision, applied AFTER the physics step.
+   *
+   * On a masked plate the mask is the collision geometry, so there are no
+   * static bodies to collide against — the player is simply not allowed to end
+   * a frame standing somewhere unwalkable. Resolution is per axis (see
+   * `resolveMove`) so walking into a wall diagonally slides along it instead of
+   * stopping dead, which is what the 8px-grid rects could never do.
+   */
+  private applyWalkMaskCollision() {
+    if (!this.walkMask || !this.player) return;
+
+    const halfWidth = 6 * CHARACTER_SCALE;
+    const x = this.player.x;
+    const y = this.player.y;
+
+    if (this.walkMask.canStand(x, y + WALK_FOOT_OFFSET, halfWidth)) {
+      this.lastWalkableX = x;
+      this.lastWalkableY = y;
+      return;
+    }
+
+    const resolved = resolveMove(
+      this.walkMask,
+      this.lastWalkableX, this.lastWalkableY + WALK_FOOT_OFFSET,
+      x, y + WALK_FOOT_OFFSET,
+      halfWidth,
+    );
+    this.player.setPosition(resolved.x, resolved.y - WALK_FOOT_OFFSET);
+    const body = this.player.body as Phaser.Physics.Arcade.Body | null;
+    if (body) {
+      if (resolved.blockedX) body.setVelocityX(0);
+      if (resolved.blockedY) body.setVelocityY(0);
+    }
+    this.lastWalkableX = this.player.x;
+    this.lastWalkableY = this.player.y;
   }
 
   private updatePlayerMovement() {
@@ -3195,6 +3426,104 @@ export class GameScene extends Phaser.Scene {
     }
   }
 
+  private updateFollowers() {
+    // 1. Record player history
+    const playerState = useGameStore.getState().player;
+    const isWalking = (this.player.body as Phaser.Physics.Arcade.Body)?.speed > 0;
+    
+    const lastEntry = this.playerHistory[this.playerHistory.length - 1];
+    const distanceMoved = lastEntry ? Phaser.Math.Distance.Between(this.player.x, this.player.y, lastEntry.x, lastEntry.y) : 999;
+    
+    if (distanceMoved > 2 || this.playerHistory.length === 0) {
+      this.playerHistory.push({
+        x: this.player.x,
+        y: this.player.y,
+        facing: playerState.facing,
+        walking: isWalking
+      });
+      // Cap history
+      if (this.playerHistory.length > 150) {
+        this.playerHistory.shift();
+      }
+    }
+
+    // 2. Check and run escort follower behavior for Siti
+    const tracked = useQuestStore.getState().getTrackedObjective();
+    const isEscortingSiti = tracked && tracked.objective && tracked.objective.type === 'escort' && tracked.objective.target === 'siti';
+    
+    const sitiSprite = this.npcSpriteById.get('siti');
+    if (sitiSprite && sitiSprite.active) {
+      if (isEscortingSiti) {
+        sitiSprite.setImmovable(false);
+        
+        // Ensure follower has active physics colliders with scene walls, added once
+        if (this.sceneColliders && !this.followerColliderAdded) {
+          this.physics.add.collider(sitiSprite, this.sceneColliders);
+          this.followerColliderAdded = true;
+        }
+
+        const followDelay = 10; // frame delay for footstep trail (tighter tracking around corners)
+        if (this.playerHistory.length > followDelay) {
+          const target = this.playerHistory[this.playerHistory.length - followDelay];
+          const dist = Phaser.Math.Distance.Between(sitiSprite.x, sitiSprite.y, target.x, target.y);
+          
+          if (dist > 15) {
+            // Speed catch-up boost if follower starts drifting
+            let speed = PLAYER_SPEED * 0.95;
+            if (dist > 75) {
+              speed = PLAYER_SPEED * 1.15;
+            }
+            
+            // Teleport fallback if stuck or too far
+            if (dist > 280) {
+              sitiSprite.setPosition(target.x, target.y);
+              return;
+            }
+
+            const angle = Phaser.Math.Angle.Between(sitiSprite.x, sitiSprite.y, target.x, target.y);
+            const vx = Math.cos(angle) * speed;
+            const vy = Math.sin(angle) * speed;
+            sitiSprite.setVelocity(vx, vy);
+
+            let dir = 'down';
+            if (Math.abs(vx) > Math.abs(vy)) {
+              dir = vx < 0 ? 'left' : 'right';
+            } else {
+              dir = vy < 0 ? 'up' : 'down';
+            }
+
+            const animKey = `siti-walk-${dir}`;
+            if (this.anims.exists(animKey) && sitiSprite.anims.currentAnim?.key !== animKey) {
+              sitiSprite.play(animKey);
+            }
+          } else {
+            sitiSprite.setVelocity(0, 0);
+            const playerFacing = target.facing || 'down';
+            const idleKey = `siti-idle-${playerFacing}`;
+            if (this.anims.exists(idleKey) && sitiSprite.anims.currentAnim?.key !== idleKey) {
+              sitiSprite.play(idleKey);
+            }
+          }
+        }
+
+        // 3. Quest completion check: Waterfront at night near Rashid's dhow (x:280, y:280)
+        // Verify BOTH player and Siti are near the target destination dhow
+        if (this.currentMap === 'waterfront' && this.timeOfDay === 'night') {
+          const distPlayerToRashid = Phaser.Math.Distance.Between(this.player.x, this.player.y, 280, 280);
+          const distSitiToRashid = Phaser.Math.Distance.Between(sitiSprite.x, sitiSprite.y, 280, 280);
+          
+          if (distPlayerToRashid < 120 && distSitiToRashid < 120) {
+            useQuestStore.getState().recordEscort('siti', 'waterfront');
+            console.log('Siti successfully escorted to the waterfront at night!');
+          }
+        }
+      } else {
+        sitiSprite.setImmovable(true);
+        sitiSprite.setVelocity(0, 0);
+      }
+    }
+  }
+
   private normalizeAmbientLayers(layers?: Array<string | AmbientLayerConfig>): AmbientLayerConfig[] {
     if (!layers || layers.length === 0) return [];
 
@@ -3213,7 +3542,10 @@ export class GameScene extends Phaser.Scene {
   }
 
   private getSceneAudioConfig() {
-    const fallback = DEFAULT_LOCATION_AUDIO[this.currentMap] || {
+    // Authoritative per-location audio lives in <id>.location.json; this
+    // fallback only covers a location id with no data file at all.
+    const audio = this.location?.audio;
+    const fallback = {
       music: 'music-main',
       nightMusic: 'music-night',
       ambientSounds: [{ key: 'base-tropical', volume: 0.25 }],
@@ -3221,16 +3553,15 @@ export class GameScene extends Phaser.Scene {
       footstepSurface: 'stone' as FootstepSurface,
     };
 
+    const ambient = this.normalizeAmbientLayers(audio?.ambientSounds);
+    const nightAmbient = this.normalizeAmbientLayers(audio?.nightAmbientSounds);
+
     return {
-      music: this.sceneConfig?.music || fallback.music,
-      nightMusic: this.sceneConfig?.nightMusic || fallback.nightMusic || this.sceneConfig?.music || fallback.music,
-      ambientSounds: this.normalizeAmbientLayers(this.sceneConfig?.ambientSounds).length > 0
-        ? this.normalizeAmbientLayers(this.sceneConfig?.ambientSounds)
-        : fallback.ambientSounds,
-      nightAmbientSounds: this.normalizeAmbientLayers(this.sceneConfig?.nightAmbientSounds).length > 0
-        ? this.normalizeAmbientLayers(this.sceneConfig?.nightAmbientSounds)
-        : fallback.nightAmbientSounds,
-      footstepSurface: this.sceneConfig?.footstepSurface || fallback.footstepSurface,
+      music: audio?.music || fallback.music,
+      nightMusic: audio?.nightMusic || audio?.music || fallback.nightMusic,
+      ambientSounds: ambient.length > 0 ? ambient : fallback.ambientSounds,
+      nightAmbientSounds: nightAmbient.length > 0 ? nightAmbient : fallback.nightAmbientSounds,
+      footstepSurface: (audio?.footstepSurface as FootstepSurface) || fallback.footstepSurface,
     };
   }
 
@@ -3428,7 +3759,13 @@ export class GameScene extends Phaser.Scene {
     if (velocityX === 0 && velocityY === 0) return;
     if (this.time.now < this.nextFootstepAt) return;
 
-    const footstepSurface = this.getSceneAudioConfig().footstepSurface;
+    // The walk mask carries a surface id per pixel (G channel), so on a
+    // composed plate the footstep follows what the player is actually standing
+    // on — stone in the street, wood on the arcade boards — instead of one
+    // sound for the whole location.
+    const footstepSurface = this.walkMask
+      ? this.walkMask.footstepAt(this.player.x, this.player.y + WALK_FOOT_OFFSET)
+      : this.getSceneAudioConfig().footstepSurface;
     this.playSfx(`sfx-footstep-${footstepSurface}`, 0.24);
     this.nextFootstepAt = this.time.now + 260;
   }
@@ -3463,16 +3800,32 @@ export class GameScene extends Phaser.Scene {
 
     this.lastCharacterLightingSignature = signature;
 
-    if (lighting.tint === null) {
+    const tint = lighting.tint;
+    if (tint === null) {
       this.player.clearTint();
       this.npcs.forEach((npc) => npc.clearTint());
     } else {
-      this.player.setTint(lighting.tint);
-      this.npcs.forEach((npc) => npc.setTint(lighting.tint));
+      this.player.setTint(tint);
+      this.npcs.forEach((npc) => npc.setTint(tint));
     }
 
-    this.player.setAlpha(lighting.alpha);
-    this.npcs.forEach((npc) => npc.setAlpha(lighting.alpha));
+    this.lightingAlpha = lighting.alpha;
+    this.applyCompositedCharacterAlpha();
+  }
+
+  /**
+   * Single writer for player/NPC alpha.
+   *
+   * Time-of-day lighting and stealth mode are independent dimming factors; they
+   * multiply so neither clobbers the other (previously the per-time lighting
+   * pass fought the stealth subscriber and reset the player to full opacity).
+   * Stealth applies to the player only — NPCs never sneak.
+   */
+  private applyCompositedCharacterAlpha() {
+    if (this.player) {
+      this.player.setAlpha(this.lightingAlpha * this.stealthAlpha);
+    }
+    this.npcs.forEach((npc) => npc.setAlpha(this.lightingAlpha));
   }
 
   private updateCharacterShadows() {

@@ -1,0 +1,356 @@
+{
+  "id": "st-pauls-church",
+  "name": "St. Paul's Church",
+  "world": {
+    "scale": 3,
+    "nativeWidth": 320,
+    "nativeHeight": 180
+  },
+  "plate": {
+    "background": "scene-st-pauls-church",
+    "variants": {
+      "dawn": "scene-st-pauls-dawn",
+      "dusk": "scene-st-pauls-dusk",
+      "night": "scene-st-pauls-night"
+    },
+    "runtimeMode": "legacy-backdrop",
+    "targetMode": "isometric-2:1",
+    "authoringBasis": "isometric-grid",
+    "anchor": "bottom-center",
+    "depthStrategy": "screen-y",
+    "tileWidth": 64,
+    "tileHeight": 32,
+    "isoMapKey": "st-pauls-church-iso",
+    "mapFile": "maps/st-pauls-church.json"
+  },
+  "collision": {
+    "rects": [
+      {
+        "x": 0,
+        "y": 0,
+        "width": 320,
+        "height": 57
+      },
+      {
+        "x": 0,
+        "y": 0,
+        "width": 43,
+        "height": 180
+      },
+      {
+        "x": 277,
+        "y": 0,
+        "width": 43,
+        "height": 180
+      },
+      {
+        "x": 0,
+        "y": 168,
+        "width": 320,
+        "height": 12
+      }
+    ]
+  },
+  "spawns": {
+    "player": {
+      "x": 160,
+      "y": 147
+    }
+  },
+  "npcs": {
+    "padre-tomas": {
+      "x": 157,
+      "y": 110
+    },
+    "siti": {
+      "x": 200,
+      "y": 115
+    }
+  },
+  "transitions": [
+    {
+      "targetLocation": "rua-direita",
+      "label": "Descend to Rua Direita",
+      "triggerArea": {
+        "x": 136,
+        "y": 156,
+        "width": 48,
+        "height": 13
+      },
+      "spawnAt": {
+        "x": 518,
+        "y": 162
+      }
+    }
+  ],
+  "props": [
+    {
+      "sprite": "stone-cross",
+      "x": 83,
+      "y": 100,
+      "scale": 2
+    },
+    {
+      "sprite": "stone-cross",
+      "x": 100,
+      "y": 110,
+      "scale": 2
+    },
+    {
+      "sprite": "gravestone",
+      "x": 77,
+      "y": 123,
+      "scale": 1.9
+    },
+    {
+      "sprite": "gravestone",
+      "x": 237,
+      "y": 110,
+      "scale": 1.9
+    },
+    {
+      "sprite": "wooden-pew",
+      "x": 187,
+      "y": 100,
+      "scale": 2
+    },
+    {
+      "sprite": "candelabra",
+      "x": 217,
+      "y": 143,
+      "scale": 1.8
+    }
+  ],
+  "animatedProps": [
+    {
+      "type": "torch",
+      "x": 160,
+      "y": 80
+    },
+    {
+      "type": "palm-sway",
+      "x": 67,
+      "y": 133
+    },
+    {
+      "type": "palm-sway",
+      "x": 250,
+      "y": 127
+    }
+  ],
+  "lights": [
+    {
+      "type": "window",
+      "x": 160,
+      "y": 30
+    },
+    {
+      "type": "window",
+      "x": 146,
+      "y": 24
+    },
+    {
+      "type": "window",
+      "x": 174,
+      "y": 24
+    },
+    {
+      "type": "lantern",
+      "x": 36,
+      "y": 92
+    },
+    {
+      "type": "lantern",
+      "x": 286,
+      "y": 98
+    },
+    {
+      "type": "lantern",
+      "x": 160,
+      "y": 96
+    }
+  ],
+  "fires": [
+    {
+      "x": 160,
+      "y": 96
+    }
+  ],
+  "audio": {
+    "music": "music-church",
+    "nightMusic": "music-church",
+    "ambientSounds": [
+      {
+        "key": "base-tropical",
+        "volume": 0.18
+      },
+      {
+        "key": "church-bells",
+        "volume": 0.34
+      },
+      {
+        "key": "sacred-calm",
+        "volume": 0.42
+      }
+    ],
+    "nightAmbientSounds": [
+      {
+        "key": "church-bells",
+        "volume": 0.18
+      },
+      {
+        "key": "sacred-calm",
+        "volume": 0.32
+      },
+      {
+        "key": "night-insects",
+        "volume": 0.14
+      }
+    ],
+    "footstepSurface": "stone",
+    "transitionSound": "sfx-wind-hilltop"
+  },
+  "visual": {
+    "transitionTint": [
+      30,
+      30,
+      40
+    ],
+    "fogTint": 14010026,
+    "fogSpeed": 0.3,
+    "hazeTint": 15062453,
+    "sunAnchor": {
+      "x": 97,
+      "y": 25
+    },
+    "aoZones": [
+      {
+        "x": 0,
+        "y": 0,
+        "width": 320,
+        "height": 67,
+        "alpha": 0.2
+      },
+      {
+        "x": 120,
+        "y": 70,
+        "width": 83,
+        "height": 50,
+        "alpha": 0.16
+      }
+    ],
+    "canopyShadows": [
+      {
+        "x": -13,
+        "y": -12,
+        "width": 117,
+        "height": 67,
+        "alpha": 0.12
+      },
+      {
+        "x": 233,
+        "y": -10,
+        "width": 100,
+        "height": 67,
+        "alpha": 0.1
+      }
+    ]
+  },
+  "crowd": {
+    "maxCrowd": 4,
+    "density": 0.3,
+    "crowdTypes": [
+      "priest",
+      "portuguese_merchant",
+      "malay_local"
+    ],
+    "paths": [
+      {
+        "start": {
+          "x": 160,
+          "y": 55
+        },
+        "end": {
+          "x": 160,
+          "y": 155
+        }
+      },
+      {
+        "start": {
+          "x": 70,
+          "y": 105
+        },
+        "end": {
+          "x": 250,
+          "y": 105
+        }
+      },
+      {
+        "start": {
+          "x": 250,
+          "y": 90
+        },
+        "end": {
+          "x": 80,
+          "y": 135
+        }
+      },
+      {
+        "start": {
+          "x": 110,
+          "y": 150
+        },
+        "end": {
+          "x": 210,
+          "y": 70
+        }
+      }
+    ]
+  },
+  "items": [
+    {
+      "id": "rosary-1",
+      "itemId": "rosary",
+      "x": 60,
+      "y": 59,
+      "description": "Blessed rosary beads left at the altar."
+    }
+  ],
+  "loreObjects": [
+    {
+      "id": "jesuit-crucifix",
+      "x": 157,
+      "y": 68
+    },
+    {
+      "id": "francis-xavier-tomb",
+      "x": 93,
+      "y": 87
+    },
+    {
+      "id": "grave-portuguese",
+      "x": 57,
+      "y": 110
+    },
+    {
+      "id": "sultan-palace-ruins",
+      "x": 117,
+      "y": 143
+    },
+    {
+      "id": "processional-cross",
+      "x": 253,
+      "y": 140
+    },
+    {
+      "id": "mission-study-lantern",
+      "x": 233,
+      "y": 80
+    },
+    {
+      "id": "schoolyard-bench",
+      "x": 207,
+      "y": 153
+    }
+  ]
+}

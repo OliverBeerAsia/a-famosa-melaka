@@ -93,8 +93,9 @@ export interface DialogueState {
   loadUnlockedTopics: (topics: Record<string, string[]>) => void;
 }
 
-const INITIAL_TOPIC_LIMIT = 5;
-const TOPIC_REVEAL_BATCH = 2;
+// NOTE: topic volume is handled in the UI (DialogueBox pages topics 9 at a time
+// via the [1]-[9] hotkeys plus [0]/arrow paging) rather than by staged reveal,
+// so every eligible topic stays reachable by keyboard.
 
 export const useDialogueStore = create<DialogueState>((set, get) => ({
   currentNPC: null,
@@ -429,21 +430,15 @@ function seedTopicsForDialogue(npc: NPCData, unlockedTopics: string[]): string[]
   if (unlockedTopics.length > 0) {
     return dedupeTopics(unlockedTopics);
   }
-
-  const eligible = prioritizeTopics(npc, getEligibleTopics(npc, unlockedTopics));
-  return eligible.slice(0, INITIAL_TOPIC_LIMIT);
+ 
+  return prioritizeTopics(npc, getEligibleTopics(npc, unlockedTopics));
 }
-
+ 
 function revealNextTopics(npc: NPCData, unlockedTopics: string[]): string[] {
   const eligible = prioritizeTopics(npc, getEligibleTopics(npc, unlockedTopics));
-  const unrevealed = eligible.filter((topic) => !unlockedTopics.includes(topic));
-  if (unrevealed.length === 0) {
-    return dedupeTopics(unlockedTopics);
-  }
-
   return dedupeTopics([
     ...unlockedTopics,
-    ...unrevealed.slice(0, TOPIC_REVEAL_BATCH),
+    ...eligible,
   ]);
 }
 

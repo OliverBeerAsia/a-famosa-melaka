@@ -6,6 +6,8 @@
 @layer base {
   body {
     @apply font-crimson text-parchment-300;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -39,19 +41,21 @@
   }
 
   .ui-caption {
-    @apply text-sepia-light text-[11px] uppercase tracking-[0.18em];
+    @apply text-sepia-light text-xs uppercase tracking-[0.18em];
   }
 
   .ui-dialogue-text {
-    @apply text-leather-200 font-crimson text-base md:text-lg leading-relaxed min-h-[96px];
+    @apply text-leather-200 font-crimson text-2xl leading-relaxed min-h-[96px];
     text-shadow: 0 1px 0 rgba(245, 222, 179, 0.22);
   }
 
   /* Portrait frame — sized to match generated 104×104 PNG */
   .ui-portrait-frame {
+    /* Image area must be an integer multiple of the 80px-native portrait art:
+       104 - 2*12 = 80 → exact 1:1 native pixels, no grid breakage. */
     width: 104px;
     height: 104px;
-    padding: 10px;
+    padding: 12px;
     background-image: url('/sprites/ui/portrait-frame.png');
     background-repeat: no-repeat;
     background-size: 100% 100%;
@@ -69,8 +73,8 @@
   }
 
   .ui-portrait-fallback {
-    width: 84px;
-    height: 84px;
+    width: 80px;
+    height: 80px;
   }
 
   .ui-topic-panel {
@@ -79,7 +83,7 @@
 
   .ui-topic-btn {
     @apply w-full min-h-[48px] justify-between gap-3 px-4 py-2;
-    @apply text-parchment-200;
+    @apply text-parchment-200 text-lg;
     @apply shadow-sm;
     background-image: linear-gradient(180deg, rgba(92, 58, 30, 0.88), rgba(48, 32, 18, 0.94));
     border-color: rgba(244, 180, 26, 0.45);
@@ -91,11 +95,11 @@
   }
 
   .ui-topic-number {
-    @apply text-gold text-xs font-cinzel;
+    @apply text-gold text-sm font-cinzel;
   }
 
   .ui-topic-tag {
-    @apply text-[10px] uppercase tracking-[0.16em] text-gold-light;
+    @apply text-xs uppercase tracking-[0.16em] text-gold-light;
   }
 
   .ui-inventory-slot-art {
@@ -188,7 +192,7 @@
   .ui-portrait-frame-lg {
     width: 104px;
     height: 104px;
-    padding: 8px;
+    padding: 12px;
     background-image: url('/sprites/ui/portrait-frame.png');
     background-repeat: no-repeat;
     background-size: 100% 100%;
@@ -219,14 +223,27 @@
 
   /* Wax seal */
   .wax-seal {
-    @apply w-14 h-14 rounded-full bg-crimson border-2 border-crimson-dark flex items-center justify-center;
-    @apply font-cinzel text-gold-light text-xl font-bold;
+    width: 56px;
+    height: 56px;
+    background-image: url('/sprites/ui/wax-seal.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    image-rendering: pixelated;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Press Start 2P', monospace;
+    color: #FFD700;
+    font-size: 16px;
+    font-weight: bold;
+    padding-left: 2px;
+    padding-bottom: 2px;
   }
 
   /* Topic button */
   .topic-btn {
     @apply flex items-center rounded-lg border transition-all duration-150 cursor-pointer;
-    @apply text-left text-sm hover:text-parchment-200;
+    @apply text-left text-base hover:text-parchment-200;
   }
 
   /* Inventory slot */

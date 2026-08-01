@@ -42,7 +42,7 @@
       "npcDialogueOverrides": {
         "padre-tomas": {
           "siti": {
-            "text": "She is young - perhaps twenty years. She worked as a servant in the household of Senhor Alvares, a sugar merchant. She speaks some Portuguese, learned from the household. Her eyes... they hold fear, yes, but also a strange dignity. She says she is innocent.",
+            "text": "She is young - perhaps twenty years. She worked as a servant in the household of Senhor Alvares, a tin merchant. She speaks some Portuguese, learned from the household. Her eyes... they hold fear, yes, but also a strange dignity. She says she is innocent.",
             "unlocks": ["alvares"]
           },
           "accusation": {
@@ -193,7 +193,7 @@
         },
         "rashid": {
           "alvares-smuggling": {
-            "text": "*grins* Alvares? That one, he thinks he is clever. I have seen his men loading cargo at night, avoiding customs. Sugar, yes, but also... other things. Goods that should pay duty but do not. If your Capitão wants real crimes, this I can show him."
+            "text": "*grins* Alvares? That one, he thinks he is clever. I have seen his men loading cargo at night, avoiding customs. Tin ingots, yes, but also... other things. Goods that should pay duty but do not. If your Capitão wants real crimes, this I can show him."
           }
         }
       },

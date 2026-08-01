@@ -1,5 +1,5 @@
 {
-  "description": "Decorative environment object clusters for each location. These objects add visual richness and historical atmosphere beyond the interactive lore hotspots.",
+  "description": "Decorative environment object clusters for each location. These objects add visual richness and historical atmosphere beyond the interactive lore hotspots. | Legacy-backdrop prop layout moved to src/data/locations/<id>.location.json (props); the clusters here are the isometric-grid authoring source only.",
   "locations": {
     "a-famosa-gate": {
       "clusters": [
@@ -322,97 +322,9 @@
             }
           ]
         }
-      ],
-      "legacyProps": [
-        {
-          "sprite": "cannon",
-          "x": 250,
-          "y": 300,
-          "scale": 2
-        },
-        {
-          "sprite": "cannon",
-          "x": 700,
-          "y": 300,
-          "scale": 2
-        },
-        {
-          "sprite": "crate",
-          "x": 300,
-          "y": 262,
-          "scale": 1.9
-        },
-        {
-          "sprite": "cargo-crate",
-          "x": 332,
-          "y": 274,
-          "scale": 1.9
-        },
-        {
-          "sprite": "barrel",
-          "x": 662,
-          "y": 262,
-          "scale": 1.9
-        },
-        {
-          "sprite": "rope-coil",
-          "x": 620,
-          "y": 430,
-          "scale": 1.8
-        },
-        {
-          "sprite": "anchor",
-          "x": 760,
-          "y": 450,
-          "scale": 1.9
-        }
       ]
     },
     "rua-direita": {
-      "legacyProps": [
-        {
-          "sprite": "market-stall",
-          "x": 320,
-          "y": 300,
-          "scale": 2.2
-        },
-        {
-          "sprite": "market-stall-1",
-          "x": 620,
-          "y": 300,
-          "scale": 2.2
-        },
-        {
-          "sprite": "fruit-basket",
-          "x": 660,
-          "y": 306,
-          "scale": 1.7
-        },
-        {
-          "sprite": "pottery",
-          "x": 574,
-          "y": 310,
-          "scale": 1.7
-        },
-        {
-          "sprite": "barrel",
-          "x": 200,
-          "y": 250,
-          "scale": 1.9
-        },
-        {
-          "sprite": "crate",
-          "x": 228,
-          "y": 262,
-          "scale": 1.9
-        },
-        {
-          "sprite": "water-well",
-          "x": 760,
-          "y": 450,
-          "scale": 2.4
-        }
-      ],
       "clusters": [
         {
           "id": "fernaos-spice-stall",
@@ -435,7 +347,7 @@
               "sprite": "spice-pile-pepper",
               "offsetX": 56,
               "offsetY": -4,
-              "examineText": "Black peppercorns — Melaka's most valuable export. Wars have been fought over piles smaller than this."
+              "examineText": "Black peppercorns \u2014 Melaka's most valuable export. Wars have been fought over piles smaller than this."
             },
             {
               "sprite": "balance-scale",
@@ -513,7 +425,7 @@
           ]
         },
         {
-          "id": "alvares-sugar-area",
+          "id": "alvares-tin-area",
           "centerTile": {
             "x": 12,
             "y": 18
@@ -567,7 +479,7 @@
               "sprite": "pelourinho",
               "offsetX": -32,
               "offsetY": 16,
-              "examineText": "The pelourinho — symbol of Portuguese municipal authority. Iron shackles hang from its sides."
+              "examineText": "The pelourinho \u2014 symbol of Portuguese municipal authority. Iron shackles hang from its sides."
             }
           ]
         },
@@ -1085,44 +997,6 @@
             }
           ]
         }
-      ],
-      "legacyProps": [
-        {
-          "sprite": "stone-cross",
-          "x": 250,
-          "y": 300,
-          "scale": 2
-        },
-        {
-          "sprite": "stone-cross",
-          "x": 300,
-          "y": 330,
-          "scale": 2
-        },
-        {
-          "sprite": "gravestone",
-          "x": 230,
-          "y": 370,
-          "scale": 1.9
-        },
-        {
-          "sprite": "gravestone",
-          "x": 710,
-          "y": 330,
-          "scale": 1.9
-        },
-        {
-          "sprite": "wooden-pew",
-          "x": 560,
-          "y": 300,
-          "scale": 2
-        },
-        {
-          "sprite": "candelabra",
-          "x": 650,
-          "y": 430,
-          "scale": 1.8
-        }
       ]
     },
     "waterfront": {
@@ -1491,50 +1365,6 @@
             }
           ]
         }
-      ],
-      "legacyProps": [
-        {
-          "sprite": "barrel",
-          "x": 250,
-          "y": 300,
-          "scale": 1.9
-        },
-        {
-          "sprite": "cargo-crate",
-          "x": 288,
-          "y": 292,
-          "scale": 2
-        },
-        {
-          "sprite": "crate",
-          "x": 320,
-          "y": 312,
-          "scale": 1.9
-        },
-        {
-          "sprite": "rope-coil",
-          "x": 220,
-          "y": 360,
-          "scale": 1.8
-        },
-        {
-          "sprite": "fishing-net",
-          "x": 700,
-          "y": 300,
-          "scale": 2
-        },
-        {
-          "sprite": "anchor",
-          "x": 740,
-          "y": 450,
-          "scale": 1.9
-        },
-        {
-          "sprite": "fish-trap",
-          "x": 620,
-          "y": 430,
-          "scale": 1.8
-        }
       ]
     },
     "kampung": {
@@ -1684,7 +1514,7 @@
               "sprite": "wayang-kulit-puppet",
               "offsetX": 72,
               "offsetY": -8,
-              "examineText": "A wayang kulit shadow puppet — the premiere entertainment of Malay culture. This one depicts Seri Rama."
+              "examineText": "A wayang kulit shadow puppet \u2014 the premiere entertainment of Malay culture. This one depicts Seri Rama."
             }
           ]
         },
@@ -1839,50 +1669,6 @@
               "offsetY": -14
             }
           ]
-        }
-      ],
-      "legacyProps": [
-        {
-          "sprite": "cooking-fire",
-          "x": 300,
-          "y": 320,
-          "scale": 2
-        },
-        {
-          "sprite": "rice-pot",
-          "x": 342,
-          "y": 332,
-          "scale": 1.7
-        },
-        {
-          "sprite": "fishing-net",
-          "x": 690,
-          "y": 300,
-          "scale": 2
-        },
-        {
-          "sprite": "pottery",
-          "x": 632,
-          "y": 330,
-          "scale": 1.7
-        },
-        {
-          "sprite": "fruit-basket",
-          "x": 260,
-          "y": 300,
-          "scale": 1.7
-        },
-        {
-          "sprite": "woven-mat",
-          "x": 500,
-          "y": 430,
-          "scale": 1.8
-        },
-        {
-          "sprite": "water-well",
-          "x": 730,
-          "y": 450,
-          "scale": 2.4
         }
       ]
     }

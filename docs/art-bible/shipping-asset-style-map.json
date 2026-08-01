@@ -23,7 +23,7 @@
           "densityMatch": null,
           "overallGrade": "pass",
           "reviewer": "auto-grader-v1",
-          "reviewDate": "2026-03-21",
+          "reviewDate": "2026-06-27",
           "notes": ""
         }
       },
@@ -47,7 +47,7 @@
           "densityMatch": null,
           "overallGrade": "pass",
           "reviewer": "auto-grader-v1",
-          "reviewDate": "2026-03-21",
+          "reviewDate": "2026-06-27",
           "notes": ""
         }
       },
@@ -71,7 +71,7 @@
           "densityMatch": null,
           "overallGrade": "pass",
           "reviewer": "auto-grader-v1",
-          "reviewDate": "2026-03-21",
+          "reviewDate": "2026-06-27",
           "notes": ""
         }
       },
@@ -95,7 +95,7 @@
           "densityMatch": null,
           "overallGrade": "pass",
           "reviewer": "auto-grader-v1",
-          "reviewDate": "2026-03-21",
+          "reviewDate": "2026-06-27",
           "notes": ""
         }
       },
@@ -119,7 +119,7 @@
           "densityMatch": null,
           "overallGrade": "pass",
           "reviewer": "auto-grader-v1",
-          "reviewDate": "2026-03-21",
+          "reviewDate": "2026-06-27",
           "notes": ""
         }
       },
@@ -143,7 +143,7 @@
           "densityMatch": null,
           "overallGrade": "pass",
           "reviewer": "auto-grader-v1",
-          "reviewDate": "2026-03-21",
+          "reviewDate": "2026-06-27",
           "notes": ""
         }
       },
@@ -155,20 +155,20 @@
           "u8-townsperson"
         ],
         "historicalNotes": "Arab sailor and navigator from a docked dhow. Would wear a thobe or loose shirt with a turban or keffiyeh. Weathered, lean build of a maritime trader on the monsoon route between Arabia and the Malay Archipelago.",
-        "status": "keep",
+        "status": "tune",
         "wave": 1,
         "gradeCard": {
           "silhouetteClarity": "pass",
           "paletteCompliance": "pass",
           "outlineWeight": "pass",
           "ditherQuality": "pass",
-          "shadowConsistency": "pass",
+          "shadowConsistency": "partial",
           "historicalAccuracy": null,
           "densityMatch": null,
-          "overallGrade": "pass",
+          "overallGrade": "partial",
           "reviewer": "auto-grader-v1",
-          "reviewDate": "2026-03-21",
-          "notes": ""
+          "reviewDate": "2026-06-27",
+          "notes": "shadow: SE score 0.56"
         }
       },
       "siti": {
@@ -186,12 +186,12 @@
           "paletteCompliance": "pass",
           "outlineWeight": "pass",
           "ditherQuality": "pass",
-          "shadowConsistency": null,
+          "shadowConsistency": "pass",
           "historicalAccuracy": null,
           "densityMatch": null,
           "overallGrade": "pass",
           "reviewer": "auto-grader-v1",
-          "reviewDate": "2026-03-21",
+          "reviewDate": "2026-06-27",
           "notes": ""
         }
       },
@@ -215,7 +215,7 @@
           "densityMatch": null,
           "overallGrade": "pass",
           "reviewer": "auto-grader-v1",
-          "reviewDate": "2026-03-21",
+          "reviewDate": "2026-06-27",
           "notes": ""
         }
       },
@@ -234,12 +234,12 @@
           "paletteCompliance": "pass",
           "outlineWeight": "pass",
           "ditherQuality": "pass",
-          "shadowConsistency": null,
+          "shadowConsistency": "pass",
           "historicalAccuracy": null,
           "densityMatch": null,
           "overallGrade": "pass",
           "reviewer": "auto-grader-v1",
-          "reviewDate": "2026-03-21",
+          "reviewDate": "2026-06-27",
           "notes": ""
         }
       },
@@ -263,7 +263,7 @@
           "densityMatch": null,
           "overallGrade": "pass",
           "reviewer": "auto-grader-v1",
-          "reviewDate": "2026-03-21",
+          "reviewDate": "2026-06-27",
           "notes": ""
         }
       },
@@ -287,7 +287,7 @@
           "densityMatch": null,
           "overallGrade": "pass",
           "reviewer": "auto-grader-v1",
-          "reviewDate": "2026-03-21",
+          "reviewDate": "2026-06-27",
           "notes": ""
         }
       },
@@ -311,7 +311,7 @@
           "densityMatch": null,
           "overallGrade": "pass",
           "reviewer": "auto-grader-v1",
-          "reviewDate": "2026-03-21",
+          "reviewDate": "2026-06-27",
           "notes": ""
         }
       },
@@ -323,20 +323,20 @@
           "u8-townsperson"
         ],
         "historicalNotes": "Malay man, an elder or community leader in the kampung. Would wear a baju melayu (tunic) with a sarong and a songkok cap. Carries himself with the quiet authority of a local headman navigating life under Portuguese colonial rule.",
-        "status": "keep",
+        "status": "tune",
         "wave": 1,
         "gradeCard": {
           "silhouetteClarity": "pass",
           "paletteCompliance": "pass",
           "outlineWeight": "pass",
           "ditherQuality": "pass",
-          "shadowConsistency": "pass",
+          "shadowConsistency": "partial",
           "historicalAccuracy": null,
           "densityMatch": null,
-          "overallGrade": "pass",
+          "overallGrade": "partial",
           "reviewer": "auto-grader-v1",
-          "reviewDate": "2026-03-21",
-          "notes": ""
+          "reviewDate": "2026-06-27",
+          "notes": "shadow: SE score 0.38"
         }
       }
     },
@@ -355,12 +355,12 @@
           "paletteCompliance": "pass",
           "outlineWeight": "pass",
           "ditherQuality": "pass",
-          "shadowConsistency": null,
+          "shadowConsistency": "pass",
           "historicalAccuracy": null,
           "densityMatch": null,
           "overallGrade": "pass",
           "reviewer": "auto-grader-v1",
-          "reviewDate": "2026-03-21",
+          "reviewDate": "2026-06-27",
           "notes": ""
         }
       },
@@ -378,12 +378,12 @@
           "paletteCompliance": "pass",
           "outlineWeight": "pass",
           "ditherQuality": "pass",
-          "shadowConsistency": null,
+          "shadowConsistency": "pass",
           "historicalAccuracy": null,
           "densityMatch": null,
           "overallGrade": "pass",
           "reviewer": "auto-grader-v1",
-          "reviewDate": "2026-03-21",
+          "reviewDate": "2026-06-27",
           "notes": ""
         }
       },
@@ -401,12 +401,12 @@
           "paletteCompliance": "pass",
           "outlineWeight": "pass",
           "ditherQuality": "pass",
-          "shadowConsistency": null,
+          "shadowConsistency": "pass",
           "historicalAccuracy": null,
           "densityMatch": null,
           "overallGrade": "pass",
           "reviewer": "auto-grader-v1",
-          "reviewDate": "2026-03-21",
+          "reviewDate": "2026-06-27",
           "notes": ""
         }
       },
@@ -429,7 +429,7 @@
           "densityMatch": null,
           "overallGrade": "pass",
           "reviewer": "auto-grader-v1",
-          "reviewDate": "2026-03-21",
+          "reviewDate": "2026-06-27",
           "notes": ""
         }
       },
@@ -440,20 +440,20 @@
           "u8-townsperson"
         ],
         "historicalNotes": "Malay man. Baju melayu tunic and sarong silhouette with songkok cap.",
-        "status": "keep",
+        "status": "tune",
         "wave": 2,
         "gradeCard": {
           "silhouetteClarity": "pass",
           "paletteCompliance": "pass",
           "outlineWeight": "pass",
           "ditherQuality": "pass",
-          "shadowConsistency": null,
+          "shadowConsistency": "partial",
           "historicalAccuracy": null,
           "densityMatch": null,
-          "overallGrade": "pass",
+          "overallGrade": "partial",
           "reviewer": "auto-grader-v1",
-          "reviewDate": "2026-03-21",
-          "notes": ""
+          "reviewDate": "2026-06-27",
+          "notes": "shadow: SE score 0.38"
         }
       },
       "malay-woman": {
@@ -475,7 +475,7 @@
           "densityMatch": null,
           "overallGrade": "pass",
           "reviewer": "auto-grader-v1",
-          "reviewDate": "2026-03-21",
+          "reviewDate": "2026-06-27",
           "notes": ""
         }
       },
@@ -486,20 +486,20 @@
           "u8-townsperson"
         ],
         "historicalNotes": "Malay child. Smaller proportions, simple tunic. Adds life and scale reference to crowd scenes.",
-        "status": "keep",
+        "status": "tune",
         "wave": 2,
         "gradeCard": {
           "silhouetteClarity": "pass",
           "paletteCompliance": "pass",
           "outlineWeight": "pass",
           "ditherQuality": "pass",
-          "shadowConsistency": null,
+          "shadowConsistency": "partial",
           "historicalAccuracy": null,
           "densityMatch": null,
-          "overallGrade": "pass",
+          "overallGrade": "partial",
           "reviewer": "auto-grader-v1",
-          "reviewDate": "2026-03-21",
-          "notes": ""
+          "reviewDate": "2026-06-27",
+          "notes": "shadow: SE score 0.41"
         }
       },
       "chinese": {
@@ -521,7 +521,7 @@
           "densityMatch": null,
           "overallGrade": "pass",
           "reviewer": "auto-grader-v1",
-          "reviewDate": "2026-03-21",
+          "reviewDate": "2026-06-27",
           "notes": ""
         }
       },
@@ -539,12 +539,12 @@
           "paletteCompliance": "pass",
           "outlineWeight": "pass",
           "ditherQuality": "pass",
-          "shadowConsistency": null,
+          "shadowConsistency": "pass",
           "historicalAccuracy": null,
           "densityMatch": null,
           "overallGrade": "pass",
           "reviewer": "auto-grader-v1",
-          "reviewDate": "2026-03-21",
+          "reviewDate": "2026-06-27",
           "notes": ""
         }
       },
@@ -562,12 +562,12 @@
           "paletteCompliance": "pass",
           "outlineWeight": "pass",
           "ditherQuality": "pass",
-          "shadowConsistency": null,
+          "shadowConsistency": "pass",
           "historicalAccuracy": null,
           "densityMatch": null,
           "overallGrade": "pass",
           "reviewer": "auto-grader-v1",
-          "reviewDate": "2026-03-21",
+          "reviewDate": "2026-06-27",
           "notes": ""
         }
       }
@@ -594,7 +594,7 @@
             "densityMatch": null,
             "overallGrade": "pass",
             "reviewer": "auto-grader-v1",
-            "reviewDate": "2026-03-21",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -617,7 +617,7 @@
             "densityMatch": null,
             "overallGrade": "pass",
             "reviewer": "auto-grader-v1",
-            "reviewDate": "2026-03-21",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -640,7 +640,7 @@
             "densityMatch": null,
             "overallGrade": "pass",
             "reviewer": "auto-grader-v1",
-            "reviewDate": "2026-03-21",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -663,7 +663,7 @@
             "densityMatch": null,
             "overallGrade": "pass",
             "reviewer": "auto-grader-v1",
-            "reviewDate": "2026-03-21",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -687,7 +687,7 @@
             "densityMatch": null,
             "overallGrade": "pass",
             "reviewer": "auto-grader-v1",
-            "reviewDate": "2026-03-21",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -711,7 +711,7 @@
             "densityMatch": null,
             "overallGrade": "pass",
             "reviewer": "auto-grader-v1",
-            "reviewDate": "2026-03-21",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -734,7 +734,7 @@
             "densityMatch": null,
             "overallGrade": "pass",
             "reviewer": "auto-grader-v1",
-            "reviewDate": "2026-03-21",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -757,7 +757,7 @@
             "densityMatch": null,
             "overallGrade": "pass",
             "reviewer": "auto-grader-v1",
-            "reviewDate": "2026-03-21",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -780,7 +780,7 @@
             "densityMatch": null,
             "overallGrade": "pass",
             "reviewer": "auto-grader-v1",
-            "reviewDate": "2026-03-21",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -803,7 +803,7 @@
             "densityMatch": null,
             "overallGrade": "pass",
             "reviewer": "auto-grader-v1",
-            "reviewDate": "2026-03-21",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -826,7 +826,7 @@
             "densityMatch": null,
             "overallGrade": "pass",
             "reviewer": "auto-grader-v1",
-            "reviewDate": "2026-03-21",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -849,7 +849,7 @@
             "densityMatch": null,
             "overallGrade": "pass",
             "reviewer": "auto-grader-v1",
-            "reviewDate": "2026-03-21",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -873,7 +873,7 @@
             "densityMatch": null,
             "overallGrade": "pass",
             "reviewer": "auto-grader-v1",
-            "reviewDate": "2026-03-21",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -896,7 +896,7 @@
             "densityMatch": null,
             "overallGrade": "pass",
             "reviewer": "auto-grader-v1",
-            "reviewDate": "2026-03-21",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         }
@@ -980,19 +980,19 @@
             "u8-stone-floor"
           ],
           "historicalNotes": "Isometric cobblestone paving variant for busier Portuguese Melaka streets.",
-          "status": "tune",
+          "status": "keep",
           "wave": 2,
           "gradeCard": {
-            "silhouetteClarity": null,
-            "paletteCompliance": null,
-            "outlineWeight": null,
-            "ditherQuality": null,
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
             "shadowConsistency": null,
             "historicalAccuracy": null,
             "densityMatch": null,
-            "overallGrade": null,
-            "reviewer": null,
-            "reviewDate": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -1003,19 +1003,19 @@
             "u8-stone-floor"
           ],
           "historicalNotes": "Isometric cobblestone paving variant for breaking up repeated street texture.",
-          "status": "tune",
+          "status": "keep",
           "wave": 2,
           "gradeCard": {
-            "silhouetteClarity": null,
-            "paletteCompliance": null,
-            "outlineWeight": null,
-            "ditherQuality": null,
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
             "shadowConsistency": null,
             "historicalAccuracy": null,
             "densityMatch": null,
-            "overallGrade": null,
-            "reviewer": null,
-            "reviewDate": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -1026,19 +1026,19 @@
             "u8-stone-floor"
           ],
           "historicalNotes": "Isometric cobblestone paving variant used for patchwork street surfaces.",
-          "status": "tune",
+          "status": "keep",
           "wave": 2,
           "gradeCard": {
-            "silhouetteClarity": null,
-            "paletteCompliance": null,
-            "outlineWeight": null,
-            "ditherQuality": null,
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
             "shadowConsistency": null,
             "historicalAccuracy": null,
             "densityMatch": null,
-            "overallGrade": null,
-            "reviewer": null,
-            "reviewDate": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -1050,19 +1050,19 @@
             "u8-vegetation"
           ],
           "historicalNotes": "Horizontal transition between cobblestone paving and tropical verge growth.",
-          "status": "tune",
+          "status": "keep",
           "wave": 2,
           "gradeCard": {
-            "silhouetteClarity": null,
-            "paletteCompliance": null,
-            "outlineWeight": null,
-            "ditherQuality": null,
-            "shadowConsistency": null,
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": "pass",
             "historicalAccuracy": null,
             "densityMatch": null,
-            "overallGrade": null,
-            "reviewer": null,
-            "reviewDate": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -1077,17 +1077,17 @@
           "status": "tune",
           "wave": 2,
           "gradeCard": {
-            "silhouetteClarity": null,
-            "paletteCompliance": null,
-            "outlineWeight": null,
-            "ditherQuality": null,
-            "shadowConsistency": null,
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": "partial",
             "historicalAccuracy": null,
             "densityMatch": null,
-            "overallGrade": null,
-            "reviewer": null,
-            "reviewDate": null,
-            "notes": ""
+            "overallGrade": "partial",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-06-27",
+            "notes": "shadow: SE score 0.60"
           }
         },
         "cobblestone-dirt-v": {
@@ -1097,19 +1097,19 @@
             "u8-stone-floor"
           ],
           "historicalNotes": "Vertical transition from paved path to packed earth in kampung edges.",
-          "status": "tune",
+          "status": "keep",
           "wave": 2,
           "gradeCard": {
-            "silhouetteClarity": null,
-            "paletteCompliance": null,
-            "outlineWeight": null,
-            "ditherQuality": null,
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
             "shadowConsistency": null,
             "historicalAccuracy": null,
             "densityMatch": null,
-            "overallGrade": null,
-            "reviewer": null,
-            "reviewDate": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -1121,19 +1121,19 @@
             "u8-wall-tile"
           ],
           "historicalNotes": "Isometric laterite stone used around A Famosa fortification surfaces.",
-          "status": "tune",
+          "status": "keep",
           "wave": 2,
           "gradeCard": {
-            "silhouetteClarity": null,
-            "paletteCompliance": null,
-            "outlineWeight": null,
-            "ditherQuality": null,
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
             "shadowConsistency": null,
             "historicalAccuracy": null,
             "densityMatch": null,
-            "overallGrade": null,
-            "reviewer": null,
-            "reviewDate": null,
+            "overallGrade": "pass",
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -1392,7 +1392,7 @@
             "densityMatch": null,
             "overallGrade": "pass",
             "reviewer": "auto-grader-v1",
-            "reviewDate": "2026-03-21",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -1415,7 +1415,7 @@
             "densityMatch": null,
             "overallGrade": "pass",
             "reviewer": "auto-grader-v1",
-            "reviewDate": "2026-03-21",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -1438,7 +1438,7 @@
             "densityMatch": null,
             "overallGrade": "pass",
             "reviewer": "auto-grader-v1",
-            "reviewDate": "2026-03-21",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -1461,7 +1461,7 @@
             "densityMatch": null,
             "overallGrade": "pass",
             "reviewer": "auto-grader-v1",
-            "reviewDate": "2026-03-21",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -1484,7 +1484,7 @@
             "densityMatch": null,
             "overallGrade": "pass",
             "reviewer": "auto-grader-v1",
-            "reviewDate": "2026-03-21",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -1507,7 +1507,7 @@
             "densityMatch": null,
             "overallGrade": "pass",
             "reviewer": "auto-grader-v1",
-            "reviewDate": "2026-03-21",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -1531,7 +1531,7 @@
             "densityMatch": null,
             "overallGrade": "pass",
             "reviewer": "auto-grader-v1",
-            "reviewDate": "2026-03-21",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -1554,7 +1554,7 @@
             "densityMatch": null,
             "overallGrade": "pass",
             "reviewer": "auto-grader-v1",
-            "reviewDate": "2026-03-21",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -1577,7 +1577,7 @@
             "densityMatch": null,
             "overallGrade": "pass",
             "reviewer": "auto-grader-v1",
-            "reviewDate": "2026-03-21",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -1600,7 +1600,7 @@
             "densityMatch": null,
             "overallGrade": "pass",
             "reviewer": "auto-grader-v1",
-            "reviewDate": "2026-03-21",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -1623,7 +1623,7 @@
             "densityMatch": null,
             "overallGrade": "pass",
             "reviewer": "auto-grader-v1",
-            "reviewDate": "2026-03-21",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -1646,7 +1646,7 @@
             "densityMatch": null,
             "overallGrade": "pass",
             "reviewer": "auto-grader-v1",
-            "reviewDate": "2026-03-21",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -1669,7 +1669,7 @@
             "densityMatch": null,
             "overallGrade": "pass",
             "reviewer": "auto-grader-v1",
-            "reviewDate": "2026-03-21",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -1693,7 +1693,7 @@
             "densityMatch": null,
             "overallGrade": "pass",
             "reviewer": "auto-grader-v1",
-            "reviewDate": "2026-03-21",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -1716,7 +1716,7 @@
             "densityMatch": null,
             "overallGrade": "pass",
             "reviewer": "auto-grader-v1",
-            "reviewDate": "2026-03-21",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -1739,7 +1739,7 @@
             "densityMatch": null,
             "overallGrade": "pass",
             "reviewer": "auto-grader-v1",
-            "reviewDate": "2026-03-21",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -1762,7 +1762,7 @@
             "densityMatch": null,
             "overallGrade": "pass",
             "reviewer": "auto-grader-v1",
-            "reviewDate": "2026-03-21",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -1786,7 +1786,7 @@
             "densityMatch": null,
             "overallGrade": "pass",
             "reviewer": "auto-grader-v1",
-            "reviewDate": "2026-03-21",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -1809,7 +1809,7 @@
             "densityMatch": null,
             "overallGrade": "pass",
             "reviewer": "auto-grader-v1",
-            "reviewDate": "2026-03-21",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -1833,7 +1833,7 @@
             "densityMatch": null,
             "overallGrade": "pass",
             "reviewer": "auto-grader-v1",
-            "reviewDate": "2026-03-21",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -1856,7 +1856,7 @@
             "densityMatch": null,
             "overallGrade": "pass",
             "reviewer": "auto-grader-v1",
-            "reviewDate": "2026-03-21",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -1879,7 +1879,7 @@
             "densityMatch": null,
             "overallGrade": "pass",
             "reviewer": "auto-grader-v1",
-            "reviewDate": "2026-03-21",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -1902,7 +1902,7 @@
             "densityMatch": null,
             "overallGrade": "pass",
             "reviewer": "auto-grader-v1",
-            "reviewDate": "2026-03-21",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -1925,7 +1925,7 @@
             "densityMatch": null,
             "overallGrade": "pass",
             "reviewer": "auto-grader-v1",
-            "reviewDate": "2026-03-21",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -1948,7 +1948,7 @@
             "densityMatch": null,
             "overallGrade": "pass",
             "reviewer": "auto-grader-v1",
-            "reviewDate": "2026-03-21",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -1971,7 +1971,7 @@
             "densityMatch": null,
             "overallGrade": "pass",
             "reviewer": "auto-grader-v1",
-            "reviewDate": "2026-03-21",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -1994,7 +1994,7 @@
             "densityMatch": null,
             "overallGrade": "pass",
             "reviewer": "auto-grader-v1",
-            "reviewDate": "2026-03-21",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -2017,7 +2017,7 @@
             "densityMatch": null,
             "overallGrade": "pass",
             "reviewer": "auto-grader-v1",
-            "reviewDate": "2026-03-21",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -2041,7 +2041,7 @@
             "densityMatch": null,
             "overallGrade": "pass",
             "reviewer": "auto-grader-v1",
-            "reviewDate": "2026-03-21",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -2064,7 +2064,7 @@
             "densityMatch": null,
             "overallGrade": "pass",
             "reviewer": "auto-grader-v1",
-            "reviewDate": "2026-03-21",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -2087,7 +2087,7 @@
             "densityMatch": null,
             "overallGrade": "pass",
             "reviewer": "auto-grader-v1",
-            "reviewDate": "2026-03-21",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -2111,7 +2111,7 @@
             "densityMatch": null,
             "overallGrade": "pass",
             "reviewer": "auto-grader-v1",
-            "reviewDate": "2026-03-21",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -2135,7 +2135,7 @@
             "densityMatch": null,
             "overallGrade": "pass",
             "reviewer": "auto-grader-v1",
-            "reviewDate": "2026-03-21",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -2158,7 +2158,7 @@
             "densityMatch": null,
             "overallGrade": "pass",
             "reviewer": "auto-grader-v1",
-            "reviewDate": "2026-03-21",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -2182,7 +2182,7 @@
             "densityMatch": null,
             "overallGrade": "pass",
             "reviewer": "auto-grader-v1",
-            "reviewDate": "2026-03-21",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -2205,7 +2205,7 @@
             "densityMatch": null,
             "overallGrade": "pass",
             "reviewer": "auto-grader-v1",
-            "reviewDate": "2026-03-21",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -2228,7 +2228,7 @@
             "densityMatch": null,
             "overallGrade": "pass",
             "reviewer": "auto-grader-v1",
-            "reviewDate": "2026-03-21",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -2252,7 +2252,7 @@
             "densityMatch": null,
             "overallGrade": "pass",
             "reviewer": "auto-grader-v1",
-            "reviewDate": "2026-03-21",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -2276,7 +2276,7 @@
             "densityMatch": null,
             "overallGrade": "pass",
             "reviewer": "auto-grader-v1",
-            "reviewDate": "2026-03-21",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -2300,7 +2300,7 @@
             "densityMatch": null,
             "overallGrade": "pass",
             "reviewer": "auto-grader-v1",
-            "reviewDate": "2026-03-21",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -2323,7 +2323,7 @@
             "densityMatch": null,
             "overallGrade": "pass",
             "reviewer": "auto-grader-v1",
-            "reviewDate": "2026-03-21",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -2346,7 +2346,7 @@
             "densityMatch": null,
             "overallGrade": "pass",
             "reviewer": "auto-grader-v1",
-            "reviewDate": "2026-03-21",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -2370,7 +2370,7 @@
             "densityMatch": null,
             "overallGrade": "pass",
             "reviewer": "auto-grader-v1",
-            "reviewDate": "2026-03-21",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -2393,7 +2393,7 @@
             "densityMatch": null,
             "overallGrade": "pass",
             "reviewer": "auto-grader-v1",
-            "reviewDate": "2026-03-21",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -2416,7 +2416,7 @@
             "densityMatch": null,
             "overallGrade": "pass",
             "reviewer": "auto-grader-v1",
-            "reviewDate": "2026-03-21",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -2439,7 +2439,7 @@
             "densityMatch": null,
             "overallGrade": "pass",
             "reviewer": "auto-grader-v1",
-            "reviewDate": "2026-03-21",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -2462,7 +2462,7 @@
             "densityMatch": null,
             "overallGrade": "pass",
             "reviewer": "auto-grader-v1",
-            "reviewDate": "2026-03-21",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -2485,7 +2485,7 @@
             "densityMatch": null,
             "overallGrade": "pass",
             "reviewer": "auto-grader-v1",
-            "reviewDate": "2026-03-21",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -2508,7 +2508,7 @@
             "densityMatch": null,
             "overallGrade": "pass",
             "reviewer": "auto-grader-v1",
-            "reviewDate": "2026-03-21",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -2531,7 +2531,7 @@
             "densityMatch": null,
             "overallGrade": "pass",
             "reviewer": "auto-grader-v1",
-            "reviewDate": "2026-03-21",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -2554,7 +2554,7 @@
             "densityMatch": null,
             "overallGrade": "pass",
             "reviewer": "auto-grader-v1",
-            "reviewDate": "2026-03-21",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -2577,7 +2577,7 @@
             "densityMatch": null,
             "overallGrade": "pass",
             "reviewer": "auto-grader-v1",
-            "reviewDate": "2026-03-21",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -2600,7 +2600,7 @@
             "densityMatch": null,
             "overallGrade": "pass",
             "reviewer": "auto-grader-v1",
-            "reviewDate": "2026-03-21",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -2624,7 +2624,7 @@
             "densityMatch": null,
             "overallGrade": "pass",
             "reviewer": "auto-grader-v1",
-            "reviewDate": "2026-03-21",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -2647,7 +2647,7 @@
             "densityMatch": null,
             "overallGrade": "pass",
             "reviewer": "auto-grader-v1",
-            "reviewDate": "2026-03-21",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -2671,7 +2671,7 @@
             "densityMatch": null,
             "overallGrade": "pass",
             "reviewer": "auto-grader-v1",
-            "reviewDate": "2026-03-21",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -2694,7 +2694,7 @@
             "densityMatch": null,
             "overallGrade": "pass",
             "reviewer": "auto-grader-v1",
-            "reviewDate": "2026-03-21",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -2718,7 +2718,7 @@
             "densityMatch": null,
             "overallGrade": "pass",
             "reviewer": "auto-grader-v1",
-            "reviewDate": "2026-03-21",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -2741,7 +2741,7 @@
             "densityMatch": null,
             "overallGrade": "pass",
             "reviewer": "auto-grader-v1",
-            "reviewDate": "2026-03-21",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -2764,7 +2764,7 @@
             "densityMatch": null,
             "overallGrade": "pass",
             "reviewer": "auto-grader-v1",
-            "reviewDate": "2026-03-21",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -2787,7 +2787,7 @@
             "densityMatch": null,
             "overallGrade": "pass",
             "reviewer": "auto-grader-v1",
-            "reviewDate": "2026-03-21",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -2810,7 +2810,7 @@
             "densityMatch": null,
             "overallGrade": "pass",
             "reviewer": "auto-grader-v1",
-            "reviewDate": "2026-03-21",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         }
@@ -2835,7 +2835,7 @@
             "densityMatch": null,
             "overallGrade": "pass",
             "reviewer": "auto-grader-v1",
-            "reviewDate": "2026-03-21",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -2859,7 +2859,7 @@
             "densityMatch": null,
             "overallGrade": "pass",
             "reviewer": "auto-grader-v1",
-            "reviewDate": "2026-03-21",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -2882,7 +2882,7 @@
             "densityMatch": null,
             "overallGrade": "pass",
             "reviewer": "auto-grader-v1",
-            "reviewDate": "2026-03-21",
+            "reviewDate": "2026-06-27",
             "notes": ""
           }
         },
@@ -2923,13 +2923,13 @@
             "paletteCompliance": "pass",
             "outlineWeight": "pass",
             "ditherQuality": "pass",
-            "shadowConsistency": "pass",
+            "shadowConsistency": null,
             "historicalAccuracy": null,
             "densityMatch": null,
             "overallGrade": "pass",
-            "reviewer": "auto-grader-v1-override",
-            "reviewDate": "2026-03-21",
-            "notes": "Shadow direction scoring not applicable to flying bird animation. Shadow check overridden — seagull is an atmospheric element, not a ground-anchored object."
+            "reviewer": "auto-grader-v1",
+            "reviewDate": "2026-06-27",
+            "notes": ""
           }
         },
         "flag-wave": {
@@ -2977,7 +2977,7 @@
           "densityMatch": null,
           "overallGrade": "pass",
           "reviewer": "auto-grader-v1",
-          "reviewDate": "2026-03-21",
+          "reviewDate": "2026-06-27",
           "notes": ""
         }
       },
@@ -3000,7 +3000,7 @@
           "densityMatch": null,
           "overallGrade": "pass",
           "reviewer": "auto-grader-v1",
-          "reviewDate": "2026-03-21",
+          "reviewDate": "2026-06-27",
           "notes": ""
         }
       },
@@ -3023,7 +3023,7 @@
           "densityMatch": null,
           "overallGrade": "pass",
           "reviewer": "auto-grader-v1",
-          "reviewDate": "2026-03-21",
+          "reviewDate": "2026-06-27",
           "notes": ""
         }
       },
@@ -3041,12 +3041,12 @@
           "paletteCompliance": null,
           "outlineWeight": "pass",
           "ditherQuality": "pass",
-          "shadowConsistency": null,
+          "shadowConsistency": "pass",
           "historicalAccuracy": null,
           "densityMatch": null,
           "overallGrade": "pass",
           "reviewer": "auto-grader-v1",
-          "reviewDate": "2026-03-21",
+          "reviewDate": "2026-06-27",
           "notes": ""
         }
       },
@@ -3069,7 +3069,7 @@
           "densityMatch": null,
           "overallGrade": "pass",
           "reviewer": "auto-grader-v1",
-          "reviewDate": "2026-03-21",
+          "reviewDate": "2026-06-27",
           "notes": ""
         }
       },
@@ -3087,12 +3087,12 @@
           "paletteCompliance": null,
           "outlineWeight": "pass",
           "ditherQuality": "pass",
-          "shadowConsistency": null,
+          "shadowConsistency": "pass",
           "historicalAccuracy": null,
           "densityMatch": null,
           "overallGrade": "pass",
           "reviewer": "auto-grader-v1",
-          "reviewDate": "2026-03-21",
+          "reviewDate": "2026-06-27",
           "notes": ""
         }
       },
@@ -3110,12 +3110,12 @@
           "paletteCompliance": null,
           "outlineWeight": "pass",
           "ditherQuality": "pass",
-          "shadowConsistency": null,
+          "shadowConsistency": "pass",
           "historicalAccuracy": null,
           "densityMatch": null,
           "overallGrade": "pass",
           "reviewer": "auto-grader-v1",
-          "reviewDate": "2026-03-21",
+          "reviewDate": "2026-06-27",
           "notes": ""
         }
       },
@@ -3133,12 +3133,12 @@
           "paletteCompliance": null,
           "outlineWeight": "pass",
           "ditherQuality": "pass",
-          "shadowConsistency": null,
+          "shadowConsistency": "pass",
           "historicalAccuracy": null,
           "densityMatch": null,
           "overallGrade": "pass",
           "reviewer": "auto-grader-v1",
-          "reviewDate": "2026-03-21",
+          "reviewDate": "2026-06-27",
           "notes": ""
         }
       },
@@ -3161,7 +3161,7 @@
           "densityMatch": null,
           "overallGrade": "pass",
           "reviewer": "auto-grader-v1",
-          "reviewDate": "2026-03-21",
+          "reviewDate": "2026-06-27",
           "notes": ""
         }
       },
@@ -3184,7 +3184,7 @@
           "densityMatch": null,
           "overallGrade": "pass",
           "reviewer": "auto-grader-v1",
-          "reviewDate": "2026-03-21",
+          "reviewDate": "2026-06-27",
           "notes": ""
         }
       },
@@ -3207,7 +3207,7 @@
           "densityMatch": null,
           "overallGrade": "pass",
           "reviewer": "auto-grader-v1",
-          "reviewDate": "2026-03-21",
+          "reviewDate": "2026-06-27",
           "notes": ""
         }
       },
@@ -3230,7 +3230,7 @@
           "densityMatch": null,
           "overallGrade": "pass",
           "reviewer": "auto-grader-v1",
-          "reviewDate": "2026-03-21",
+          "reviewDate": "2026-06-27",
           "notes": ""
         }
       },
@@ -3248,12 +3248,12 @@
           "paletteCompliance": null,
           "outlineWeight": "pass",
           "ditherQuality": "pass",
-          "shadowConsistency": null,
+          "shadowConsistency": "pass",
           "historicalAccuracy": null,
           "densityMatch": null,
           "overallGrade": "pass",
           "reviewer": "auto-grader-v1",
-          "reviewDate": "2026-03-21",
+          "reviewDate": "2026-06-27",
           "notes": ""
         }
       },
@@ -3276,7 +3276,7 @@
           "densityMatch": null,
           "overallGrade": "pass",
           "reviewer": "auto-grader-v1",
-          "reviewDate": "2026-03-21",
+          "reviewDate": "2026-06-27",
           "notes": ""
         }
       }
@@ -3290,20 +3290,20 @@
           "u8-building-facade"
         ],
         "historicalNotes": "Title screen vista derived from an 18th-century Portuguese landscape/city view, Vista do Terreiro do Paço, preserving the old-painted panorama rather than using a map crop.",
-        "status": "tune",
+        "status": "keep",
         "wave": 3,
         "gradeCard": {
           "silhouetteClarity": null,
           "paletteCompliance": null,
-          "outlineWeight": null,
-          "ditherQuality": null,
-          "shadowConsistency": null,
+          "outlineWeight": "pass",
+          "ditherQuality": "pass",
+          "shadowConsistency": "pass",
           "historicalAccuracy": null,
           "densityMatch": null,
-          "overallGrade": null,
-          "reviewer": null,
-          "reviewDate": null,
-          "notes": "Rebuilt from period source art; needs a fresh style grade after screen-in-context review."
+          "overallGrade": "pass",
+          "reviewer": "auto-grader-v1",
+          "reviewDate": "2026-06-27",
+          "notes": ""
         }
       },
       "scene-loading-ribeira": {
@@ -3314,20 +3314,20 @@
           "u8-building-facade"
         ],
         "historicalNotes": "Loading screen derived from an 18th-century Portuguese view of the Ribeira Palace and square in Lisbon, used as proper Portuguese landscape/cityscape art rather than cartographic source material.",
-        "status": "tune",
+        "status": "keep",
         "wave": 3,
         "gradeCard": {
           "silhouetteClarity": null,
           "paletteCompliance": null,
-          "outlineWeight": null,
-          "ditherQuality": null,
-          "shadowConsistency": null,
+          "outlineWeight": "pass",
+          "ditherQuality": "pass",
+          "shadowConsistency": "pass",
           "historicalAccuracy": null,
           "densityMatch": null,
-          "overallGrade": null,
-          "reviewer": null,
-          "reviewDate": null,
-          "notes": "New sourced loading backdrop; needs a fresh style grade after screen-in-context review."
+          "overallGrade": "pass",
+          "reviewer": "auto-grader-v1",
+          "reviewDate": "2026-06-27",
+          "notes": ""
         }
       },
       "scene-a-famosa": {
@@ -3344,14 +3344,14 @@
           "silhouetteClarity": null,
           "paletteCompliance": null,
           "outlineWeight": "pass",
-          "ditherQuality": "fail",
+          "ditherQuality": "pass",
           "shadowConsistency": "fail",
           "historicalAccuracy": null,
           "densityMatch": null,
           "overallGrade": "fail",
           "reviewer": "auto-grader-v1",
-          "reviewDate": "2026-03-21",
-          "notes": "dither: gradient ratio 0.719 exceeds 0.05; shadow: SE score 0.25"
+          "reviewDate": "2026-06-27",
+          "notes": "shadow: SE score 0.03"
         }
       },
       "scene-a-famosa-dawn": {
@@ -3361,20 +3361,20 @@
           "u8-environment-overview"
         ],
         "historicalNotes": "A Famosa at dawn, warm golden light from the east over the Strait of Melaka.",
-        "status": "replace",
+        "status": "keep",
         "wave": 3,
         "gradeCard": {
           "silhouetteClarity": null,
           "paletteCompliance": null,
           "outlineWeight": "pass",
-          "ditherQuality": "fail",
-          "shadowConsistency": "fail",
+          "ditherQuality": "pass",
+          "shadowConsistency": "pass",
           "historicalAccuracy": null,
           "densityMatch": null,
-          "overallGrade": "fail",
+          "overallGrade": "pass",
           "reviewer": "auto-grader-v1",
-          "reviewDate": "2026-03-21",
-          "notes": "dither: gradient ratio 3.369 exceeds 0.05; shadow: SE score 0.21"
+          "reviewDate": "2026-06-27",
+          "notes": ""
         }
       },
       "scene-a-famosa-dusk": {
@@ -3384,20 +3384,20 @@
           "u8-environment-overview"
         ],
         "historicalNotes": "A Famosa at dusk, orange and purple sky as the sun sets behind the peninsula.",
-        "status": "replace",
+        "status": "keep",
         "wave": 3,
         "gradeCard": {
           "silhouetteClarity": null,
           "paletteCompliance": null,
           "outlineWeight": "pass",
-          "ditherQuality": "fail",
-          "shadowConsistency": "fail",
+          "ditherQuality": "pass",
+          "shadowConsistency": "pass",
           "historicalAccuracy": null,
           "densityMatch": null,
-          "overallGrade": "fail",
+          "overallGrade": "pass",
           "reviewer": "auto-grader-v1",
-          "reviewDate": "2026-03-21",
-          "notes": "dither: gradient ratio 2.383 exceeds 0.05; shadow: SE score 0.25"
+          "reviewDate": "2026-06-27",
+          "notes": ""
         }
       },
       "scene-a-famosa-night": {
@@ -3414,13 +3414,13 @@
           "paletteCompliance": null,
           "outlineWeight": "pass",
           "ditherQuality": "fail",
-          "shadowConsistency": "pass",
+          "shadowConsistency": null,
           "historicalAccuracy": null,
           "densityMatch": null,
           "overallGrade": "fail",
           "reviewer": "auto-grader-v1",
-          "reviewDate": "2026-03-21",
-          "notes": "dither: gradient ratio 5.667 exceeds 0.05"
+          "reviewDate": "2026-06-27",
+          "notes": "dither: gradient ratio 0.085 exceeds 0.05"
         }
       },
       "scene-rua-direita": {
@@ -3437,14 +3437,14 @@
           "silhouetteClarity": null,
           "paletteCompliance": null,
           "outlineWeight": "pass",
-          "ditherQuality": "fail",
-          "shadowConsistency": "pass",
+          "ditherQuality": "pass",
+          "shadowConsistency": "fail",
           "historicalAccuracy": null,
           "densityMatch": null,
           "overallGrade": "fail",
           "reviewer": "auto-grader-v1",
-          "reviewDate": "2026-03-21",
-          "notes": "dither: gradient ratio 2.959 exceeds 0.05"
+          "reviewDate": "2026-06-27",
+          "notes": "shadow: SE score 0.00"
         }
       },
       "scene-rua-direita-dawn": {
@@ -3454,20 +3454,20 @@
           "u8-environment-overview"
         ],
         "historicalNotes": "Rua Direita at dawn as merchants open stalls and early traders arrive.",
-        "status": "replace",
+        "status": "keep",
         "wave": 3,
         "gradeCard": {
           "silhouetteClarity": null,
           "paletteCompliance": null,
           "outlineWeight": "pass",
-          "ditherQuality": "fail",
-          "shadowConsistency": "partial",
+          "ditherQuality": "pass",
+          "shadowConsistency": "pass",
           "historicalAccuracy": null,
           "densityMatch": null,
-          "overallGrade": "fail",
+          "overallGrade": "pass",
           "reviewer": "auto-grader-v1",
-          "reviewDate": "2026-03-21",
-          "notes": "dither: gradient ratio 4.719 exceeds 0.05; shadow: SE score 0.37"
+          "reviewDate": "2026-06-27",
+          "notes": ""
         }
       },
       "scene-rua-direita-dusk": {
@@ -3489,8 +3489,8 @@
           "densityMatch": null,
           "overallGrade": "fail",
           "reviewer": "auto-grader-v1",
-          "reviewDate": "2026-03-21",
-          "notes": "dither: gradient ratio 4.648 exceeds 0.05"
+          "reviewDate": "2026-06-27",
+          "notes": "dither: gradient ratio 0.831 exceeds 0.05"
         }
       },
       "scene-rua-direita-night": {
@@ -3507,13 +3507,13 @@
           "paletteCompliance": null,
           "outlineWeight": "pass",
           "ditherQuality": "fail",
-          "shadowConsistency": "pass",
+          "shadowConsistency": null,
           "historicalAccuracy": null,
           "densityMatch": null,
           "overallGrade": "fail",
           "reviewer": "auto-grader-v1",
-          "reviewDate": "2026-03-21",
-          "notes": "dither: gradient ratio 4.972 exceeds 0.05"
+          "reviewDate": "2026-06-27",
+          "notes": "dither: gradient ratio 0.757 exceeds 0.05"
         }
       },
       "scene-st-pauls": {
@@ -3524,20 +3524,20 @@
           "u8-building-facade"
         ],
         "historicalNotes": "St. Paul's Church atop Bukit Melaka, a stone chapel built by the Portuguese with panoramic views of the strait.",
-        "status": "replace",
+        "status": "tune",
         "wave": 3,
         "gradeCard": {
           "silhouetteClarity": null,
           "paletteCompliance": null,
           "outlineWeight": "pass",
-          "ditherQuality": "fail",
-          "shadowConsistency": "pass",
+          "ditherQuality": "pass",
+          "shadowConsistency": "partial",
           "historicalAccuracy": null,
           "densityMatch": null,
-          "overallGrade": "fail",
+          "overallGrade": "partial",
           "reviewer": "auto-grader-v1",
-          "reviewDate": "2026-03-21",
-          "notes": "dither: gradient ratio 2.583 exceeds 0.05"
+          "reviewDate": "2026-06-27",
+          "notes": "shadow: SE score 0.41"
         }
       },
       "scene-st-pauls-dawn": {
@@ -3552,15 +3552,15 @@
         "gradeCard": {
           "silhouetteClarity": null,
           "paletteCompliance": null,
-          "outlineWeight": "pass",
-          "ditherQuality": "fail",
+          "outlineWeight": "fail",
+          "ditherQuality": "pass",
           "shadowConsistency": "pass",
           "historicalAccuracy": null,
           "densityMatch": null,
           "overallGrade": "fail",
           "reviewer": "auto-grader-v1",
-          "reviewDate": "2026-03-21",
-          "notes": "dither: gradient ratio 5.057 exceeds 0.05"
+          "reviewDate": "2026-06-27",
+          "notes": "outline: AA ratio 0.407 exceeds 0.02"
         }
       },
       "scene-st-pauls-dusk": {
@@ -3575,15 +3575,15 @@
         "gradeCard": {
           "silhouetteClarity": null,
           "paletteCompliance": null,
-          "outlineWeight": "pass",
-          "ditherQuality": "fail",
-          "shadowConsistency": "partial",
+          "outlineWeight": "fail",
+          "ditherQuality": "pass",
+          "shadowConsistency": "fail",
           "historicalAccuracy": null,
           "densityMatch": null,
           "overallGrade": "fail",
           "reviewer": "auto-grader-v1",
-          "reviewDate": "2026-03-21",
-          "notes": "dither: gradient ratio 4.878 exceeds 0.05; shadow: SE score 0.31"
+          "reviewDate": "2026-06-27",
+          "notes": "outline: AA ratio 0.407 exceeds 0.02; shadow: SE score 0.24"
         }
       },
       "scene-st-pauls-night": {
@@ -3598,15 +3598,15 @@
         "gradeCard": {
           "silhouetteClarity": null,
           "paletteCompliance": null,
-          "outlineWeight": "pass",
+          "outlineWeight": "fail",
           "ditherQuality": "fail",
-          "shadowConsistency": "pass",
+          "shadowConsistency": null,
           "historicalAccuracy": null,
           "densityMatch": null,
           "overallGrade": "fail",
           "reviewer": "auto-grader-v1",
-          "reviewDate": "2026-03-21",
-          "notes": "dither: gradient ratio 6.163 exceeds 0.05"
+          "reviewDate": "2026-06-27",
+          "notes": "outline: AA ratio 0.407 exceeds 0.02; dither: gradient ratio 0.163 exceeds 0.05"
         }
       },
       "scene-waterfront": {
@@ -3617,20 +3617,20 @@
           "u8-building-facade"
         ],
         "historicalNotes": "The Waterfront Quay, where Portuguese carracks, Malay prahu, Arab dhows, and Chinese junks crowd the harbor.",
-        "status": "replace",
+        "status": "keep",
         "wave": 3,
         "gradeCard": {
           "silhouetteClarity": null,
           "paletteCompliance": null,
           "outlineWeight": "pass",
-          "ditherQuality": "fail",
+          "ditherQuality": "pass",
           "shadowConsistency": "pass",
           "historicalAccuracy": null,
           "densityMatch": null,
-          "overallGrade": "fail",
+          "overallGrade": "pass",
           "reviewer": "auto-grader-v1",
-          "reviewDate": "2026-03-21",
-          "notes": "dither: gradient ratio 5.644 exceeds 0.05"
+          "reviewDate": "2026-06-27",
+          "notes": ""
         }
       },
       "scene-waterfront-dawn": {
@@ -3640,20 +3640,20 @@
           "u8-environment-overview"
         ],
         "historicalNotes": "Waterfront at dawn, fishing boats returning with the night's catch.",
-        "status": "replace",
+        "status": "keep",
         "wave": 3,
         "gradeCard": {
           "silhouetteClarity": null,
           "paletteCompliance": null,
           "outlineWeight": "pass",
-          "ditherQuality": "fail",
+          "ditherQuality": "pass",
           "shadowConsistency": "pass",
           "historicalAccuracy": null,
           "densityMatch": null,
-          "overallGrade": "fail",
+          "overallGrade": "pass",
           "reviewer": "auto-grader-v1",
-          "reviewDate": "2026-03-21",
-          "notes": "dither: gradient ratio 3.311 exceeds 0.05"
+          "reviewDate": "2026-06-27",
+          "notes": ""
         }
       },
       "scene-waterfront-dusk": {
@@ -3663,20 +3663,20 @@
           "u8-environment-overview"
         ],
         "historicalNotes": "Waterfront at dusk, ships' masts silhouetted against the darkening sky.",
-        "status": "replace",
+        "status": "keep",
         "wave": 3,
         "gradeCard": {
           "silhouetteClarity": null,
           "paletteCompliance": null,
           "outlineWeight": "pass",
-          "ditherQuality": "fail",
+          "ditherQuality": "pass",
           "shadowConsistency": "pass",
           "historicalAccuracy": null,
           "densityMatch": null,
-          "overallGrade": "fail",
+          "overallGrade": "pass",
           "reviewer": "auto-grader-v1",
-          "reviewDate": "2026-03-21",
-          "notes": "dither: gradient ratio 3.391 exceeds 0.05"
+          "reviewDate": "2026-06-27",
+          "notes": ""
         }
       },
       "scene-waterfront-night": {
@@ -3693,13 +3693,13 @@
           "paletteCompliance": null,
           "outlineWeight": "pass",
           "ditherQuality": "fail",
-          "shadowConsistency": "pass",
+          "shadowConsistency": null,
           "historicalAccuracy": null,
           "densityMatch": null,
           "overallGrade": "fail",
           "reviewer": "auto-grader-v1",
-          "reviewDate": "2026-03-21",
-          "notes": "dither: gradient ratio 3.809 exceeds 0.05"
+          "reviewDate": "2026-06-27",
+          "notes": "dither: gradient ratio 1.031 exceeds 0.05"
         }
       },
       "scene-kampung": {
@@ -3716,15 +3716,15 @@
         "gradeCard": {
           "silhouetteClarity": null,
           "paletteCompliance": null,
-          "outlineWeight": "fail",
-          "ditherQuality": "fail",
-          "shadowConsistency": "partial",
+          "outlineWeight": "pass",
+          "ditherQuality": "pass",
+          "shadowConsistency": "fail",
           "historicalAccuracy": null,
           "densityMatch": null,
           "overallGrade": "fail",
           "reviewer": "auto-grader-v1",
-          "reviewDate": "2026-03-21",
-          "notes": "outline: AA ratio 0.067 exceeds 0.02; dither: gradient ratio 1.402 exceeds 0.05; shadow: SE score 0.45"
+          "reviewDate": "2026-06-27",
+          "notes": "shadow: SE score 0.26"
         }
       },
       "scene-kampung-dawn": {
@@ -3734,20 +3734,20 @@
           "u8-environment-overview"
         ],
         "historicalNotes": "Kampung at dawn, mist rising from the river and early cooking smoke.",
-        "status": "replace",
+        "status": "keep",
         "wave": 3,
         "gradeCard": {
           "silhouetteClarity": null,
           "paletteCompliance": null,
-          "outlineWeight": "fail",
-          "ditherQuality": "fail",
-          "shadowConsistency": null,
+          "outlineWeight": "pass",
+          "ditherQuality": "pass",
+          "shadowConsistency": "pass",
           "historicalAccuracy": null,
           "densityMatch": null,
-          "overallGrade": "fail",
+          "overallGrade": "pass",
           "reviewer": "auto-grader-v1",
-          "reviewDate": "2026-03-21",
-          "notes": "outline: AA ratio 0.067 exceeds 0.02; dither: gradient ratio 4.980 exceeds 0.05"
+          "reviewDate": "2026-06-27",
+          "notes": ""
         }
       },
       "scene-kampung-dusk": {
@@ -3757,20 +3757,20 @@
           "u8-environment-overview"
         ],
         "historicalNotes": "Kampung at dusk, warm light through bamboo walls as families gather.",
-        "status": "replace",
+        "status": "tune",
         "wave": 3,
         "gradeCard": {
           "silhouetteClarity": null,
           "paletteCompliance": null,
-          "outlineWeight": "fail",
-          "ditherQuality": "fail",
-          "shadowConsistency": "pass",
+          "outlineWeight": "pass",
+          "ditherQuality": "pass",
+          "shadowConsistency": "partial",
           "historicalAccuracy": null,
           "densityMatch": null,
-          "overallGrade": "fail",
+          "overallGrade": "partial",
           "reviewer": "auto-grader-v1",
-          "reviewDate": "2026-03-21",
-          "notes": "outline: AA ratio 0.067 exceeds 0.02; dither: gradient ratio 3.909 exceeds 0.05"
+          "reviewDate": "2026-06-27",
+          "notes": "shadow: SE score 0.59"
         }
       },
       "scene-kampung-night": {
@@ -3780,20 +3780,20 @@
           "u8-environment-overview"
         ],
         "historicalNotes": "Kampung at night, firefly light and distant oil lamps in the tropical darkness.",
-        "status": "replace",
+        "status": "keep",
         "wave": 3,
         "gradeCard": {
           "silhouetteClarity": null,
           "paletteCompliance": null,
-          "outlineWeight": "fail",
-          "ditherQuality": "fail",
-          "shadowConsistency": "pass",
+          "outlineWeight": "pass",
+          "ditherQuality": "pass",
+          "shadowConsistency": null,
           "historicalAccuracy": null,
           "densityMatch": null,
-          "overallGrade": "fail",
+          "overallGrade": "pass",
           "reviewer": "auto-grader-v1",
-          "reviewDate": "2026-03-21",
-          "notes": "outline: AA ratio 0.067 exceeds 0.02; dither: gradient ratio 9.439 exceeds 0.05"
+          "reviewDate": "2026-06-27",
+          "notes": ""
         }
       }
     }

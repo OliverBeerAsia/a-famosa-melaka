@@ -6,33 +6,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **A Famosa: Streets of Golden Melaka** is a small, atmospheric adventure RPG inspired by Ultima VII, set in Portuguese Melaka circa 1580. The game features pixel-art graphics (320×180 base resolution), ¾ top-down isometric perspective, and focuses on exploration, NPC interaction, and story-driven quests in a historically-inspired setting.
 
-## Project Structure
-
-```
-melaka-rpg/
-├── assets/
-│   ├── sprites/       # Character, tile, object, and UI sprites
-│   ├── audio/         # Music tracks and sound effects
-│   └── maps/          # Tiled map files (JSON export)
-├── src/
-│   ├── scenes/        # Game scenes (menu, gameplay, etc.)
-│   ├── entities/      # Player, NPCs, interactive objects
-│   ├── systems/       # Core systems (dialogue, inventory, time)
-│   ├── ui/            # UI components and HUD
-│   └── data/          # JSON data files (NPCs, quests, items)
-└── docs/              # Design docs, lore, art bible
-```
-
 ## Technology Stack
 
-- **Engine**: Phaser 3 with React UI layer (TypeScript)
-- **Build System**: Vite with hot reload
-- **State Management**: Zustand stores
-- **Styling**: Tailwind CSS
-- **Tilemap Editor**: Tiled (export to JSON)
-- **Art Tools**: Aseprite for sprites and tiles
 - **Graphics Production**: Claude-managed — procedural code engine (`tools/ultima8-graphics/*`) for the gameplay kit + Canva MCP for scene plates. **No external image-generation API keys** (no Gemini/OpenAI). Claude/Anthropic has no native image generation.
-- **Audio Tools**: Audacity (SFX), LMMS/FamiStudio (chiptune music)
 
 ## Resolution & Scaling Architecture
 
@@ -51,7 +27,7 @@ melaka-rpg/
 - **Current implementation** uses 960×540 canvas with 3× scaled characters
 - **Shipping world is the painted PLATE, not the isometric tilemap** — as of v0.10.0 all 5 locations ship in `legacy-backdrop` mode: a per-location painted background plate with the player, NPCs, props, and items composited on top as Y-sorted sprites (Ultima VII-style overlap). The isometric tilemap renderer (`src/phaser/systems/IsometricRenderer.ts`) still exists but is no longer the shipping gameplay path.
 - **Plates are pixelated to native 320×180 then nearest-upscaled to 960×540** so the background's pixel grid matches the 3×-scaled sprites — one cohesive chunky pixel-art look, 0% off-palette, no anti-aliasing.
-- **`runtimeMode`** per location lives in `src/data/location-scenes.json` (all set to `"legacy-backdrop"`).
+- **`runtimeMode`** per location lives in `src/data/locations/<id>.location.json` under `plate.runtimeMode` (all set to `"legacy-backdrop"`). BootScene skips the iso tilemaps/tile textures entirely while no location is `"isometric"`.
 - **CHARACTER_SCALE constant** in `src/phaser/game.ts` controls sprite scaling
 
 ### Scene Plate Pipeline
@@ -63,7 +39,7 @@ melaka-rpg/
 - Unified `worldDepth(y)` Y-sorting applies to player, NPCs, props, and items in both modes (`GameScene.ts`, `EnvironmentObjectSystem.ts`), clamped below the FX/UI depth bands (~800 / ~1001).
 
 ### Spawns & Collision (legacy-backdrop)
-- In legacy mode, `playerStart` and `npcPositions` in `location-scenes.json` are PIXEL coordinates (not tile coords).
+- **ALL** per-location coordinates are authored in NATIVE 320x180 plate pixels in `src/data/locations/<id>.location.json` and multiplied by `world.scale` (3) exactly once, in `src/phaser/core/LocationData.ts`. Never scale again downstream.
 - Each plate defines perimeter `collisionRects`, plus water-edge collision for the waterfront and kampung.
 - Location transitions use an on-screen pixel `triggerArea` + `spawnAt`.
 
@@ -76,23 +52,18 @@ New character/NPC sprites should be:
 ### Key Files
 - `src/phaser/game.ts` - Contains `CHARACTER_SCALE = 3` constant
 - `src/phaser/scenes/GameScene.ts` - Applies scaling + `worldDepth(y)` Y-sorting to player/NPCs
-- `src/phaser/systems/EnvironmentObjectSystem.ts` - `placeStaticObjects` composites props; uses `legacyProps` when present (skips iso-grid `clusters`)
+- `src/phaser/systems/EnvironmentObjectSystem.ts` - `placeStaticObjects` composites props from the location file's `props` array (skips iso-grid `clusters` unless running isometric)
 - `src/phaser/systems/IsometricRenderer.ts` - Iso tilemap renderer (exists, not the shipping path)
-- `src/data/location-scenes.json` - `runtimeMode`, pixel `playerStart`/`npcPositions`, `collisionRects`, `triggerArea`/`spawnAt`
-- `src/data/environment-objects.json` - Per-location `legacyProps` array (pixel-positioned prop sprites, ~2× scale)
+- `src/data/locations/<id>.location.json` - THE per-location source of truth: plate/variants/`runtimeMode`, `collision.rects`, `spawns.player`, `npcs`, `transitions`, `props`, `animatedProps`, `lights`, `fires`, `audio`, `visual`, `crowd`, `items`, `loreObjects` — all in native 320x180 px
+- `src/phaser/core/LocationData.ts` - loader/validator/native->world transform + typed accessors
+- `src/phaser/core/depth.ts` - `worldDepth(y)` + the depth-band constants (world <800, FX 800-1000, UI 1001+)
+- `tools/validate-location-data.cjs` - pretest/prebuild gate: every coordinate on-plate, every sprite/audio key real, transitions paired
+- `tools/migrate-location-data.cjs` - one-shot codemod that built the above from the pre-Stage-1 sources (see `tools/migration-report.md`)
+- `src/data/environment-objects.json` - Iso-grid `clusters` only (isometric authoring source; the shipping prop layout lives in the location files)
 - `tools/post-process-scene.cjs` - Scene quantizer/dither/pixelate (`--pixelate`, `--spread`, `--dither`)
 - `tools/canva-sources/MANIFEST.json` - Plate provenance and master exports
 
 ## Core Architecture
-
-### Game Systems
-
-1. **Exploration System**: Free movement through interconnected screens with collision detection
-2. **Interaction System**: Click-to-interact with objects, NPCs, and environment
-3. **Dialogue System**: Keyword-based or branching dialogue trees
-4. **Inventory System**: Pick up, combine, examine, and use items
-5. **Time System**: Day/night cycle affecting NPC schedules and availability
-6. **Journal System**: Auto-logs quests, rumors, and important discoveries
 
 ### Key Design Patterns
 
@@ -160,9 +131,7 @@ Every system, feature, and asset should enhance immersion. Environmental detail,
 
 1. **Immersion Over Features**: A small, deeply atmospheric world beats a large, shallow one
 2. **Test Assets In-Engine Early**: Don't perfect sprites in isolation; iterate in context
-3. **Sound Is Half the Experience**: Audio implementation is not an afterthought
-4. **Modular and Readable Code**: Clear naming, generous comments, separated systems
-5. **Placeholder → Iterate**: Get working placeholders first, then refine toward final quality
+3. **Placeholder → Iterate**: Get working placeholders first, then refine toward final quality
 
 ## Important Context
 

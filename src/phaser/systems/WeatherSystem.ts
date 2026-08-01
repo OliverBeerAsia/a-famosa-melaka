@@ -387,6 +387,9 @@ export class WeatherSystem {
     );
     this.heatShimmerOverlay.setDepth(850);
     this.heatShimmerOverlay.setBlendMode('ADD');
+    // Full-screen weather sheets are SCREEN space: sized to the viewport, they
+    // would only cover the left third of a scrolling world otherwise.
+    this.heatShimmerOverlay.setScrollFactor(0);
 
     this.shimmerLines = [];
     for (let i = 0; i < 5; i++) {
@@ -398,6 +401,7 @@ export class WeatherSystem {
       );
       line.setDepth(851);
       line.setBlendMode('ADD');
+      line.setScrollFactor(0);
       this.shimmerLines.push(line);
     }
   }
@@ -459,6 +463,7 @@ export class WeatherSystem {
     );
     this.rainOverlay.setDepth(899);
     this.rainOverlay.setBlendMode('MULTIPLY');
+    this.rainOverlay.setScrollFactor(0);
   }
 
   // ---------------------------------------------------------------------------

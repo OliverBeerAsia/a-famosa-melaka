@@ -352,7 +352,7 @@ function generateSeagullFlyby() {
       const wy = Math.round(bodyCY + wing.tipDY * t);
       if (wx >= 0 && wy >= 0 && wy < frameH) {
         // Wing tip uses darker color
-        const color = i >= 4 ? wingTip[4] : body[5];
+        const color = i >= 4 ? wingTip[5] : body[5];
         setPixel(ctx, ox + wx, wy, color);
       }
     }
@@ -363,7 +363,7 @@ function generateSeagullFlyby() {
       const t = i / 5;
       const wy = Math.round(bodyCY + wing.tipDY * t);
       if (wx < frameW && wy >= 0 && wy < frameH) {
-        const color = i >= 4 ? wingTip[4] : body[5];
+        const color = i >= 4 ? wingTip[5] : body[5];
         setPixel(ctx, ox + wx, wy, color);
       }
     }

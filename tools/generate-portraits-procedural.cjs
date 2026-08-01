@@ -48,8 +48,16 @@ function seededRandom(x, y, seed = 0) {
 }
 
 // ---------------------------------------------------------------------------
-// Hard value-band helpers
+// Hard value-band helpers with optional Bayer dithering
 // ---------------------------------------------------------------------------
+
+const BAYER2 = [
+  [0, 2],
+  [3, 1]
+];
+function bayerOffset2(x, y) {
+  return (BAYER2[Math.floor(y) & 1][Math.floor(x) & 1] + 0.5) / 4 - 0.5;
+}
 
 /** Clamp a continuous shade value to an integer palette index 0..7. */
 function snapShade(v) {
@@ -59,11 +67,15 @@ function snapShade(v) {
 /**
  * Quantize a continuous 0..7 value into `bands` hard steps that span
  * [lo, hi] of the ramp.  Returns an integer palette index.
- * This is the core anti-mud primitive: no two-colour dithering, ever.
+ * Optionally applies a light Bayer dither to smooth the transition boundaries.
  */
-function bandShade(v, lo, hi, bands) {
+function bandShade(v, lo, hi, bands, x = null, y = null, ditherStrength = 0.52) {
   const t = Math.max(0, Math.min(1, (v - lo) / Math.max(0.0001, hi - lo)));
-  const step = Math.round(t * (bands - 1)) / (bands - 1);
+  let s = t * (bands - 1);
+  if (x !== null && y !== null) {
+    s += bayerOffset2(x, y) * ditherStrength;
+  }
+  const step = Math.round(s) / (bands - 1);
   return snapShade(lo + step * (hi - lo));
 }
 
@@ -164,10 +176,10 @@ function drawBackground(ctx, innerPalette, outerPalette) {
       let color;
       if (t < 0.55) {
         // bright centre (7) down to mid (2) across the inner ramp (6 bands)
-        color = innerPalette[bandShade(7 - (t / 0.55) * 5, 2, 7, 6)];
+        color = innerPalette[bandShade(7 - (t / 0.55) * 5, 2, 7, 6, x, y, 0.65)];
       } else {
         // mid (6) down to deep shadow (0) across the outer ramp (7 bands)
-        color = outerPalette[bandShade(6 - ((t - 0.55) / 0.45) * 6, 0, 6, 7)];
+        color = outerPalette[bandShade(6 - ((t - 0.55) / 0.45) * 6, 0, 6, 7, x, y, 0.65)];
       }
       setPixel(ctx, x, y, color);
     }
@@ -198,7 +210,7 @@ function drawHead(ctx, cx, cy, skinPalette, opts = {}) {
         // Terminator darkening near the rim so the form reads as a sphere.
         const rim = nd > 0.82 ? -0.9 : nd > 0.6 ? -0.35 : 0;
         // 6 hard bands across skin index 2..7 (0-1 reserved for outline/deep shadow)
-        const shade = bandShade(2 + (light + rim) * 5, 2, 7, 6);
+        const shade = bandShade(2 + (light + rim) * 5, 2, 7, 6, cx + dx, cy + dy, 0.52);
         setPixel(ctx, cx + dx, cy + dy, skinPalette[shade]);
       }
     }
@@ -299,8 +311,13 @@ function drawNose(ctx, cx, cy, skinPalette, opts = {}) {
   for (let dy = 0; dy < noseLength; dy++) {
     const w = Math.max(1, Math.floor(noseWidth * (0.4 + (dy / noseLength) * 0.6)));
     for (let dx = -w; dx <= w; dx++) {
-      const shade = dx < 0 ? 7 : dx > 0 ? 3 : 5; // hard 3-band
-      setPixel(ctx, cx + dx, noseTop + dy, skinPalette[shade]);
+      let shade = dx < 0 ? 7 : dx > 0 ? 3 : 5; // hard 3-band
+      let color = skinPalette[shade];
+      // Specular highlight on nose bridge (light direction is NW, so dx === -1 is optimal)
+      if (dy === Math.floor(noseLength / 2) && dx === -1) {
+        color = PALETTE.specular[5];
+      }
+      setPixel(ctx, cx + dx, noseTop + dy, color);
     }
   }
   const tipY = noseTop + noseLength;
@@ -790,7 +807,7 @@ function drawNeck(ctx, cx, cy, skinPalette) {
     for (let dx = -neckHW; dx <= neckHW; dx++) {
       // Lit left, shadow right + ambient occlusion under the jaw.
       const v = 2 + (1 - Math.abs(dx) / neckHW) * 2 - (dy - neckTop) * 0.3;
-      setPixel(ctx, cx + dx, dy, skinPalette[bandShade(v, 1, 5, 3)]);
+      setPixel(ctx, cx + dx, dy, skinPalette[bandShade(v, 1, 5, 3, cx + dx, dy, 0.45)]);
     }
   }
 }

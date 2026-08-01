@@ -1,9 +1,19 @@
-const fs = require('fs');
-const path = require('path');
+import fs from "node:fs";
+import path from "node:path";
+import { createRequire } from "node:module";
+import { fileURLToPath } from "node:url";
+
+import { loadLocationsScreenSpace } from './helpers/locations.js';
+
+const require = createRequire(import.meta.url);
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const QUEST_DIR = path.join(__dirname, '..', 'src', 'data', 'quests');
 const NPC_FILE = path.join(__dirname, '..', 'src', 'data', 'npcs.json');
 const MARKER_FILE = path.join(__dirname, '..', 'src', 'data', 'objective-markers.json');
+
+/** Max pixels a marker anchor may drift from the NPC's actual spawn position. */
+const ANCHOR_TOLERANCE = 40;
 
 const RUNTIME_NPC_LOCATIONS = {
   'mak-enang': 'kampung',
@@ -13,6 +23,14 @@ function loadQuests() {
   return fs.readdirSync(QUEST_DIR)
     .filter((file) => file.endsWith('.json') && file !== 'index.json')
     .map((file) => JSON.parse(fs.readFileSync(path.join(QUEST_DIR, file), 'utf8')));
+}
+
+function loadJSON(file) {
+  return JSON.parse(fs.readFileSync(file, 'utf8'));
+}
+
+function loadSceneLocations() {
+  return loadLocationsScreenSpace();
 }
 
 describe('Objective Marker Coverage', () => {
@@ -85,5 +103,54 @@ describe('Objective Marker Coverage', () => {
     });
 
     expect(missing).toEqual([]);
+  });
+
+  test('every NPC spawn in the unified location data has a marker anchor', () => {
+    const anchors = loadJSON(MARKER_FILE).anchors || {};
+    const locations = loadSceneLocations();
+    const missing = [];
+
+    Object.entries(locations).forEach(([locationId, location]) => {
+      Object.keys(location.npcPositions || {}).forEach((npcId) => {
+        if (!anchors[locationId] || !anchors[locationId][`npc:${npcId}`]) {
+          missing.push(`missing anchor npc:${npcId} @ ${locationId}`);
+        }
+      });
+    });
+
+    expect(missing).toEqual([]);
+  });
+
+  test('marker anchors do not drift from the NPC spawn positions they point at', () => {
+    const anchors = loadJSON(MARKER_FILE).anchors || {};
+    const locations = loadSceneLocations();
+    const drifted = [];
+
+    Object.entries(anchors).forEach(([locationId, locationAnchors]) => {
+      const spawns = (locations[locationId] || {}).npcPositions || {};
+
+      Object.entries(locationAnchors).forEach(([key, anchor]) => {
+        if (!key.startsWith('npc:')) return;
+
+        const npcId = key.slice('npc:'.length);
+        const spawn = spawns[npcId];
+
+        if (!spawn) {
+          drifted.push(`${locationId}:${key} has no matching npcPositions entry`);
+          return;
+        }
+
+        const dx = Math.abs(anchor.x - spawn.x);
+        const dy = Math.abs(anchor.y - spawn.y);
+
+        if (dx > ANCHOR_TOLERANCE || dy > ANCHOR_TOLERANCE) {
+          drifted.push(
+            `${locationId}:${key} anchor (${anchor.x},${anchor.y}) drifted from spawn (${spawn.x},${spawn.y}) by (${dx},${dy}) > ${ANCHOR_TOLERANCE}px`
+          );
+        }
+      });
+    });
+
+    expect(drifted).toEqual([]);
   });
 });

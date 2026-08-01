@@ -1,0 +1,2028 @@
+[
+  {
+    "label": "music-main",
+    "durationSec": 80,
+    "sampleRate": 44100,
+    "channels": 2,
+    "levels": {
+      "peak": 0.8809,
+      "rms": 0.2041,
+      "rmsDb": -13.8,
+      "crestDb": 12.7,
+      "dc": -0.000016
+    },
+    "seam": {
+      "seamStep": 0.110718,
+      "meanStep": 0.015631,
+      "maxStep": 0.372637,
+      "seamStepVsMean": 7.08,
+      "seamStepVsMax": 0.2971,
+      "slopeBefore": -0.029159,
+      "slopeAfter": -0.049465,
+      "headRms": 0.2575,
+      "tailRms": 0.161,
+      "rmsDeltaDb": -4.08,
+      "headCentroidHz": 1335,
+      "tailCentroidHz": 1100,
+      "centroidRatio": 0.824,
+      "jointMaxStep": 0.110718,
+      "elsewhereMaxStep": 0.224464,
+      "seamOutlierRatio": 0.49
+    },
+    "onsets": {
+      "count": 135,
+      "perSecond": 1.69,
+      "gridAlignedPct": 82,
+      "meanGridErrMs": 22,
+      "topIOIs": [
+        "0.41s x18",
+        "0.84s x15",
+        "0.42s x14",
+        "0.7s x10",
+        "0.85s x9"
+      ],
+      "ioiConcentration": 0.49
+    },
+    "structure": {
+      "centroidMeanHz": 1478,
+      "centroidSdHz": 899,
+      "centroidCv": 0.609,
+      "localCoherence": 0.753,
+      "longRangeSim": 0.671,
+      "sectionContrast": 0.082
+    },
+    "bands": {
+      "sub<120": 39.4,
+      "120-500": 43.9,
+      "500-2k": 12.4,
+      "2k-6k": 4.2,
+      "6k+": 0.1
+    },
+    "loop": true
+  },
+  {
+    "label": "music-market",
+    "durationSec": 73.846,
+    "sampleRate": 44100,
+    "channels": 2,
+    "levels": {
+      "peak": 0.8507,
+      "rms": 0.2213,
+      "rmsDb": -13.1,
+      "crestDb": 11.7,
+      "dc": -0.000519
+    },
+    "seam": {
+      "seamStep": 0.029559,
+      "meanStep": 0.027073,
+      "maxStep": 0.314486,
+      "seamStepVsMean": 1.09,
+      "seamStepVsMax": 0.094,
+      "slopeBefore": 0.030923,
+      "slopeAfter": 0.020352,
+      "headRms": 0.2132,
+      "tailRms": 0.1319,
+      "rmsDeltaDb": -4.17,
+      "headCentroidHz": 1515,
+      "tailCentroidHz": 2050,
+      "centroidRatio": 1.354,
+      "jointMaxStep": 0.087094,
+      "elsewhereMaxStep": 0.213094,
+      "seamOutlierRatio": 0.41
+    },
+    "onsets": {
+      "count": 262,
+      "perSecond": 3.55,
+      "gridAlignedPct": 97,
+      "meanGridErrMs": 12.3,
+      "topIOIs": [
+        "0.29s x143",
+        "0.28s x56",
+        "0.3s x26",
+        "0.14s x11",
+        "0.15s x7"
+      ],
+      "ioiConcentration": 0.93
+    },
+    "structure": {
+      "centroidMeanHz": 2505,
+      "centroidSdHz": 968,
+      "centroidCv": 0.386,
+      "localCoherence": 0.856,
+      "longRangeSim": 0.693,
+      "sectionContrast": 0.163
+    },
+    "bands": {
+      "sub<120": 10.6,
+      "120-500": 25.7,
+      "500-2k": 56.9,
+      "2k-6k": 6.4,
+      "6k+": 0.3
+    },
+    "loop": true
+  },
+  {
+    "label": "music-church",
+    "durationSec": 88.889,
+    "sampleRate": 44100,
+    "channels": 2,
+    "levels": {
+      "peak": 0.8895,
+      "rms": 0.3528,
+      "rmsDb": -9.05,
+      "crestDb": 8.03,
+      "dc": 0.004681
+    },
+    "seam": {
+      "seamStep": 0.04885,
+      "meanStep": 0.027831,
+      "maxStep": 0.296938,
+      "seamStepVsMean": 1.76,
+      "seamStepVsMax": 0.1645,
+      "slopeBefore": 0.047232,
+      "slopeAfter": 0.133909,
+      "headRms": 0.475,
+      "tailRms": 0.2805,
+      "rmsDeltaDb": -4.58,
+      "headCentroidHz": 1441,
+      "tailCentroidHz": 1480,
+      "centroidRatio": 1.027,
+      "jointMaxStep": 0.147413,
+      "elsewhereMaxStep": 0.214424,
+      "seamOutlierRatio": 0.69
+    },
+    "onsets": {
+      "count": 5,
+      "perSecond": 0.06,
+      "gridAlignedPct": 100,
+      "meanGridErrMs": 13.3,
+      "topIOIs": [
+        "22.22s x1",
+        "8.89s x1",
+        "13.33s x1",
+        "2.22s x1"
+      ],
+      "ioiConcentration": 1
+    },
+    "structure": {
+      "centroidMeanHz": 1318,
+      "centroidSdHz": 170,
+      "centroidCv": 0.129,
+      "localCoherence": 0.964,
+      "longRangeSim": 0.938,
+      "sectionContrast": 0.026
+    },
+    "bands": {
+      "sub<120": 1.3,
+      "120-500": 51,
+      "500-2k": 46.1,
+      "2k-6k": 1.6,
+      "6k+": 0
+    },
+    "loop": true
+  },
+  {
+    "label": "music-waterfront",
+    "durationSec": 85.714,
+    "sampleRate": 44100,
+    "channels": 2,
+    "levels": {
+      "peak": 0.8852,
+      "rms": 0.2639,
+      "rmsDb": -11.57,
+      "crestDb": 10.51,
+      "dc": 0.000262
+    },
+    "seam": {
+      "seamStep": 0.006595,
+      "meanStep": 0.017039,
+      "maxStep": 0.157961,
+      "seamStepVsMean": 0.39,
+      "seamStepVsMax": 0.0417,
+      "slopeBefore": 0.005234,
+      "slopeAfter": 0.008687,
+      "headRms": 0.1497,
+      "tailRms": 0.1256,
+      "rmsDeltaDb": -1.53,
+      "headCentroidHz": 741,
+      "tailCentroidHz": 1013,
+      "centroidRatio": 1.367,
+      "jointMaxStep": 0.016886,
+      "elsewhereMaxStep": 0.116723,
+      "seamOutlierRatio": 0.14
+    },
+    "onsets": {
+      "count": 47,
+      "perSecond": 0.55,
+      "gridAlignedPct": 43,
+      "meanGridErrMs": 47.2,
+      "topIOIs": [
+        "0.16s x6",
+        "2.07s x6",
+        "0.15s x4",
+        "2.05s x3",
+        "0.5s x2"
+      ],
+      "ioiConcentration": 0.46
+    },
+    "structure": {
+      "centroidMeanHz": 1109,
+      "centroidSdHz": 329,
+      "centroidCv": 0.296,
+      "localCoherence": 0.833,
+      "longRangeSim": 0.724,
+      "sectionContrast": 0.109
+    },
+    "bands": {
+      "sub<120": 15.9,
+      "120-500": 57.5,
+      "500-2k": 25.1,
+      "2k-6k": 1.4,
+      "6k+": 0
+    },
+    "loop": true
+  },
+  {
+    "label": "music-night",
+    "durationSec": 88,
+    "sampleRate": 44100,
+    "channels": 2,
+    "levels": {
+      "peak": 0.8884,
+      "rms": 0.2039,
+      "rmsDb": -13.81,
+      "crestDb": 12.78,
+      "dc": 0.000005
+    },
+    "seam": {
+      "seamStep": 0.077473,
+      "meanStep": 0.02084,
+      "maxStep": 0.322773,
+      "seamStepVsMean": 3.72,
+      "seamStepVsMax": 0.24,
+      "slopeBefore": 0.005976,
+      "slopeAfter": 0.036035,
+      "headRms": 0.2211,
+      "tailRms": 0.0692,
+      "rmsDeltaDb": -10.09,
+      "headCentroidHz": 1145,
+      "tailCentroidHz": 857,
+      "centroidRatio": 0.749,
+      "jointMaxStep": 0.077473,
+      "elsewhereMaxStep": 0.225904,
+      "seamOutlierRatio": 0.34
+    },
+    "onsets": {
+      "count": 53,
+      "perSecond": 0.6,
+      "gridAlignedPct": 98,
+      "meanGridErrMs": 11.7,
+      "topIOIs": [
+        "2s x9",
+        "2.01s x9",
+        "1s x5",
+        "1.5s x4",
+        "0.98s x4"
+      ],
+      "ioiConcentration": 0.6
+    },
+    "structure": {
+      "centroidMeanHz": 1272,
+      "centroidSdHz": 383,
+      "centroidCv": 0.301,
+      "localCoherence": 0.777,
+      "longRangeSim": 0.642,
+      "sectionContrast": 0.135
+    },
+    "bands": {
+      "sub<120": 21.5,
+      "120-500": 28.7,
+      "500-2k": 42.5,
+      "2k-6k": 7.2,
+      "6k+": 0
+    },
+    "loop": true
+  },
+  {
+    "label": "music-tension",
+    "durationSec": 60,
+    "sampleRate": 44100,
+    "channels": 2,
+    "levels": {
+      "peak": 0.8861,
+      "rms": 0.1621,
+      "rmsDb": -15.8,
+      "crestDb": 14.75,
+      "dc": 0.00003
+    },
+    "seam": {
+      "seamStep": 0.050266,
+      "meanStep": 0.010229,
+      "maxStep": 0.141465,
+      "seamStepVsMean": 4.91,
+      "seamStepVsMax": 0.3553,
+      "slopeBefore": 0.00328,
+      "slopeAfter": 0.01441,
+      "headRms": 0.1603,
+      "tailRms": 0.0752,
+      "rmsDeltaDb": -6.58,
+      "headCentroidHz": 714,
+      "tailCentroidHz": 885,
+      "centroidRatio": 1.241,
+      "jointMaxStep": 0.050266,
+      "elsewhereMaxStep": 0.101037,
+      "seamOutlierRatio": 0.5
+    },
+    "onsets": {
+      "count": 106,
+      "perSecond": 1.77,
+      "gridAlignedPct": 77,
+      "meanGridErrMs": 25.9,
+      "topIOIs": [
+        "0.31s x20",
+        "0.23s x13",
+        "0.63s x7",
+        "0.71s x6",
+        "0.28s x5"
+      ],
+      "ioiConcentration": 0.49
+    },
+    "structure": {
+      "centroidMeanHz": 996,
+      "centroidSdHz": 310,
+      "centroidCv": 0.312,
+      "localCoherence": 0.886,
+      "longRangeSim": 0.793,
+      "sectionContrast": 0.093
+    },
+    "bands": {
+      "sub<120": 33.5,
+      "120-500": 40.2,
+      "500-2k": 24.6,
+      "2k-6k": 1.6,
+      "6k+": 0
+    },
+    "loop": true
+  },
+  {
+    "label": "music-fortress",
+    "durationSec": 65.455,
+    "sampleRate": 44100,
+    "channels": 2,
+    "levels": {
+      "peak": 0.8866,
+      "rms": 0.3119,
+      "rmsDb": -10.12,
+      "crestDb": 9.07,
+      "dc": -0.000404
+    },
+    "seam": {
+      "seamStep": 0.017785,
+      "meanStep": 0.023532,
+      "maxStep": 0.2344,
+      "seamStepVsMean": 0.76,
+      "seamStepVsMax": 0.0759,
+      "slopeBefore": -0.003332,
+      "slopeAfter": 0.003099,
+      "headRms": 0.2512,
+      "tailRms": 0.1878,
+      "rmsDeltaDb": -2.52,
+      "headCentroidHz": 1378,
+      "tailCentroidHz": 1071,
+      "centroidRatio": 0.777,
+      "jointMaxStep": 0.053729,
+      "elsewhereMaxStep": 0.165586,
+      "seamOutlierRatio": 0.32
+    },
+    "onsets": {
+      "count": 123,
+      "perSecond": 1.88,
+      "gridAlignedPct": 98,
+      "meanGridErrMs": 11.2,
+      "topIOIs": [
+        "0.17s x19",
+        "0.34s x11",
+        "0.85s x9",
+        "0.5s x8",
+        "0.33s x8"
+      ],
+      "ioiConcentration": 0.45
+    },
+    "structure": {
+      "centroidMeanHz": 1366,
+      "centroidSdHz": 426,
+      "centroidCv": 0.311,
+      "localCoherence": 0.854,
+      "longRangeSim": 0.805,
+      "sectionContrast": 0.048
+    },
+    "bands": {
+      "sub<120": 18.5,
+      "120-500": 59,
+      "500-2k": 20,
+      "2k-6k": 2.5,
+      "6k+": 0
+    },
+    "loop": true
+  },
+  {
+    "label": "base-tropical",
+    "durationSec": 40,
+    "sampleRate": 22050,
+    "channels": 1,
+    "levels": {
+      "peak": 0.7057,
+      "rms": 0.13,
+      "rmsDb": -17.72,
+      "crestDb": 14.69,
+      "dc": 0
+    },
+    "seam": {
+      "seamStep": 0.015224,
+      "meanStep": 0.031317,
+      "maxStep": 0.35441,
+      "seamStepVsMean": 0.49,
+      "seamStepVsMax": 0.043,
+      "slopeBefore": 0.001497,
+      "slopeAfter": 0.018975,
+      "headRms": 0.1468,
+      "tailRms": 0.1493,
+      "rmsDeltaDb": 0.14,
+      "headCentroidHz": 1493,
+      "tailCentroidHz": 1650,
+      "centroidRatio": 1.105,
+      "jointMaxStep": 0.093038,
+      "elsewhereMaxStep": 0.235882,
+      "seamOutlierRatio": 0.39
+    },
+    "onsets": {
+      "count": 0,
+      "perSecond": 0,
+      "topIOIs": [],
+      "ioiConcentration": 0
+    },
+    "structure": {
+      "centroidMeanHz": 1908,
+      "centroidSdHz": 650,
+      "centroidCv": 0.341,
+      "localCoherence": 0.922,
+      "longRangeSim": 0.92,
+      "sectionContrast": 0.002
+    },
+    "bands": {
+      "sub<120": 12.6,
+      "120-500": 48.4,
+      "500-2k": 33.1,
+      "2k-6k": 5.1,
+      "6k+": 0.9
+    },
+    "loop": true
+  },
+  {
+    "label": "morning-birds",
+    "durationSec": 36,
+    "sampleRate": 22050,
+    "channels": 1,
+    "levels": {
+      "peak": 0.8468,
+      "rms": 0.13,
+      "rmsDb": -17.72,
+      "crestDb": 16.28,
+      "dc": 0
+    },
+    "seam": {
+      "seamStep": 0.031117,
+      "meanStep": 0.029571,
+      "maxStep": 0.724453,
+      "seamStepVsMean": 1.05,
+      "seamStepVsMax": 0.043,
+      "slopeBefore": 0.027799,
+      "slopeAfter": 0.026855,
+      "headRms": 0.1353,
+      "tailRms": 0.1324,
+      "rmsDeltaDb": -0.19,
+      "headCentroidHz": 3335,
+      "tailCentroidHz": 3578,
+      "centroidRatio": 1.073,
+      "jointMaxStep": 0.076081,
+      "elsewhereMaxStep": 0.642623,
+      "seamOutlierRatio": 0.12
+    },
+    "onsets": {
+      "count": 73,
+      "perSecond": 2.03,
+      "topIOIs": [
+        "0.12s x33",
+        "0.14s x5",
+        "0.23s x3",
+        "0.26s x3",
+        "0.72s x2"
+      ],
+      "ioiConcentration": 0.64
+    },
+    "structure": {
+      "centroidMeanHz": 1384,
+      "centroidSdHz": 990,
+      "centroidCv": 0.715,
+      "localCoherence": 0.717,
+      "longRangeSim": 0.722,
+      "sectionContrast": -0.005
+    },
+    "bands": {
+      "sub<120": 41,
+      "120-500": 27,
+      "500-2k": 12,
+      "2k-6k": 18,
+      "6k+": 2
+    },
+    "loop": true
+  },
+  {
+    "label": "night-insects",
+    "durationSec": 40,
+    "sampleRate": 22050,
+    "channels": 1,
+    "levels": {
+      "peak": 0.6668,
+      "rms": 0.13,
+      "rmsDb": -17.72,
+      "crestDb": 14.2,
+      "dc": 0
+    },
+    "seam": {
+      "seamStep": 0.069199,
+      "meanStep": 0.068413,
+      "maxStep": 0.687964,
+      "seamStepVsMean": 1.01,
+      "seamStepVsMax": 0.1006,
+      "slopeBefore": -0.013436,
+      "slopeAfter": 0.023386,
+      "headRms": 0.1266,
+      "tailRms": 0.1213,
+      "rmsDeltaDb": -0.37,
+      "headCentroidHz": 2606,
+      "tailCentroidHz": 2549,
+      "centroidRatio": 0.978,
+      "jointMaxStep": 0.235551,
+      "elsewhereMaxStep": 0.468436,
+      "seamOutlierRatio": 0.5
+    },
+    "onsets": {
+      "count": 0,
+      "perSecond": 0,
+      "topIOIs": [],
+      "ioiConcentration": 0
+    },
+    "structure": {
+      "centroidMeanHz": 2885,
+      "centroidSdHz": 293,
+      "centroidCv": 0.101,
+      "localCoherence": 0.956,
+      "longRangeSim": 0.944,
+      "sectionContrast": 0.012
+    },
+    "bands": {
+      "sub<120": 40.3,
+      "120-500": 24.6,
+      "500-2k": 6.9,
+      "2k-6k": 21.8,
+      "6k+": 6.4
+    },
+    "loop": true
+  },
+  {
+    "label": "cricket-chorus",
+    "durationSec": 34,
+    "sampleRate": 22050,
+    "channels": 1,
+    "levels": {
+      "peak": 0.6528,
+      "rms": 0.13,
+      "rmsDb": -17.72,
+      "crestDb": 14.02,
+      "dc": 0
+    },
+    "seam": {
+      "seamStep": 0.002617,
+      "meanStep": 0.038752,
+      "maxStep": 0.442788,
+      "seamStepVsMean": 0.07,
+      "seamStepVsMax": 0.0059,
+      "slopeBefore": -0.003404,
+      "slopeAfter": -0.001577,
+      "headRms": 0.1347,
+      "tailRms": 0.1162,
+      "rmsDeltaDb": -1.28,
+      "headCentroidHz": 1807,
+      "tailCentroidHz": 1950,
+      "centroidRatio": 1.079,
+      "jointMaxStep": 0.139667,
+      "elsewhereMaxStep": 0.309844,
+      "seamOutlierRatio": 0.45
+    },
+    "onsets": {
+      "count": 2,
+      "perSecond": 0.06,
+      "topIOIs": [
+        "5.9s x1"
+      ],
+      "ioiConcentration": 1
+    },
+    "structure": {
+      "centroidMeanHz": 2131,
+      "centroidSdHz": 248,
+      "centroidCv": 0.116,
+      "localCoherence": 0.963,
+      "longRangeSim": 0.958,
+      "sectionContrast": 0.005
+    },
+    "bands": {
+      "sub<120": 60.4,
+      "120-500": 24.3,
+      "500-2k": 0.7,
+      "2k-6k": 14.6,
+      "6k+": 0
+    },
+    "loop": true
+  },
+  {
+    "label": "evening-calls",
+    "durationSec": 32,
+    "sampleRate": 22050,
+    "channels": 1,
+    "levels": {
+      "peak": 0.6798,
+      "rms": 0.13,
+      "rmsDb": -17.72,
+      "crestDb": 14.37,
+      "dc": 0
+    },
+    "seam": {
+      "seamStep": 0.018138,
+      "meanStep": 0.020007,
+      "maxStep": 0.28394,
+      "seamStepVsMean": 0.91,
+      "seamStepVsMax": 0.0639,
+      "slopeBefore": 0.017334,
+      "slopeAfter": 0.000183,
+      "headRms": 0.1698,
+      "tailRms": 0.1604,
+      "rmsDeltaDb": -0.5,
+      "headCentroidHz": 1074,
+      "tailCentroidHz": 1229,
+      "centroidRatio": 1.145,
+      "jointMaxStep": 0.095881,
+      "elsewhereMaxStep": 0.229017,
+      "seamOutlierRatio": 0.42
+    },
+    "onsets": {
+      "count": 5,
+      "perSecond": 0.16,
+      "topIOIs": [
+        "8.06s x1",
+        "4.16s x1",
+        "0.12s x1",
+        "2.14s x1"
+      ],
+      "ioiConcentration": 1
+    },
+    "structure": {
+      "centroidMeanHz": 1159,
+      "centroidSdHz": 185,
+      "centroidCv": 0.16,
+      "localCoherence": 0.929,
+      "longRangeSim": 0.928,
+      "sectionContrast": 0.001
+    },
+    "bands": {
+      "sub<120": 47.9,
+      "120-500": 32.3,
+      "500-2k": 15.8,
+      "2k-6k": 4,
+      "6k+": 0
+    },
+    "loop": true
+  },
+  {
+    "label": "fortress-ambience",
+    "durationSec": 36,
+    "sampleRate": 22050,
+    "channels": 1,
+    "levels": {
+      "peak": 0.757,
+      "rms": 0.13,
+      "rmsDb": -17.72,
+      "crestDb": 15.3,
+      "dc": 0
+    },
+    "seam": {
+      "seamStep": 0.001232,
+      "meanStep": 0.006392,
+      "maxStep": 0.048171,
+      "seamStepVsMean": 0.19,
+      "seamStepVsMax": 0.0256,
+      "slopeBefore": 0.007578,
+      "slopeAfter": 0.009635,
+      "headRms": 0.0985,
+      "tailRms": 0.0838,
+      "rmsDeltaDb": -1.4,
+      "headCentroidHz": 521,
+      "tailCentroidHz": 526,
+      "centroidRatio": 1.009,
+      "jointMaxStep": 0.018912,
+      "elsewhereMaxStep": 0.036611,
+      "seamOutlierRatio": 0.52
+    },
+    "onsets": {
+      "count": 0,
+      "perSecond": 0,
+      "topIOIs": [],
+      "ioiConcentration": 0
+    },
+    "structure": {
+      "centroidMeanHz": 416,
+      "centroidSdHz": 101,
+      "centroidCv": 0.243,
+      "localCoherence": 0.96,
+      "longRangeSim": 0.958,
+      "sectionContrast": 0.002
+    },
+    "bands": {
+      "sub<120": 48.9,
+      "120-500": 48,
+      "500-2k": 3.1,
+      "2k-6k": 0,
+      "6k+": 0
+    },
+    "loop": true
+  },
+  {
+    "label": "distant-city",
+    "durationSec": 36,
+    "sampleRate": 22050,
+    "channels": 1,
+    "levels": {
+      "peak": 0.88,
+      "rms": 0.1237,
+      "rmsDb": -18.15,
+      "crestDb": 17.04,
+      "dc": 0.000005
+    },
+    "seam": {
+      "seamStep": 0.005732,
+      "meanStep": 0.00662,
+      "maxStep": 0.106028,
+      "seamStepVsMean": 0.87,
+      "seamStepVsMax": 0.0541,
+      "slopeBefore": 0.005816,
+      "slopeAfter": 0.00554,
+      "headRms": 0.0756,
+      "tailRms": 0.0706,
+      "rmsDeltaDb": -0.59,
+      "headCentroidHz": 252,
+      "tailCentroidHz": 313,
+      "centroidRatio": 1.24,
+      "jointMaxStep": 0.014908,
+      "elsewhereMaxStep": 0.090977,
+      "seamOutlierRatio": 0.16
+    },
+    "onsets": {
+      "count": 9,
+      "perSecond": 0.25,
+      "topIOIs": [
+        "17.83s x1",
+        "0.16s x1",
+        "0.26s x1",
+        "0.21s x1",
+        "0.12s x1"
+      ],
+      "ioiConcentration": 0.63
+    },
+    "structure": {
+      "centroidMeanHz": 299,
+      "centroidSdHz": 34,
+      "centroidCv": 0.113,
+      "localCoherence": 0.963,
+      "longRangeSim": 0.923,
+      "sectionContrast": 0.041
+    },
+    "bands": {
+      "sub<120": 15.6,
+      "120-500": 78.6,
+      "500-2k": 5.8,
+      "2k-6k": 0,
+      "6k+": 0
+    },
+    "loop": true
+  },
+  {
+    "label": "market-crowd",
+    "durationSec": 38,
+    "sampleRate": 22050,
+    "channels": 1,
+    "levels": {
+      "peak": 0.6775,
+      "rms": 0.13,
+      "rmsDb": -17.72,
+      "crestDb": 14.34,
+      "dc": 0
+    },
+    "seam": {
+      "seamStep": 0.005053,
+      "meanStep": 0.02321,
+      "maxStep": 0.173245,
+      "seamStepVsMean": 0.22,
+      "seamStepVsMax": 0.0292,
+      "slopeBefore": 0.025246,
+      "slopeAfter": 0.013077,
+      "headRms": 0.1361,
+      "tailRms": 0.1416,
+      "rmsDeltaDb": 0.34,
+      "headCentroidHz": 1465,
+      "tailCentroidHz": 1475,
+      "centroidRatio": 1.007,
+      "jointMaxStep": 0.078685,
+      "elsewhereMaxStep": 0.117421,
+      "seamOutlierRatio": 0.67
+    },
+    "onsets": {
+      "count": 0,
+      "perSecond": 0,
+      "topIOIs": [],
+      "ioiConcentration": 0
+    },
+    "structure": {
+      "centroidMeanHz": 1491,
+      "centroidSdHz": 82,
+      "centroidCv": 0.055,
+      "localCoherence": 0.971,
+      "longRangeSim": 0.972,
+      "sectionContrast": -0.001
+    },
+    "bands": {
+      "sub<120": 1.2,
+      "120-500": 51.9,
+      "500-2k": 44.3,
+      "2k-6k": 2.5,
+      "6k+": 0.1
+    },
+    "loop": true
+  },
+  {
+    "label": "street-life",
+    "durationSec": 36,
+    "sampleRate": 22050,
+    "channels": 1,
+    "levels": {
+      "peak": 0.6089,
+      "rms": 0.13,
+      "rmsDb": -17.72,
+      "crestDb": 13.41,
+      "dc": 0
+    },
+    "seam": {
+      "seamStep": 0.003297,
+      "meanStep": 0.005319,
+      "maxStep": 0.19464,
+      "seamStepVsMean": 0.62,
+      "seamStepVsMax": 0.0169,
+      "slopeBefore": -0.003997,
+      "slopeAfter": -0.002735,
+      "headRms": 0.177,
+      "tailRms": 0.1637,
+      "rmsDeltaDb": -0.68,
+      "headCentroidHz": 269,
+      "tailCentroidHz": 193,
+      "centroidRatio": 0.715,
+      "jointMaxStep": 0.01272,
+      "elsewhereMaxStep": 0.144899,
+      "seamOutlierRatio": 0.09
+    },
+    "onsets": {
+      "count": 37,
+      "perSecond": 1.03,
+      "topIOIs": [
+        "0.56s x4",
+        "0.26s x3",
+        "1.07s x2",
+        "0.6s x2",
+        "0.46s x1"
+      ],
+      "ioiConcentration": 0.33
+    },
+    "structure": {
+      "centroidMeanHz": 348,
+      "centroidSdHz": 286,
+      "centroidCv": 0.823,
+      "localCoherence": 0.927,
+      "longRangeSim": 0.918,
+      "sectionContrast": 0.009
+    },
+    "bands": {
+      "sub<120": 80.1,
+      "120-500": 18.7,
+      "500-2k": 0.8,
+      "2k-6k": 0.4,
+      "6k+": 0.1
+    },
+    "loop": true
+  },
+  {
+    "label": "church-bells",
+    "durationSec": 40,
+    "sampleRate": 22050,
+    "channels": 1,
+    "levels": {
+      "peak": 0.7399,
+      "rms": 0.13,
+      "rmsDb": -17.72,
+      "crestDb": 15.1,
+      "dc": 0
+    },
+    "seam": {
+      "seamStep": 0.000058,
+      "meanStep": 0.007047,
+      "maxStep": 0.060006,
+      "seamStepVsMean": 0.01,
+      "seamStepVsMax": 0.001,
+      "slopeBefore": -0.000065,
+      "slopeAfter": -0.000047,
+      "headRms": 0.0026,
+      "tailRms": 0.0126,
+      "rmsDeltaDb": 13.63,
+      "headCentroidHz": 210,
+      "tailCentroidHz": 238,
+      "centroidRatio": 1.133,
+      "jointMaxStep": 0.000259,
+      "elsewhereMaxStep": 0.052538,
+      "seamOutlierRatio": 0
+    },
+    "onsets": {
+      "count": 14,
+      "perSecond": 0.35,
+      "topIOIs": [
+        "3.6s x4",
+        "2s x1",
+        "1.3s x1",
+        "2.9s x1",
+        "5.69s x1"
+      ],
+      "ioiConcentration": 0.62
+    },
+    "structure": {
+      "centroidMeanHz": 293,
+      "centroidSdHz": 91,
+      "centroidCv": 0.312,
+      "localCoherence": 0.952,
+      "longRangeSim": 0.792,
+      "sectionContrast": 0.16
+    },
+    "bands": {
+      "sub<120": 18.5,
+      "120-500": 77.4,
+      "500-2k": 4.1,
+      "2k-6k": 0,
+      "6k+": 0
+    },
+    "loop": true
+  },
+  {
+    "label": "sacred-calm",
+    "durationSec": 40,
+    "sampleRate": 22050,
+    "channels": 1,
+    "levels": {
+      "peak": 0.6721,
+      "rms": 0.13,
+      "rmsDb": -17.72,
+      "crestDb": 14.27,
+      "dc": 0
+    },
+    "seam": {
+      "seamStep": 0.003186,
+      "meanStep": 0.012153,
+      "maxStep": 0.087945,
+      "seamStepVsMean": 0.26,
+      "seamStepVsMax": 0.0362,
+      "slopeBefore": -0.000991,
+      "slopeAfter": 0.00014,
+      "headRms": 0.0163,
+      "tailRms": 0.0193,
+      "rmsDeltaDb": 1.44,
+      "headCentroidHz": 202,
+      "tailCentroidHz": 326,
+      "centroidRatio": 1.614,
+      "jointMaxStep": 0.003186,
+      "elsewhereMaxStep": 0.07242,
+      "seamOutlierRatio": 0.04
+    },
+    "onsets": {
+      "count": 3,
+      "perSecond": 0.07,
+      "topIOIs": [
+        "0.09s x1",
+        "19.41s x1"
+      ],
+      "ioiConcentration": 1
+    },
+    "structure": {
+      "centroidMeanHz": 619,
+      "centroidSdHz": 103,
+      "centroidCv": 0.166,
+      "localCoherence": 0.939,
+      "longRangeSim": 0.881,
+      "sectionContrast": 0.058
+    },
+    "bands": {
+      "sub<120": 1.1,
+      "120-500": 84.5,
+      "500-2k": 14.4,
+      "2k-6k": 0.1,
+      "6k+": 0
+    },
+    "loop": true
+  },
+  {
+    "label": "water-lapping",
+    "durationSec": 38,
+    "sampleRate": 22050,
+    "channels": 1,
+    "levels": {
+      "peak": 0.7495,
+      "rms": 0.13,
+      "rmsDb": -17.72,
+      "crestDb": 15.22,
+      "dc": 0
+    },
+    "seam": {
+      "seamStep": 0.002982,
+      "meanStep": 0.013039,
+      "maxStep": 0.175482,
+      "seamStepVsMean": 0.23,
+      "seamStepVsMax": 0.017,
+      "slopeBefore": 0.00345,
+      "slopeAfter": 0.002637,
+      "headRms": 0.1093,
+      "tailRms": 0.1127,
+      "rmsDeltaDb": 0.26,
+      "headCentroidHz": 278,
+      "tailCentroidHz": 230,
+      "centroidRatio": 0.828,
+      "jointMaxStep": 0.013729,
+      "elsewhereMaxStep": 0.121675,
+      "seamOutlierRatio": 0.11
+    },
+    "onsets": {
+      "count": 0,
+      "perSecond": 0,
+      "topIOIs": [],
+      "ioiConcentration": 0
+    },
+    "structure": {
+      "centroidMeanHz": 756,
+      "centroidSdHz": 419,
+      "centroidCv": 0.554,
+      "localCoherence": 0.74,
+      "longRangeSim": 0.8,
+      "sectionContrast": -0.06
+    },
+    "bands": {
+      "sub<120": 53.8,
+      "120-500": 29.2,
+      "500-2k": 15.6,
+      "2k-6k": 1.4,
+      "6k+": 0
+    },
+    "loop": true
+  },
+  {
+    "label": "harbor-activity",
+    "durationSec": 36,
+    "sampleRate": 22050,
+    "channels": 1,
+    "levels": {
+      "peak": 0.8367,
+      "rms": 0.13,
+      "rmsDb": -17.72,
+      "crestDb": 16.17,
+      "dc": 0
+    },
+    "seam": {
+      "seamStep": 0.006815,
+      "meanStep": 0.008468,
+      "maxStep": 0.06781,
+      "seamStepVsMean": 0.8,
+      "seamStepVsMax": 0.1005,
+      "slopeBefore": -0.004245,
+      "slopeAfter": -0.007277,
+      "headRms": 0.0909,
+      "tailRms": 0.0924,
+      "rmsDeltaDb": 0.15,
+      "headCentroidHz": 636,
+      "tailCentroidHz": 549,
+      "centroidRatio": 0.864,
+      "jointMaxStep": 0.025784,
+      "elsewhereMaxStep": 0.051317,
+      "seamOutlierRatio": 0.5
+    },
+    "onsets": {
+      "count": 0,
+      "perSecond": 0,
+      "topIOIs": [],
+      "ioiConcentration": 0
+    },
+    "structure": {
+      "centroidMeanHz": 562,
+      "centroidSdHz": 49,
+      "centroidCv": 0.088,
+      "localCoherence": 0.963,
+      "longRangeSim": 0.961,
+      "sectionContrast": 0.003
+    },
+    "bands": {
+      "sub<120": 59.7,
+      "120-500": 31.4,
+      "500-2k": 8.8,
+      "2k-6k": 0.1,
+      "6k+": 0
+    },
+    "loop": true
+  },
+  {
+    "label": "seagulls",
+    "durationSec": 32,
+    "sampleRate": 22050,
+    "channels": 1,
+    "levels": {
+      "peak": 0.88,
+      "rms": 0.1163,
+      "rmsDb": -18.69,
+      "crestDb": 17.57,
+      "dc": -0.000002
+    },
+    "seam": {
+      "seamStep": 0.049528,
+      "meanStep": 0.032371,
+      "maxStep": 0.517355,
+      "seamStepVsMean": 1.53,
+      "seamStepVsMax": 0.0957,
+      "slopeBefore": -0.073948,
+      "slopeAfter": -0.038559,
+      "headRms": 0.1175,
+      "tailRms": 0.1253,
+      "rmsDeltaDb": 0.56,
+      "headCentroidHz": 2156,
+      "tailCentroidHz": 2224,
+      "centroidRatio": 1.032,
+      "jointMaxStep": 0.220795,
+      "elsewhereMaxStep": 0.417404,
+      "seamOutlierRatio": 0.53
+    },
+    "onsets": {
+      "count": 5,
+      "perSecond": 0.16,
+      "topIOIs": [
+        "6.57s x1",
+        "0.86s x1",
+        "12.38s x1",
+        "8.38s x1"
+      ],
+      "ioiConcentration": 1
+    },
+    "structure": {
+      "centroidMeanHz": 2250,
+      "centroidSdHz": 186,
+      "centroidCv": 0.083,
+      "localCoherence": 0.896,
+      "longRangeSim": 0.892,
+      "sectionContrast": 0.004
+    },
+    "bands": {
+      "sub<120": 0.3,
+      "120-500": 3.6,
+      "500-2k": 89.4,
+      "2k-6k": 6.3,
+      "6k+": 0.3
+    },
+    "loop": true
+  },
+  {
+    "label": "village-life",
+    "durationSec": 36,
+    "sampleRate": 22050,
+    "channels": 1,
+    "levels": {
+      "peak": 0.7784,
+      "rms": 0.13,
+      "rmsDb": -17.72,
+      "crestDb": 15.55,
+      "dc": 0
+    },
+    "seam": {
+      "seamStep": 0.009832,
+      "meanStep": 0.011422,
+      "maxStep": 0.135751,
+      "seamStepVsMean": 0.86,
+      "seamStepVsMax": 0.0724,
+      "slopeBefore": 0.000739,
+      "slopeAfter": -0.017783,
+      "headRms": 0.1368,
+      "tailRms": 0.118,
+      "rmsDeltaDb": -1.28,
+      "headCentroidHz": 680,
+      "tailCentroidHz": 685,
+      "centroidRatio": 1.007,
+      "jointMaxStep": 0.03723,
+      "elsewhereMaxStep": 0.081664,
+      "seamOutlierRatio": 0.46
+    },
+    "onsets": {
+      "count": 0,
+      "perSecond": 0,
+      "topIOIs": [],
+      "ioiConcentration": 0
+    },
+    "structure": {
+      "centroidMeanHz": 686,
+      "centroidSdHz": 39,
+      "centroidCv": 0.057,
+      "localCoherence": 0.974,
+      "longRangeSim": 0.975,
+      "sectionContrast": -0.001
+    },
+    "bands": {
+      "sub<120": 50.4,
+      "120-500": 32.5,
+      "500-2k": 16.9,
+      "2k-6k": 0.2,
+      "6k+": 0
+    },
+    "loop": true
+  },
+  {
+    "label": "jungle-sounds",
+    "durationSec": 36,
+    "sampleRate": 22050,
+    "channels": 1,
+    "levels": {
+      "peak": 0.88,
+      "rms": 0.1091,
+      "rmsDb": -19.24,
+      "crestDb": 18.13,
+      "dc": 0.000013
+    },
+    "seam": {
+      "seamStep": 0.005939,
+      "meanStep": 0.022857,
+      "maxStep": 0.864078,
+      "seamStepVsMean": 0.26,
+      "seamStepVsMax": 0.0069,
+      "slopeBefore": 0.063809,
+      "slopeAfter": -0.03454,
+      "headRms": 0.0679,
+      "tailRms": 0.0847,
+      "rmsDeltaDb": 1.92,
+      "headCentroidHz": 1846,
+      "tailCentroidHz": 2022,
+      "centroidRatio": 1.095,
+      "jointMaxStep": 0.151159,
+      "elsewhereMaxStep": 0.33176,
+      "seamOutlierRatio": 0.46
+    },
+    "onsets": {
+      "count": 10,
+      "perSecond": 0.28,
+      "topIOIs": [
+        "0.12s x3",
+        "6.32s x1",
+        "4.64s x1",
+        "9.57s x1",
+        "6.55s x1"
+      ],
+      "ioiConcentration": 0.78
+    },
+    "structure": {
+      "centroidMeanHz": 1805,
+      "centroidSdHz": 470,
+      "centroidCv": 0.26,
+      "localCoherence": 0.931,
+      "longRangeSim": 0.931,
+      "sectionContrast": 0
+    },
+    "bands": {
+      "sub<120": 1.5,
+      "120-500": 21.9,
+      "500-2k": 71.5,
+      "2k-6k": 4.8,
+      "6k+": 0.4
+    },
+    "loop": true
+  },
+  {
+    "label": "sfx-menu-select",
+    "durationSec": 0.5,
+    "sampleRate": 44100,
+    "channels": 1,
+    "levels": {
+      "peak": 0.82,
+      "rms": 0.1982,
+      "rmsDb": -14.06,
+      "crestDb": 12.34,
+      "dc": 0
+    },
+    "seam": {
+      "seamStep": 0,
+      "meanStep": 0.021834,
+      "maxStep": 0.218358,
+      "seamStepVsMean": 0,
+      "seamStepVsMax": 0,
+      "slopeBefore": 0,
+      "slopeAfter": 0.00012,
+      "headRms": 0.3183,
+      "tailRms": 0.0015,
+      "rmsDeltaDb": -46.55,
+      "headCentroidHz": 1492,
+      "tailCentroidHz": 29,
+      "centroidRatio": 0.019,
+      "jointMaxStep": 0.136142,
+      "elsewhereMaxStep": 0.207963,
+      "seamOutlierRatio": 0.65
+    },
+    "onsets": {
+      "count": 3,
+      "perSecond": 6,
+      "topIOIs": [
+        "0.1s x1",
+        "0.17s x1"
+      ],
+      "ioiConcentration": 1
+    },
+    "structure": {
+      "centroidMeanHz": 1626,
+      "centroidSdHz": 139,
+      "centroidCv": 0.085,
+      "localCoherence": 0.998,
+      "longRangeSim": 0.82,
+      "sectionContrast": 0.178
+    },
+    "bands": {
+      "sub<120": 0,
+      "120-500": 0,
+      "500-2k": 95.2,
+      "2k-6k": 4.8,
+      "6k+": 0
+    },
+    "loop": false
+  },
+  {
+    "label": "sfx-dialogue-blip",
+    "durationSec": 0.09,
+    "sampleRate": 44100,
+    "channels": 1,
+    "levels": {
+      "peak": 0.7,
+      "rms": 0.1507,
+      "rmsDb": -16.44,
+      "crestDb": 13.34,
+      "dc": 0
+    },
+    "seam": {
+      "seamStep": 0.000002,
+      "meanStep": 0.011461,
+      "maxStep": 0.159908,
+      "seamStepVsMean": 0,
+      "seamStepVsMax": 0,
+      "slopeBefore": 0.000017,
+      "slopeAfter": 0.000002,
+      "headRms": 0.2785,
+      "tailRms": 0.0133,
+      "rmsDeltaDb": -26.41,
+      "headCentroidHz": 1398,
+      "tailCentroidHz": 1228,
+      "centroidRatio": 0.879,
+      "jointMaxStep": 0.159908,
+      "elsewhereMaxStep": 0.159908,
+      "seamOutlierRatio": 1
+    },
+    "onsets": {
+      "count": 0,
+      "perSecond": 0,
+      "topIOIs": [],
+      "ioiConcentration": 0
+    },
+    "structure": {
+      "centroidMeanHz": 1399,
+      "centroidSdHz": 9,
+      "centroidCv": 0.007,
+      "localCoherence": 1,
+      "longRangeSim": 0.999,
+      "sectionContrast": 0.001
+    },
+    "bands": {
+      "sub<120": 0,
+      "120-500": 0,
+      "500-2k": 93.1,
+      "2k-6k": 6.9,
+      "6k+": 0
+    },
+    "loop": false
+  },
+  {
+    "label": "sfx-item-pickup",
+    "durationSec": 0.75,
+    "sampleRate": 44100,
+    "channels": 1,
+    "levels": {
+      "peak": 0.82,
+      "rms": 0.188,
+      "rmsDb": -14.52,
+      "crestDb": 12.79,
+      "dc": 0
+    },
+    "seam": {
+      "seamStep": 0.000004,
+      "meanStep": 0.020219,
+      "maxStep": 0.157588,
+      "seamStepVsMean": 0,
+      "seamStepVsMax": 0,
+      "slopeBefore": 0.000051,
+      "slopeAfter": 0.000025,
+      "headRms": 0.1864,
+      "tailRms": 0.0518,
+      "rmsDeltaDb": -11.13,
+      "headCentroidHz": 1152,
+      "tailCentroidHz": 1258,
+      "centroidRatio": 1.092,
+      "jointMaxStep": 0.027509,
+      "elsewhereMaxStep": 0.133294,
+      "seamOutlierRatio": 0.21
+    },
+    "onsets": {
+      "count": 2,
+      "perSecond": 2.67,
+      "topIOIs": [
+        "0.09s x1"
+      ],
+      "ioiConcentration": 1
+    },
+    "structure": {
+      "centroidMeanHz": 1410,
+      "centroidSdHz": 109,
+      "centroidCv": 0.078,
+      "localCoherence": 0.995,
+      "longRangeSim": 0.932,
+      "sectionContrast": 0.063
+    },
+    "bands": {
+      "sub<120": 0,
+      "120-500": 0,
+      "500-2k": 95.1,
+      "2k-6k": 4.7,
+      "6k+": 0.2
+    },
+    "loop": false
+  },
+  {
+    "label": "sfx-coin-clink",
+    "durationSec": 0.55,
+    "sampleRate": 44100,
+    "channels": 1,
+    "levels": {
+      "peak": 0.82,
+      "rms": 0.1179,
+      "rmsDb": -18.57,
+      "crestDb": 16.84,
+      "dc": 0
+    },
+    "seam": {
+      "seamStep": 0,
+      "meanStep": 0.033271,
+      "maxStep": 0.47544,
+      "seamStepVsMean": 0,
+      "seamStepVsMax": 0,
+      "slopeBefore": 0,
+      "slopeAfter": 0,
+      "headRms": 0.1874,
+      "tailRms": 0.0008,
+      "rmsDeltaDb": -47.64,
+      "headCentroidHz": 4934,
+      "tailCentroidHz": 29,
+      "centroidRatio": 0.006,
+      "jointMaxStep": 0.307893,
+      "elsewhereMaxStep": 0.427435,
+      "seamOutlierRatio": 0.72
+    },
+    "onsets": {
+      "count": 3,
+      "perSecond": 5.45,
+      "topIOIs": [
+        "0.24s x1",
+        "0.13s x1"
+      ],
+      "ioiConcentration": 1
+    },
+    "structure": {
+      "centroidMeanHz": 3980,
+      "centroidSdHz": 1334,
+      "centroidCv": 0.335,
+      "localCoherence": 0.964,
+      "longRangeSim": 0.747,
+      "sectionContrast": 0.217
+    },
+    "bands": {
+      "sub<120": 0,
+      "120-500": 0,
+      "500-2k": 0.1,
+      "2k-6k": 95.4,
+      "6k+": 4.5
+    },
+    "loop": false
+  },
+  {
+    "label": "sfx-door-open",
+    "durationSec": 1.6,
+    "sampleRate": 44100,
+    "channels": 1,
+    "levels": {
+      "peak": 0.82,
+      "rms": 0.2013,
+      "rmsDb": -13.92,
+      "crestDb": 12.2,
+      "dc": -0.000002
+    },
+    "seam": {
+      "seamStep": 0.000197,
+      "meanStep": 0.006024,
+      "maxStep": 0.10252,
+      "seamStepVsMean": 0.03,
+      "seamStepVsMax": 0.0019,
+      "slopeBefore": 0.000128,
+      "slopeAfter": 0.000005,
+      "headRms": 0.0788,
+      "tailRms": 0.2322,
+      "rmsDeltaDb": 9.39,
+      "headCentroidHz": 5011,
+      "tailCentroidHz": 512,
+      "centroidRatio": 0.102,
+      "jointMaxStep": 0.10252,
+      "elsewhereMaxStep": 0.087767,
+      "seamOutlierRatio": 1.17
+    },
+    "onsets": {
+      "count": 1,
+      "perSecond": 0.63,
+      "topIOIs": [],
+      "ioiConcentration": 0
+    },
+    "structure": {
+      "centroidMeanHz": 1184,
+      "centroidSdHz": 1339,
+      "centroidCv": 1.131,
+      "localCoherence": 0.961,
+      "longRangeSim": 0.502,
+      "sectionContrast": 0.459
+    },
+    "bands": {
+      "sub<120": 63.3,
+      "120-500": 33.9,
+      "500-2k": 1.8,
+      "2k-6k": 0.9,
+      "6k+": 0.1
+    },
+    "loop": false
+  },
+  {
+    "label": "sfx-footstep-stone",
+    "durationSec": 0.3,
+    "sampleRate": 44100,
+    "channels": 1,
+    "levels": {
+      "peak": 0.75,
+      "rms": 0.0807,
+      "rmsDb": -21.86,
+      "crestDb": 19.36,
+      "dc": 0
+    },
+    "seam": {
+      "seamStep": 0,
+      "meanStep": 0.003381,
+      "maxStep": 0.166238,
+      "seamStepVsMean": 0,
+      "seamStepVsMax": 0,
+      "slopeBefore": 0,
+      "slopeAfter": 0.000032,
+      "headRms": 0.1609,
+      "tailRms": 0,
+      "rmsDeltaDb": -115.6,
+      "headCentroidHz": 2989,
+      "tailCentroidHz": 29,
+      "centroidRatio": 0.01,
+      "jointMaxStep": 0.166238,
+      "elsewhereMaxStep": 0.146748,
+      "seamOutlierRatio": 1.13
+    },
+    "onsets": {
+      "count": 2,
+      "perSecond": 6.67,
+      "topIOIs": [
+        "0.17s x1"
+      ],
+      "ioiConcentration": 1
+    },
+    "structure": {
+      "centroidMeanHz": 1620,
+      "centroidSdHz": 1043,
+      "centroidCv": 0.644,
+      "localCoherence": 0.993,
+      "longRangeSim": 0.744,
+      "sectionContrast": 0.249
+    },
+    "bands": {
+      "sub<120": 96.5,
+      "120-500": 0.1,
+      "500-2k": 0.9,
+      "2k-6k": 2.3,
+      "6k+": 0.2
+    },
+    "loop": false
+  },
+  {
+    "label": "sfx-footstep-wood",
+    "durationSec": 0.3,
+    "sampleRate": 44100,
+    "channels": 1,
+    "levels": {
+      "peak": 0.75,
+      "rms": 0.1648,
+      "rmsDb": -15.66,
+      "crestDb": 13.16,
+      "dc": 0
+    },
+    "seam": {
+      "seamStep": 0,
+      "meanStep": 0.002713,
+      "maxStep": 0.047373,
+      "seamStepVsMean": 0,
+      "seamStepVsMax": 0,
+      "slopeBefore": 0,
+      "slopeAfter": 0.000026,
+      "headRms": 0.3094,
+      "tailRms": 0,
+      "rmsDeltaDb": -89.15,
+      "headCentroidHz": 1127,
+      "tailCentroidHz": 29,
+      "centroidRatio": 0.025,
+      "jointMaxStep": 0.047373,
+      "elsewhereMaxStep": 0.044657,
+      "seamOutlierRatio": 1.06
+    },
+    "onsets": {
+      "count": 2,
+      "perSecond": 6.67,
+      "topIOIs": [
+        "0.16s x1"
+      ],
+      "ioiConcentration": 1
+    },
+    "structure": {
+      "centroidMeanHz": 618,
+      "centroidSdHz": 333,
+      "centroidCv": 0.539,
+      "localCoherence": 0.989,
+      "longRangeSim": 0.823,
+      "sectionContrast": 0.166
+    },
+    "bands": {
+      "sub<120": 0,
+      "120-500": 99.5,
+      "500-2k": 0.4,
+      "2k-6k": 0.1,
+      "6k+": 0
+    },
+    "loop": false
+  },
+  {
+    "label": "sfx-footstep-dirt",
+    "durationSec": 0.3,
+    "sampleRate": 44100,
+    "channels": 1,
+    "levels": {
+      "peak": 0.75,
+      "rms": 0.1081,
+      "rmsDb": -19.32,
+      "crestDb": 16.82,
+      "dc": 0
+    },
+    "seam": {
+      "seamStep": 0,
+      "meanStep": 0.00562,
+      "maxStep": 0.110339,
+      "seamStepVsMean": 0,
+      "seamStepVsMax": 0,
+      "slopeBefore": 0,
+      "slopeAfter": 0.00001,
+      "headRms": 0.2139,
+      "tailRms": 0,
+      "rmsDeltaDb": -106.62,
+      "headCentroidHz": 2019,
+      "tailCentroidHz": 29,
+      "centroidRatio": 0.014,
+      "jointMaxStep": 0.110339,
+      "elsewhereMaxStep": 0.106812,
+      "seamOutlierRatio": 1.03
+    },
+    "onsets": {
+      "count": 1,
+      "perSecond": 3.33,
+      "topIOIs": [],
+      "ioiConcentration": 0
+    },
+    "structure": {
+      "centroidMeanHz": 1786,
+      "centroidSdHz": 962,
+      "centroidCv": 0.539,
+      "localCoherence": 0.989,
+      "longRangeSim": 0.57,
+      "sectionContrast": 0.419
+    },
+    "bands": {
+      "sub<120": 76.8,
+      "120-500": 0.6,
+      "500-2k": 13.1,
+      "2k-6k": 9.3,
+      "6k+": 0.2
+    },
+    "loop": false
+  },
+  {
+    "label": "sfx-gate-creak",
+    "durationSec": 2.4,
+    "sampleRate": 44100,
+    "channels": 1,
+    "levels": {
+      "peak": 0.82,
+      "rms": 0.2159,
+      "rmsDb": -13.32,
+      "crestDb": 11.59,
+      "dc": 0.000015
+    },
+    "seam": {
+      "seamStep": 0.001818,
+      "meanStep": 0.003797,
+      "maxStep": 0.031148,
+      "seamStepVsMean": 0.48,
+      "seamStepVsMax": 0.0584,
+      "slopeBefore": 0.00021,
+      "slopeAfter": 0,
+      "headRms": 0.0445,
+      "tailRms": 0.2653,
+      "rmsDeltaDb": 15.51,
+      "headCentroidHz": 95,
+      "tailCentroidHz": 206,
+      "centroidRatio": 2.166,
+      "jointMaxStep": 0.005925,
+      "elsewhereMaxStep": 0.027425,
+      "seamOutlierRatio": 0.22
+    },
+    "onsets": {
+      "count": 4,
+      "perSecond": 1.67,
+      "topIOIs": [
+        "0.31s x1",
+        "0.33s x1",
+        "0.41s x1"
+      ],
+      "ioiConcentration": 1
+    },
+    "structure": {
+      "centroidMeanHz": 1441,
+      "centroidSdHz": 1091,
+      "centroidCv": 0.757,
+      "localCoherence": 0.928,
+      "longRangeSim": 0.694,
+      "sectionContrast": 0.235
+    },
+    "bands": {
+      "sub<120": 81.4,
+      "120-500": 18.2,
+      "500-2k": 0.3,
+      "2k-6k": 0.1,
+      "6k+": 0
+    },
+    "loop": false
+  },
+  {
+    "label": "sfx-waves-crash",
+    "durationSec": 2.6,
+    "sampleRate": 44100,
+    "channels": 1,
+    "levels": {
+      "peak": 0.82,
+      "rms": 0.1132,
+      "rmsDb": -18.92,
+      "crestDb": 17.2,
+      "dc": 0
+    },
+    "seam": {
+      "seamStep": 0,
+      "meanStep": 0.035341,
+      "maxStep": 0.457434,
+      "seamStepVsMean": 0,
+      "seamStepVsMax": 0,
+      "slopeBefore": 0,
+      "slopeAfter": 0,
+      "headRms": 0.0495,
+      "tailRms": 0.019,
+      "rmsDeltaDb": -8.31,
+      "headCentroidHz": 665,
+      "tailCentroidHz": 937,
+      "centroidRatio": 1.408,
+      "jointMaxStep": 0.000029,
+      "elsewhereMaxStep": 0.426155,
+      "seamOutlierRatio": 0
+    },
+    "onsets": {
+      "count": 1,
+      "perSecond": 0.38,
+      "topIOIs": [],
+      "ioiConcentration": 0
+    },
+    "structure": {
+      "centroidMeanHz": 3866,
+      "centroidSdHz": 2094,
+      "centroidCv": 0.542,
+      "localCoherence": 0.968,
+      "longRangeSim": 0.701,
+      "sectionContrast": 0.266
+    },
+    "bands": {
+      "sub<120": 8.9,
+      "120-500": 5.4,
+      "500-2k": 25.8,
+      "2k-6k": 49.8,
+      "6k+": 10.1
+    },
+    "loop": false
+  },
+  {
+    "label": "sfx-crowd-murmur",
+    "durationSec": 2.2,
+    "sampleRate": 44100,
+    "channels": 1,
+    "levels": {
+      "peak": 0.82,
+      "rms": 0.1211,
+      "rmsDb": -18.34,
+      "crestDb": 16.61,
+      "dc": 0
+    },
+    "seam": {
+      "seamStep": 0.000015,
+      "meanStep": 0.007171,
+      "maxStep": 0.050321,
+      "seamStepVsMean": 0,
+      "seamStepVsMax": 0.0003,
+      "slopeBefore": 0.000021,
+      "slopeAfter": 0,
+      "headRms": 0.0483,
+      "tailRms": 0.0772,
+      "rmsDeltaDb": 4.07,
+      "headCentroidHz": 693,
+      "tailCentroidHz": 713,
+      "centroidRatio": 1.029,
+      "jointMaxStep": 0.003414,
+      "elsewhereMaxStep": 0.047836,
+      "seamOutlierRatio": 0.07
+    },
+    "onsets": {
+      "count": 0,
+      "perSecond": 0,
+      "topIOIs": [],
+      "ioiConcentration": 0
+    },
+    "structure": {
+      "centroidMeanHz": 768,
+      "centroidSdHz": 41,
+      "centroidCv": 0.053,
+      "localCoherence": 0.981,
+      "longRangeSim": 0.919,
+      "sectionContrast": 0.062
+    },
+    "bands": {
+      "sub<120": 0,
+      "120-500": 48.4,
+      "500-2k": 51.4,
+      "2k-6k": 0.2,
+      "6k+": 0
+    },
+    "loop": false
+  },
+  {
+    "label": "sfx-birds-tropical",
+    "durationSec": 2,
+    "sampleRate": 44100,
+    "channels": 1,
+    "levels": {
+      "peak": 0.82,
+      "rms": 0.141,
+      "rmsDb": -17.02,
+      "crestDb": 15.29,
+      "dc": 0
+    },
+    "seam": {
+      "seamStep": 0,
+      "meanStep": 0.044626,
+      "maxStep": 0.432615,
+      "seamStepVsMean": 0,
+      "seamStepVsMax": 0,
+      "slopeBefore": -0.000051,
+      "slopeAfter": 0,
+      "headRms": 0.0381,
+      "tailRms": 0.1801,
+      "rmsDeltaDb": 13.5,
+      "headCentroidHz": 0,
+      "tailCentroidHz": 2788,
+      "centroidRatio": 2787831267.094,
+      "jointMaxStep": 0.042136,
+      "elsewhereMaxStep": 0.381722,
+      "seamOutlierRatio": 0.11
+    },
+    "onsets": {
+      "count": 2,
+      "perSecond": 1,
+      "topIOIs": [
+        "0.53s x1"
+      ],
+      "ioiConcentration": 1
+    },
+    "structure": {
+      "centroidMeanHz": 3580,
+      "centroidSdHz": 698,
+      "centroidCv": 0.195,
+      "localCoherence": 0.942,
+      "longRangeSim": 0.706,
+      "sectionContrast": 0.237
+    },
+    "bands": {
+      "sub<120": 0,
+      "120-500": 0.1,
+      "500-2k": 1.7,
+      "2k-6k": 96,
+      "6k+": 2.2
+    },
+    "loop": false
+  },
+  {
+    "label": "sfx-wind-hilltop",
+    "durationSec": 2.8,
+    "sampleRate": 44100,
+    "channels": 1,
+    "levels": {
+      "peak": 0.82,
+      "rms": 0.1413,
+      "rmsDb": -17,
+      "crestDb": 15.27,
+      "dc": 0.000001
+    },
+    "seam": {
+      "seamStep": 0.000137,
+      "meanStep": 0.008172,
+      "maxStep": 0.081473,
+      "seamStepVsMean": 0.02,
+      "seamStepVsMax": 0.0017,
+      "slopeBefore": 0.000011,
+      "slopeAfter": 0,
+      "headRms": 0.0812,
+      "tailRms": 0.0489,
+      "rmsDeltaDb": -4.4,
+      "headCentroidHz": 875,
+      "tailCentroidHz": 877,
+      "centroidRatio": 1.002,
+      "jointMaxStep": 0.00093,
+      "elsewhereMaxStep": 0.063544,
+      "seamOutlierRatio": 0.01
+    },
+    "onsets": {
+      "count": 0,
+      "perSecond": 0,
+      "topIOIs": [],
+      "ioiConcentration": 0
+    },
+    "structure": {
+      "centroidMeanHz": 1359,
+      "centroidSdHz": 216,
+      "centroidCv": 0.159,
+      "localCoherence": 0.969,
+      "longRangeSim": 0.918,
+      "sectionContrast": 0.051
+    },
+    "bands": {
+      "sub<120": 29.6,
+      "120-500": 50,
+      "500-2k": 19.9,
+      "2k-6k": 0.4,
+      "6k+": 0.1
+    },
+    "loop": false
+  }
+]

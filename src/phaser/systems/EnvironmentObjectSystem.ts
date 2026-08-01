@@ -13,16 +13,9 @@ import Phaser from 'phaser';
 import { ISO_TILE_WIDTH, ISO_TILE_HEIGHT } from '../game';
 import type { ResolvedVisualQuality } from '../visualProfile';
 import environmentData from '../../data/environment-objects.json';
-
-// World Y-sort band — must match GameScene depth bands. World props are sorted
-// by floor(y) and clamped so they never reach the FX/lighting band (>= 800).
-const DEPTH_WORLD_MIN = 0;
-const DEPTH_WORLD_MAX = 780;
-
-/** Quantized, clamped Y-sort depth for a world object at screen-space `y`. */
-function worldDepth(y: number): number {
-  return Math.floor(Phaser.Math.Clamp(y, DEPTH_WORLD_MIN, DEPTH_WORLD_MAX));
-}
+import { emitGameEvent } from '../eventBridge';
+import { worldDepth, DEPTH_FX_SEAGULL } from '../core/depth';
+import { getLocationAnimatedProps, getLocationProps } from '../core/LocationData';
 
 interface ObjectDef {
   sprite: string;
@@ -38,26 +31,27 @@ interface ClusterDef {
   objects: ObjectDef[];
 }
 
-interface LegacyPropDef {
-  sprite: string;
-  x: number;
-  y: number;
-  scale?: number;
-  examineText?: string;
-  particles?: 'smoke' | 'steam' | 'dust';
-}
-
 interface LocationDef {
+  /** Iso-grid clusters. Only used when a location runs in isometric mode —
+   *  the shipping legacy-backdrop layout lives in <id>.location.json props. */
   clusters: ClusterDef[];
-  // Curated, pixel-positioned props for the legacy painted-plate. When present,
-  // these are the authoritative layout and the iso-grid clusters are ignored.
-  legacyProps?: LegacyPropDef[];
 }
 
 interface PlacedObject {
   image: Phaser.GameObjects.Image;
   examineText?: string;
   clusterId: string;
+  /** Human-readable name shown as the examine message title. */
+  label: string;
+}
+
+/** 'spice-pile' -> 'Spice Pile' — a readable title for the examine overlay. */
+function labelFromSprite(sprite: string): string {
+  return sprite
+    .split(/[-_]/)
+    .filter(Boolean)
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
 }
 
 interface AnimatedPlacement {
@@ -65,39 +59,6 @@ interface AnimatedPlacement {
   type: string;
 }
 
-// Animated object definitions per location
-const ANIMATED_OBJECTS: Record<string, Array<{
-  type: 'torch' | 'palm-sway' | 'awning-flutter' | 'smoke' | 'seagull' | 'flag';
-  x: number;
-  y: number;
-}>> = {
-  'a-famosa-gate': [
-    { type: 'torch', x: 300, y: 300 },
-    { type: 'torch', x: 680, y: 310 },
-    { type: 'flag', x: 480, y: 120 },
-  ],
-  'rua-direita': [
-    { type: 'torch', x: 150, y: 300 },
-    { type: 'smoke', x: 250, y: 150 },
-  ],
-  'st-pauls-church': [
-    { type: 'torch', x: 480, y: 240 },
-    { type: 'palm-sway', x: 200, y: 400 },
-    { type: 'palm-sway', x: 750, y: 380 },
-  ],
-  'waterfront': [
-    { type: 'seagull', x: 300, y: 100 },
-    { type: 'seagull', x: 600, y: 80 },
-    { type: 'seagull', x: 850, y: 120 },
-    { type: 'flag', x: 720, y: 160 },
-  ],
-  'kampung': [
-    { type: 'smoke', x: 500, y: 380 },
-    { type: 'smoke', x: 650, y: 400 },
-    { type: 'palm-sway', x: 100, y: 350 },
-    { type: 'palm-sway', x: 800, y: 320 },
-  ],
-};
 
 export class EnvironmentObjectSystem {
   private scene: Phaser.Scene;
@@ -133,19 +94,26 @@ export class EnvironmentObjectSystem {
   private placeStaticObjects(locationId: string): void {
     const locations = (environmentData as { locations: Record<string, LocationDef> }).locations;
     const locationDef = locations[locationId];
-    if (!locationDef) return;
+    const isIsoMode = (this.scene as any).isIsometric;
 
-    // Legacy painted-plate: if a curated pixel-positioned prop list exists, use
-    // it as the authoritative layout and SKIP the iso-grid clusters (which
-    // mis-place/oversize/duplicate on a fixed 960x540 plate).
-    if (locationDef.legacyProps && locationDef.legacyProps.length > 0) {
-      for (const p of locationDef.legacyProps) {
+    // Legacy painted-plate: the curated pixel-positioned prop list in
+    // <id>.location.json is the authoritative layout, so SKIP the iso-grid
+    // clusters (which mis-place/oversize/duplicate on a fixed 960x540 plate).
+    // ONLY use props if we are NOT in isometric mode.
+    const legacyProps = getLocationProps(locationId);
+    if (!isIsoMode && legacyProps.length > 0) {
+      for (const p of legacyProps) {
         if (!this.scene.textures.exists(p.sprite)) continue;
         const image = this.scene.add.image(p.x, p.y, p.sprite);
         image.setOrigin(0.5, 1);
         image.setDepth(worldDepth(p.y));
         image.setScale(p.scale ?? 2);
-        const placed: PlacedObject = { image, examineText: p.examineText, clusterId: 'legacy' };
+        const placed: PlacedObject = {
+          image,
+          examineText: p.examineText,
+          clusterId: 'legacy',
+          label: labelFromSprite(p.sprite),
+        };
         if (p.examineText) {
           image.setInteractive({ useHandCursor: true });
           image.on('pointerdown', () => this.onExamineObject(placed));
@@ -156,10 +124,24 @@ export class EnvironmentObjectSystem {
       return;
     }
 
+    if (!locationDef) return;
+
     for (const cluster of locationDef.clusters) {
-      // Convert tile coordinates to world position (960x540 space)
-      const baseX = cluster.centerTile.x * ISO_TILE_WIDTH;
-      const baseY = cluster.centerTile.y * ISO_TILE_HEIGHT;
+      // Convert tile coordinates to world position
+      let baseX: number;
+      let baseY: number;
+      const isoRenderer = (this.scene as any).isoRenderer;
+
+      if (isIsoMode && isoRenderer) {
+        // Use true isometric tilemap conversion
+        const worldPos = isoRenderer.tileToWorld(cluster.centerTile.x, cluster.centerTile.y);
+        baseX = worldPos.x;
+        baseY = worldPos.y;
+      } else {
+        // Orthogonal grid calculation for legacy mode fallback (960x540 screen)
+        baseX = cluster.centerTile.x * ISO_TILE_WIDTH;
+        baseY = cluster.centerTile.y * ISO_TILE_HEIGHT;
+      }
 
       for (const objDef of cluster.objects) {
         const worldX = baseX + objDef.offsetX;
@@ -168,7 +150,8 @@ export class EnvironmentObjectSystem {
         // Legacy painted-plate is a fixed 960x540 image. Iso-authored clusters
         // can compute positions off the plate (e.g. tileX 16 * 64 = 1024) — skip
         // those so props don't float off-screen / mis-place over the backdrop.
-        if (worldX < 24 || worldX > 936 || worldY < 24 || worldY > 528) {
+        // ONLY perform this off-screen check when NOT in isometric mode (which has a large scrollable world bounds).
+        if (!isIsoMode && (worldX < 24 || worldX > 936 || worldY < 24 || worldY > 528)) {
           continue;
         }
 
@@ -194,6 +177,7 @@ export class EnvironmentObjectSystem {
           image,
           examineText: objDef.examineText,
           clusterId: cluster.id,
+          label: labelFromSprite(objDef.sprite),
         };
 
         // If object has examine text, make it interactive
@@ -218,7 +202,7 @@ export class EnvironmentObjectSystem {
    * Place animated objects (torches, flags, smoke, etc.)
    */
   private placeAnimatedObjects(locationId: string): void {
-    const animDefs = ANIMATED_OBJECTS[locationId];
+    const animDefs = getLocationAnimatedProps(locationId);
     if (!animDefs) return;
 
     // Only place animated objects on balanced/high quality
@@ -295,7 +279,7 @@ export class EnvironmentObjectSystem {
     const bird = this.scene.textures.exists('seagull')
       ? this.scene.add.sprite(x, y, 'seagull')
       : this.scene.add.ellipse(x, y, 6, 3, 0xFFFFFF, 0.8);
-    bird.setDepth(10000); // Always on top (sky)
+    bird.setDepth(DEPTH_FX_SEAGULL); // Sky layer — FX band, below the UI band (>= 1001)
 
     if (bird instanceof Phaser.GameObjects.Sprite && this.scene.anims.exists('seagull-fly')) {
       bird.play('seagull-fly');
@@ -517,12 +501,10 @@ export class EnvironmentObjectSystem {
   private onExamineObject(obj: PlacedObject): void {
     if (!obj.examineText) return;
 
-    // Emit an event that the React UI layer can pick up
-    const { emitGameEvent } = require('../eventBridge');
-    emitGameEvent('examine', {
-      type: 'environment-object',
-      text: obj.examineText,
-    });
+    // Emit an event the React UI layer actually listens for. ('examine' was a
+    // dead event name — nothing subscribed to it — and it was emitted through a
+    // CommonJS require() that throws in this ESM/Vite module.)
+    emitGameEvent('message:show', obj.label, obj.examineText);
   }
 
   /**
@@ -530,10 +512,37 @@ export class EnvironmentObjectSystem {
    * Handles depth sorting for objects near the player.
    */
   update(_time: number, _delta: number): void {
+    const player = (this.scene as any).player;
+    
     // Re-sort object depths based on Y position (for proper layering with player)
     for (const obj of this.placedObjects) {
       if (obj.image.active) {
         obj.image.setDepth(worldDepth(obj.image.y));
+        
+        // Dynamic occlusion check for tall props in legacy-backdrop mode
+        if (player) {
+          const img = obj.image;
+          const px = player.x;
+          const py = player.y;
+          const pw = img.displayWidth;
+          const ph = img.displayHeight;
+          
+          // Only perform check for props tall enough to block character views
+          if (ph > 40) {
+            // Player's feet are at py + 48 (since origin is 0.5, 0.5 and height is 96 scaled)
+            const feetY = py + 48;
+            const isBehind = feetY < img.y + 6 && 
+                             feetY > img.y - ph - 10 && 
+                             px > img.x - pw/2 - 10 && 
+                             px < img.x + pw/2 + 10;
+            
+            if (isBehind) {
+              img.setAlpha(0.35);
+            } else {
+              img.setAlpha(1.0);
+            }
+          }
+        }
       }
     }
   }

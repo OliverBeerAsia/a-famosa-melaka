@@ -8,6 +8,7 @@
  */
 
 import Phaser from 'phaser';
+import { worldDepth } from '../core/depth';
 
 export const ISO_TILE_WIDTH = 64;
 export const ISO_TILE_HEIGHT = 32;
@@ -107,6 +108,14 @@ export class IsometricRenderer {
   private objectSprites: Phaser.GameObjects.GameObject[] = [];
   private mapKey: string;
   private tilesetMappings: TilesetMapping[];
+  private buildingComponents: Array<{
+    graphicsList: Phaser.GameObjects.Graphics[];
+    tiles: Array<{
+      worldX: number;
+      worldY: number;
+      height: number;
+    }>;
+  }> = [];
 
   constructor(
     scene: Phaser.Scene,
@@ -210,14 +219,44 @@ export class IsometricRenderer {
       buildingTiles.set(`${tile.x},${tile.y}`, { tile, tilesetName, style });
     });
 
+    this.buildingComponents = [];
+
     this.collectBuildingComponents(buildingTiles).forEach((component) => {
-      const building = this.scene.add.graphics();
-      const maxDepthY = Math.max(...component.tiles.map(({ tile }) => (
-        this.tileToWorld(tile.x, tile.y).y
-      )));
-      building.setDepth(maxDepthY + ISO_TILE_HEIGHT);
-      this.drawBuildingComponent(building, component);
-      this.objectSprites.push(building);
+      const graphicsList: Phaser.GameObjects.Graphics[] = [];
+      const tilesInfo: Array<{ worldX: number; worldY: number; height: number }> = [];
+
+      component.tiles.forEach((bTile) => {
+        const building = this.scene.add.graphics();
+        const world = this.tileToWorld(bTile.tile.x, bTile.tile.y);
+        // Set quantized individual depth per tile tip to fix 1D sorting popping and z-fighting
+        building.setDepth(worldDepth(world.y + ISO_TILE_HEIGHT / 2));
+        
+        const neighbors = this.getComponentNeighbors(component.keys, bTile.tile.x, bTile.tile.y);
+        this.drawBuildingTile(
+          building,
+          world.x,
+          world.y,
+          bTile.style,
+          component.primaryStyle,
+          component.roofStyle,
+          bTile.tile.x,
+          bTile.tile.y,
+          neighbors,
+        );
+        this.objectSprites.push(building);
+        graphicsList.push(building);
+
+        tilesInfo.push({
+          worldX: world.x,
+          worldY: world.y,
+          height: bTile.style.height || 52
+        });
+      });
+
+      this.buildingComponents.push({
+        graphicsList,
+        tiles: tilesInfo
+      });
     });
 
     buildingTiles.forEach(({ tile }) => {
@@ -496,9 +535,26 @@ export class IsometricRenderer {
     };
   }
 
+  update(playerX: number, playerY: number): void {
+    this.buildingComponents.forEach((comp) => {
+      // Cohesive fading: check if player is behind ANY tile in the component
+      const isBehind = comp.tiles.some((tile) => {
+        const dx = playerX - tile.worldX;
+        const dy = playerY - tile.worldY;
+        return dy < 16 && dy > -tile.height - 20 && Math.abs(dx) < 48;
+      });
+
+      const targetAlpha = isBehind ? 0.35 : 1.0;
+      comp.graphicsList.forEach((gfx) => {
+        gfx.setAlpha(targetAlpha);
+      });
+    });
+  }
+
   destroy(): void {
     this.objectSprites.forEach((sprite) => sprite.destroy());
     this.objectSprites = [];
+    this.buildingComponents = [];
     if (this.groundLayer) {
       this.groundLayer.destroy();
       this.groundLayer = null;

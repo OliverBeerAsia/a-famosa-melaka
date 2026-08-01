@@ -1,19 +1,21 @@
 {
-  "note": "Master Canva Magic Media exports (desktop_wallpaper / 16:9, 1920x1080 pro) for scene backdrop plates. Re-derive any plate with: node tools/post-process-scene.cjs <raw> assets/scenes/<scene>.png --width 960 --height 540 --spread <S>. Generated 2026-06-07 for the graphics overhaul (BG2/Skald/Ultima-VIII direction). | All 5 plates regenerated as EMPTY isometric plazas (2026-06-07); interactive props are pixel-positioned sprites via environment-objects.json legacyProps. | Plates pixelated to native 320x180 (--pixelate 3) so the background pixel grid matches the 3x sprites = cohesive chunky pixel art.",
+  "note": "Master Canva Magic Media exports (desktop_wallpaper / 16:9, 1920x1080 pro) for scene backdrop plates. Re-derive any plate with: node tools/post-process-scene.cjs <raw> assets/scenes/<scene>.png --width 960 --height 540 --spread <S>. Generated 2026-06-07 for the graphics overhaul (BG2/Skald/Ultima-VIII direction). | All 5 plates regenerated as EMPTY isometric plazas (2026-06-07); interactive props are pixel-positioned sprites via environment-objects.json legacyProps. | Plates pixelated to native 320x180 (--pixelate 3) so the background pixel grid matches the 3x sprites = cohesive chunky pixel art. | 2026-08-01 Stage 0: st-pauls + a-famosa exported with an EMPTY near-white background that dithered into a white checkerboard 'sky'; their masters were reprocessed through tools/fix-checkerboard-sky.cjs into *-raw-sky.png (flat canon sky-ramp bands) and raw_export now points at those. Original untouched exports kept as raw_export_original. | 2026-08-01 Stage 0: st-pauls + rua-direita dropped from spread 26 to 10 — 26 dithered them into noise mush.",
   "plates": {
     "rua-direita": {
       "canva_design_id": "DAHL5ALY7TM",
       "view_url": "https://www.canva.com/d/Uja6xxmIOlK1TwG",
       "raw_export": "tools/canva-sources/rua-direita-raw.png",
       "installed": "assets/scenes/scene-rua-direita.png",
-      "spread": 26,
+      "spread": 10,
       "style": "true 2:1 isometric, EMPTY walkable centre, features frame edges, no baked props/people (all props are sprites)",
       "pixelate": 3
     },
     "a-famosa": {
       "canva_design_id": "DAHL5NFGdU4",
       "view_url": "https://www.canva.com/d/ytfIBOCq9-ow7Nv",
-      "raw_export": "tools/canva-sources/a-famosa-raw.png",
+      "raw_export": "tools/canva-sources/a-famosa-raw-sky.png",
+      "raw_export_original": "tools/canva-sources/a-famosa-raw.png",
+      "sky_fix": "node tools/fix-checkerboard-sky.cjs tools/canva-sources/a-famosa-raw.png tools/canva-sources/a-famosa-raw-sky.png",
       "installed": "assets/scenes/scene-a-famosa.png",
       "spread": 26,
       "style": "true 2:1 isometric, EMPTY walkable centre, features frame edges, no baked props/people (all props are sprites)",
@@ -22,9 +24,11 @@
     "st-pauls": {
       "canva_design_id": "DAHL5GSYvnY",
       "view_url": "https://www.canva.com/d/t1bajeZtjcyzZy1",
-      "raw_export": "tools/canva-sources/st-pauls-raw.png",
+      "raw_export": "tools/canva-sources/st-pauls-raw-sky.png",
+      "raw_export_original": "tools/canva-sources/st-pauls-raw.png",
+      "sky_fix": "node tools/fix-checkerboard-sky.cjs tools/canva-sources/st-pauls-raw.png tools/canva-sources/st-pauls-raw-sky.png",
       "installed": "assets/scenes/scene-st-pauls.png",
-      "spread": 26,
+      "spread": 10,
       "style": "true 2:1 isometric, EMPTY walkable centre, features frame edges, no baked props/people (all props are sprites)",
       "pixelate": 3
     },

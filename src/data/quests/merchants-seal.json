@@ -53,11 +53,11 @@
       "id": "choose-path",
       "description": "Decide how to recover the seal.",
       "isBranching": true,
-      "journalEntry": "Chen Wei admits to holding the seal as collateral for a 50 cruzado debt Gomes owes. I have several options:\n- Pay the debt (50 cruzados)\n- Help Chen Wei with his customs problem\n- Investigate whether Gomes' debt is legitimate\n- Find another way...",
+      "journalEntry": "Chen Wei admits to holding the seal as collateral for a 500 cruzado debt Gomes owes. I have several options:\n- Pay the debt (500 cruzados)\n- Help Chen Wei with his customs problem\n- Investigate whether Gomes' debt is legitimate\n- Find another way...",
       "npcDialogueOverrides": {
         "chen-wei": {
           "settle-debt": {
-            "text": "Very well. If you intend to settle the debt properly, bring the fifty cruzados and we will conclude matters with dignity.",
+            "text": "Very well. If you intend to settle the debt properly, bring the five hundred cruzados and we will conclude matters with dignity.",
             "questCritical": true,
             "questPath": "payment"
           }
@@ -74,7 +74,7 @@
         {
           "id": "payment",
           "name": "Pay the Debt",
-          "description": "Pay Chen Wei 50 cruzados to recover the seal.",
+          "description": "Pay Chen Wei 500 cruzados to recover the seal.",
           "nextStage": "payment"
         },
         {
@@ -101,15 +101,15 @@
         }
       ]
     },
-
+ 
     {
       "id": "payment",
       "path": "payment",
-      "description": "Pay 50 cruzados to Chen Wei for the seal.",
+      "description": "Pay 500 cruzados to Chen Wei for the seal.",
       "objectives": [
-        { "type": "pay", "target": "chen-wei", "amount": 50, "completed": false }
+        { "type": "pay", "target": "chen-wei", "amount": 500, "completed": false }
       ],
-      "journalEntry": "I need to gather 50 cruzados to pay Chen Wei for the return of the seal. A straightforward solution, if I have the funds.",
+      "journalEntry": "I need to gather 500 cruzados to pay Chen Wei for the return of the seal. A straightforward solution, if I have the funds.",
       "nextStage": "seal-recovered",
       "consequenceText": "Chen Wei accepts payment with a slight bow. 'Business concluded. The Portuguese understand commerce when pressed.' He produces the seal from a locked drawer.",
       "consequences": {

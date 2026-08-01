@@ -40,7 +40,7 @@ const TOPIC_DISPLAY_NAMES: Record<string, string> = {
   'garrison': 'The Garrison',
   'war': 'War Stories',
   'sultan': 'The Sultanate',
-  'dutch': 'The Dutch',
+  'english': 'The English',
   'locals': 'Local People',
   'padre': 'Padre Tomás',
   'gomes': 'Fernão Gomes',
@@ -65,7 +65,14 @@ const TOPIC_DISPLAY_NAMES: Record<string, string> = {
   'pirates': 'Pirates',
   'witness': 'What You Saw',
   'return-stolen-seal': 'Return the Seal',
+  'rest': 'Rest/Wait',
+  'rest-dawn': 'Awaken at Dawn',
+  'rest-noon': 'Awaken at Noon',
+  'rest-night': 'Awaken at Night',
 };
+
+/** Topics shown per page — one per [1]-[9] hotkey. */
+const TOPICS_PER_PAGE = 9;
 
 /**
  * Portrait Image Component
@@ -77,8 +84,10 @@ function PortraitImage({ npcId, npcName }: { npcId: string; npcName: string }) {
 
   if (hasError) {
     return (
-      <div className="wax-seal ui-portrait-fallback flex-shrink-0">
-        {npcName.charAt(0).toUpperCase()}
+      <div className="ui-portrait-frame flex-shrink-0 flex items-center justify-center">
+        <div className="wax-seal">
+          {npcName.charAt(0).toUpperCase()}
+        </div>
       </div>
     );
   }
@@ -109,10 +118,38 @@ export function DialogueBox() {
   } = useDialogueStore();
 
   const setDialogueOpen = useGameStore((state) => state.setDialogueOpen);
+  const isResting = useGameStore((state) => state.isResting);
 
   // Displayed text (for typewriter effect)
   const [displayedText, setDisplayedText] = useState('');
   const [typingComplete, setTypingComplete] = useState(false);
+
+  // Topic paging: only TOPICS_PER_PAGE fit the 1-9 hotkeys, so anything beyond
+  // that is reachable by cycling pages with [0] / arrow keys.
+  const [topicPage, setTopicPage] = useState(0);
+
+  const pageCount = Math.max(1, Math.ceil(availableTopics.length / TOPICS_PER_PAGE));
+  const currentPage = Math.min(topicPage, pageCount - 1);
+  const pageStart = currentPage * TOPICS_PER_PAGE;
+  const visibleTopics = availableTopics.slice(pageStart, pageStart + TOPICS_PER_PAGE);
+
+  // Reset to the first page whenever we start talking to a different NPC
+  const npcId = currentNPC?.id;
+  useEffect(() => {
+    setTopicPage(0);
+  }, [npcId]);
+
+  // Keep the page in range when the topic list shrinks
+  useEffect(() => {
+    setTopicPage((prev) => (prev > pageCount - 1 ? pageCount - 1 : prev));
+  }, [pageCount]);
+
+  const cyclePage = useCallback((direction: 1 | -1) => {
+    setTopicPage((prev) => {
+      const clamped = Math.min(prev, pageCount - 1);
+      return (clamped + direction + pageCount) % pageCount;
+    });
+  }, [pageCount]);
 
   // Listen for dialogue start events from Phaser
   useGameEvent('dialogue:start', (npcData) => {
@@ -154,34 +191,39 @@ export function DialogueBox() {
 
   // Handle skip typing
   const handleSkip = useCallback(() => {
+    if (isResting) return;
     if (isTyping) {
       setDisplayedText(currentText);
       setTyping(false);
       setTypingComplete(true);
       skipTyping();
     }
-  }, [isTyping, currentText, setTyping, skipTyping]);
+  }, [isTyping, currentText, setTyping, skipTyping, isResting]);
 
-  // Handle topic selection
+  // Handle topic selection (index is relative to the visible page)
   const handleTopicSelect = useCallback((index: number) => {
-    if (!typingComplete || !availableTopics[index]) return;
+    if (isResting) return;
+    const topic = availableTopics[pageStart + index];
+    if (!typingComplete || !topic) return;
 
-    const topic = availableTopics[index];
+    // The topic list re-sorts after each answer, so return to the first page
+    setTopicPage(0);
     selectTopic(topic);
-  }, [typingComplete, availableTopics, selectTopic]);
+  }, [typingComplete, availableTopics, pageStart, selectTopic, isResting]);
 
   // Handle close
   const handleClose = useCallback(() => {
+    if (isResting) return;
     endDialogue();
     setDialogueOpen(false);
     emitGameEvent('ui:dialogue:close');
-  }, [endDialogue, setDialogueOpen]);
+  }, [endDialogue, setDialogueOpen, isResting]);
 
   // Keyboard handlers
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // Don't capture if no dialogue is open
-      if (!currentNPC) return;
+      // Don't capture if no dialogue is open or if resting
+      if (!currentNPC || isResting) return;
 
       if (e.key === 'Escape') {
         e.preventDefault();
@@ -195,12 +237,20 @@ export function DialogueBox() {
         e.preventDefault();
         const index = parseInt(e.key) - 1;
         handleTopicSelect(index);
+      } else if (e.key === '0' || e.key === 'ArrowRight') {
+        if (pageCount <= 1) return;
+        e.preventDefault();
+        cyclePage(1);
+      } else if (e.key === 'ArrowLeft') {
+        if (pageCount <= 1) return;
+        e.preventDefault();
+        cyclePage(-1);
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [currentNPC, isTyping, handleSkip, handleClose, handleTopicSelect]);
+  }, [currentNPC, isTyping, handleSkip, handleClose, handleTopicSelect, isResting, cyclePage, pageCount]);
 
   if (!currentNPC) return null;
   const portraitKey = currentNPC.portrait || currentNPC.id;
@@ -209,7 +259,9 @@ export function DialogueBox() {
 
   const formatTopic = (topic: string): string => {
     if (topic.startsWith('pay-')) {
-      const moneyMatch = currentNPC.dialogue.topics[topic]?.takesMoney;
+      const overrides = useDialogueStore.getState().dialogueOverrides[currentNPC.id] || {};
+      const topicData = overrides[topic] || currentNPC.dialogue.topics[topic];
+      const moneyMatch = topicData?.takesMoney;
       return moneyMatch ? `Pay ${moneyMatch} cruzados` : 'Make Payment';
     }
 
@@ -254,7 +306,7 @@ export function DialogueBox() {
   };
 
   return (
-    <div className="absolute bottom-3 left-1/2 -translate-x-1/2 w-[min(920px,96vw)] animate-fade-in z-50">
+    <div className="absolute bottom-3 left-0 right-0 mx-auto w-[min(920px,96vw)] animate-fade-in z-50">
       <div className="absolute inset-0 translate-x-2 translate-y-2 bg-black/45 rounded-[20px] blur-[1px]" />
 
       <div className="relative ui-dialogue-shell p-3 md:p-4">
@@ -265,15 +317,15 @@ export function DialogueBox() {
 
               <div className="min-w-0 pt-1">
                 <p className="ui-caption mb-1">{locationLabel}</p>
-                <h3 className="font-cinzel text-crimson font-bold text-lg leading-tight">
+                <h3 className="font-cinzel text-crimson font-bold text-xl leading-tight">
                   {currentNPC.name}
                 </h3>
                 {currentNPC.title && (
-                  <p className="text-sepia-light text-xs italic leading-snug mt-1">
+                  <p className="text-sepia-light text-sm italic leading-snug mt-1">
                     {currentNPC.title}
                   </p>
                 )}
-                <p className="text-sepia-light/80 text-[11px] uppercase tracking-[0.2em] mt-3">
+                <p className="text-sepia-light/80 text-xs uppercase tracking-[0.2em] mt-3">
                   Speak carefully. Answers are not always free.
                 </p>
               </div>
@@ -287,13 +339,18 @@ export function DialogueBox() {
             </div>
           </div>
 
-          {typingComplete && availableTopics.length > 0 && (
-            <div className="ui-topic-panel">
-              <p className="ui-caption mb-3">
-                Ask about
+          {availableTopics.length > 0 && (
+            <div className={`ui-topic-panel transition-opacity duration-300 ${typingComplete ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+              <p className="ui-caption mb-3 flex items-center justify-between gap-3">
+                <span>Ask about</span>
+                {pageCount > 1 && (
+                  <span className="normal-case tracking-normal text-sepia-light/70">
+                    Page {currentPage + 1} / {pageCount}
+                  </span>
+                )}
               </p>
               <div className="grid gap-2 sm:grid-cols-2">
-                {availableTopics.slice(0, 9).map((topic, index) => (
+                {visibleTopics.map((topic, index) => (
                   <button
                     key={topic}
                     onClick={() => handleTopicSelect(index)}
@@ -307,19 +364,32 @@ export function DialogueBox() {
                   </button>
                 ))}
               </div>
-              {availableTopics.length > 9 && (
-                <p className="text-sepia-light/60 text-xs mt-2">
-                  + {availableTopics.length - 9} more topics...
-                </p>
+              {pageCount > 1 && (
+                <div className="flex items-center gap-2 mt-3">
+                  <button
+                    onClick={() => cyclePage(1)}
+                    className="topic-btn ui-topic-btn"
+                    title="Show the next page of topics"
+                  >
+                    <span className="ui-topic-number">[0]</span>
+                    <span className="flex-1 text-left leading-snug">
+                      More topics ({availableTopics.length - visibleTopics.length} others)
+                    </span>
+                  </button>
+                </div>
               )}
             </div>
           )}
 
           <div className="flex items-center justify-between mt-3 pt-2 border-t border-sepia-light/20">
-            <span className="text-sepia-light text-xs font-mono">
-              {isTyping ? '[SPACE] skip' : '[1-9] ask • [ESC] close'}
+            <span className="text-sepia-light text-sm font-mono">
+              {isTyping
+                ? '[SPACE] skip'
+                : pageCount > 1
+                  ? '[1-9] ask • [0/←→] more topics • [ESC] close'
+                  : '[1-9] ask • [ESC] close'}
             </span>
-            <span className="text-sepia-light/60 text-[11px] uppercase tracking-[0.18em]">
+            <span className="text-sepia-light/60 text-xs uppercase tracking-[0.18em]">
               Melaka remembers everything
             </span>
           </div>

@@ -1,5 +1,10 @@
-const fs = require('fs');
-const path = require('path');
+import fs from "node:fs";
+import path from "node:path";
+import { createRequire } from "node:module";
+import { fileURLToPath } from "node:url";
+
+const require = createRequire(import.meta.url);
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const QUEST_DIR = path.join(__dirname, '..', 'src', 'data', 'quests');
 const NPC_FILE = path.join(__dirname, '..', 'src', 'data', 'npcs.json');

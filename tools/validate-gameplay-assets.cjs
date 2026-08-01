@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const { createCanvas, loadImage } = require('canvas');
 const { getAllPaletteColors } = require('./ultima8-graphics/palette.cjs');
+const forgeCanon = require('./forge/palette.cjs');
 
 const repoRoot = path.join(__dirname, '..');
 const specPath = path.join(repoRoot, 'docs', 'art-bible', 'gameplay-asset-spec.json');
@@ -337,7 +338,22 @@ async function validate(spec) {
   };
 
   const pngFiles = walkPngs(path.join(repoRoot, 'assets'));
-  const paletteSet = new Set(getAllPaletteColors().map((color) => color.hex.toUpperCase()));
+  // TRANSITIONAL PALETTE UNION (Stage 2 -> Stage 6)
+  // ------------------------------------------------
+  // Two palettes are in flight: the legacy 184-colour ultima8-graphics ramps,
+  // and the 50-colour Forge canon that is replacing them set by set. Asserting
+  // only the legacy set here would fail every asset the moment it migrates;
+  // asserting only the canon would fail everything that has not migrated yet.
+  //
+  // So this validator checks the UNION — "is this pixel from *a* sanctioned
+  // palette" — and tools/forge/validate-canon.cjs does the strict per-set work:
+  // it knows exactly which sets are migrated and fails them for so much as one
+  // legacy colour, with an explicit allowlist naming the sets still to come.
+  // When that allowlist empties, delete the legacy half of this union.
+  const paletteSet = new Set([
+    ...getAllPaletteColors().map((color) => color.hex.toUpperCase()),
+    ...forgeCanon.CANON.map((c) => c.hex.toUpperCase()),
+  ]);
 
   for (const filePath of pngFiles) {
     const relPath = normalizeRelPath(filePath);

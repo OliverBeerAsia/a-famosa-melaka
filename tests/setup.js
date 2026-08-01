@@ -1,37 +1,30 @@
 /**
- * Jest Test Setup
- * 
- * Runs before all tests to set up the testing environment
+ * Vitest Test Setup
+ *
+ * Runs before every test file to set up the testing environment.
  */
+import { expect, vi } from 'vitest';
 
-// Suppress console logs during tests unless explicitly testing them
+// Suppress console noise during tests unless explicitly testing it.
 global.console = {
   ...console,
-  log: jest.fn(),
-  warn: jest.fn(),
-  error: jest.fn(),
-  info: jest.fn(),
-  debug: jest.fn()
+  log: vi.fn(),
+  warn: vi.fn(),
+  error: vi.fn(),
+  info: vi.fn(),
+  debug: vi.fn(),
 };
 
 // Add custom matchers if needed
 expect.extend({
   toBeWithinRange(received, floor, ceiling) {
     const pass = received >= floor && received <= ceiling;
-    if (pass) {
-      return {
-        message: () =>
-          `expected ${received} not to be within range ${floor} - ${ceiling}`,
-        pass: true
-      };
-    } else {
-      return {
-        message: () =>
-          `expected ${received} to be within range ${floor} - ${ceiling}`,
-        pass: false
-      };
-    }
-  }
+    return {
+      message: () =>
+        pass
+          ? `expected ${received} not to be within range ${floor} - ${ceiling}`
+          : `expected ${received} to be within range ${floor} - ${ceiling}`,
+      pass,
+    };
+  },
 });
-
-

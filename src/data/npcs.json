@@ -50,7 +50,7 @@
           "requires": ["seal"]
         },
         "debt": {
-          "text": "Fifty cruzados. Too much to ignore, too little to lose the seal over. That is the trap.",
+          "text": "Five hundred cruzados. Too much to ignore, too little to lose the seal over. That is the trap.",
           "requires": ["chen-wei"]
         },
         "spices": {
@@ -69,7 +69,7 @@
           "text": "The monsoons decide who profits and who waits. Miss the wind, and you miss the season."
         },
         "food": {
-          "text": "I still miss Porto wine and salted cod, but Rua Direita has its comforts. Ask for the tavern stew when you want something familiar."
+          "text": "I still miss Lisbon wine and salted cod, but Melaka has its comforts. My household cook makes a tolerable stew when I yearn for Lisbon."
         },
         "captain": {
           "text": "Capitão Rodrigues is all steel and duty. He understands gates and guards, not cargo and credit."
@@ -78,13 +78,29 @@
           "text": "I attend Mass on Sundays. Padre Tomás means well, though he speaks as if faith alone can balance a ledger."
         },
         "rumors": {
-          "text": "There are northern ships nosing near the straits. When they come, they bring hard bargains and harder guns."
+          "text": "There are English privateers nosing near the straits. When they come, they bring hard bargains and harder guns."
         },
         "family": {
           "text": "My brother trades in Goa. My father never came home from the sea. Melaka has taught me that distance is expensive."
         },
         "advice": {
           "text": "Read the room before you read the price. In Melaka, the loudest man is rarely the most honest one."
+        },
+        "rest": {
+          "text": "If you need a safe place to sleep, my warehouse has a clean cot. You are welcome to rest here until dawn, noon, or night. When would you like to awaken?",
+          "unlocks": ["rest-dawn", "rest-noon", "rest-night"]
+        },
+        "rest-dawn": {
+          "text": "Sleep well, friend. I will have the warehouse boy wake you when the sun rises over the gate.",
+          "requires": ["rest"]
+        },
+        "rest-noon": {
+          "text": "Sleep well, friend. Rest until the high sun shines down on the market stalls.",
+          "requires": ["rest"]
+        },
+        "rest-night": {
+          "text": "Sleep well, friend. Wake when the cool sea breeze sets in after dark.",
+          "requires": ["rest"]
         }
       },
       "farewell": "Find the seal. Until then, I sleep badly.",
@@ -163,8 +179,8 @@
         "sultan": {
           "text": "The old Sultanate of Melaka fell, but the Sultan's heirs plot from Johor. They want their city back. The Acehnese raid our shipping. We are an island of Portugal in a sea of enemies."
         },
-        "dutch": {
-          "text": "*spits* Protestant pirates. Now they sniff around these waters like sharks smelling blood. If they push into the straits, war will follow."
+        "english": {
+          "text": "*spits* English privateers. Now they sniff around these waters like sharks smelling blood. If Drake's spawn pushes into the straits, war will follow."
         },
         "locals": {
           "text": "The Malays? Some are loyal, many are not. They smile and bow, but they remember the conquest. The Chinese keep to themselves - they care only for profit. Trust no one completely."
@@ -293,6 +309,22 @@
         },
         "advice": {
           "text": "Walk humbly, my child. Pride is the first sin. In Melaka, many are proud - of their wealth, their conquest, their certainty. Pride blinds us to truth. Keep your heart open to God's guidance."
+        },
+        "rest": {
+          "text": "Ah, you seek physical and spiritual rest? You are welcome to sit in the pews and rest in this sanctuary until dawn, noon, or night. When would you like to awaken?",
+          "unlocks": ["rest-dawn", "rest-noon", "rest-night"]
+        },
+        "rest-dawn": {
+          "text": "Very well. Rest in sanctuary until the dawn light touches the spire. Go with God.",
+          "requires": ["rest"]
+        },
+        "rest-noon": {
+          "text": "Very well. Rest in sanctuary until the midday sun is high. Go with God.",
+          "requires": ["rest"]
+        },
+        "rest-night": {
+          "text": "Very well. Rest in sanctuary until the darkness falls over the straits. Go with God.",
+          "requires": ["rest"]
         }
       },
       "farewell": "Go with God, my child. May His light guide your path.",
@@ -358,7 +390,7 @@
           "text": "The market is Melaka's face. The kampung is its breath. One sells, the other remembers."
         },
         "food": {
-          "text": "My rice and sambal beat any heavy Portuguese stew. They swear they will not come back for more, then they do."
+          "text": "My spiced rice and ginger fish beat any heavy Portuguese stew. They swear they will not come back for more, then they do."
         },
         "sultan": {
           "text": "The old Sultan's family still watches from Johor. Melaka has not forgotten them, even if the Portuguese pretend otherwise."
@@ -450,7 +482,7 @@
       "greetingReturning": "You return with either news or debt. Both are useful.",
       "topics": {
         "seal": {
-          "text": "Yes. Gomes left the seal here as collateral for fifty cruzados. Return the debt, and the seal goes back.",
+          "text": "Yes. Gomes left the seal here as collateral for five hundred cruzados. Return the debt, and the seal goes back.",
           "questCritical": true
         },
         "debt": {
@@ -494,18 +526,18 @@
         "religion": {
           "text": "We honor our ancestors and the teachings of the sages. The Jesuits speak with passion; I prefer balance."
         },
-        "dutch": {
-          "text": "There are whispers of northern traders with hard bargains. Melaka listens to every wind."
+        "english": {
+          "text": "There are whispers of English captains with hard bargains. Melaka listens to every wind."
         },
         "advice": {
           "text": "Do not ask for mercy where a contract will do. Melaka rewards clear terms."
         }
       },
       "farewell": "I have other accounts to close.",
-      "farewellDebt": "Fifty cruzados. Or a cleaner arrangement. The arithmetic does not change."
+      "farewellDebt": "Five hundred cruzados. Or a cleaner arrangement. The arithmetic does not change."
     },
     "hasItem": "trading-seal",
-    "requiresPayment": 50,
+    "requiresPayment": 500,
     "personality": {
       "traits": ["patient", "calculating", "proud", "pragmatic"],
       "accent": "Chinese with formal Portuguese phrasing",
@@ -517,8 +549,8 @@
     "id": "rashid",
     "name": "Rashid",
     "sprite": "rashid",
-    "title": "Indian Ocean Sailor",
-    "description": "A jovial sailor from the western Indian Ocean with a quick laugh and a head full of port tales. He has sailed from Aden to Canton and seen wonders beyond imagination.",
+    "title": "Nakhoda (Ship Captain)",
+    "description": "A respected Nakhoda (merchant captain) from Oman who commands the ocean-going dhow Al-Rashida. He has navigated the trade winds from Aden to Canton.",
     "culture": "arab",
     "location": "waterfront",
     "position": { "x": 240, "y": 220 },
@@ -585,10 +617,10 @@
           "text": "Chen Wei is sharp-edged - but honest about it. You know where he stands, and that is better than a man who smiles and then bites. At least with Chen Wei, the terms are plain."
         },
         "women": {
-          "text": "*sighs* I have a wife in Aden, waiting. And a wife in Calicut. And perhaps... *grins* ...a wife in Canton. A sailor's life is lonely! Allah understands!"
+          "text": "My family remains in Oman, managing our trading accounts while I navigate the trade winds. It is a long separation, but it secures our house's future."
         },
         "drink": {
-          "text": "Palm wine! The Malays make it from coconut trees. Haram, forbidden for Muslims, yes... but also delicious! *drinks* Allah forgives a sailor his small vices. It is the big sins He watches for."
+          "text": "We navigate by the stars and the monsoon. The Kamal — our wooden card with knotted strings — measures the height of Polaris above the horizon. Simple, yet it guides us across thousands of miles of open water."
         },
         "music": {
           "text": "Ah, you want entertainment? *pulls out small drum* In Aden, we sing of the sea. Here, listen... *sings a few notes in Arabic* It speaks of the waves, the stars, and the loneliness of blue horizons."
@@ -634,13 +666,13 @@
       "greetingTrusted": "You have returned. I... I am glad. It is lonely here, with only prayers and shadows for company.",
       "topics": {
         "her-story": {
-          "text": "*wrings hands* I was a servant in the household of Senhor Alvares. He is a powerful man, a sugar merchant. When I could no longer bear his cruelty, I fled. The Padre took me in, but I fear Alvares will come looking."
+          "text": "*wrings hands* I was a servant in the household of Senhor Alvares. He is a powerful man, a tin merchant. When I could no longer bear his cruelty, I fled. The Padre took me in, but I fear Alvares will come looking."
         },
         "sanctuary": {
           "text": "The Padre says the church is a place of sanctuary — that even Portuguese law cannot touch me here. But Alvares has powerful friends. I do not know how long the walls of God's house will protect a Malay servant girl."
         },
         "fear": {
-          "text": "*voice drops* He beat his servants. Not just me — all of us. But I saw worse. He cheats the local farmers, takes their sugar cane for nothing, threatens their families. He hides behind his wealth and his Portuguese name."
+          "text": "*voice drops* He beat his servants. Not just me — all of us. But I saw worse. He cheats the local miners, takes their tin ore for nothing, threatens their families. He hides behind his wealth and his Portuguese name."
         },
         "melaka": {
           "text": "I was born in the kampung. My mother still lives there — Mak Enang, the healer. She does not know I am here. I did not want to bring trouble to her door. Perhaps... could you tell her I am safe?"
@@ -663,8 +695,8 @@
     "id": "alvares",
     "name": "Senhor Alvares",
     "sprite": "alvares",
-    "title": "Sugar Merchant",
-    "description": "A wealthy and arrogant Portuguese sugar merchant who exploits local laborers. His respectable facade hides a cruel nature.",
+    "title": "Tin Merchant",
+    "description": "A wealthy and arrogant Portuguese tin merchant who exploits local miners. His respectable facade hides a cruel nature.",
     "culture": "portuguese",
     "location": "rua-direita",
     "position": { "x": 200, "y": 200 },
@@ -693,14 +725,14 @@
       }
     ],
     "dialogue": {
-      "greeting": "If you are buying sugar, speak. If not, do not waste my time. I am Alvares.",
+      "greeting": "If you are buying tin ingots, speak. If not, do not waste my time. I am Alvares.",
       "greetingReturning": "You again. Either you are rich or persistent.",
       "topics": {
-        "sugar": {
-          "text": "Sugar is the future. Spice is for dreamers. Sugar fills holds, tables, and ledgers."
+        "tin": {
+          "text": "Tin is the future. Spice is for dreamers. Tin fills holds, tables, and ledgers."
         },
         "business": {
-          "text": "The cane is cut locally, refined here, and shipped outward under Portuguese papers. That is how wealth works."
+          "text": "The ore is mined locally under tribute, smelted here, and shipped outward under Portuguese papers. That is how wealth works."
         },
         "servants": {
           "text": "I pay laborers and expect labor. This is not cruelty; it is order. Those who complain mistake discipline for injustice."
@@ -715,7 +747,7 @@
           "text": "Fernão Gomes sells stories of spice and honor. I sell what the harbor can move. That is the difference."
         }
       },
-      "farewell": "Move along. Sugar does not refine itself.",
+      "farewell": "Move along. Tin does not smelt itself.",
       "farewellBusiness": "Return when you can speak in numbers, not feelings."
     },
     "personality": {
@@ -1094,6 +1126,68 @@
       "traits": ["practical", "guarded", "warm", "worldly"],
       "accent": "Malay waterfront",
       "gesturesFrequent": false
+    }
+  },
+  "rudra-mudaliar": {
+    "id": "rudra-mudaliar",
+    "name": "Rudra Mudaliar",
+    "title": "Tamil Textile Merchant",
+    "_portraitDebt": "No Tamil portrait/sheet exists yet; the portrait alias to Rashid (an Omani captain) was removed so the UI falls back to a neutral wax seal. Sprite still borrows rashid-sheet. Needs a dedicated portrait + character sheet in the Stage 6 portrait rebuild.",
+    "sprite": "rashid",
+    "location": "rua-direita",
+    "description": "A wealthy Tamil merchant from the Coromandel Coast who trades in fine painted textiles. He values credit, community contracts, and harbor balance.",
+    "schedule": [
+      {
+        "startHour": 8,
+        "endHour": 18,
+        "location": "rua-direita",
+        "activity": "Trading cotton textiles at the street market stall",
+        "available": true
+      },
+      {
+        "startHour": 18,
+        "endHour": 22,
+        "location": "rua-direita",
+        "activity": "Reading transaction books under market lantern",
+        "available": true
+      },
+      {
+        "startHour": 22,
+        "endHour": 8,
+        "location": "home",
+        "activity": "Resting at home",
+        "available": false
+      }
+    ],
+    "defaultText": "Welcome, traveler. Looking for fine Pulicat weave or Masulipatam painted chintz? The currencies of these straits are woven, not just minted.",
+    "dialogue": {
+      "greeting": "A good contract outlasts any ruler.",
+      "topics": {
+        "about": {
+          "text": "My family has traded in these straits since the days of the Sultanate. The rulers change, but the need for Coromandel cloth does not."
+        },
+        "trade": {
+          "text": "Fine cottons from Pulicat, painted Chintz from Masulipatam. These are the currencies that buy spices in the eastern islands. Spices move west, but cotton moves east."
+        },
+        "union": {
+          "text": "They speak of a new Spanish King in Lisbon. The garrison captains look anxious, but a merchant only cares if the port customs remain stable."
+        },
+        "english": {
+          "text": "The English privateers? Yes, Drake has shown them the route. If they bring silver, we trade. But if they bring fire, these straits will burn."
+        },
+        "gomes": {
+          "text": "Fernão is a good partner, but too hot-headed. In business, anger is a bad ledger entry."
+        },
+        "chen-wei": {
+          "text": "Chen Wei understands exchange rates better than the Notary. We have settled accounts for twenty years without a single weapon drawn."
+        }
+      },
+      "farewell": "May your credit remain clear."
+    },
+    "personality": {
+      "traits": ["sharp", "calculating", "polite", "dignified"],
+      "accent": "Tamil merchant",
+      "gesturesFrequent": true
     }
   }
 }

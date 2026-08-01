@@ -78,11 +78,29 @@ function addHands(ctx, skin, leftX, rightX, y) {
   px(ctx, rightX, y + 1, skin[1]);
 }
 
+function addCrowdShadow(ctx) {
+  const sh = PALETTE.shadow;
+  const cx = 11;
+  const cy = 30;
+  const rx = 4;
+  const ry = 1.5;
+  for (let y = 29; y < 32; y++) {
+    for (let x = 6; x < 16; x++) {
+      const dx = (x - cx) / rx;
+      const dy = (y - cy) / ry;
+      if (dx * dx + dy * dy <= 1) {
+        px(ctx, x, y, sh[2]);
+      }
+    }
+  }
+}
+
 function saveSprite(name, draw) {
   const canvas = createCanvas(WIDTH, HEIGHT);
   const ctx = canvas.getContext('2d');
   ctx.imageSmoothingEnabled = false;
   ctx.clearRect(0, 0, WIDTH, HEIGHT);
+  addCrowdShadow(ctx);
   draw(ctx);
   fs.writeFileSync(path.join(OUT_DIR, `${name}.png`), canvas.toBuffer('image/png'));
   console.log(`  OK: ${name}.png (${WIDTH}x${HEIGHT})`);
@@ -245,7 +263,7 @@ function drawIndianMerchant(ctx) {
   outlineRect(ctx, 4, 14, 8, 11);
   ditherRect(ctx, 4, 14, 8, 11, PALETTE.lacquerRed, 5, 2);
   addSash(ctx, 5, 15, PALETTE.gold[5]);
-  ditherRect(ctx, 4, 25, 8, 4, PALETTE.whitewash, 5, 3);
+  ditherRect(ctx, 4, 25, 8, 4, PALETTE.sand, 7, 5);
   addHands(ctx, skin, 3, 12, 23);
   drawLegs(ctx, 4, 29, PALETTE.skinIndian);
 }

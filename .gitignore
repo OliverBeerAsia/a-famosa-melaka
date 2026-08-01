@@ -14,3 +14,6 @@ release/
 .playwright-cli/
 *.code-workspace
 .playwright-mcp/
+
+# Claude Code local settings (may contain approved commands with secrets)
+.claude/

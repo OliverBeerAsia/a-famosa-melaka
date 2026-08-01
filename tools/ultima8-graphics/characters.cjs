@@ -68,18 +68,18 @@ function addShadowOutline(ctx) {
   });
 }
 
-// Add ground shadow ellipse at character feet
+// Add ground shadow ellipse at character feet, offset to the South-East
 function addGroundShadow(ctx) {
-  const cx = CHAR_WIDTH / 2;
-  const ry = 1.5;
+  const cx = CHAR_WIDTH / 2 + 3; // Offset to the right for SE shadow
+  const cy = CHAR_HEIGHT - 2;
   const rx = 6;
-  for (let y = CHAR_HEIGHT - 2; y < CHAR_HEIGHT; y++) {
+  const ry = 1.5;
+  for (let y = CHAR_HEIGHT - 4; y < CHAR_HEIGHT; y++) {
     for (let x = 0; x < CHAR_WIDTH; x++) {
       const dx = (x - cx) / rx;
-      const dy = (y - (CHAR_HEIGHT - 1.5)) / ry;
+      const dy = (y - cy) / ry;
       if (dx * dx + dy * dy <= 1) {
-        const alpha = Math.max(0, 0.3 * (1 - (dx * dx + dy * dy)));
-        ctx.fillStyle = `rgba(0,0,0,${alpha.toFixed(2)})`;
+        ctx.fillStyle = PALETTE.shadow[2];
         ctx.fillRect(x, y, 1, 1);
       }
     }
@@ -1377,7 +1377,7 @@ const CHARACTER_META = {
   },
   'padre-tomas': {
     drawFunc: drawPadreTomas,
-    hairColor: PALETTE.skinPortuguese,  // tonsured
+    hairColor: PALETTE.stone,  // tonsured gray hair ring
     skinColor: PALETTE.skinPortuguese,
     mainCloth: PALETTE.shadow,   // black cassock
     headTop: 4, headBottom: 15,

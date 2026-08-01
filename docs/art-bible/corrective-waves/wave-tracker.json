@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "lastUpdated": "2026-03-21",
+  "lastUpdated": "2026-06-27",
   "waves": {
     "wave-1": {
       "name": "Named Gameplay Sheets and Portraits",
@@ -8,8 +8,8 @@
       "status": "graded",
       "totalAssets": 28,
       "graded": 28,
-      "keep": 28,
-      "tune": 0,
+      "keep": 26,
+      "tune": 2,
       "replace": 0,
       "complete": false,
       "assets": {
@@ -22,10 +22,10 @@
       "description": "Refresh tiles, isometric tiles, props, animated objects, and crowd silhouettes with denser occlusion, clearer shadows, and Ultima VIII material treatment.",
       "status": "graded",
       "totalAssets": 163,
-      "graded": 90,
-      "keep": 89,
-      "tune": 0,
-      "replace": 1,
+      "graded": 97,
+      "keep": 94,
+      "tune": 3,
+      "replace": 0,
       "complete": false,
       "assets": {
         "tiles-base": 14,
@@ -41,10 +41,10 @@
       "description": "Regenerate the base scenes and time-of-day variants after the gameplay art kit stabilizes, ensuring cinematic art shares the same palette and density logic.",
       "status": "graded",
       "totalAssets": 21,
-      "graded": 21,
-      "keep": 0,
-      "tune": 0,
-      "replace": 21,
+      "graded": 22,
+      "keep": 10,
+      "tune": 2,
+      "replace": 10,
       "complete": false,
       "assets": {
         "base-scenes": 6,

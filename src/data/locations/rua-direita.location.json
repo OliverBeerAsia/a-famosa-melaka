@@ -1,0 +1,2122 @@
+{
+  "id": "rua-direita",
+  "name": "Rua Direita",
+  "coordVersion": 3,
+  "world": {
+    "scale": 3,
+    "nativeWidth": 640,
+    "nativeHeight": 360
+  },
+  "layoutHash": "41a23a5ca966",
+  "generatedBy": "tools/forge/compose-plate.cjs",
+  "sun": {
+    "azimuthDeg": 315,
+    "elevationDeg": 30,
+    "litFace": "+ty",
+    "shadowFace": "+tx",
+    "castOffset": [
+      1,
+      0.5
+    ]
+  },
+  "plate": {
+    "background": "scene-rua-direita",
+    "variants": {
+      "dawn": "scene-rua-direita-dawn",
+      "dusk": "scene-rua-direita-dusk",
+      "night": "scene-rua-direita-night"
+    },
+    "runtimeMode": "legacy-backdrop",
+    "camera": "scrolling",
+    "walkMask": "rua-direita-walk",
+    "targetMode": "isometric-2:1",
+    "authoringBasis": "forge-compositor",
+    "anchor": "bottom-center",
+    "depthStrategy": "screen-y",
+    "tileWidth": 32,
+    "tileHeight": 16
+  },
+  "collision": {
+    "rects": [
+      {
+        "x": 0,
+        "y": 0,
+        "width": 640,
+        "height": 120
+      },
+      {
+        "x": 0,
+        "y": 120,
+        "width": 256,
+        "height": 32
+      },
+      {
+        "x": 296,
+        "y": 120,
+        "width": 184,
+        "height": 8
+      },
+      {
+        "x": 552,
+        "y": 120,
+        "width": 88,
+        "height": 8
+      },
+      {
+        "x": 296,
+        "y": 128,
+        "width": 176,
+        "height": 24
+      },
+      {
+        "x": 560,
+        "y": 128,
+        "width": 80,
+        "height": 24
+      },
+      {
+        "x": 480,
+        "y": 136,
+        "width": 8,
+        "height": 8
+      },
+      {
+        "x": 8,
+        "y": 152,
+        "width": 16,
+        "height": 8
+      },
+      {
+        "x": 72,
+        "y": 152,
+        "width": 64,
+        "height": 8
+      },
+      {
+        "x": 272,
+        "y": 152,
+        "width": 8,
+        "height": 8
+      },
+      {
+        "x": 320,
+        "y": 152,
+        "width": 48,
+        "height": 8
+      },
+      {
+        "x": 392,
+        "y": 152,
+        "width": 80,
+        "height": 8
+      },
+      {
+        "x": 88,
+        "y": 160,
+        "width": 32,
+        "height": 8
+      },
+      {
+        "x": 336,
+        "y": 160,
+        "width": 16,
+        "height": 8
+      },
+      {
+        "x": 400,
+        "y": 160,
+        "width": 64,
+        "height": 8
+      },
+      {
+        "x": 528,
+        "y": 160,
+        "width": 16,
+        "height": 8
+      },
+      {
+        "x": 416,
+        "y": 168,
+        "width": 32,
+        "height": 8
+      },
+      {
+        "x": 480,
+        "y": 168,
+        "width": 16,
+        "height": 8
+      },
+      {
+        "x": 592,
+        "y": 168,
+        "width": 8,
+        "height": 16
+      },
+      {
+        "x": 624,
+        "y": 168,
+        "width": 8,
+        "height": 8
+      },
+      {
+        "x": 24,
+        "y": 176,
+        "width": 16,
+        "height": 8
+      },
+      {
+        "x": 64,
+        "y": 176,
+        "width": 8,
+        "height": 16
+      },
+      {
+        "x": 264,
+        "y": 176,
+        "width": 8,
+        "height": 8
+      },
+      {
+        "x": 408,
+        "y": 176,
+        "width": 8,
+        "height": 16
+      },
+      {
+        "x": 40,
+        "y": 184,
+        "width": 8,
+        "height": 8
+      },
+      {
+        "x": 120,
+        "y": 184,
+        "width": 16,
+        "height": 8
+      },
+      {
+        "x": 336,
+        "y": 184,
+        "width": 16,
+        "height": 8
+      },
+      {
+        "x": 480,
+        "y": 184,
+        "width": 8,
+        "height": 8
+      },
+      {
+        "x": 528,
+        "y": 184,
+        "width": 8,
+        "height": 8
+      },
+      {
+        "x": 216,
+        "y": 192,
+        "width": 8,
+        "height": 8
+      },
+      {
+        "x": 264,
+        "y": 200,
+        "width": 8,
+        "height": 8
+      },
+      {
+        "x": 16,
+        "y": 208,
+        "width": 16,
+        "height": 8
+      },
+      {
+        "x": 520,
+        "y": 216,
+        "width": 8,
+        "height": 24
+      },
+      {
+        "x": 576,
+        "y": 216,
+        "width": 16,
+        "height": 8
+      },
+      {
+        "x": 96,
+        "y": 224,
+        "width": 16,
+        "height": 24
+      },
+      {
+        "x": 368,
+        "y": 224,
+        "width": 16,
+        "height": 16
+      },
+      {
+        "x": 464,
+        "y": 224,
+        "width": 8,
+        "height": 8
+      },
+      {
+        "x": 88,
+        "y": 232,
+        "width": 8,
+        "height": 8
+      },
+      {
+        "x": 112,
+        "y": 232,
+        "width": 8,
+        "height": 8
+      },
+      {
+        "x": 160,
+        "y": 232,
+        "width": 8,
+        "height": 24
+      },
+      {
+        "x": 360,
+        "y": 232,
+        "width": 8,
+        "height": 8
+      },
+      {
+        "x": 384,
+        "y": 232,
+        "width": 8,
+        "height": 24
+      },
+      {
+        "x": 504,
+        "y": 232,
+        "width": 16,
+        "height": 8
+      },
+      {
+        "x": 152,
+        "y": 240,
+        "width": 8,
+        "height": 8
+      },
+      {
+        "x": 168,
+        "y": 240,
+        "width": 16,
+        "height": 8
+      },
+      {
+        "x": 544,
+        "y": 240,
+        "width": 16,
+        "height": 8
+      },
+      {
+        "x": 624,
+        "y": 240,
+        "width": 8,
+        "height": 8
+      },
+      {
+        "x": 120,
+        "y": 248,
+        "width": 8,
+        "height": 8
+      },
+      {
+        "x": 168,
+        "y": 248,
+        "width": 8,
+        "height": 8
+      },
+      {
+        "x": 232,
+        "y": 248,
+        "width": 8,
+        "height": 24
+      },
+      {
+        "x": 376,
+        "y": 248,
+        "width": 8,
+        "height": 8
+      },
+      {
+        "x": 392,
+        "y": 248,
+        "width": 8,
+        "height": 8
+      },
+      {
+        "x": 552,
+        "y": 248,
+        "width": 8,
+        "height": 8
+      },
+      {
+        "x": 128,
+        "y": 256,
+        "width": 24,
+        "height": 8
+      },
+      {
+        "x": 216,
+        "y": 256,
+        "width": 16,
+        "height": 8
+      },
+      {
+        "x": 240,
+        "y": 256,
+        "width": 16,
+        "height": 8
+      },
+      {
+        "x": 56,
+        "y": 264,
+        "width": 16,
+        "height": 8
+      },
+      {
+        "x": 136,
+        "y": 264,
+        "width": 16,
+        "height": 8
+      },
+      {
+        "x": 184,
+        "y": 264,
+        "width": 16,
+        "height": 8
+      },
+      {
+        "x": 392,
+        "y": 264,
+        "width": 8,
+        "height": 8
+      },
+      {
+        "x": 568,
+        "y": 264,
+        "width": 24,
+        "height": 8
+      },
+      {
+        "x": 16,
+        "y": 272,
+        "width": 16,
+        "height": 16
+      },
+      {
+        "x": 336,
+        "y": 272,
+        "width": 32,
+        "height": 16
+      },
+      {
+        "x": 520,
+        "y": 272,
+        "width": 8,
+        "height": 8
+      },
+      {
+        "x": 576,
+        "y": 272,
+        "width": 8,
+        "height": 8
+      },
+      {
+        "x": 56,
+        "y": 280,
+        "width": 8,
+        "height": 8
+      },
+      {
+        "x": 8,
+        "y": 288,
+        "width": 8,
+        "height": 8
+      },
+      {
+        "x": 352,
+        "y": 288,
+        "width": 8,
+        "height": 8
+      },
+      {
+        "x": 584,
+        "y": 288,
+        "width": 16,
+        "height": 8
+      },
+      {
+        "x": 152,
+        "y": 296,
+        "width": 8,
+        "height": 8
+      },
+      {
+        "x": 216,
+        "y": 296,
+        "width": 16,
+        "height": 16
+      },
+      {
+        "x": 608,
+        "y": 296,
+        "width": 8,
+        "height": 8
+      },
+      {
+        "x": 240,
+        "y": 304,
+        "width": 8,
+        "height": 8
+      },
+      {
+        "x": 112,
+        "y": 312,
+        "width": 32,
+        "height": 48
+      },
+      {
+        "x": 0,
+        "y": 320,
+        "width": 8,
+        "height": 40
+      },
+      {
+        "x": 96,
+        "y": 320,
+        "width": 16,
+        "height": 40
+      },
+      {
+        "x": 144,
+        "y": 320,
+        "width": 16,
+        "height": 40
+      },
+      {
+        "x": 352,
+        "y": 320,
+        "width": 16,
+        "height": 8
+      },
+      {
+        "x": 632,
+        "y": 320,
+        "width": 8,
+        "height": 40
+      },
+      {
+        "x": 8,
+        "y": 328,
+        "width": 16,
+        "height": 32
+      },
+      {
+        "x": 80,
+        "y": 328,
+        "width": 16,
+        "height": 24
+      },
+      {
+        "x": 160,
+        "y": 328,
+        "width": 16,
+        "height": 24
+      },
+      {
+        "x": 520,
+        "y": 328,
+        "width": 32,
+        "height": 32
+      },
+      {
+        "x": 24,
+        "y": 336,
+        "width": 16,
+        "height": 24
+      },
+      {
+        "x": 72,
+        "y": 336,
+        "width": 8,
+        "height": 8
+      },
+      {
+        "x": 176,
+        "y": 336,
+        "width": 8,
+        "height": 8
+      },
+      {
+        "x": 408,
+        "y": 336,
+        "width": 16,
+        "height": 8
+      },
+      {
+        "x": 552,
+        "y": 336,
+        "width": 16,
+        "height": 24
+      },
+      {
+        "x": 616,
+        "y": 336,
+        "width": 16,
+        "height": 16
+      },
+      {
+        "x": 40,
+        "y": 344,
+        "width": 16,
+        "height": 16
+      },
+      {
+        "x": 504,
+        "y": 344,
+        "width": 16,
+        "height": 16
+      },
+      {
+        "x": 568,
+        "y": 344,
+        "width": 16,
+        "height": 16
+      },
+      {
+        "x": 488,
+        "y": 352,
+        "width": 16,
+        "height": 8
+      },
+      {
+        "x": 584,
+        "y": 352,
+        "width": 16,
+        "height": 8
+      }
+    ]
+  },
+  "spawns": {
+    "player": {
+      "x": 320,
+      "y": 252
+    }
+  },
+  "npcs": {
+    "fernao-gomes": {
+      "x": 216,
+      "y": 219
+    },
+    "aminah": {
+      "x": 99,
+      "y": 244
+    },
+    "alvares": {
+      "x": 440,
+      "y": 221
+    },
+    "rudra-mudaliar": {
+      "x": 54,
+      "y": 266
+    },
+    "diogo-almeida": {
+      "x": 8,
+      "y": 284
+    }
+  },
+  "transitions": [
+    {
+      "targetLocation": "a-famosa-gate",
+      "label": "To A Famosa Gate",
+      "triggerArea": {
+        "x": 0,
+        "y": 205,
+        "width": 16,
+        "height": 100
+      },
+      "spawnAt": {
+        "x": 247,
+        "y": 113
+      }
+    },
+    {
+      "targetLocation": "waterfront",
+      "label": "To The Waterfront",
+      "triggerArea": {
+        "x": 624,
+        "y": 205,
+        "width": 16,
+        "height": 100
+      },
+      "spawnAt": {
+        "x": 60,
+        "y": 113
+      }
+    },
+    {
+      "targetLocation": "st-pauls-church",
+      "label": "Climb to St. Paul's",
+      "triggerArea": {
+        "x": 484,
+        "y": 126,
+        "width": 58,
+        "height": 22
+      },
+      "spawnAt": {
+        "x": 160,
+        "y": 143
+      }
+    },
+    {
+      "targetLocation": "a-famosa-gate",
+      "label": "To A Famosa Gate (South Gate)",
+      "triggerArea": {
+        "x": 200,
+        "y": 340,
+        "width": 240,
+        "height": 20
+      },
+      "spawnAt": {
+        "x": 247,
+        "y": 113
+      }
+    }
+  ],
+  "props": [],
+  "plateProps": [
+    {
+      "key": "banana-clump-48",
+      "type": "banana-clump",
+      "x": 486,
+      "y": 136,
+      "label": "banana clump",
+      "examineText": "A clump of pisang, leaves torn by the monsoon.",
+      "interactive": false
+    },
+    {
+      "key": "laundry-line-39",
+      "type": "laundry-line",
+      "x": 253,
+      "y": 138,
+      "label": "laundry line",
+      "examineText": "Washing strung between the upper storeys.",
+      "interactive": false
+    },
+    {
+      "key": "padrao-32",
+      "type": "padrao",
+      "x": 518,
+      "y": 142,
+      "label": "padrao",
+      "examineText": "A padrão cut with the Cross of the Order of Christ, set where the lane climbs to St Paul's.",
+      "interactive": true
+    },
+    {
+      "key": "banana-clump-38",
+      "type": "banana-clump",
+      "x": 278,
+      "y": 159,
+      "label": "banana clump",
+      "examineText": "A clump of pisang, leaves torn by the monsoon.",
+      "interactive": false
+    },
+    {
+      "key": "sack-pile-47",
+      "type": "sack-pile",
+      "x": 538,
+      "y": 162,
+      "label": "sack pile",
+      "examineText": "Sacks of pepper, sagging under their own weight.",
+      "interactive": false
+    },
+    {
+      "key": "bench-49",
+      "type": "bench",
+      "x": 490,
+      "y": 173,
+      "label": "bench",
+      "examineText": "A worn bench under the arcade.",
+      "interactive": false
+    },
+    {
+      "key": "amphora-4",
+      "type": "amphora",
+      "x": 186,
+      "y": 184,
+      "label": "amphora",
+      "examineText": "A tall glazed jar — palm oil, or arrack.",
+      "interactive": false
+    },
+    {
+      "key": "crate-2",
+      "type": "crate",
+      "x": 70,
+      "y": 181,
+      "label": "crate",
+      "examineText": "A pine crate stencilled with a merchant's mark.",
+      "interactive": false
+    },
+    {
+      "key": "crate-37",
+      "type": "crate",
+      "x": 266,
+      "y": 183,
+      "label": "crate",
+      "examineText": "A pine crate stencilled with a merchant's mark.",
+      "interactive": false
+    },
+    {
+      "key": "barrel-0",
+      "type": "barrel",
+      "x": 32,
+      "y": 183,
+      "label": "barrel",
+      "examineText": "A stout oak barrel, hooped in iron.",
+      "interactive": false
+    },
+    {
+      "key": "chicken-coop-9",
+      "type": "chicken-coop",
+      "x": 600,
+      "y": 183,
+      "label": "chicken coop",
+      "examineText": "A rattan coop; the birds are asleep in the heat.",
+      "interactive": false
+    },
+    {
+      "key": "crate-45",
+      "type": "crate",
+      "x": 486,
+      "y": 186,
+      "label": "crate",
+      "examineText": "A pine crate stencilled with a merchant's mark.",
+      "interactive": false
+    },
+    {
+      "key": "crate-stack-11",
+      "type": "crate-stack",
+      "x": 696,
+      "y": 183,
+      "label": "crate stack",
+      "examineText": "Crates stacked two high, roped against the rain.",
+      "interactive": false
+    },
+    {
+      "key": "pot-row-8",
+      "type": "pot-row",
+      "x": 410,
+      "y": 184,
+      "label": "pot row",
+      "examineText": "Water jars set out to catch the afternoon rain.",
+      "interactive": false
+    },
+    {
+      "key": "barrel-1",
+      "type": "barrel",
+      "x": 45,
+      "y": 189,
+      "label": "barrel",
+      "examineText": "A stout oak barrel, hooped in iron.",
+      "interactive": false
+    },
+    {
+      "key": "barrel-46",
+      "type": "barrel",
+      "x": 531,
+      "y": 190,
+      "label": "barrel",
+      "examineText": "A stout oak barrel, hooped in iron.",
+      "interactive": false
+    },
+    {
+      "key": "bench-10",
+      "type": "bench",
+      "x": 648,
+      "y": 190,
+      "label": "bench",
+      "examineText": "A worn bench under the arcade.",
+      "interactive": false
+    },
+    {
+      "key": "sack-pile-6",
+      "type": "sack-pile",
+      "x": 342,
+      "y": 190,
+      "label": "sack pile",
+      "examineText": "Sacks of Sumatran pepper, stamped with the Gomes house mark.",
+      "interactive": true
+    },
+    {
+      "key": "basket-7",
+      "type": "basket",
+      "x": 362,
+      "y": 194,
+      "label": "basket",
+      "examineText": "A rattan basket heaped with rambutan and mangosteen.",
+      "interactive": false
+    },
+    {
+      "key": "bench-3",
+      "type": "bench",
+      "x": 120,
+      "y": 191,
+      "label": "bench",
+      "examineText": "A bench worn smooth by two generations of gossips.",
+      "interactive": false
+    },
+    {
+      "key": "amphora-44",
+      "type": "amphora",
+      "x": 506,
+      "y": 196,
+      "label": "amphora",
+      "examineText": "A tall glazed jar — palm oil, or arrack.",
+      "interactive": false
+    },
+    {
+      "key": "step-stone-5",
+      "type": "step-stone",
+      "x": 221,
+      "y": 196,
+      "label": "step stone",
+      "examineText": "A mounting block, hollowed by two centuries of boots.",
+      "interactive": false
+    },
+    {
+      "key": "signboard-chinese-59",
+      "type": "signboard-chinese",
+      "x": 77,
+      "y": 205,
+      "label": "signboard chinese",
+      "examineText": "A rice-wine shop board, the characters redrawn every Lunar New Year.",
+      "interactive": true
+    },
+    {
+      "key": "pot-row-35",
+      "type": "pot-row",
+      "x": -22,
+      "y": 201,
+      "label": "pot row",
+      "examineText": "Water jars set out to catch the afternoon rain.",
+      "interactive": false
+    },
+    {
+      "key": "barrel-open-36",
+      "type": "barrel-open",
+      "x": 270,
+      "y": 204,
+      "label": "barrel open",
+      "examineText": "An open cask, half full of brackish water.",
+      "interactive": false
+    },
+    {
+      "key": "step-stone-56",
+      "type": "step-stone",
+      "x": 582,
+      "y": 207,
+      "label": "step stone",
+      "examineText": "A mounting block, hollowed by two centuries of boots.",
+      "interactive": false
+    },
+    {
+      "key": "lantern-post-30",
+      "type": "lantern-post",
+      "x": 278,
+      "y": 213,
+      "label": "lantern post",
+      "examineText": "A pitch lantern on an iron bracket.",
+      "interactive": false
+    },
+    {
+      "key": "lantern-post-31",
+      "type": "lantern-post",
+      "x": 618,
+      "y": 213,
+      "label": "lantern post",
+      "examineText": "A pitch lantern on an iron bracket.",
+      "interactive": false
+    },
+    {
+      "key": "signboard-chinese-29",
+      "type": "signboard-chinese",
+      "x": 394,
+      "y": 214,
+      "label": "signboard chinese",
+      "examineText": "A guild board: the Melaka Chinese kongsi, gilt characters flaking in the salt air.",
+      "interactive": true
+    },
+    {
+      "key": "cloth-rack-60",
+      "type": "cloth-rack",
+      "x": 22,
+      "y": 213,
+      "label": "cloth rack",
+      "examineText": "Bolts of Gujarati cloth on a bamboo rack.",
+      "interactive": false
+    },
+    {
+      "key": "crate-stack-51",
+      "type": "crate-stack",
+      "x": 678,
+      "y": 216,
+      "label": "crate stack",
+      "examineText": "Crates stacked two high, roped against the rain.",
+      "interactive": false
+    },
+    {
+      "key": "banana-clump-27",
+      "type": "banana-clump",
+      "x": 584,
+      "y": 221,
+      "label": "banana clump",
+      "examineText": "A clump of pisang, leaves torn by the monsoon.",
+      "interactive": false
+    },
+    {
+      "key": "pot-row-50",
+      "type": "pot-row",
+      "x": 525,
+      "y": 223,
+      "label": "pot row",
+      "examineText": "Water jars set out to catch the afternoon rain.",
+      "interactive": false
+    },
+    {
+      "key": "potted-palm-26",
+      "type": "potted-palm",
+      "x": 467,
+      "y": 230,
+      "label": "potted palm",
+      "examineText": "A young coconut palm in a cracked jar.",
+      "interactive": false
+    },
+    {
+      "key": "brazier-21",
+      "type": "brazier",
+      "x": 8,
+      "y": 236,
+      "label": "brazier",
+      "examineText": "A charcoal brazier; skewers of grilled fish sputter over it.",
+      "interactive": false
+    },
+    {
+      "key": "market-stall-15",
+      "type": "market-stall",
+      "x": 374,
+      "y": 234,
+      "label": "market stall",
+      "examineText": "Blue-and-white porcelain from Jingdezhen, packed in straw.",
+      "interactive": false
+    },
+    {
+      "key": "rope-coil-53",
+      "type": "rope-coil",
+      "x": 630,
+      "y": 244,
+      "label": "rope coil",
+      "examineText": "A coil of tarred hemp, stiff with salt.",
+      "interactive": false
+    },
+    {
+      "key": "aminah-stall",
+      "type": "market-stall",
+      "x": 104,
+      "y": 236,
+      "label": "market stall",
+      "examineText": "Aminah's stall: bolts of batik, and betel nut wrapped in banana leaf.",
+      "interactive": true
+    },
+    {
+      "x": 515,
+      "y": 237,
+      "key": "rua-direita-pelourinho",
+      "label": "The pelourinho",
+      "type": "pelourinho"
+    },
+    {
+      "key": "basket-17",
+      "type": "basket",
+      "x": 125,
+      "y": 252,
+      "label": "basket",
+      "examineText": "A rattan basket heaped with rambutan and mangosteen.",
+      "interactive": false
+    },
+    {
+      "key": "water-trough-25",
+      "type": "water-trough",
+      "x": 554,
+      "y": 248,
+      "label": "water trough",
+      "examineText": "A stone trough; the water is warm and green.",
+      "interactive": false
+    },
+    {
+      "key": "handcart-64",
+      "type": "handcart",
+      "x": 390,
+      "y": 250,
+      "label": "handcart",
+      "examineText": "A two-wheeled handcart, shafts resting on the cobbles.",
+      "interactive": false
+    },
+    {
+      "key": "market-stall-13",
+      "type": "market-stall",
+      "x": 166,
+      "y": 245,
+      "label": "market stall",
+      "examineText": "Cones of turmeric, mace and long pepper, sold by the tahil.",
+      "interactive": false
+    },
+    {
+      "key": "basket-18",
+      "type": "basket",
+      "x": 141,
+      "y": 257,
+      "label": "basket",
+      "examineText": "A rattan basket heaped with rambutan and mangosteen.",
+      "interactive": false
+    },
+    {
+      "key": "crate-70",
+      "type": "crate",
+      "x": 666,
+      "y": 255,
+      "label": "crate",
+      "examineText": "A pine crate stencilled with a merchant's mark.",
+      "interactive": false
+    },
+    {
+      "key": "barrel-71",
+      "type": "barrel",
+      "x": 683,
+      "y": 259,
+      "label": "barrel",
+      "examineText": "A stout oak barrel, hooped in iron.",
+      "interactive": false
+    },
+    {
+      "key": "sack-pile-19",
+      "type": "sack-pile",
+      "x": 192,
+      "y": 264,
+      "label": "sack pile",
+      "examineText": "Sacks of pepper, sagging under their own weight.",
+      "interactive": false
+    },
+    {
+      "key": "brazier-20",
+      "type": "brazier",
+      "x": 282,
+      "y": 269,
+      "label": "brazier",
+      "examineText": "A charcoal brazier; skewers of grilled fish sputter over it.",
+      "interactive": false
+    },
+    {
+      "key": "cloth-rack-16",
+      "type": "cloth-rack",
+      "x": 64,
+      "y": 265,
+      "label": "cloth rack",
+      "examineText": "Gujarati cottons on a bamboo rack — Rudra's stock, unsold since the monsoon.",
+      "interactive": true
+    },
+    {
+      "key": "basket-58",
+      "type": "basket",
+      "x": 397,
+      "y": 269,
+      "label": "basket",
+      "examineText": "A rattan basket heaped with rambutan and mangosteen.",
+      "interactive": false
+    },
+    {
+      "key": "market-stall-14",
+      "type": "market-stall",
+      "x": 237,
+      "y": 260,
+      "label": "market stall",
+      "examineText": "Ikan bilis drying in flat trays; the smell reaches the church.",
+      "interactive": false
+    },
+    {
+      "key": "potted-palm-40",
+      "type": "potted-palm",
+      "x": 656,
+      "y": 273,
+      "label": "potted palm",
+      "examineText": "A young coconut palm in a cracked jar.",
+      "interactive": false
+    },
+    {
+      "x": 144,
+      "y": 274,
+      "key": "rua-direita-well",
+      "label": "The public well",
+      "type": "well"
+    },
+    {
+      "key": "basket-54",
+      "type": "basket",
+      "x": 522,
+      "y": 276,
+      "label": "basket",
+      "examineText": "A rattan basket heaped with rambutan and mangosteen.",
+      "interactive": false
+    },
+    {
+      "key": "handcart-52",
+      "type": "handcart",
+      "x": 582,
+      "y": 270,
+      "label": "handcart",
+      "examineText": "A two-wheeled handcart, shafts resting on the cobbles.",
+      "interactive": false
+    },
+    {
+      "key": "amphora-67",
+      "type": "amphora",
+      "x": -16,
+      "y": 278,
+      "label": "amphora",
+      "examineText": "A tall glazed jar — palm oil, or arrack.",
+      "interactive": false
+    },
+    {
+      "key": "basket-68",
+      "type": "basket",
+      "x": 344,
+      "y": 285,
+      "label": "basket",
+      "examineText": "A rattan basket heaped with rambutan and mangosteen.",
+      "interactive": false
+    },
+    {
+      "key": "barrel-23",
+      "type": "barrel",
+      "x": 61,
+      "y": 284,
+      "label": "barrel",
+      "examineText": "A stout oak barrel, hooped in iron.",
+      "interactive": false
+    },
+    {
+      "key": "amphora-28",
+      "type": "amphora",
+      "x": 440,
+      "y": 287,
+      "label": "amphora",
+      "examineText": "A tall glazed jar — palm oil, or arrack.",
+      "interactive": false
+    },
+    {
+      "key": "handcart-22",
+      "type": "handcart",
+      "x": 24,
+      "y": 282,
+      "label": "handcart",
+      "examineText": "A two-wheeled handcart, shafts resting on the cobbles.",
+      "interactive": false
+    },
+    {
+      "key": "brazier-69",
+      "type": "brazier",
+      "x": 483,
+      "y": 289,
+      "label": "brazier",
+      "examineText": "A charcoal brazier; skewers of grilled fish sputter over it.",
+      "interactive": false
+    },
+    {
+      "key": "market-stall-61",
+      "type": "market-stall",
+      "x": 355,
+      "y": 279,
+      "label": "market stall",
+      "examineText": "A tea seller's trestle; the water is kept on the boil all day.",
+      "interactive": false
+    },
+    {
+      "key": "rope-coil-24",
+      "type": "rope-coil",
+      "x": -8,
+      "y": 289,
+      "label": "rope coil",
+      "examineText": "A coil of tarred hemp, stiff with salt.",
+      "interactive": false
+    },
+    {
+      "key": "sack-pile-65",
+      "type": "sack-pile",
+      "x": 592,
+      "y": 293,
+      "label": "sack pile",
+      "examineText": "Sacks of pepper, sagging under their own weight.",
+      "interactive": false
+    },
+    {
+      "key": "chicken-coop-57",
+      "type": "chicken-coop",
+      "x": 13,
+      "y": 295,
+      "label": "chicken coop",
+      "examineText": "A rattan coop; the birds are asleep in the heat.",
+      "interactive": false
+    },
+    {
+      "key": "bollard-33",
+      "type": "bollard",
+      "x": -48,
+      "y": 299,
+      "label": "bollard",
+      "examineText": "A capstan-headed mooring post, rope-scarred.",
+      "interactive": false
+    },
+    {
+      "key": "crate-41",
+      "type": "crate",
+      "x": 136,
+      "y": 296,
+      "label": "crate",
+      "examineText": "A pine crate stencilled with a merchant's mark.",
+      "interactive": false
+    },
+    {
+      "key": "bench-43",
+      "type": "bench",
+      "x": 360,
+      "y": 295,
+      "label": "bench",
+      "examineText": "A worn bench under the arcade.",
+      "interactive": false
+    },
+    {
+      "key": "barrel-42",
+      "type": "barrel",
+      "x": 154,
+      "y": 298,
+      "label": "barrel",
+      "examineText": "A stout oak barrel, hooped in iron.",
+      "interactive": false
+    },
+    {
+      "key": "crate-66",
+      "type": "crate",
+      "x": 614,
+      "y": 297,
+      "label": "crate",
+      "examineText": "A pine crate stencilled with a merchant's mark.",
+      "interactive": false
+    },
+    {
+      "key": "amphora-55",
+      "type": "amphora",
+      "x": 515,
+      "y": 303,
+      "label": "amphora",
+      "examineText": "A tall glazed jar — palm oil, or arrack.",
+      "interactive": false
+    },
+    {
+      "key": "bollard-34",
+      "type": "bollard",
+      "x": -29,
+      "y": 304,
+      "label": "bollard",
+      "examineText": "A capstan-headed mooring post, rope-scarred.",
+      "interactive": false
+    },
+    {
+      "key": "barrel-63",
+      "type": "barrel",
+      "x": 246,
+      "y": 306,
+      "label": "barrel",
+      "examineText": "A stout oak barrel, hooped in iron.",
+      "interactive": false
+    },
+    {
+      "key": "crate-stack-62",
+      "type": "crate-stack",
+      "x": 224,
+      "y": 304,
+      "label": "crate stack",
+      "examineText": "Crates stacked two high, roped against the rain.",
+      "interactive": false
+    },
+    {
+      "key": "bollard-78",
+      "type": "bollard",
+      "x": -72,
+      "y": 317,
+      "label": "bollard",
+      "examineText": "A capstan-headed mooring post, rope-scarred.",
+      "interactive": false
+    },
+    {
+      "key": "pot-row-76",
+      "type": "pot-row",
+      "x": 360,
+      "y": 322,
+      "label": "pot row",
+      "examineText": "Water jars set out to catch the afternoon rain.",
+      "interactive": false
+    },
+    {
+      "key": "rope-coil-72",
+      "type": "rope-coil",
+      "x": 128,
+      "y": 327,
+      "label": "rope coil",
+      "examineText": "A coil of tarred hemp, stiff with salt.",
+      "interactive": false
+    },
+    {
+      "key": "laundry-line-82",
+      "type": "laundry-line",
+      "x": 64,
+      "y": 330,
+      "label": "laundry line",
+      "examineText": "Washing strung between the upper storeys.",
+      "interactive": false
+    },
+    {
+      "key": "water-trough-77",
+      "type": "water-trough",
+      "x": 640,
+      "y": 326,
+      "label": "water trough",
+      "examineText": "A stone trough; the water is warm and green.",
+      "interactive": false
+    },
+    {
+      "key": "barrel-73",
+      "type": "barrel",
+      "x": 168,
+      "y": 331,
+      "label": "barrel",
+      "examineText": "A stout oak barrel, hooped in iron.",
+      "interactive": false
+    },
+    {
+      "key": "bench-75",
+      "type": "bench",
+      "x": 528,
+      "y": 330,
+      "label": "bench",
+      "examineText": "A worn bench under the arcade.",
+      "interactive": false
+    },
+    {
+      "key": "crate-stack-74",
+      "type": "crate-stack",
+      "x": 416,
+      "y": 337,
+      "label": "crate stack",
+      "examineText": "Crates stacked two high, roped against the rain.",
+      "interactive": false
+    },
+    {
+      "key": "potted-palm-79",
+      "type": "potted-palm",
+      "x": 288,
+      "y": 342,
+      "label": "potted palm",
+      "examineText": "A young coconut palm in a cracked jar.",
+      "interactive": false
+    },
+    {
+      "key": "banana-clump-80",
+      "type": "banana-clump",
+      "x": 704,
+      "y": 346,
+      "label": "banana clump",
+      "examineText": "A clump of pisang, leaves torn by the monsoon.",
+      "interactive": false
+    },
+    {
+      "key": "market-stall-81",
+      "type": "market-stall",
+      "x": 24,
+      "y": 341,
+      "label": "market stall",
+      "examineText": "A stall packing up for the day; the awning still smells of cardamom.",
+      "interactive": false
+    }
+  ],
+  "doors": [
+    {
+      "x": 266,
+      "y": 115,
+      "face": "ty",
+      "label": "alley-door"
+    },
+    {
+      "x": 179,
+      "y": 135,
+      "face": "ty",
+      "label": "warehouse"
+    },
+    {
+      "x": 236,
+      "y": 144,
+      "face": "tx",
+      "label": "warehouse-side"
+    },
+    {
+      "x": 683,
+      "y": 155,
+      "face": "ty",
+      "label": "counting-house"
+    },
+    {
+      "x": 409,
+      "y": 168,
+      "face": "ty",
+      "label": "tavern"
+    }
+  ],
+  "overlays": [
+    {
+      "key": "rua-direita-fg-0",
+      "sprite": "rua-direita-fg-0.png",
+      "x": 560,
+      "y": 111,
+      "width": 80,
+      "height": 66,
+      "depthY": 177,
+      "from": "arcade#11"
+    },
+    {
+      "key": "rua-direita-fg-1",
+      "sprite": "rua-direita-fg-1.png",
+      "x": 296,
+      "y": 111,
+      "width": 107,
+      "height": 70,
+      "depthY": 181,
+      "from": "arcade#10"
+    },
+    {
+      "key": "rua-direita-fg-2",
+      "sprite": "rua-direita-fg-2.png",
+      "x": 0,
+      "y": 115,
+      "width": 75,
+      "height": 67,
+      "depthY": 182,
+      "from": "arcade#8"
+    },
+    {
+      "key": "rua-direita-fg-3",
+      "sprite": "rua-direita-fg-3.png",
+      "x": 64,
+      "y": 125,
+      "width": 106,
+      "height": 65,
+      "depthY": 190,
+      "from": "arcade#9"
+    },
+    {
+      "key": "rua-direita-fg-4",
+      "sprite": "rua-direita-fg-4.png",
+      "x": 59,
+      "y": 250,
+      "width": 139,
+      "height": 110,
+      "depthY": 360,
+      "from": "townhouse#16"
+    },
+    {
+      "key": "rua-direita-fg-5",
+      "sprite": "rua-direita-fg-5.png",
+      "x": 603,
+      "y": 282,
+      "width": 37,
+      "height": 78,
+      "depthY": 360,
+      "from": "townhouse#18"
+    },
+    {
+      "key": "rua-direita-fg-6",
+      "sprite": "rua-direita-fg-6.png",
+      "x": 0,
+      "y": 277,
+      "width": 70,
+      "height": 83,
+      "depthY": 360,
+      "from": "townhouse#15"
+    },
+    {
+      "key": "rua-direita-fg-7",
+      "sprite": "rua-direita-fg-7.png",
+      "x": 475,
+      "y": 285,
+      "width": 139,
+      "height": 75,
+      "depthY": 360,
+      "from": "townhouse#17"
+    }
+  ],
+  "animatedProps": [
+    {
+      "type": "smoke",
+      "x": 282,
+      "y": 253
+    },
+    {
+      "type": "smoke",
+      "x": 8,
+      "y": 220
+    },
+    {
+      "type": "smoke",
+      "x": 483,
+      "y": 273
+    },
+    {
+      "type": "awning-flutter",
+      "x": 104,
+      "y": 189
+    },
+    {
+      "type": "awning-flutter",
+      "x": 374,
+      "y": 187
+    },
+    {
+      "type": "awning-flutter",
+      "x": 237,
+      "y": 213
+    },
+    {
+      "type": "awning-flutter",
+      "x": 24,
+      "y": 294
+    },
+    {
+      "type": "awning-flutter",
+      "x": 272,
+      "y": 86
+    },
+    {
+      "type": "awning-flutter",
+      "x": 80,
+      "y": 282
+    },
+    {
+      "type": "palm-sway",
+      "x": 467,
+      "y": 197
+    },
+    {
+      "type": "palm-sway",
+      "x": 584,
+      "y": 192
+    },
+    {
+      "type": "palm-sway",
+      "x": 288,
+      "y": 305
+    },
+    {
+      "type": "torch",
+      "x": 278,
+      "y": 171
+    },
+    {
+      "type": "torch",
+      "x": 618,
+      "y": 171
+    },
+    {
+      "type": "seagull",
+      "x": 300,
+      "y": 44
+    }
+  ],
+  "lights": [
+    {
+      "x": 179,
+      "y": 91,
+      "type": "lantern",
+      "radius": 42
+    },
+    {
+      "x": -7,
+      "y": 79,
+      "type": "window",
+      "radius": 34,
+      "nightOnly": true
+    },
+    {
+      "x": 41,
+      "y": 79,
+      "type": "window",
+      "radius": 34,
+      "nightOnly": true
+    },
+    {
+      "x": 321,
+      "y": 86,
+      "type": "window",
+      "radius": 34,
+      "nightOnly": true
+    },
+    {
+      "x": 683,
+      "y": 111,
+      "type": "lantern",
+      "radius": 42
+    },
+    {
+      "x": 147,
+      "y": 83,
+      "type": "window",
+      "radius": 34,
+      "nightOnly": true
+    },
+    {
+      "x": 409,
+      "y": 124,
+      "type": "lantern",
+      "radius": 42
+    },
+    {
+      "x": 278,
+      "y": 183,
+      "type": "lantern",
+      "radius": 46,
+      "nightOnly": true
+    },
+    {
+      "x": 618,
+      "y": 183,
+      "type": "lantern",
+      "radius": 46,
+      "nightOnly": true
+    },
+    {
+      "x": 8,
+      "y": 206,
+      "type": "cookingFire",
+      "radius": 52,
+      "nightOnly": true
+    },
+    {
+      "x": 282,
+      "y": 239,
+      "type": "cookingFire",
+      "radius": 52,
+      "nightOnly": true
+    },
+    {
+      "x": 483,
+      "y": 259,
+      "type": "cookingFire",
+      "radius": 52,
+      "nightOnly": true
+    },
+    {
+      "x": 96,
+      "y": 155,
+      "type": "lantern",
+      "radius": 46,
+      "nightOnly": true
+    },
+    {
+      "x": 336,
+      "y": 146,
+      "type": "lantern",
+      "radius": 46,
+      "nightOnly": true
+    },
+    {
+      "x": 592,
+      "y": 142,
+      "type": "lantern",
+      "radius": 46,
+      "nightOnly": true
+    },
+    {
+      "x": 64,
+      "y": 286,
+      "type": "lantern",
+      "radius": 44,
+      "nightOnly": true
+    },
+    {
+      "x": 608,
+      "y": 286,
+      "type": "lantern",
+      "radius": 44,
+      "nightOnly": true
+    }
+  ],
+  "fires": [
+    {
+      "x": 8,
+      "y": 206
+    },
+    {
+      "x": 282,
+      "y": 239
+    },
+    {
+      "x": 483,
+      "y": 259
+    }
+  ],
+  "audio": {
+    "music": "music-market",
+    "nightMusic": "music-night",
+    "ambientSounds": [
+      {
+        "key": "base-tropical",
+        "volume": 0.24
+      },
+      {
+        "key": "market-crowd",
+        "volume": 0.48
+      },
+      {
+        "key": "street-life",
+        "volume": 0.4
+      }
+    ],
+    "nightAmbientSounds": [
+      {
+        "key": "street-life",
+        "volume": 0.22
+      },
+      {
+        "key": "distant-city",
+        "volume": 0.2
+      },
+      {
+        "key": "cricket-chorus",
+        "volume": 0.18
+      }
+    ],
+    "footstepSurface": "stone",
+    "transitionSound": "sfx-crowd-murmur"
+  },
+  "visual": {
+    "transitionTint": [
+      50,
+      40,
+      10
+    ],
+    "fogTint": 13153422,
+    "fogSpeed": 0.38,
+    "hazeTint": 15323039,
+    "sunAnchor": {
+      "x": 146,
+      "y": 54
+    },
+    "aoZones": [
+      {
+        "x": 0,
+        "y": 0,
+        "width": 640,
+        "height": 120,
+        "alpha": 0.18
+      },
+      {
+        "x": 220,
+        "y": 146,
+        "width": 200,
+        "height": 80,
+        "alpha": 0.14
+      }
+    ],
+    "canopyShadows": [
+      {
+        "x": -6,
+        "y": -14,
+        "width": 200,
+        "height": 106,
+        "alpha": 0.11
+      },
+      {
+        "x": 460,
+        "y": -14,
+        "width": 200,
+        "height": 106,
+        "alpha": 0.11
+      },
+      {
+        "x": 200,
+        "y": 100,
+        "width": 240,
+        "height": 80,
+        "alpha": 0.08
+      }
+    ]
+  },
+  "crowd": {
+    "maxCrowd": 7,
+    "density": 1,
+    "crowdTypes": [
+      "portuguese_merchant",
+      "malay_local",
+      "malay_woman",
+      "chinese_merchant",
+      "arab_trader",
+      "indian_merchant"
+    ],
+    "paths": [
+      {
+        "id": "west-east-street",
+        "speed": 22,
+        "points": [
+          {
+            "x": 10,
+            "y": 246
+          },
+          {
+            "x": 180,
+            "y": 240
+          },
+          {
+            "x": 330,
+            "y": 250
+          },
+          {
+            "x": 500,
+            "y": 244
+          },
+          {
+            "x": 630,
+            "y": 248
+          }
+        ]
+      },
+      {
+        "id": "east-west-way",
+        "speed": 18,
+        "points": [
+          {
+            "x": 630,
+            "y": 180
+          },
+          {
+            "x": 420,
+            "y": 176
+          },
+          {
+            "x": 230,
+            "y": 182
+          },
+          {
+            "x": 20,
+            "y": 178
+          }
+        ]
+      },
+      {
+        "id": "market-browse",
+        "speed": 12,
+        "points": [
+          {
+            "x": 150,
+            "y": 264
+          },
+          {
+            "x": 212,
+            "y": 248
+          },
+          {
+            "x": 268,
+            "y": 258
+          },
+          {
+            "x": 200,
+            "y": 276
+          },
+          {
+            "x": 150,
+            "y": 264
+          }
+        ]
+      },
+      {
+        "id": "well-run",
+        "speed": 15,
+        "points": [
+          {
+            "x": 320,
+            "y": 296
+          },
+          {
+            "x": 200,
+            "y": 270
+          },
+          {
+            "x": 176,
+            "y": 260
+          },
+          {
+            "x": 230,
+            "y": 292
+          },
+          {
+            "x": 320,
+            "y": 296
+          }
+        ]
+      },
+      {
+        "id": "lane-to-church",
+        "speed": 16,
+        "points": [
+          {
+            "x": 512,
+            "y": 146
+          },
+          {
+            "x": 500,
+            "y": 192
+          },
+          {
+            "x": 470,
+            "y": 236
+          },
+          {
+            "x": 430,
+            "y": 264
+          }
+        ]
+      },
+      {
+        "id": "near-pavement",
+        "speed": 20,
+        "points": [
+          {
+            "x": 40,
+            "y": 330
+          },
+          {
+            "x": 240,
+            "y": 324
+          },
+          {
+            "x": 430,
+            "y": 328
+          },
+          {
+            "x": 600,
+            "y": 322
+          }
+        ]
+      },
+      {
+        "id": "alley-loiter",
+        "speed": 9,
+        "points": [
+          {
+            "x": 286,
+            "y": 148
+          },
+          {
+            "x": 280,
+            "y": 184
+          },
+          {
+            "x": 292,
+            "y": 212
+          },
+          {
+            "x": 286,
+            "y": 148
+          }
+        ]
+      }
+    ]
+  },
+  "items": [
+    {
+      "id": "coin-pouch-1",
+      "itemId": "coin-pouch",
+      "x": 300,
+      "y": 300,
+      "description": "A leather pouch containing 10 cruzados."
+    },
+    {
+      "id": "spice-sample-1",
+      "itemId": "spice-sample",
+      "x": 139,
+      "y": 230,
+      "description": "A small sample of exotic spices from the Moluccas."
+    },
+    {
+      "id": "letter-of-credit-1",
+      "itemId": "letter-of-credit",
+      "x": 262,
+      "y": 214,
+      "description": "A sealed letter of credit useful for reputable trade dealings."
+    }
+  ],
+  "loreObjects": [
+    {
+      "id": "spice-pile-nutmeg",
+      "x": 112,
+      "y": 244
+    },
+    {
+      "id": "spice-pile-cloves",
+      "x": 176,
+      "y": 252
+    },
+    {
+      "id": "merchant-petition-book",
+      "x": 368,
+      "y": 301
+    },
+    {
+      "id": "notary-scroll",
+      "x": 398,
+      "y": 257
+    },
+    {
+      "id": "customs-request-ledger",
+      "x": 494,
+      "y": 193
+    },
+    {
+      "id": "trade-ledger",
+      "x": 246,
+      "y": 267
+    },
+    {
+      "id": "betel-nut-tray",
+      "x": 133,
+      "y": 258
+    },
+    {
+      "id": "balance-scale",
+      "x": 382,
+      "y": 241
+    },
+    {
+      "id": "pelourinho",
+      "x": 508,
+      "y": 246
+    },
+    {
+      "id": "pepper-pile",
+      "x": 200,
+      "y": 271
+    }
+  ]
+}

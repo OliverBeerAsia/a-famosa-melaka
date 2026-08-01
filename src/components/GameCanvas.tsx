@@ -25,12 +25,22 @@ export default function GameCanvas() {
       setGameReady(true);
     });
 
+    // Dev-only handle so headless review passes (Playwright contact sheets of
+    // each location at each time of day) can drive the running game without
+    // walking the player there. Stripped from production builds.
+    if (import.meta.env.DEV) {
+      (window as unknown as { __melakaGame?: Phaser.Game }).__melakaGame = gameRef.current;
+    }
+
     // Cleanup on unmount
     return () => {
       if (gameRef.current) {
         destroyGame(gameRef.current);
         gameRef.current = null;
         setGameReady(false);
+      }
+      if (import.meta.env.DEV) {
+        delete (window as unknown as { __melakaGame?: Phaser.Game }).__melakaGame;
       }
     };
   }, [setGameReady]);

@@ -1,31 +1,103 @@
 {
+  "_comment": "npc: anchors must stay in sync with the npcs block in src/data/locations/<id>.location.json (native plate px * world.scale = these screen coords; enforced within tolerance by tests/ObjectiveMarkerIntegrity.test.js).",
   "anchors": {
     "a-famosa-gate": {
-      "npc:capitao-rodrigues": { "x": 480, "y": 340 },
-      "location:a-famosa-gate": { "x": 480, "y": 320 }
+      "npc:capitao-rodrigues": {
+        "x": 400,
+        "y": 330
+      },
+      "npc:gaspar-mesquita": {
+        "x": 560,
+        "y": 330
+      },
+      "location:a-famosa-gate": {
+        "x": 480,
+        "y": 380
+      }
     },
     "rua-direita": {
-      "npc:fernao-gomes": { "x": 280, "y": 340 },
-      "npc:aminah": { "x": 700, "y": 340 },
-      "npc:alvares": { "x": 500, "y": 300 },
-      "location:rua-direita": { "x": 500, "y": 320 }
+      "npc:fernao-gomes": {
+        "x": 648,
+        "y": 657
+      },
+      "npc:aminah": {
+        "x": 297,
+        "y": 732
+      },
+      "npc:alvares": {
+        "x": 1320,
+        "y": 663
+      },
+      "npc:rudra-mudaliar": {
+        "x": 162,
+        "y": 798
+      },
+      "npc:diogo-almeida": {
+        "x": 24,
+        "y": 852
+      },
+      "location:rua-direita": {
+        "x": 960,
+        "y": 756
+      }
     },
     "st-pauls-church": {
-      "npc:padre-tomas": { "x": 520, "y": 320 },
-      "npc:siti": { "x": 480, "y": 280 },
-      "poi:siti": { "x": 480, "y": 280 },
-      "location:st-pauls-church": { "x": 520, "y": 320 }
+      "npc:padre-tomas": {
+        "x": 470,
+        "y": 330
+      },
+      "npc:siti": {
+        "x": 600,
+        "y": 345
+      },
+      "poi:siti": {
+        "x": 600,
+        "y": 345
+      },
+      "location:st-pauls-church": {
+        "x": 480,
+        "y": 380
+      }
     },
     "waterfront": {
-      "npc:chen-wei": { "x": 650, "y": 260 },
-      "npc:rashid": { "x": 280, "y": 280 },
-      "poi:counting-house": { "x": 700, "y": 240 },
-      "poi:counting-house-drawer": { "x": 720, "y": 225 },
-      "location:waterfront": { "x": 480, "y": 280 }
+      "npc:chen-wei": {
+        "x": 470,
+        "y": 330
+      },
+      "npc:rashid": {
+        "x": 300,
+        "y": 360
+      },
+      "npc:lin-mei": {
+        "x": 650,
+        "y": 330
+      },
+      "poi:counting-house": {
+        "x": 640,
+        "y": 300
+      },
+      "poi:counting-house-drawer": {
+        "x": 660,
+        "y": 285
+      },
+      "location:waterfront": {
+        "x": 480,
+        "y": 380
+      }
     },
     "kampung": {
-      "npc:mak-enang": { "x": 600, "y": 320 },
-      "location:kampung": { "x": 520, "y": 360 }
+      "npc:mak-enang": {
+        "x": 470,
+        "y": 330
+      },
+      "npc:pak-salleh": {
+        "x": 600,
+        "y": 345
+      },
+      "location:kampung": {
+        "x": 480,
+        "y": 380
+      }
     }
   }
 }

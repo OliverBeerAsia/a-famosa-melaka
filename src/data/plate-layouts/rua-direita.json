@@ -1,0 +1,1556 @@
+{
+  "id": "rua-direita",
+  "name": "Rua Direita",
+  "notes": [
+    "AUTHORING COORDINATES: s = tx+ty (screen DEPTH, y = s*8), dd = tx-ty (screen",
+    "HORIZONTAL, x = 320 + dd*16). A street runs along constant s, so it is a BAND:",
+    "{sFrom, sTo, ddFrom, ddTo}. Buildings give frontS (the s of their street-facing",
+    "corner) + dd; a terrace is a chain of buildings whose dd spans [dd-w, dd+d] abut.",
+    "Changing frontS moves a building UP/DOWN the screen without changing its screen",
+    "x span \u2014 that is how the terrace is staggered without breaking the packing.",
+    "VERTICAL BUDGET (640x360 native): sky 0-84 | distant town 58-112 |",
+    "far terrace 24-190 | five-foot way 155-190 | STREET 190-308 |",
+    "near pavement 308-364 | near roofs 262-360 (the foreground occluder plane).",
+    "SCALE MARKERS: player 32, doorway 40, storey 48, stall canopy 40, arcade pier 36."
+  ],
+  "canvas": {
+    "width": 640,
+    "height": 360
+  },
+  "iso": {
+    "tileWidth": 32,
+    "tileHeight": 16,
+    "originX": 320,
+    "originY": 0
+  },
+  "horizon": {
+    "skyTo": 84,
+    "skyTop": 1,
+    "skyBottom": 3,
+    "groundFrom": 110
+  },
+  "background": [
+    {
+      "type": "hill",
+      "cx": 214,
+      "baseY": 88,
+      "rx": 132,
+      "ry": 40,
+      "haze": 0.4
+    },
+    {
+      "type": "tower",
+      "x": 196,
+      "w": 20,
+      "baseY": 54,
+      "h": 26,
+      "cap": 10,
+      "haze": 0.26
+    },
+    {
+      "type": "distant-roofline",
+      "baseY": 84,
+      "minH": 9,
+      "maxH": 20,
+      "haze": 0.48,
+      "seed": 71
+    },
+    {
+      "type": "distant-roofline",
+      "baseY": 112,
+      "minH": 13,
+      "maxH": 28,
+      "haze": 0.24,
+      "seed": 83
+    }
+  ],
+  "backdrop": {
+    "texture": "dirt",
+    "material": "earth",
+    "light": 3,
+    "bigScale": 2.6,
+    "smallScale": 1.1,
+    "surface": "dirt"
+  },
+  "ground": [
+    {
+      "id": "street",
+      "shape": {
+        "sFrom": 23.8,
+        "sTo": 38.5,
+        "ddFrom": -28,
+        "ddTo": 29
+      },
+      "texture": "trodden",
+      "material": "earth",
+      "light": 2,
+      "ruts": [
+        {
+          "s": 31.4,
+          "w": 0.4
+        },
+        {
+          "s": 33.1,
+          "w": 0.34
+        },
+        {
+          "s": 27.2,
+          "w": 0.26
+        }
+      ],
+      "hotspots": [
+        {
+          "s": 29.6,
+          "dd": -13.5,
+          "r": 46
+        },
+        {
+          "s": 30.8,
+          "dd": -9.6,
+          "r": 42
+        },
+        {
+          "s": 32.6,
+          "dd": -5.2,
+          "r": 42
+        },
+        {
+          "s": 29.4,
+          "dd": 3.4,
+          "r": 46
+        },
+        {
+          "s": 35.0,
+          "dd": 2.2,
+          "r": 40
+        },
+        {
+          "s": 33.6,
+          "dd": -11,
+          "r": 52
+        },
+        {
+          "s": 25.0,
+          "dd": -6.0,
+          "r": 40
+        },
+        {
+          "s": 25.2,
+          "dd": 7.5,
+          "r": 40
+        },
+        {
+          "s": 34.4,
+          "dd": -2.4,
+          "r": 34
+        },
+        {
+          "s": 30.2,
+          "dd": -19.5,
+          "r": 34
+        },
+        {
+          "s": 30.6,
+          "dd": 12.2,
+          "r": 38
+        }
+      ],
+      "surface": "stone",
+      "walkable": true
+    },
+    {
+      "id": "largo",
+      "shape": {
+        "sFrom": 30.5,
+        "sTo": 35.5,
+        "ddFrom": -14.5,
+        "ddTo": -7.5
+      },
+      "texture": "flagstone",
+      "material": "stone",
+      "light": 4,
+      "n": 1.4,
+      "surface": "stone",
+      "walkable": true
+    },
+    {
+      "id": "five-foot-way",
+      "shape": {
+        "sFrom": 19.4,
+        "sTo": 23.8,
+        "ddFrom": -28,
+        "ddTo": 29
+      },
+      "texture": "flagstone",
+      "material": "stone",
+      "light": 3,
+      "n": 1.4,
+      "surface": "stone",
+      "walkable": true
+    },
+    {
+      "id": "near-pavement",
+      "shape": {
+        "sFrom": 38.5,
+        "sTo": 45.5,
+        "ddFrom": -28,
+        "ddTo": 29
+      },
+      "texture": "flagstone",
+      "material": "stone",
+      "light": 3,
+      "n": 1.4,
+      "surface": "stone",
+      "walkable": true
+    },
+    {
+      "id": "alley",
+      "shape": {
+        "sFrom": 15,
+        "sTo": 24.5,
+        "ddFrom": -3.9,
+        "ddTo": -1.6
+      },
+      "texture": "dirt",
+      "material": "earth",
+      "light": 3,
+      "bigScale": 2.6,
+      "smallScale": 1.1,
+      "surface": "dirt",
+      "walkable": true
+    },
+    {
+      "id": "church-lane",
+      "shape": {
+        "sFrom": 15.5,
+        "sTo": 24.5,
+        "ddFrom": 9.7,
+        "ddTo": 14.9
+      },
+      "texture": "flagstone",
+      "material": "stone",
+      "light": 3,
+      "n": 1.4,
+      "surface": "stone",
+      "walkable": true
+    }
+  ],
+  "shade": [
+    {
+      "shape": {
+        "sFrom": 19.0,
+        "sTo": 22.4,
+        "ddFrom": -22.6,
+        "ddTo": -15.6
+      },
+      "strength": 0.34
+    },
+    {
+      "shape": {
+        "sFrom": 20.6,
+        "sTo": 23.4,
+        "ddFrom": -16.4,
+        "ddTo": -9.6
+      },
+      "strength": 0.34
+    },
+    {
+      "shape": {
+        "sFrom": 19.8,
+        "sTo": 22.2,
+        "ddFrom": -2.1,
+        "ddTo": 4.9
+      },
+      "strength": 0.34
+    },
+    {
+      "shape": {
+        "sFrom": 18.4,
+        "sTo": 21.8,
+        "ddFrom": 14.4,
+        "ddTo": 21.9
+      },
+      "strength": 0.34
+    },
+    {
+      "shape": {
+        "sFrom": 15,
+        "sTo": 21,
+        "ddFrom": -3.9,
+        "ddTo": -1.6
+      },
+      "strength": 0.26
+    },
+    {
+      "shape": {
+        "sFrom": 15.5,
+        "sTo": 19.5,
+        "ddFrom": 9.7,
+        "ddTo": 14.9
+      },
+      "strength": 0.18
+    }
+  ],
+  "buildings": [
+    {
+      "kit": "townhouse",
+      "frontS": 20.0,
+      "dd": -19,
+      "w": 3,
+      "d": 3,
+      "floors": 2,
+      "wall": "whitewash",
+      "roof": {
+        "type": "hip",
+        "ridgeAxis": "tx"
+      },
+      "windows": {
+        "perStorey": 2,
+        "litFloors": [
+          1
+        ],
+        "litChance": 0.3
+      },
+      "balcony": {
+        "from": 0.2,
+        "to": 0.8
+      },
+      "seed": 11
+    },
+    {
+      "kit": "townhouse",
+      "frontS": 21.6,
+      "dd": -13.5,
+      "w": 2.5,
+      "d": 3.5,
+      "floors": 2,
+      "wall": "whitewash",
+      "roof": {
+        "type": "hip",
+        "ridgeAxis": "ty",
+        "rise": 22
+      },
+      "windows": {
+        "perStorey": 2,
+        "litFloors": [
+          1
+        ],
+        "litChance": 0.25
+      },
+      "seed": 12
+    },
+    {
+      "kit": "townhouse",
+      "frontS": 19.2,
+      "dd": -6.5,
+      "w": 3.5,
+      "d": 2.5,
+      "floors": 1,
+      "wall": "terracotta",
+      "groundH": 52,
+      "roof": {
+        "type": "hip",
+        "ridgeAxis": "tx",
+        "rise": 22
+      },
+      "windows": {
+        "perStorey": 0
+      },
+      "doors": [
+        {
+          "face": "ty",
+          "at": 0.34,
+          "label": "warehouse",
+          "lamp": true
+        },
+        {
+          "face": "tx",
+          "at": 0.5,
+          "label": "warehouse-side"
+        }
+      ],
+      "seed": 13
+    },
+    {
+      "kit": "townhouse",
+      "frontS": 20.8,
+      "dd": 1.5,
+      "w": 3,
+      "d": 3,
+      "floors": 2,
+      "wall": "whitewash",
+      "roof": {
+        "type": "hip",
+        "ridgeAxis": "ty"
+      },
+      "windows": {
+        "perStorey": 2,
+        "litFloors": [
+          1
+        ],
+        "litChance": 0.35
+      },
+      "seed": 14
+    },
+    {
+      "kit": "townhouse",
+      "frontS": 22.4,
+      "dd": 7,
+      "w": 2.5,
+      "d": 3,
+      "floors": 1,
+      "wall": "whitewash",
+      "groundH": 50,
+      "roof": {
+        "type": "gable",
+        "ridgeAxis": "tx",
+        "rise": 24
+      },
+      "windows": {
+        "perStorey": 1,
+        "litFloors": []
+      },
+      "doors": [
+        {
+          "face": "ty",
+          "at": 0.42,
+          "label": "tavern",
+          "lamp": true,
+          "litInterior": true
+        }
+      ],
+      "seed": 15
+    },
+    {
+      "kit": "townhouse",
+      "frontS": 19.4,
+      "dd": 18.5,
+      "w": 3.5,
+      "d": 3,
+      "floors": 2,
+      "wall": "whitewash",
+      "roof": {
+        "type": "hip",
+        "ridgeAxis": "tx"
+      },
+      "windows": {
+        "perStorey": 2,
+        "litFloors": [
+          1
+        ],
+        "litChance": 0.3
+      },
+      "balcony": {
+        "from": 0.16,
+        "to": 0.84
+      },
+      "seed": 16
+    },
+    {
+      "kit": "townhouse",
+      "frontS": 21.2,
+      "dd": 24.5,
+      "w": 3,
+      "d": 3,
+      "floors": 2,
+      "wall": "whitewash",
+      "roof": {
+        "type": "gable",
+        "ridgeAxis": "ty"
+      },
+      "windows": {
+        "perStorey": 2,
+        "litFloors": [
+          1
+        ],
+        "litChance": 0.3
+      },
+      "doors": [
+        {
+          "face": "ty",
+          "at": 0.4,
+          "label": "counting-house",
+          "lamp": true
+        }
+      ],
+      "seed": 17
+    },
+    {
+      "kit": "townhouse",
+      "frontS": 15,
+      "dd": -2.75,
+      "w": 1.3,
+      "d": 1.3,
+      "floors": 1,
+      "wall": "whitewash",
+      "groundH": 42,
+      "dado": 12,
+      "roof": {
+        "type": "hip",
+        "ridgeAxis": "tx",
+        "rise": 12
+      },
+      "windows": {
+        "perStorey": 1,
+        "litFloors": []
+      },
+      "doors": [
+        {
+          "face": "ty",
+          "at": 0.5,
+          "height": 34,
+          "width": 16,
+          "label": "alley-door"
+        }
+      ],
+      "seed": 18
+    },
+    {
+      "kit": "arcade",
+      "s": 22.4,
+      "dd": -22,
+      "len": 3,
+      "axis": "h",
+      "bays": 3,
+      "pierH": 36,
+      "entablature": 7,
+      "rise": 6,
+      "roofDepth": 0.7,
+      "springV": 20,
+      "layer": "overlay",
+      "seed": 21
+    },
+    {
+      "kit": "arcade",
+      "s": 23.4,
+      "dd": -16,
+      "len": 3,
+      "axis": "h",
+      "bays": 3,
+      "pierH": 34,
+      "entablature": 7,
+      "rise": 6,
+      "roofDepth": 0.7,
+      "springV": 19,
+      "layer": "overlay",
+      "seed": 22
+    },
+    {
+      "kit": "arcade",
+      "s": 22.2,
+      "dd": -1.5,
+      "len": 3,
+      "axis": "h",
+      "bays": 3,
+      "pierH": 37,
+      "entablature": 8,
+      "rise": 6,
+      "roofDepth": 0.7,
+      "springV": 21,
+      "layer": "overlay",
+      "seed": 23
+    },
+    {
+      "kit": "arcade",
+      "s": 21.8,
+      "dd": 15,
+      "len": 3.25,
+      "axis": "h",
+      "bays": 3,
+      "pierH": 35,
+      "entablature": 7,
+      "rise": 6,
+      "roofDepth": 0.7,
+      "springV": 20,
+      "layer": "overlay",
+      "seed": 24
+    },
+    {
+      "kit": "stair",
+      "s": 25,
+      "dd": 11.5,
+      "w": 2.5,
+      "steps": 4,
+      "riseEach": 4,
+      "depthEach": 0.5,
+      "seed": 25
+    },
+    {
+      "kit": "well",
+      "s": 33,
+      "dd": -11,
+      "wallH": 15,
+      "key": "rua-direita-well",
+      "label": "The public well",
+      "seed": 26
+    },
+    {
+      "kit": "pelourinho",
+      "s": 29.6,
+      "dd": 12.2,
+      "height": 56,
+      "key": "rua-direita-pelourinho",
+      "label": "The pelourinho",
+      "seed": 27
+    },
+    {
+      "kit": "townhouse",
+      "frontS": 48,
+      "dd": -20,
+      "w": 4,
+      "d": 4,
+      "floors": 1,
+      "wall": "whitewash",
+      "roof": {
+        "type": "hip",
+        "ridgeAxis": "tx",
+        "rise": 26
+      },
+      "windows": {
+        "perStorey": 0
+      },
+      "castShadow": false,
+      "layer": "overlay",
+      "seed": 41
+    },
+    {
+      "kit": "townhouse",
+      "frontS": 46.5,
+      "dd": -12,
+      "w": 4,
+      "d": 4,
+      "floors": 1,
+      "wall": "whitewash",
+      "roof": {
+        "type": "gable",
+        "ridgeAxis": "ty",
+        "rise": 24
+      },
+      "windows": {
+        "perStorey": 0
+      },
+      "castShadow": false,
+      "layer": "overlay",
+      "seed": 42
+    },
+    {
+      "kit": "townhouse",
+      "frontS": 49,
+      "dd": 14,
+      "w": 4,
+      "d": 4,
+      "floors": 1,
+      "wall": "whitewash",
+      "roof": {
+        "type": "hip",
+        "ridgeAxis": "ty",
+        "rise": 26
+      },
+      "windows": {
+        "perStorey": 0
+      },
+      "castShadow": false,
+      "layer": "overlay",
+      "seed": 43
+    },
+    {
+      "kit": "townhouse",
+      "frontS": 47,
+      "dd": 22,
+      "w": 4,
+      "d": 4,
+      "floors": 1,
+      "wall": "terracotta",
+      "roof": {
+        "type": "hip",
+        "ridgeAxis": "tx",
+        "rise": 26
+      },
+      "windows": {
+        "perStorey": 0
+      },
+      "castShadow": false,
+      "layer": "overlay",
+      "seed": 44
+    }
+  ],
+  "props": [
+    {
+      "type": "barrel",
+      "s": 22.6,
+      "dd": -18
+    },
+    {
+      "type": "barrel",
+      "s": 23.3,
+      "dd": -17.2
+    },
+    {
+      "type": "crate",
+      "s": 22.3,
+      "dd": -15.6
+    },
+    {
+      "type": "bench",
+      "s": 23.5,
+      "dd": -12.5,
+      "examineText": "A bench worn smooth by two generations of gossips."
+    },
+    {
+      "type": "amphora",
+      "s": 22.7,
+      "dd": -8.4
+    },
+    {
+      "type": "step-stone",
+      "s": 24.2,
+      "dd": -6.2
+    },
+    {
+      "type": "sack-pile",
+      "s": 23.3,
+      "dd": 1.4,
+      "interactive": true,
+      "examineText": "Sacks of Sumatran pepper, stamped with the Gomes house mark."
+    },
+    {
+      "type": "basket",
+      "s": 24.0,
+      "dd": 2.6
+    },
+    {
+      "type": "pot-row",
+      "s": 22.5,
+      "dd": 5.6
+    },
+    {
+      "type": "chicken-coop",
+      "s": 22.5,
+      "dd": 17.5
+    },
+    {
+      "type": "bench",
+      "s": 23.3,
+      "dd": 20.5
+    },
+    {
+      "type": "crate-stack",
+      "s": 22.3,
+      "dd": 23.5
+    },
+    {
+      "type": "market-stall",
+      "s": 28.6,
+      "dd": -13.5,
+      "culture": "malay",
+      "w": 1.5,
+      "d": 1.0,
+      "key": "aminah-stall",
+      "interactive": true,
+      "examineText": "Aminah's stall: bolts of batik, and betel nut wrapped in banana leaf."
+    },
+    {
+      "type": "market-stall",
+      "s": 29.8,
+      "dd": -9.6,
+      "culture": "spice",
+      "w": 1.4,
+      "d": 1.0,
+      "examineText": "Cones of turmeric, mace and long pepper, sold by the tahil."
+    },
+    {
+      "type": "market-stall",
+      "s": 31.6,
+      "dd": -5.2,
+      "culture": "fish",
+      "w": 1.4,
+      "d": 1.0,
+      "examineText": "Ikan bilis drying in flat trays; the smell reaches the church."
+    },
+    {
+      "type": "market-stall",
+      "s": 28.4,
+      "dd": 3.4,
+      "culture": "chinese",
+      "w": 1.5,
+      "d": 1.0,
+      "examineText": "Blue-and-white porcelain from Jingdezhen, packed in straw."
+    },
+    {
+      "type": "cloth-rack",
+      "s": 32.6,
+      "dd": -16,
+      "interactive": true,
+      "examineText": "Gujarati cottons on a bamboo rack \u2014 Rudra's stock, unsold since the monsoon."
+    },
+    {
+      "type": "basket",
+      "s": 31.2,
+      "dd": -12.2
+    },
+    {
+      "type": "basket",
+      "s": 31.8,
+      "dd": -11.2
+    },
+    {
+      "type": "sack-pile",
+      "s": 32.6,
+      "dd": -8
+    },
+    {
+      "type": "brazier",
+      "s": 33.4,
+      "dd": -2.4
+    },
+    {
+      "type": "brazier",
+      "s": 29.2,
+      "dd": -19.5
+    },
+    {
+      "type": "handcart",
+      "s": 34.6,
+      "dd": -18.5
+    },
+    {
+      "type": "barrel",
+      "s": 35.2,
+      "dd": -16.2
+    },
+    {
+      "type": "rope-coil",
+      "s": 35.8,
+      "dd": -20.5
+    },
+    {
+      "type": "water-trough",
+      "s": 30.4,
+      "dd": 14.6
+    },
+    {
+      "type": "potted-palm",
+      "s": 28.4,
+      "dd": 9.2
+    },
+    {
+      "type": "banana-clump",
+      "s": 27.2,
+      "dd": 16.5
+    },
+    {
+      "type": "amphora",
+      "s": 35.6,
+      "dd": 7.5
+    },
+    {
+      "type": "signboard-chinese",
+      "s": 26.6,
+      "dd": 4.6,
+      "interactive": true,
+      "examineText": "A guild board: the Melaka Chinese kongsi, gilt characters flaking in the salt air."
+    },
+    {
+      "type": "lantern-post",
+      "s": 26.4,
+      "dd": -2.6
+    },
+    {
+      "type": "lantern-post",
+      "s": 26.4,
+      "dd": 18.6
+    },
+    {
+      "type": "padrao",
+      "s": 17.5,
+      "dd": 12.4,
+      "interactive": true,
+      "examineText": "A padr\u00e3o cut with the Cross of the Order of Christ, set where the lane climbs to St Paul's."
+    },
+    {
+      "type": "bollard",
+      "s": 37.2,
+      "dd": -23
+    },
+    {
+      "type": "bollard",
+      "s": 37.8,
+      "dd": -21.8
+    },
+    {
+      "type": "pot-row",
+      "s": 24.6,
+      "dd": -21.4
+    },
+    {
+      "type": "barrel-open",
+      "s": 25.2,
+      "dd": -3.1
+    },
+    {
+      "type": "crate",
+      "s": 22.5,
+      "dd": -3.4
+    },
+    {
+      "type": "banana-clump",
+      "s": 19.5,
+      "dd": -2.6
+    },
+    {
+      "type": "laundry-line",
+      "s": 17,
+      "dd": -4.2,
+      "len": 1.6,
+      "z": 52,
+      "collide": false
+    },
+    {
+      "type": "potted-palm",
+      "s": 33.8,
+      "dd": 21
+    },
+    {
+      "type": "crate",
+      "s": 36.6,
+      "dd": -11.5
+    },
+    {
+      "type": "barrel",
+      "s": 36.9,
+      "dd": -10.4
+    },
+    {
+      "type": "bench",
+      "s": 36.5,
+      "dd": 2.5
+    },
+    {
+      "type": "amphora",
+      "s": 24.3,
+      "dd": 11.6
+    },
+    {
+      "type": "crate",
+      "s": 22.9,
+      "dd": 10.4
+    },
+    {
+      "type": "barrel",
+      "s": 23.4,
+      "dd": 13.2
+    },
+    {
+      "type": "sack-pile",
+      "s": 19.8,
+      "dd": 13.6
+    },
+    {
+      "type": "banana-clump",
+      "s": 16.6,
+      "dd": 10.4
+    },
+    {
+      "type": "bench",
+      "s": 21.2,
+      "dd": 10.6
+    },
+    {
+      "type": "pot-row",
+      "s": 27.4,
+      "dd": 12.8
+    },
+    {
+      "type": "crate-stack",
+      "s": 26.4,
+      "dd": 22.4
+    },
+    {
+      "type": "handcart",
+      "s": 33.2,
+      "dd": 16.4
+    },
+    {
+      "type": "rope-coil",
+      "s": 30.2,
+      "dd": 19.4
+    },
+    {
+      "type": "basket",
+      "s": 34.2,
+      "dd": 12.6
+    },
+    {
+      "type": "amphora",
+      "s": 37.6,
+      "dd": 12.2
+    },
+    {
+      "type": "step-stone",
+      "s": 25.6,
+      "dd": 16.4
+    },
+    {
+      "type": "chicken-coop",
+      "s": 36.4,
+      "dd": -19.2
+    },
+    {
+      "type": "basket",
+      "s": 33.4,
+      "dd": 4.8
+    },
+    {
+      "type": "signboard-chinese",
+      "s": 25.4,
+      "dd": -15.2,
+      "h": 40,
+      "interactive": true,
+      "examineText": "A rice-wine shop board, the characters redrawn every Lunar New Year."
+    },
+    {
+      "type": "cloth-rack",
+      "s": 26.2,
+      "dd": -18.6
+    },
+    {
+      "type": "market-stall",
+      "s": 34.0,
+      "dd": 2.2,
+      "culture": "chinese",
+      "w": 1.4,
+      "d": 1.0,
+      "examineText": "A tea seller's trestle; the water is kept on the boil all day."
+    },
+    {
+      "type": "crate-stack",
+      "s": 37.5,
+      "dd": -6
+    },
+    {
+      "type": "barrel",
+      "s": 37.9,
+      "dd": -4.6
+    },
+    {
+      "type": "handcart",
+      "s": 30.6,
+      "dd": 4.4
+    },
+    {
+      "type": "sack-pile",
+      "s": 36.2,
+      "dd": 17
+    },
+    {
+      "type": "crate",
+      "s": 36.8,
+      "dd": 18.4
+    },
+    {
+      "type": "amphora",
+      "s": 34.5,
+      "dd": -21
+    },
+    {
+      "type": "basket",
+      "s": 35.4,
+      "dd": 1.5
+    },
+    {
+      "type": "brazier",
+      "s": 35.9,
+      "dd": 10.2
+    },
+    {
+      "type": "crate",
+      "s": 31.5,
+      "dd": 21.6
+    },
+    {
+      "type": "barrel",
+      "s": 32.1,
+      "dd": 22.7
+    },
+    {
+      "type": "rope-coil",
+      "s": 40.6,
+      "dd": -12
+    },
+    {
+      "type": "barrel",
+      "s": 41.0,
+      "dd": -9.5
+    },
+    {
+      "type": "crate-stack",
+      "s": 41.6,
+      "dd": 6
+    },
+    {
+      "type": "bench",
+      "s": 40.8,
+      "dd": 13
+    },
+    {
+      "type": "pot-row",
+      "s": 39.8,
+      "dd": 2.5
+    },
+    {
+      "type": "water-trough",
+      "s": 40.2,
+      "dd": 20
+    },
+    {
+      "type": "bollard",
+      "s": 39.4,
+      "dd": -24.5
+    },
+    {
+      "type": "potted-palm",
+      "s": 42.4,
+      "dd": -2,
+      "h": 34
+    },
+    {
+      "type": "banana-clump",
+      "s": 42.8,
+      "dd": 24
+    },
+    {
+      "type": "market-stall",
+      "s": 41.8,
+      "dd": -18.5,
+      "culture": "spice",
+      "w": 1.5,
+      "d": 1.0,
+      "examineText": "A stall packing up for the day; the awning still smells of cardamom."
+    },
+    {
+      "type": "laundry-line",
+      "s": 41,
+      "dd": -16,
+      "len": 2,
+      "z": 46,
+      "collide": false
+    }
+  ],
+  "lights": [
+    {
+      "s": 23.4,
+      "dd": -14,
+      "z": 32,
+      "type": "lantern",
+      "radius": 46
+    },
+    {
+      "s": 22.2,
+      "dd": 1,
+      "z": 32,
+      "type": "lantern",
+      "radius": 46
+    },
+    {
+      "s": 21.8,
+      "dd": 17,
+      "z": 32,
+      "type": "lantern",
+      "radius": 46
+    },
+    {
+      "s": 39.5,
+      "dd": -16,
+      "z": 30,
+      "type": "lantern",
+      "radius": 44
+    },
+    {
+      "s": 39.5,
+      "dd": 18,
+      "z": 30,
+      "type": "lantern",
+      "radius": 44
+    }
+  ],
+  "animatedProps": [
+    {
+      "type": "smoke",
+      "s": 33.4,
+      "dd": -2.4,
+      "z": 14,
+      "period": 2400
+    },
+    {
+      "type": "smoke",
+      "s": 29.2,
+      "dd": -19.5,
+      "z": 14,
+      "period": 2900
+    },
+    {
+      "type": "smoke",
+      "s": 35.9,
+      "dd": 10.2,
+      "z": 14,
+      "period": 3300
+    },
+    {
+      "type": "cloth-flutter",
+      "s": 28.6,
+      "dd": -13.5,
+      "z": 40,
+      "period": 1700
+    },
+    {
+      "type": "cloth-flutter",
+      "s": 28.4,
+      "dd": 3.4,
+      "z": 40,
+      "period": 2100
+    },
+    {
+      "type": "cloth-flutter",
+      "s": 31.6,
+      "dd": -5.2,
+      "z": 40,
+      "period": 1300
+    },
+    {
+      "type": "cloth-flutter",
+      "s": 41.8,
+      "dd": -18.5,
+      "z": 40,
+      "period": 2500
+    },
+    {
+      "type": "laundry-sway",
+      "s": 17,
+      "dd": -3,
+      "z": 50,
+      "period": 2600
+    },
+    {
+      "type": "laundry-sway",
+      "s": 41,
+      "dd": -15,
+      "z": 46,
+      "period": 2200
+    },
+    {
+      "type": "foliage-sway",
+      "s": 28.4,
+      "dd": 9.2,
+      "z": 30,
+      "period": 2200
+    },
+    {
+      "type": "foliage-sway",
+      "s": 27.2,
+      "dd": 16.5,
+      "z": 26,
+      "period": 1900
+    },
+    {
+      "type": "foliage-sway",
+      "s": 42.4,
+      "dd": -2,
+      "z": 34,
+      "period": 2800
+    },
+    {
+      "type": "torch-flicker",
+      "s": 26.4,
+      "dd": -2.6,
+      "z": 40,
+      "period": 800
+    },
+    {
+      "type": "torch-flicker",
+      "s": 26.4,
+      "dd": 18.6,
+      "z": 40,
+      "period": 900
+    },
+    {
+      "type": "birds",
+      "x": 300,
+      "y": 44,
+      "period": 9000
+    }
+  ],
+  "spawns": {
+    "player": {
+      "s": 31.5,
+      "dd": 0
+    }
+  },
+  "npcs": {
+    "fernao-gomes": {
+      "s": 27.4,
+      "dd": -6.5
+    },
+    "aminah": {
+      "s": 29.9,
+      "dd": -13.6
+    },
+    "alvares": {
+      "s": 27.6,
+      "dd": 7.5
+    },
+    "rudra-mudaliar": {
+      "s": 33.2,
+      "dd": -16.6
+    },
+    "diogo-almeida": {
+      "s": 35.5,
+      "dd": -19.5
+    }
+  },
+  "transitions": [
+    {
+      "targetLocation": "a-famosa-gate",
+      "label": "To A Famosa Gate",
+      "s": 31,
+      "dd": -19.5,
+      "triggerArea": {
+        "x": 0,
+        "y": 205,
+        "width": 16,
+        "height": 100
+      },
+      "spawnAt": {
+        "x": 247,
+        "y": 113
+      }
+    },
+    {
+      "targetLocation": "waterfront",
+      "label": "To The Waterfront",
+      "s": 31,
+      "dd": 19.5,
+      "triggerArea": {
+        "x": 624,
+        "y": 205,
+        "width": 16,
+        "height": 100
+      },
+      "spawnAt": {
+        "x": 60,
+        "y": 113
+      }
+    },
+    {
+      "targetLocation": "st-pauls-church",
+      "label": "Climb to St. Paul's",
+      "s": 17.5,
+      "dd": 12.4,
+      "triggerArea": {
+        "x": 484,
+        "y": 126,
+        "width": 58,
+        "height": 22
+      },
+      "spawnAt": {
+        "x": 160,
+        "y": 143
+      }
+    },
+    {
+      "targetLocation": "a-famosa-gate",
+      "label": "To A Famosa Gate (South Gate)",
+      "s": 43,
+      "dd": 0,
+      "triggerArea": {
+        "x": 200,
+        "y": 340,
+        "width": 240,
+        "height": 20
+      },
+      "spawnAt": {
+        "x": 160,
+        "y": 73
+      }
+    }
+  ],
+  "crowd": {
+    "maxActors": 7,
+    "paths": [
+      {
+        "id": "west-east-street",
+        "points": [
+          [
+            10,
+            246
+          ],
+          [
+            180,
+            240
+          ],
+          [
+            330,
+            250
+          ],
+          [
+            500,
+            244
+          ],
+          [
+            630,
+            248
+          ]
+        ],
+        "speed": 22
+      },
+      {
+        "id": "east-west-way",
+        "points": [
+          [
+            630,
+            180
+          ],
+          [
+            420,
+            176
+          ],
+          [
+            230,
+            182
+          ],
+          [
+            20,
+            178
+          ]
+        ],
+        "speed": 18
+      },
+      {
+        "id": "market-browse",
+        "points": [
+          [
+            150,
+            264
+          ],
+          [
+            212,
+            248
+          ],
+          [
+            268,
+            258
+          ],
+          [
+            200,
+            276
+          ],
+          [
+            150,
+            264
+          ]
+        ],
+        "speed": 12
+      },
+      {
+        "id": "well-run",
+        "points": [
+          [
+            320,
+            296
+          ],
+          [
+            200,
+            270
+          ],
+          [
+            176,
+            260
+          ],
+          [
+            230,
+            292
+          ],
+          [
+            320,
+            296
+          ]
+        ],
+        "speed": 15
+      },
+      {
+        "id": "lane-to-church",
+        "points": [
+          [
+            512,
+            146
+          ],
+          [
+            500,
+            192
+          ],
+          [
+            470,
+            236
+          ],
+          [
+            430,
+            264
+          ]
+        ],
+        "speed": 16
+      },
+      {
+        "id": "near-pavement",
+        "points": [
+          [
+            40,
+            330
+          ],
+          [
+            240,
+            324
+          ],
+          [
+            430,
+            328
+          ],
+          [
+            600,
+            322
+          ]
+        ],
+        "speed": 20
+      },
+      {
+        "id": "alley-loiter",
+        "points": [
+          [
+            286,
+            148
+          ],
+          [
+            280,
+            184
+          ],
+          [
+            292,
+            212
+          ],
+          [
+            286,
+            148
+          ]
+        ],
+        "speed": 9
+      }
+    ]
+  },
+  "audio": {
+    "music": "music-market",
+    "nightMusic": "music-night",
+    "ambient": [
+      "ambient-crowd",
+      "ambient-market"
+    ],
+    "footstepSurfaceDefault": "stone"
+  }
+}

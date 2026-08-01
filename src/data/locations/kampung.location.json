@@ -1,0 +1,430 @@
+{
+  "id": "kampung",
+  "name": "Kampung Quarter",
+  "world": {
+    "scale": 3,
+    "nativeWidth": 320,
+    "nativeHeight": 180
+  },
+  "plate": {
+    "background": "scene-kampung",
+    "variants": {
+      "dawn": "scene-kampung-dawn",
+      "dusk": "scene-kampung-dusk",
+      "night": "scene-kampung-night"
+    },
+    "runtimeMode": "legacy-backdrop",
+    "targetMode": "isometric-2:1",
+    "authoringBasis": "isometric-grid",
+    "anchor": "bottom-center",
+    "depthStrategy": "screen-y",
+    "tileWidth": 64,
+    "tileHeight": 32,
+    "isoMapKey": "kampung-iso",
+    "mapFile": "maps/kampung.json"
+  },
+  "collision": {
+    "rects": [
+      {
+        "x": 0,
+        "y": 0,
+        "width": 320,
+        "height": 57
+      },
+      {
+        "x": 0,
+        "y": 0,
+        "width": 43,
+        "height": 180
+      },
+      {
+        "x": 277,
+        "y": 0,
+        "width": 43,
+        "height": 180
+      },
+      {
+        "x": 0,
+        "y": 153,
+        "width": 320,
+        "height": 27
+      },
+      {
+        "x": 37,
+        "y": 140,
+        "width": 67,
+        "height": 40
+      },
+      {
+        "x": 217,
+        "y": 140,
+        "width": 67,
+        "height": 40
+      }
+    ]
+  },
+  "spawns": {
+    "player": {
+      "x": 160,
+      "y": 147
+    }
+  },
+  "npcs": {
+    "mak-enang": {
+      "x": 157,
+      "y": 110
+    },
+    "pak-salleh": {
+      "x": 200,
+      "y": 115
+    }
+  },
+  "transitions": [
+    {
+      "targetLocation": "waterfront",
+      "label": "To The Waterfront",
+      "triggerArea": {
+        "x": 136,
+        "y": 57,
+        "width": 48,
+        "height": 13
+      },
+      "spawnAt": {
+        "x": 160,
+        "y": 147
+      }
+    }
+  ],
+  "props": [
+    {
+      "sprite": "cooking-fire",
+      "x": 100,
+      "y": 107,
+      "scale": 2
+    },
+    {
+      "sprite": "rice-pot",
+      "x": 114,
+      "y": 111,
+      "scale": 1.7
+    },
+    {
+      "sprite": "fishing-net",
+      "x": 230,
+      "y": 100,
+      "scale": 2
+    },
+    {
+      "sprite": "pottery",
+      "x": 211,
+      "y": 110,
+      "scale": 1.7
+    },
+    {
+      "sprite": "fruit-basket",
+      "x": 87,
+      "y": 100,
+      "scale": 1.7
+    },
+    {
+      "sprite": "woven-mat",
+      "x": 167,
+      "y": 143,
+      "scale": 1.8
+    },
+    {
+      "sprite": "water-well",
+      "x": 243,
+      "y": 150,
+      "scale": 2.4
+    }
+  ],
+  "animatedProps": [
+    {
+      "type": "smoke",
+      "x": 167,
+      "y": 127
+    },
+    {
+      "type": "smoke",
+      "x": 217,
+      "y": 133
+    },
+    {
+      "type": "palm-sway",
+      "x": 33,
+      "y": 117
+    },
+    {
+      "type": "palm-sway",
+      "x": 267,
+      "y": 107
+    }
+  ],
+  "lights": [
+    {
+      "type": "cookingFire",
+      "x": 110,
+      "y": 52
+    },
+    {
+      "type": "cookingFire",
+      "x": 200,
+      "y": 55
+    },
+    {
+      "type": "window",
+      "x": 30,
+      "y": 66
+    },
+    {
+      "type": "window",
+      "x": 56,
+      "y": 50
+    },
+    {
+      "type": "window",
+      "x": 258,
+      "y": 54
+    },
+    {
+      "type": "window",
+      "x": 285,
+      "y": 68
+    }
+  ],
+  "fires": [
+    {
+      "x": 110,
+      "y": 52
+    },
+    {
+      "x": 200,
+      "y": 55
+    }
+  ],
+  "audio": {
+    "music": "music-main",
+    "nightMusic": "music-night",
+    "ambientSounds": [
+      {
+        "key": "base-tropical",
+        "volume": 0.2
+      },
+      {
+        "key": "village-life",
+        "volume": 0.42
+      },
+      {
+        "key": "jungle-sounds",
+        "volume": 0.34
+      }
+    ],
+    "nightAmbientSounds": [
+      {
+        "key": "village-life",
+        "volume": 0.18
+      },
+      {
+        "key": "jungle-sounds",
+        "volume": 0.34
+      },
+      {
+        "key": "cricket-chorus",
+        "volume": 0.24
+      }
+    ],
+    "footstepSurface": "dirt",
+    "transitionSound": "sfx-birds-tropical"
+  },
+  "visual": {
+    "transitionTint": [
+      10,
+      40,
+      15
+    ],
+    "fogTint": 11059354,
+    "fogSpeed": 0.5,
+    "hazeTint": 13948590,
+    "sunAnchor": {
+      "x": 80,
+      "y": 29
+    },
+    "aoZones": [
+      {
+        "x": 0,
+        "y": 0,
+        "width": 320,
+        "height": 67,
+        "alpha": 0.18
+      },
+      {
+        "x": 117,
+        "y": 73,
+        "width": 87,
+        "height": 50,
+        "alpha": 0.15
+      }
+    ],
+    "canopyShadows": [
+      {
+        "x": -13,
+        "y": -7,
+        "width": 133,
+        "height": 77,
+        "alpha": 0.16
+      },
+      {
+        "x": 193,
+        "y": -8,
+        "width": 140,
+        "height": 77,
+        "alpha": 0.15
+      },
+      {
+        "x": 83,
+        "y": 50,
+        "width": 140,
+        "height": 43,
+        "alpha": 0.09
+      }
+    ]
+  },
+  "crowd": {
+    "maxCrowd": 8,
+    "density": 0.7,
+    "crowdTypes": [
+      "malay_local",
+      "malay_woman",
+      "child"
+    ],
+    "paths": [
+      {
+        "start": {
+          "x": 40,
+          "y": 95
+        },
+        "end": {
+          "x": 280,
+          "y": 95
+        }
+      },
+      {
+        "start": {
+          "x": 280,
+          "y": 108
+        },
+        "end": {
+          "x": 40,
+          "y": 108
+        }
+      },
+      {
+        "start": {
+          "x": 160,
+          "y": 45
+        },
+        "end": {
+          "x": 160,
+          "y": 145
+        }
+      },
+      {
+        "start": {
+          "x": 70,
+          "y": 60
+        },
+        "end": {
+          "x": 230,
+          "y": 130
+        }
+      },
+      {
+        "start": {
+          "x": 230,
+          "y": 60
+        },
+        "end": {
+          "x": 90,
+          "y": 135
+        }
+      }
+    ]
+  },
+  "items": [
+    {
+      "id": "herbs-1",
+      "itemId": "medicinal-herbs",
+      "x": 50,
+      "y": 60,
+      "description": "Local Malay medicinal herbs."
+    }
+  ],
+  "loreObjects": [
+    {
+      "id": "keris-display",
+      "x": 60,
+      "y": 77
+    },
+    {
+      "id": "gamelan-gong",
+      "x": 83,
+      "y": 67
+    },
+    {
+      "id": "malay-manuscript",
+      "x": 117,
+      "y": 67
+    },
+    {
+      "id": "medicine-chest",
+      "x": 50,
+      "y": 130
+    },
+    {
+      "id": "rice-mortar",
+      "x": 67,
+      "y": 110
+    },
+    {
+      "id": "fish-trap",
+      "x": 90,
+      "y": 130
+    },
+    {
+      "id": "prayer-mat",
+      "x": 110,
+      "y": 83
+    },
+    {
+      "id": "wayang-kulit-puppet",
+      "x": 187,
+      "y": 83
+    },
+    {
+      "id": "surau-prayer-niche",
+      "x": 140,
+      "y": 72
+    },
+    {
+      "id": "batik-cloth",
+      "x": 217,
+      "y": 67
+    },
+    {
+      "id": "healers-herb-rack",
+      "x": 240,
+      "y": 93
+    },
+    {
+      "id": "ablution-jar",
+      "x": 167,
+      "y": 133
+    },
+    {
+      "id": "coastal-fish-rack",
+      "x": 263,
+      "y": 117
+    }
+  ]
+}
