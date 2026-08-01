@@ -24,29 +24,27 @@ export function MessageOverlay({ title, text, onClose }: MessageOverlayProps) {
       <div className="absolute inset-0 bg-black/55" onClick={onClose} />
 
       <div className="relative w-[620px] max-w-[92vw]">
-        <div className="absolute inset-0 translate-x-1 translate-y-1 bg-black/50 rounded" />
-
-        <div className="relative bg-leather-200 border-2 border-gold rounded shadow-parchment">
-          <div className="bg-parchment-100 m-2 p-5">
-            <div className="flex items-start justify-between gap-4 mb-3">
+        <div className="ui-panel-shell">
+          <div className="ui-parchment-panel">
+            <div className="flex items-start justify-between gap-4">
               <div>
-                <p className="font-cinzel text-gold text-xs uppercase tracking-[0.18em]">Discovery</p>
-                <h2 className="font-cinzel text-leather-200 text-xl font-bold">{title}</h2>
+                <p className="ui-caption ui-accent">Discovery</p>
+                <h2 className="ui-heading text-base">{title}</h2>
               </div>
-              <button
-                onClick={onClose}
-                className="text-sepia-light hover:text-leather-200 text-sm"
-              >
+              <button onClick={onClose} className="ui-body-soft hover:text-[var(--wood)] text-sm">
                 Close
               </button>
             </div>
 
-            <p className="text-leather-200 font-crimson text-[15px] leading-6 whitespace-pre-line">
+            <div className="ui-rule my-3" />
+
+            <p className="ui-body font-crimson text-lg leading-6 whitespace-pre-line">
               {text}
             </p>
 
-            <div className="mt-4 pt-3 border-t border-sepia-light/20 text-center">
-              <span className="text-sepia text-xs font-mono">[Enter] continue • [Esc] close</span>
+            <div className="ui-rule mt-4" />
+            <div className="pt-2 text-center">
+              <span className="ui-keys">[Enter] continue • [Esc] close</span>
             </div>
           </div>
         </div>

@@ -13,24 +13,12 @@ const COLS = 5;
 const ROWS = 4;
 const TOTAL_SLOTS = COLS * ROWS;
 
-// Item color mapping
-const itemColors: Record<string, string> = {
-  'trading-seal': 'bg-crimson',
-  'coin-pouch': 'bg-gold',
-  'spice-sample': 'bg-orange-500',
-  'letter': 'bg-amber-100',
-  'key-warehouse': 'bg-slate-500',
-  'portuguese-wine': 'bg-rose-900',
-  'medicinal-herbs': 'bg-green-600',
-  'rosary': 'bg-gold-dark',
-};
-
 function ItemIcon({ item }: { item: InventoryItem }) {
   const [hasError, setHasError] = useState(false);
 
   if (hasError) {
     return (
-      <div className={`ui-item-fallback ${itemColors[item.id] || 'bg-sepia'}`}>
+      <div className="ui-item-fallback">
         {item.name.charAt(0).toUpperCase()}
       </div>
     );
@@ -128,7 +116,7 @@ export function InventoryPanel() {
       <button
         key={i}
         onClick={() => handleSelectSlot(i)}
-        className={`inv-slot ui-inventory-slot-art transition-all ${isSelected ? 'inv-slot-selected' : ''} ${item ? 'cursor-pointer hover:brightness-110' : 'cursor-default'}`}
+        className={`inv-slot ${isSelected ? 'inv-slot-selected' : ''} ${item ? 'cursor-pointer hover:brightness-110' : 'cursor-default'}`}
       >
         {item && (
           <div className="relative w-9 h-9">
@@ -153,51 +141,48 @@ export function InventoryPanel() {
       />
 
       <div className="relative w-[min(860px,95vw)]">
-        <div className="absolute inset-0 translate-x-2 translate-y-2 bg-black/45 rounded-[20px] blur-[1px]" />
-
-        <div className="relative ui-inventory-shell p-3 md:p-4">
-          <div className="ui-parchment-panel p-4 md:p-5">
-            <div className="flex items-center justify-between gap-4 mb-4">
+        <div className="ui-inventory-shell">
+          <div className="ui-parchment-panel">
+            <div className="flex items-center justify-between gap-4">
               <div>
-                <p className="ui-caption mb-1">Satchel inventory</p>
-                <h2 className="font-cinzel text-crimson text-2xl font-bold tracking-wide">
+                <p className="ui-caption">Satchel inventory</p>
+                <h2 className="ui-heading text-xl tracking-wide">
                   Merchant&apos;s Satchel
                 </h2>
               </div>
 
-              <div className="flex items-center gap-3 ui-money-pill">
+              <div className="ui-money-pill">
                 <img src="/sprites/ui/coin-icon.png" alt="" className="ui-money-coin" />
                 <div className="text-right">
-                  <div className="font-cinzel text-gold text-lg leading-none">
+                  <div className="font-cinzel text-sm leading-none" style={{ color: 'var(--brass)' }}>
                     {money}
                   </div>
-                  <div className="text-gold-dark text-[11px] uppercase tracking-[0.16em]">
+                  <div className="text-[10px] uppercase tracking-[0.16em]" style={{ color: 'var(--brass-dark)' }}>
                     cruzados
                   </div>
                 </div>
               </div>
             </div>
 
+            <div className="ui-rule my-3" />
+
             <div className="flex flex-col gap-4 lg:flex-row">
               <div
-                className="grid gap-2 flex-1"
-                style={{
-                  gridTemplateColumns: `repeat(${COLS}, minmax(0, 1fr))`,
-                  gridTemplateRows: `repeat(${ROWS}, minmax(0, 1fr))`,
-                }}
+                className="grid gap-2 shrink-0"
+                style={{ gridTemplateColumns: `repeat(${COLS}, 48px)` }}
               >
                 {slots}
               </div>
 
-              <div className="lg:w-[280px]">
-                <div className="ui-description-panel">
-                  <p className="text-leather-200 font-crimson text-sm leading-relaxed min-h-[84px]">
+              <div className="flex-1 min-w-0 flex flex-col">
+                <div className="ui-description-panel flex-1">
+                  <p className="ui-body font-crimson text-base leading-relaxed min-h-[84px]">
                     {description}
                   </p>
                 </div>
 
-                <div className="mt-4 text-center">
-                  <span className="text-sepia text-xs font-mono">
+                <div className="mt-3 text-center">
+                  <span className="ui-keys">
                     [I] close • [←→↑↓] select • [E] examine
                   </span>
                 </div>

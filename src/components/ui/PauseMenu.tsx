@@ -93,22 +93,19 @@ export function PauseMenu({ onReturnToTitle }: PauseMenuProps) {
       <div className="absolute inset-0 bg-black/70" />
 
       {/* Panel */}
-      <div className="relative w-[400px]">
-        {/* Shadow */}
-        <div className="absolute inset-0 translate-x-1 translate-y-1 bg-black/50 rounded" />
-
+      <div className="relative w-[400px] max-h-[94vh] overflow-y-auto">
         {/* Main container */}
-        <div className="relative bg-leather-200 border-2 border-gold rounded shadow-parchment">
-          <div className="bg-parchment-200 m-2 p-6">
+        <div className="ui-panel-shell">
+          <div className="ui-parchment-panel">
             {/* Title */}
-            <h2 className="font-cinzel text-crimson text-2xl font-bold text-center mb-6">
+            <h2 className="ui-heading text-base text-center mb-3">
               PAUSED
             </h2>
 
             {/* Volume sliders */}
-            <div className="space-y-4 mb-6">
+            <div className="space-y-2 mb-3">
               <div>
-                <label className="block text-leather-200 font-crimson text-sm mb-1">
+                <label className="block ui-body font-crimson text-sm mb-1">
                   Music Volume
                 </label>
                 <input
@@ -127,7 +124,7 @@ export function PauseMenu({ onReturnToTitle }: PauseMenuProps) {
               </div>
 
               <div>
-                <label className="block text-leather-200 font-crimson text-sm mb-1">
+                <label className="block ui-body font-crimson text-sm mb-1">
                   Sound Effects
                 </label>
                 <input
@@ -146,7 +143,7 @@ export function PauseMenu({ onReturnToTitle }: PauseMenuProps) {
               </div>
 
               <div>
-                <label className="block text-leather-200 font-crimson text-sm mb-1">
+                <label className="block ui-body font-crimson text-sm mb-1">
                   Ambient Sounds
                 </label>
                 <input
@@ -165,7 +162,7 @@ export function PauseMenu({ onReturnToTitle }: PauseMenuProps) {
               </div>
 
               <div>
-                <label className="block text-leather-200 font-crimson text-sm mb-1">
+                <label className="block ui-body font-crimson text-sm mb-1">
                   Visual Quality
                 </label>
                 <select
@@ -175,7 +172,7 @@ export function PauseMenu({ onReturnToTitle }: PauseMenuProps) {
                     setVisualQualityMode(mode);
                     emitGameEvent('settings:visual:mode', mode);
                   }}
-                  className="w-full bg-parchment-300/70 border border-sepia-light/40 rounded px-2 py-1 text-sm text-leather-200"
+                  className="ui-field"
                 >
                   <option value="auto">Auto (Adaptive)</option>
                   <option value="high">High</option>
@@ -184,7 +181,7 @@ export function PauseMenu({ onReturnToTitle }: PauseMenuProps) {
                 </select>
               </div>
 
-              <label className="flex items-center gap-2 text-sm text-leather-200 font-crimson">
+              <label className="flex items-center gap-2 text-sm ui-body font-crimson">
                 <input
                   type="checkbox"
                   checked={dynamicVisualQuality}
@@ -197,30 +194,26 @@ export function PauseMenu({ onReturnToTitle }: PauseMenuProps) {
                 />
                 Dynamic quality scaling
               </label>
-              <p className="text-[11px] text-sepia-light/80">
-                Runtime profile: <span className="text-gold capitalize">{resolvedVisualQuality}</span>
+              <p className="ui-body-soft text-xs">
+                Runtime profile: <span className="ui-accent capitalize">{resolvedVisualQuality}</span>
               </p>
             </div>
 
             {/* Save slots */}
-            <div className="mb-6">
-              <p className="text-leather-200 font-crimson text-sm mb-2">Save Slot</p>
-              <div className="space-y-1 max-h-28 overflow-y-auto pr-1">
+            <div className="mb-3">
+              <p className="ui-body font-crimson text-sm mb-2">Save Slot</p>
+              <div className="space-y-1 max-h-24 overflow-y-auto pr-1">
                 {slots.map((slot) => (
                   <button
                     key={slot.index}
                     onClick={() => setSelectedSlot(slot.index)}
-                    className={`w-full text-left px-2 py-1 rounded border text-xs ${
-                      slot.index === selectedSlot
-                        ? 'border-gold bg-gold/10 text-leather-200'
-                        : 'border-sepia-light/30 text-sepia hover:border-gold/40'
-                    }`}
+                    className={`ui-list-row ${slot.index === selectedSlot ? 'ui-list-row--active' : ''}`}
                   >
                     <span className="font-semibold">Slot {slot.index}</span>
-                    <span className="mx-2 text-sepia-light/70">•</span>
+                    <span className="mx-2">•</span>
                     <span>{slot.isEmpty ? 'Empty' : `${slot.locationName} • ${formatPlaytime(slot.playtime)}`}</span>
                     {!slot.isEmpty && (
-                      <span className="block text-[10px] text-sepia-light/70 mt-0.5">
+                      <span className="block text-[10px] mt-0.5">
                         {formatTimestamp(slot.timestamp)}
                       </span>
                     )}
@@ -230,43 +223,43 @@ export function PauseMenu({ onReturnToTitle }: PauseMenuProps) {
             </div>
 
             {/* Menu buttons */}
-            <div className="space-y-3">
+            <div className="space-y-2">
               <button
                 onClick={handleResume}
-                className="menu-btn w-full"
+                className="menu-btn"
               >
                 Resume Game
               </button>
 
               <button
                 onClick={handleSave}
-                className="menu-btn w-full"
+                className="menu-btn"
               >
                 Save Game
               </button>
 
               <button
                 onClick={handleLoad}
-                className="menu-btn w-full"
+                className="menu-btn"
               >
                 Load Game
               </button>
 
               <button
                 onClick={onReturnToTitle}
-                className="menu-btn w-full text-crimson hover:text-crimson-light"
+                className="menu-btn"
               >
                 Return to Title
               </button>
             </div>
 
             {/* Instructions */}
-            <div className="text-center mt-4">
-              <span className="text-sepia text-xs font-mono">
+            <div className="text-center mt-3">
+              <span className="ui-keys">
                 [ESC] Resume
               </span>
               {status && (
-                <p className="text-gold text-xs mt-2">{status}</p>
+                <p className="ui-accent text-xs mt-2">{status}</p>
               )}
             </div>
           </div>

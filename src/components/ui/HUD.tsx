@@ -170,43 +170,43 @@ export function HUD() {
     <>
       <div className="absolute top-0 left-0 right-0 p-4 flex justify-between items-start pointer-events-none">
         {/* Location indicator */}
-        <div className="bg-leather-300/85 px-4 py-2 rounded border border-gold/30 shadow-parchment">
-          <span className="font-cinzel text-parchment-200">{location.name}</span>
+        <div className="ui-chip">
+          <span className="font-cinzel text-xs" style={{ color: 'var(--parch)' }}>{location.name}</span>
         </div>
 
         {/* Time indicator */}
-        <div className="bg-leather-300/85 px-4 py-2 rounded border border-gold/30 shadow-parchment flex flex-col items-end">
+        <div className="ui-chip flex flex-col items-end">
           <div className="flex items-center gap-2">
             <span className={`font-mono text-lg ${timeColors[time.timeOfDay]}`}>
               {timeString}
             </span>
-            <span className="text-parchment-400 text-sm capitalize">
+            <span className="text-xs capitalize" style={{ color: 'var(--parch-warm)' }}>
               ({time.timeOfDay})
             </span>
           </div>
-          <span className="text-parchment-400/80 text-xs">Day {time.day}</span>
+          <span className="text-[10px]" style={{ color: 'var(--parch-warm)' }}>Day {time.day}</span>
         </div>
       </div>
 
       {/* Quest tracker */}
       {(trackedQuestName && trackedObjective) || tutorialHint ? (
         <div className="absolute top-20 left-4 max-w-[420px] pointer-events-none">
-          <div className="bg-leather-300/82 border border-gold/25 rounded px-3 py-2 shadow-parchment">
-            <p className="font-cinzel text-gold text-xs uppercase tracking-wide">
+          <div className="ui-chip">
+            <p className="font-cinzel text-[10px] uppercase tracking-wide" style={{ color: 'var(--brass)' }}>
               {trackedQuestName && trackedObjective ? 'Quest Tracker' : tutorialHint?.title}
             </p>
             {trackedQuestName && trackedObjective ? (
               <>
-                <p className="text-parchment-200 text-sm font-semibold">{trackedQuestName}</p>
-                <p className="text-parchment-300/90 text-xs">{formatObjective(trackedObjective)}</p>
+                <p className="text-sm font-semibold" style={{ color: 'var(--parch)' }}>{trackedQuestName}</p>
+                <p className="text-xs" style={{ color: 'var(--parch-warm)' }}>{formatObjective(trackedObjective)}</p>
                 {trackedObjectiveLocation && trackedObjectiveLocation !== location.id && (
-                  <p className="text-gold/90 text-[11px] mt-1">
+                  <p className="text-[11px] mt-1" style={{ color: 'var(--brass)' }}>
                     Travel to {getLocationName(trackedObjectiveLocation)}
                   </p>
                 )}
               </>
             ) : (
-              <p className="text-parchment-300/90 text-xs leading-5">{tutorialHint?.text}</p>
+              <p className="text-xs leading-5" style={{ color: 'var(--parch-warm)' }}>{tutorialHint?.text}</p>
             )}
 
             {trackedQuestName && trackedObjective && currentHighlights.length > 0 && (
@@ -216,10 +216,10 @@ export function HUD() {
                     key={current.id}
                     className={
                       current.tone === 'favorable'
-                        ? 'text-emerald-300'
+                        ? 'text-[#709C44]'
                         : current.tone === 'hostile'
-                          ? 'text-rose-300'
-                          : 'text-gold/90'
+                          ? 'text-[#B47844]'
+                          : 'text-[#D8A428]'
                     }
                   >
                     {current.title}: {current.text}
@@ -233,47 +233,48 @@ export function HUD() {
 
       {!isPaused && travelHint && (
         <div className="absolute bottom-4 right-4 pointer-events-none">
-          <div className="bg-leather-300/86 border border-gold/30 rounded px-3 py-2 shadow-parchment max-w-[320px]">
-            <p className="font-cinzel text-gold text-xs uppercase tracking-wide mb-1">Travel Guidance</p>
-            <p className="text-parchment-200 text-xs leading-5">{travelHint}</p>
+          <div className="ui-chip max-w-[320px]">
+            <p className="font-cinzel text-[10px] uppercase tracking-wide mb-1" style={{ color: 'var(--brass)' }}>Travel Guidance</p>
+            <p className="text-xs leading-5" style={{ color: 'var(--parch)' }}>{travelHint}</p>
           </div>
         </div>
       )}
 
       {!onboarding.hasCompletedTutorialBanner && (
         <div className="absolute bottom-20 left-0 right-0 mx-auto w-[min(480px,90vw)] z-50 pointer-events-auto">
-          <div className="absolute inset-0 translate-x-1 translate-y-1 bg-black/45 rounded-lg blur-[1px]" />
-          <div className="relative bg-leather-300 border border-gold/45 rounded p-4 shadow-parchment text-center">
-            <h4 className="font-cinzel text-gold text-sm uppercase tracking-wider mb-2">
+          <div className="ui-panel-shell text-center">
+          <div className="ui-parchment-panel">
+            <h4 className="ui-heading text-xs uppercase tracking-wider mb-2">
               Streets of Melaka — Controls
             </h4>
-            <p className="text-[11px] text-parchment-300 italic leading-relaxed mb-3 px-2 border-b border-sepia-light/20 pb-2">
+            <p className="ui-body-soft text-sm italic leading-relaxed mb-3 px-2 pb-2">
               Year 1580. The Portuguese fortress of A Famosa stands as a golden gateway to the East, but beneath the spice trade lies a web of debt, faith, and secrets...
             </p>
-            <div className="grid grid-cols-2 gap-3 text-left text-parchment-200 text-xs my-3 border-y border-sepia-light/20 py-2">
+            <div className="grid grid-cols-2 gap-3 text-left ui-body text-sm my-3 py-2">
               <div>
-                <span className="text-gold font-mono font-bold mr-2">[W,A,S,D] / [Arrows]</span>
+                <span className="ui-accent font-mono font-bold mr-2">[W,A,S,D] / [Arrows]</span>
                 <span>Move Character</span>
               </div>
               <div>
-                <span className="text-gold font-mono font-bold mr-2">[Space] / [Click]</span>
+                <span className="ui-accent font-mono font-bold mr-2">[Space] / [Click]</span>
                 <span>Interact / Dialogue</span>
               </div>
               <div>
-                <span className="text-gold font-mono font-bold mr-2">[I] Key</span>
+                <span className="ui-accent font-mono font-bold mr-2">[I] Key</span>
                 <span>Open Inventory</span>
               </div>
               <div>
-                <span className="text-gold font-mono font-bold mr-2">[J] Key</span>
+                <span className="ui-accent font-mono font-bold mr-2">[J] Key</span>
                 <span>Open Quest Journal</span>
               </div>
             </div>
             <button
               onClick={completeTutorialBanner}
-              className="mt-2 px-4 py-1.5 bg-crimson hover:bg-crimson-dark border border-gold/40 text-gold-light text-xs font-cinzel rounded uppercase tracking-wider transition-colors"
+              className="ui-btn mt-2"
             >
               Begin Journey
             </button>
+            </div>
           </div>
         </div>
       )}
@@ -293,11 +294,12 @@ export function HUD() {
 
         return (
           <div className="absolute inset-0 bg-black/75 flex items-center justify-center z-[100] pointer-events-auto">
-            <div className="bg-leather-300 border border-gold rounded-lg p-6 max-w-md w-full shadow-parchment animate-fade-in text-center mx-4 relative">
-              <h3 className="font-cinzel text-gold text-xl mb-2 uppercase tracking-wider">
+            <div className="ui-panel-shell max-w-md w-full animate-fade-in text-center mx-4 relative">
+            <div className="ui-parchment-panel">
+              <h3 className="ui-heading text-base mb-2 uppercase tracking-wider">
                 {currentStage.description || 'Make Your Choice'}
               </h3>
-              <p className="text-parchment-300 text-sm mb-6 italic leading-relaxed">
+              <p className="ui-body-soft text-base mb-6 italic leading-relaxed">
                 {bQuest.name}
               </p>
               <div className="space-y-3">
@@ -310,25 +312,23 @@ export function HUD() {
                       onClick={() => {
                         useQuestStore.getState().requestPathSelection(path.id);
                       }}
-                      className={`w-full py-3 px-4 rounded text-left border transition-all duration-200 block ${
-                        check.allowed
-                          ? 'bg-parchment-800/10 hover:bg-parchment-800/25 border-gold/40 hover:border-gold text-parchment-200 cursor-pointer'
-                          : 'bg-black/45 border-zinc-800 text-zinc-500 cursor-not-allowed opacity-45'
+                      className={`ui-topic-btn block text-left ${
+                        check.allowed ? 'cursor-pointer' : 'cursor-not-allowed opacity-45'
                       }`}
                     >
                       <div className="flex justify-between items-center">
                         <span className="font-semibold text-base">{path.name}</span>
                         {!check.allowed && (
-                          <span className="text-xs text-rose-300 uppercase tracking-wider bg-black/60 px-1.5 py-0.5 rounded">
+                          <span className="ui-topic-tag">
                             Locked
                           </span>
                         )}
                       </div>
                       {path.description && (
-                        <p className="text-sm mt-1 text-parchment-400 leading-normal">{path.description}</p>
+                        <p className="text-sm mt-1 leading-normal" style={{ color: 'var(--parch-warm)' }}>{path.description}</p>
                       )}
                       {!check.allowed && check.reason && (
-                        <p className="text-xs mt-1 text-rose-400/80 italic leading-normal">
+                        <p className="text-xs mt-1 italic leading-normal" style={{ color: 'var(--parch-warm)' }}>
                           Requires: {check.reason}
                         </p>
                       )}
@@ -336,6 +336,7 @@ export function HUD() {
                   );
                 })}
               </div>
+            </div>
             </div>
           </div>
         );

@@ -138,21 +138,21 @@ export function JournalPanel() {
     const entries = questEntries.slice(-MAX_RENDERED_ENTRIES);
 
     return (
-      <div className="mt-5 pt-3 border-t border-sepia-light/30">
-        <h3 className="font-cinzel text-xs uppercase tracking-wide text-gold mb-2">
+      <div className="mt-5 pt-3">
+        <h3 className="ui-caption ui-accent mb-2">
           Chronicle
         </h3>
         {questEntries.length > entries.length && (
-          <p className="text-sepia-light/70 text-[11px] italic mb-2">
+          <p className="ui-body-soft text-xs italic mb-2">
             Showing the most recent {entries.length} of {questEntries.length} entries.
           </p>
         )}
         {entries.map((entry) => (
           <div key={entry.id} className="mb-3">
-            <span className="text-sepia-light text-xs font-mono">
+            <span className="ui-keys text-xs">
               [{entry.timeString}]
             </span>
-            <p className="text-leather-200 font-crimson text-sm mt-1 whitespace-pre-line">
+            <p className="ui-body font-crimson text-base mt-1 whitespace-pre-line">
               {entry.text}
             </p>
           </div>
@@ -167,19 +167,19 @@ export function JournalPanel() {
       return (
         <>
           {narrativeCurrents.length > 0 ? (
-            <div className="mb-4 rounded border border-gold/20 bg-parchment-300/35 p-3">
-              <h3 className="font-cinzel text-xs uppercase tracking-wide text-gold mb-2">City Currents</h3>
+            <div className="mb-4 ui-description-panel">
+              <h3 className="ui-caption ui-accent mb-2">City Currents</h3>
               <div className="space-y-2">
                 {narrativeCurrents.slice(0, 3).map((current) => (
                   <div key={current.id}>
-                    <p className="text-leather-200 text-sm font-semibold">{current.title}</p>
-                    <p className="text-sepia text-xs leading-5">{current.text}</p>
+                    <p className="ui-body text-base font-semibold">{current.title}</p>
+                    <p className="ui-body-soft text-sm leading-5">{current.text}</p>
                   </div>
                 ))}
               </div>
             </div>
           ) : null}
-          <p className="text-sepia-light italic">
+          <p className="ui-body-soft italic">
             No active quests.
             <br />
             Speak with townsfolk to find work...
@@ -192,13 +192,13 @@ export function JournalPanel() {
     return (
       <>
         {narrativeCurrents.length > 0 ? (
-          <div className="mb-4 rounded border border-gold/20 bg-parchment-300/35 p-3">
-            <h3 className="font-cinzel text-xs uppercase tracking-wide text-gold mb-2">City Currents</h3>
+          <div className="mb-4 ui-description-panel">
+            <h3 className="ui-caption ui-accent mb-2">City Currents</h3>
             <div className="space-y-2">
               {narrativeCurrents.slice(0, 3).map((current) => (
                 <div key={current.id}>
-                  <p className="text-leather-200 text-sm font-semibold">{current.title}</p>
-                  <p className="text-sepia text-xs leading-5">{current.text}</p>
+                  <p className="ui-body text-base font-semibold">{current.title}</p>
+                  <p className="ui-body-soft text-sm leading-5">{current.text}</p>
                 </div>
               ))}
             </div>
@@ -209,8 +209,8 @@ export function JournalPanel() {
 
       return (
         <div key={quest.id} className="mb-4">
-          <h3 className="font-crimson text-leather-200 font-semibold flex items-center gap-2">
-            <span className="text-gold">⚜</span>
+          <h3 className="font-crimson ui-body font-semibold flex items-center gap-2">
+            <span className="ui-accent">⚜</span>
             {quest.name}
           </h3>
           {stage && (
@@ -220,13 +220,13 @@ export function JournalPanel() {
                   <li
                     key={obj.id}
                     className={`flex items-center gap-2 text-sm ${
-                      obj.completed ? 'text-green-600' : 'text-sepia'
+                      obj.completed ? 'ui-done' : 'ui-body-soft'
                     }`}
                   >
                     {trackedObjective?.questId === quest.id && trackedObjective?.objectiveId === obj.id ? (
-                      <span className="text-gold text-[11px]">◆</span>
+                      <span className="ui-accent text-xs">◆</span>
                     ) : (
-                      <span className="text-sepia-light/50 text-[11px]">·</span>
+                      <span className="ui-body-soft text-xs">·</span>
                     )}
                     <span>{obj.completed ? '✓' : '○'}</span>
                     <button
@@ -235,7 +235,7 @@ export function JournalPanel() {
                       className={`text-left ${
                         obj.completed
                           ? 'cursor-default'
-                          : 'hover:text-leather-200 underline decoration-dotted underline-offset-2'
+                          : 'underline decoration-dotted underline-offset-2'
                       }`}
                       title={obj.completed ? 'Objective completed' : 'Track objective'}
                     >
@@ -246,14 +246,14 @@ export function JournalPanel() {
               </ul>
 
               {stage.isBranching && stage.availablePaths?.length ? (
-                <div className="mt-3 ml-4 p-2 border border-gold/20 rounded bg-parchment-300/30">
-                  <p className="text-xs text-sepia-light mb-2">
+                <div className="mt-3 ml-4 ui-description-panel">
+                  <p className="ui-body-soft text-sm mb-2">
                     Paths now emerge through conversation, evidence, payment, or after-dark risk in the world.
                   </p>
-                  <ul className="space-y-1 text-xs text-leather-200">
+                  <ul className="space-y-1 text-sm ui-body">
                     {stage.availablePaths.map((path) => (
                       <li key={path.id}>
-                        <span className="text-gold">•</span> {path.name}
+                        <span className="ui-accent">•</span> {path.name}
                         {path.description ? ` — ${path.description}` : ''}
                       </li>
                     ))}
@@ -274,7 +274,7 @@ export function JournalPanel() {
   const renderJournal = (entries: JournalEntry[]) => {
     if (entries.length === 0) {
       return (
-        <p className="text-sepia-light italic">
+        <p className="ui-body-soft italic">
           Journal is empty.
           <br />
           Your adventures await...
@@ -284,10 +284,10 @@ export function JournalPanel() {
 
     return [...entries].reverse().slice(0, MAX_RENDERED_ENTRIES).map((entry) => (
       <div key={entry.id} className="mb-3">
-        <span className="text-sepia-light text-xs font-mono">
+        <span className="ui-keys text-xs">
           [{entry.timeString}]
         </span>
-        <p className="text-leather-200 font-crimson text-sm mt-1 whitespace-pre-line">
+        <p className="ui-body font-crimson text-base mt-1 whitespace-pre-line">
           {entry.text}
         </p>
       </div>
@@ -303,26 +303,23 @@ export function JournalPanel() {
       />
 
       {/* Panel */}
-      <div className="relative w-[550px] h-[400px]">
-        {/* Shadow */}
-        <div className="absolute inset-0 translate-x-1 translate-y-1 bg-black/50 rounded" />
-
-        {/* Main container - leather cover */}
-        <div className="relative bg-leather-200 border-2 border-gold rounded shadow-parchment h-full flex flex-col">
-          {/* Inner parchment */}
-          <div className="bg-parchment-100 m-2 flex-1 flex flex-col overflow-hidden">
+      <div className="relative w-[620px] h-[460px]">
+        {/* Main container — parchment 9-slice with hardwood scroll rods */}
+        <div className="ui-panel-shell h-full">
+          <div className="ui-parchment-panel h-full flex flex-col overflow-hidden">
             {/* Header */}
-            <div className="text-center py-3 border-b border-sepia-light/30">
-              <h2 className="font-cinzel text-leather-200 text-xl font-bold">
-                EXPLORER'S JOURNAL
+            <div className="text-center pb-2">
+              <div className="ui-scroll-rod mb-2" />
+              <h2 className="ui-heading text-base">
+                EXPLORER&apos;S JOURNAL
               </h2>
-              <p className="text-sepia-light text-xs italic">
+              <p className="ui-body-soft text-sm italic">
                 Melaka, Anno Domini 1580
               </p>
             </div>
 
             {/* Tabs */}
-            <div className="flex justify-center gap-4 py-2 border-b border-sepia-light/20">
+            <div className="flex justify-center gap-2 py-1">
               <button
                 onClick={() => {
                   setCurrentTab('quests');
@@ -364,11 +361,13 @@ export function JournalPanel() {
               </button>
             </div>
 
+            <div className="ui-rule" />
+
             {/* Content */}
             <div ref={viewportRef} className="flex-1 overflow-hidden">
               <div
                 ref={contentRef}
-                className="px-4 py-3"
+                className="px-2 py-3"
                 style={{ transform: `translateY(-${scrollOffset}px)` }}
               >
                 {currentTab === 'quests' && renderQuests()}
@@ -378,8 +377,9 @@ export function JournalPanel() {
             </div>
 
             {/* Instructions */}
-            <div className="text-center py-2 border-t border-sepia-light/20">
-              <span className="text-sepia text-xs font-mono">
+            <div className="text-center pt-2">
+              <div className="ui-scroll-rod mb-2" />
+              <span className="ui-keys">
                 [J] close • [Q/E/D] tabs • [↑↓] scroll
               </span>
             </div>

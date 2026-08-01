@@ -84,7 +84,7 @@ function PortraitImage({ npcId, npcName }: { npcId: string; npcName: string }) {
 
   if (hasError) {
     return (
-      <div className="ui-portrait-frame flex-shrink-0 flex items-center justify-center">
+      <div className="ui-portrait-frame flex items-center justify-center">
         <div className="wax-seal">
           {npcName.charAt(0).toUpperCase()}
         </div>
@@ -92,8 +92,11 @@ function PortraitImage({ npcId, npcName }: { npcId: string; npcName: string }) {
     );
   }
 
+  // The portrait is 80x80 native art shipped at x3; it is presented at its
+  // full 240x240 so its pixel grid matches the world's. Anything smaller is a
+  // downscale, i.e. a blurred or aliased portrait.
   return (
-    <div className="ui-portrait-frame flex-shrink-0">
+    <div className="ui-portrait-frame">
       <img
         src={`/sprites/portraits/${npcId}.png`}
         alt={npcName}
@@ -277,20 +280,15 @@ export function DialogueBox() {
       .join(' ');
   };
 
-  // Get topic importance indicator
+  // Topic importance — a chrome variant, not a tint: quest-critical rows get
+  // the brass bead, everything else the plain hardwood plaque.
   const getTopicStyle = (topic: string): string => {
     const topicData = currentNPC.dialogue.topics[topic];
     if (!topicData) return '';
 
-    if (topicData.questTrigger || topicData.questCritical) {
-      return 'border-gold bg-gold/10'; // Important topics
-    }
-    if (topicData.takesMoney) {
-      return 'border-amber-600/50 bg-amber-900/20';
-    }
-    if (topicData.givesItem) {
-      return 'border-emerald-600/50 bg-emerald-900/20'; // Items
-    }
+    if (topicData.questTrigger || topicData.questCritical) return 'ui-topic-btn--quest';
+    if (topicData.takesMoney) return 'ui-topic-btn--trade';
+    if (topicData.givesItem) return 'ui-topic-btn--item';
     return '';
   };
 
@@ -306,92 +304,91 @@ export function DialogueBox() {
   };
 
   return (
-    <div className="absolute bottom-3 left-0 right-0 mx-auto w-[min(920px,96vw)] animate-fade-in z-50">
-      <div className="absolute inset-0 translate-x-2 translate-y-2 bg-black/45 rounded-[20px] blur-[1px]" />
-
-      <div className="relative ui-dialogue-shell p-3 md:p-4">
-        <div className="ui-parchment-panel p-4 md:p-5">
-          <div className="flex flex-col gap-4 md:flex-row md:gap-5">
-            <div className="flex items-start gap-4 md:w-[260px]">
-              <PortraitImage npcId={portraitKey} npcName={currentNPC.name} />
-
-              <div className="min-w-0 pt-1">
-                <p className="ui-caption mb-1">{locationLabel}</p>
-                <h3 className="font-cinzel text-crimson font-bold text-xl leading-tight">
-                  {currentNPC.name}
-                </h3>
-                {currentNPC.title && (
-                  <p className="text-sepia-light text-sm italic leading-snug mt-1">
-                    {currentNPC.title}
-                  </p>
-                )}
-                <p className="text-sepia-light/80 text-xs uppercase tracking-[0.2em] mt-3">
-                  Speak carefully. Answers are not always free.
-                </p>
-              </div>
-            </div>
-
-            <div className="flex-1 min-w-0">
-              <div className="ui-dialogue-text">
-                {displayedText}
-                {isTyping && <span className="typewriter-cursor" />}
-              </div>
-            </div>
+    <div className="absolute bottom-3 left-0 right-0 mx-auto w-[min(940px,97vw)] animate-fade-in z-50">
+      {/* Portrait column sits beside the text so the 240px portrait does not
+          push the topic list off a 540px-tall screen. */}
+      <div className="ui-dialogue-shell">
+        <div className="ui-parchment-panel flex gap-5">
+          {/* Left column: the portrait plus the speaker's card, so the column
+              heights stay close and the parchment has no dead corner. */}
+          <div className="hidden md:block w-[276px] shrink-0">
+            <PortraitImage npcId={portraitKey} npcName={currentNPC.name} />
+            <h3 className="ui-heading text-base leading-tight mt-3">
+              {currentNPC.name}
+            </h3>
+            {currentNPC.title && (
+              <p className="ui-body-soft text-base italic leading-snug">
+                {currentNPC.title}
+              </p>
+            )}
+            <p className="ui-caption mt-1">{locationLabel}</p>
           </div>
 
-          {availableTopics.length > 0 && (
-            <div className={`ui-topic-panel transition-opacity duration-300 ${typingComplete ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
-              <p className="ui-caption mb-3 flex items-center justify-between gap-3">
-                <span>Ask about</span>
-                {pageCount > 1 && (
-                  <span className="normal-case tracking-normal text-sepia-light/70">
-                    Page {currentPage + 1} / {pageCount}
-                  </span>
-                )}
-              </p>
-              <div className="grid gap-2 sm:grid-cols-2">
-                {visibleTopics.map((topic, index) => (
-                  <button
-                    key={topic}
-                    onClick={() => handleTopicSelect(index)}
-                    className={`topic-btn ui-topic-btn ${getTopicStyle(topic)}`}
-                  >
-                    <span className="ui-topic-number">[{index + 1}]</span>
-                    <span className="flex-1 text-left leading-snug">{formatTopic(topic)}</span>
-                    {getTopicTag(topic) && (
-                      <span className="ui-topic-tag">{getTopicTag(topic)}</span>
-                    )}
-                  </button>
-                ))}
-              </div>
-              {pageCount > 1 && (
-                <div className="flex items-center gap-2 mt-3">
-                  <button
-                    onClick={() => cyclePage(1)}
-                    className="topic-btn ui-topic-btn"
-                    title="Show the next page of topics"
-                  >
-                    <span className="ui-topic-number">[0]</span>
-                    <span className="flex-1 text-left leading-snug">
-                      More topics ({availableTopics.length - visibleTopics.length} others)
-                    </span>
-                  </button>
-                </div>
-              )}
+          <div className="flex-1 min-w-0 flex flex-col">
+            {/* Repeated for the narrow layout, where the portrait is hidden. */}
+            <div className="md:hidden mb-2">
+              <h3 className="ui-heading text-base leading-tight">{currentNPC.name}</h3>
+              <p className="ui-caption">{locationLabel}</p>
             </div>
-          )}
 
-          <div className="flex items-center justify-between mt-3 pt-2 border-t border-sepia-light/20">
-            <span className="text-sepia-light text-sm font-mono">
-              {isTyping
-                ? '[SPACE] skip'
-                : pageCount > 1
-                  ? '[1-9] ask • [0/←→] more topics • [ESC] close'
-                  : '[1-9] ask • [ESC] close'}
-            </span>
-            <span className="text-sepia-light/60 text-xs uppercase tracking-[0.18em]">
-              Melaka remembers everything
-            </span>
+            <div className="ui-dialogue-text min-h-[72px]">
+              {displayedText}
+              {isTyping && <span className="typewriter-cursor" />}
+            </div>
+
+            {availableTopics.length > 0 && (
+              <div className={`mt-auto pt-3 transition-opacity duration-300 ${typingComplete ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+                <p className="ui-caption mb-2 flex items-center justify-between gap-3">
+                  <span>Ask about</span>
+                  {pageCount > 1 && (
+                    <span className="normal-case tracking-normal">
+                      Page {currentPage + 1} / {pageCount}
+                    </span>
+                  )}
+                </p>
+                <div className="grid gap-2 sm:grid-cols-2">
+                  {visibleTopics.map((topic, index) => (
+                    <button
+                      key={topic}
+                      onClick={() => handleTopicSelect(index)}
+                      className={`ui-topic-btn ${getTopicStyle(topic)}`}
+                    >
+                      <span className="ui-topic-number">[{index + 1}]</span>
+                      <span className="flex-1 text-left">{formatTopic(topic)}</span>
+                      {getTopicTag(topic) && (
+                        <span className="ui-topic-tag">{getTopicTag(topic)}</span>
+                      )}
+                    </button>
+                  ))}
+                </div>
+                {pageCount > 1 && (
+                  <div className="mt-2">
+                    <button
+                      onClick={() => cyclePage(1)}
+                      className="ui-topic-btn"
+                      title="Show the next page of topics"
+                    >
+                      <span className="ui-topic-number">[0]</span>
+                      <span className="flex-1 text-left">
+                        More topics ({availableTopics.length - visibleTopics.length} others)
+                      </span>
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
+
+            <div className="ui-rule mt-3" />
+            <div className="flex items-center justify-between gap-6 pt-2">
+              <span className="ui-keys whitespace-nowrap">
+                {isTyping
+                  ? '[SPACE] skip'
+                  : pageCount > 1
+                    ? '[1-9] ask • [0/←→] more topics • [ESC] close'
+                    : '[1-9] ask • [ESC] close'}
+              </span>
+              <span className="ui-caption truncate">Melaka remembers everything</span>
+            </div>
           </div>
         </div>
       </div>

@@ -2,111 +2,267 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Base typography */
+/* ---------------------------------------------------------------------------
+   MELAKA UI CHROME — native-resolution kit (tools/forge/ui.cjs)
+   ---------------------------------------------------------------------------
+   THE ONE RULE: the UI shares the world's pixel grid. Every chrome asset is
+   authored at NATIVE resolution and shipped at an exact x3 nearest-neighbour
+   upscale, exactly like the 320x180 plates and the 16x32 sprites. So the
+   smallest legal feature in this stylesheet is 3 CSS px — one native pixel.
+   No 1px hairlines, no border-radius, no gradients, no box-shadow bevels:
+   every edge, bevel, bead and rivet is painted into the PNG.
+
+   9-slice panels are consumed with border-image at 1:1 (border-width equals
+   the slice), so corners never scale and edges/middle tile seamlessly.
+--------------------------------------------------------------------------- */
+:root {
+  /* canon palette — tools/forge/palette.cjs */
+  --ink: #24101C;            /* timber-0  — the only outline colour */
+  --wood: #44201C;           /* timber-1  — shaded hardwood */
+  --wood-lit: #704828;       /* timber-2  — sunlit hardwood */
+  --wood-hi: #9C7C4C;        /* timber-3  — bevel catching the NW key */
+  --parch: #F0D498;          /* earth-4   — rag paper */
+  --parch-warm: #C8A860;     /* earth-3   — age patch */
+  --parch-stain: #987438;    /* earth-2   — deep stain */
+  --brass: #D8A428;          /* accent    — brass / gold */
+  --brass-dark: #987438;
+  --crimson: #B01C28;        /* accent    — Portuguese crimson */
+  --wax-deep: #581814;
+  --spec: #FFF4D4;
+
+  /* one native pixel, shipped */
+  --px: 3px;
+  --panel-slice: 18px;   /* dialogue-box.png / panel-parchment.png */
+  --chip-slice: 12px;    /* hud-plate.png / button-*.png / topic-row-*.png */
+  --rod-slice: 24px;     /* scroll-rod.png */
+}
+
 @layer base {
   body {
-    @apply font-crimson text-parchment-300;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+    @apply font-crimson;
+    color: var(--parch);
+    /* pixel fonts must not be smoothed — that is the same crime as AA on art */
+    -webkit-font-smoothing: none;
+    -moz-osx-font-smoothing: unset;
   }
 
   h1, h2, h3, h4, h5, h6 {
     @apply font-cinzel;
   }
+
+  img {
+    image-rendering: pixelated;
+  }
 }
 
-/* Game UI Components */
 @layer components {
+  /* =========================================================================
+     PANEL SHELLS — 9-slice, border-image at 1:1
+     ========================================================================= */
+  .ui-panel {
+    border-style: solid;
+    border-width: var(--panel-slice);
+    border-image-slice: 18 fill;
+    border-image-width: var(--panel-slice);
+    border-image-repeat: repeat;
+    image-rendering: pixelated;
+    /* the panel's own drop shadow — offset SE, matching the world's NW key */
+    filter: drop-shadow(6px 6px 0 rgba(12, 12, 24, 0.55));
+  }
+
   .ui-dialogue-shell {
-    background-image: url('/sprites/ui/dialogue-box.png');
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
-    image-rendering: pixelated;
+    @apply ui-panel;
+    border-image-source: url('/sprites/ui/dialogue-box.png');
   }
 
-  .ui-inventory-shell {
-    background-image: url('/sprites/ui/panel-parchment.png');
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
-    image-rendering: pixelated;
+  .ui-inventory-shell,
+  .ui-panel-shell {
+    @apply ui-panel;
+    border-image-source: url('/sprites/ui/panel-parchment.png');
   }
 
+  /* The 9-slice already IS the parchment field — this is only inner spacing. */
   .ui-parchment-panel {
-    background-image: linear-gradient(180deg, rgba(245, 222, 179, 0.96), rgba(222, 184, 135, 0.9));
-    border: 1px solid rgba(139, 111, 78, 0.35);
-    box-shadow:
-      inset 0 0 0 1px rgba(255, 255, 255, 0.22),
-      0 10px 24px rgba(28, 16, 7, 0.2);
-    border-radius: 18px;
+    padding: 12px 15px;
   }
 
+  /* Dark hardwood chip: HUD readouts, tooltips, anything over the world. */
+  .ui-chip {
+    border-style: solid;
+    border-width: var(--chip-slice);
+    border-image-source: url('/sprites/ui/hud-plate.png');
+    border-image-slice: 12 fill;
+    border-image-width: var(--chip-slice);
+    border-image-repeat: repeat;
+    image-rendering: pixelated;
+    filter: drop-shadow(3px 3px 0 rgba(12, 12, 24, 0.55));
+  }
+
+  /* Journal scroll ends — a hardwood rod with brass ferrules. */
+  .ui-scroll-rod {
+    height: 18px;
+    border-style: solid;
+    border-width: 0 var(--rod-slice);
+    border-image-source: url('/sprites/ui/scroll-rod.png');
+    border-image-slice: 0 24 fill;
+    border-image-width: 0 var(--rod-slice);
+    border-image-repeat: repeat;
+    image-rendering: pixelated;
+  }
+
+  /* =========================================================================
+     TYPE ON PARCHMENT
+     ========================================================================= */
   .ui-caption {
-    @apply text-sepia-light text-xs uppercase tracking-[0.18em];
+    @apply text-xs uppercase tracking-[0.18em];
+    color: var(--wood-lit);
+  }
+
+  .ui-heading {
+    @apply font-cinzel font-bold;
+    color: var(--wax-deep);
+  }
+
+  .ui-body {
+    color: var(--wood);
+  }
+
+  .ui-body-soft {
+    color: var(--wood-lit);
+  }
+
+  /* Warm rust — section marks and fleurons on parchment. Gold has no contrast
+     against paper; terracotta does. */
+  .ui-accent {
+    color: #844020;
+  }
+
+  .ui-done {
+    color: #387024;
   }
 
   .ui-dialogue-text {
-    @apply text-leather-200 font-crimson text-2xl leading-relaxed min-h-[96px];
-    text-shadow: 0 1px 0 rgba(245, 222, 179, 0.22);
+    @apply font-crimson text-2xl leading-relaxed;
+    color: var(--wood);
   }
 
-  /* Portrait frame — sized to match generated 104×104 PNG */
+  .ui-keys {
+    @apply text-sm font-mono;
+    color: var(--wood-lit);
+  }
+
+  /* A 3px brass rule replaces every 1px hairline divider. */
+  .ui-rule {
+    height: var(--px);
+    background: var(--parch-stain);
+  }
+
+  /* =========================================================================
+     PORTRAIT — 80px native art window (x3 = 240) inside a 6px native frame
+     ========================================================================= */
   .ui-portrait-frame {
-    /* Image area must be an integer multiple of the 80px-native portrait art:
-       104 - 2*12 = 80 → exact 1:1 native pixels, no grid breakage. */
-    width: 104px;
-    height: 104px;
-    padding: 12px;
+    width: 276px;    /* 92 native x3 */
+    height: 276px;
+    padding: 18px;   /* 6 native x3 */
     background-image: url('/sprites/ui/portrait-frame.png');
     background-repeat: no-repeat;
     background-size: 100% 100%;
     image-rendering: pixelated;
-    border-radius: 14px;
     flex-shrink: 0;
+    filter: drop-shadow(6px 6px 0 rgba(12, 12, 24, 0.45));
   }
 
   .ui-portrait-image {
-    width: 100%;
-    height: 100%;
+    width: 240px;
+    height: 240px;
     object-fit: cover;
     image-rendering: pixelated;
-    border-radius: 8px;
+    display: block;
   }
 
-  .ui-portrait-fallback {
-    width: 80px;
-    height: 80px;
+  /* =========================================================================
+     BUTTONS + TOPIC ROWS
+     ========================================================================= */
+  .ui-btn {
+    border-style: solid;
+    border-width: var(--chip-slice);
+    border-image-source: url('/sprites/ui/button-default.png');
+    border-image-slice: 12 fill;
+    border-image-width: var(--chip-slice);
+    border-image-repeat: repeat;
+    image-rendering: pixelated;
+    @apply font-cinzel text-xs tracking-widest uppercase cursor-pointer;
+    color: var(--parch);
+    padding: 0 6px;
   }
-
-  .ui-topic-panel {
-    @apply mt-4 pt-3 border-t border-sepia-light/25;
+  .ui-btn:hover {
+    border-image-source: url('/sprites/ui/button-hover.png');
+    color: var(--spec);
+  }
+  .ui-btn:active {
+    border-image-source: url('/sprites/ui/button-active.png');
+    transform: translate(var(--px), var(--px));
   }
 
   .ui-topic-btn {
-    @apply w-full min-h-[48px] justify-between gap-3 px-4 py-2;
-    @apply text-parchment-200 text-lg;
-    @apply shadow-sm;
-    background-image: linear-gradient(180deg, rgba(92, 58, 30, 0.88), rgba(48, 32, 18, 0.94));
-    border-color: rgba(244, 180, 26, 0.45);
+    @apply w-full flex items-center gap-3 text-left cursor-pointer;
+    min-height: 42px;
+    padding: 0 3px;
+    border-style: solid;
+    border-width: var(--chip-slice);
+    border-image-source: url('/sprites/ui/topic-row.png');
+    border-image-slice: 12 fill;
+    border-image-width: var(--chip-slice);
+    border-image-repeat: repeat;
+    image-rendering: pixelated;
+    color: var(--parch);
+    font-size: 1.05rem;
+    line-height: 1.15;
   }
-
   .ui-topic-btn:hover {
-    transform: translateY(-1px);
-    border-color: rgba(244, 180, 26, 0.8);
+    border-image-source: url('/sprites/ui/topic-row-hover.png');
+    color: var(--spec);
+  }
+  .ui-topic-btn:active {
+    transform: translate(var(--px), var(--px));
+  }
+  .ui-topic-btn--quest {
+    border-image-source: url('/sprites/ui/topic-row-quest.png');
+  }
+  .ui-topic-btn--quest:hover {
+    border-image-source: url('/sprites/ui/topic-row-hover.png');
   }
 
   .ui-topic-number {
-    @apply text-gold text-sm font-cinzel;
+    @apply font-cinzel text-sm;
+    color: var(--brass);
+    flex-shrink: 0;
   }
 
   .ui-topic-tag {
-    @apply text-xs uppercase tracking-[0.16em] text-gold-light;
+    @apply text-xs uppercase tracking-[0.14em];
+    color: var(--parch-warm);
+    flex-shrink: 0;
   }
+  .ui-topic-btn--quest .ui-topic-tag { color: var(--brass); }
+  .ui-topic-btn--trade .ui-topic-tag { color: var(--parch-warm); }
+  .ui-topic-btn--item  .ui-topic-tag { color: var(--parch-warm); }
 
-  .ui-inventory-slot-art {
+  /* =========================================================================
+     INVENTORY
+     ========================================================================= */
+  .inv-slot {
+    @apply relative flex items-center justify-center;
+    width: 48px;    /* 16 native x3 */
+    height: 48px;
     background-image: url('/sprites/ui/inventory-slot.png');
     background-repeat: no-repeat;
     background-size: 100% 100%;
     image-rendering: pixelated;
+  }
+
+  .inv-slot-selected {
+    background-image: url('/sprites/ui/inventory-slot-selected.png');
   }
 
   .ui-item-icon {
@@ -114,117 +270,57 @@
     height: 100%;
     object-fit: contain;
     image-rendering: pixelated;
-    filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.25));
   }
 
   .ui-item-fallback {
     width: 100%;
     height: 100%;
-    border-radius: 8px;
-    @apply flex items-center justify-center font-cinzel text-parchment-200 text-lg;
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.15);
+    @apply flex items-center justify-center font-cinzel text-lg;
+    color: var(--parch);
   }
 
   .ui-quantity-badge {
-    @apply absolute -bottom-1 -right-1 text-[10px] text-white bg-black/70 px-1.5 py-0.5 rounded;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    @apply absolute text-[10px] font-mono;
+    right: -3px;
+    bottom: -3px;
+    color: var(--parch);
+    background: var(--ink);
+    padding: 0 3px;
   }
 
   .ui-money-pill {
-    @apply px-3 py-2 rounded-full border border-gold/40 bg-leather-100/70;
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+    @apply flex items-center gap-3 shrink-0;
+    padding: 0 9px;
+    border-style: solid;
+    border-width: var(--chip-slice);
+    border-image-source: url('/sprites/ui/hud-plate.png');
+    border-image-slice: 12 fill;
+    border-image-width: var(--chip-slice);
+    border-image-repeat: repeat;
+    image-rendering: pixelated;
   }
 
   .ui-money-coin {
-    width: 22px;
-    height: 22px;
+    width: 24px;    /* 8 native x3 */
+    height: 24px;
     image-rendering: pixelated;
   }
 
+  /* A recessed reading well on the parchment: darker paper, 3px stain edge. */
   .ui-description-panel {
-    @apply p-3 rounded-xl border border-sepia-light/25 bg-parchment-400/50;
-    background-image: linear-gradient(180deg, rgba(245, 222, 179, 0.4), rgba(222, 184, 135, 0.24));
+    background: var(--parch-warm);
+    box-shadow:
+      inset var(--px) var(--px) 0 var(--parch-stain),
+      inset calc(var(--px) * -1) calc(var(--px) * -1) 0 var(--parch);
+    padding: 9px 12px;
   }
 
-  /* Parchment panel style — now uses generated sprite */
-  .panel-parchment {
-    background-image: url('/sprites/ui/panel-parchment.png');
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
-    image-rendering: pixelated;
-    @apply shadow-parchment;
-  }
-
-  /* Leather panel style */
-  .panel-leather {
-    @apply bg-leather-200 border-2 border-gold rounded shadow-parchment;
-  }
-
-  /* Button variants using generated sprites */
-  .ui-btn {
-    background-image: url('/sprites/ui/button-default.png');
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
-    image-rendering: pixelated;
-    @apply font-cinzel text-xs tracking-widest uppercase cursor-pointer;
-    width: 120px;
-    height: 28px;
-  }
-  .ui-btn:hover {
-    background-image: url('/sprites/ui/button-hover.png');
-  }
-  .ui-btn:active {
-    background-image: url('/sprites/ui/button-active.png');
-    transform: translateY(1px);
-  }
-
-  /* Coin icon (16×16) */
-  .ui-coin-icon {
-    width: 16px;
-    height: 16px;
-    background-image: url('/sprites/ui/coin-icon.png');
-    background-size: 100% 100%;
-    image-rendering: pixelated;
-    display: inline-block;
-  }
-
-  /* Portrait frame — upgraded to 104×104 slot */
-  .ui-portrait-frame-lg {
-    width: 104px;
-    height: 104px;
-    padding: 12px;
-    background-image: url('/sprites/ui/portrait-frame.png');
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
-    image-rendering: pixelated;
-    flex-shrink: 0;
-  }
-
-  /* HUD orbs */
-  .ui-health-orb {
-    width: 24px;
-    height: 24px;
-    background-image: url('/sprites/ui/health-orb.png');
-    background-size: 100% 100%;
-    image-rendering: pixelated;
-  }
-  .ui-energy-orb {
-    width: 24px;
-    height: 24px;
-    background-image: url('/sprites/ui/energy-orb.png');
-    background-size: 100% 100%;
-    image-rendering: pixelated;
-  }
-
-  /* Gold text */
-  .text-golden {
-    @apply text-gold font-cinzel;
-  }
-
-  /* Wax seal */
+  /* =========================================================================
+     WAX SEAL — the recurring motif (portrait fallback, flourishes)
+     ========================================================================= */
   .wax-seal {
-    width: 56px;
-    height: 56px;
+    width: 60px;    /* 20 native x3 */
+    height: 60px;
     background-image: url('/sprites/ui/wax-seal.png');
     background-size: 100% 100%;
     background-repeat: no-repeat;
@@ -233,64 +329,94 @@
     align-items: center;
     justify-content: center;
     font-family: 'Press Start 2P', monospace;
-    color: #FFD700;
+    color: var(--spec);
     font-size: 16px;
-    font-weight: bold;
-    padding-left: 2px;
-    padding-bottom: 2px;
   }
 
-  /* Topic button */
-  .topic-btn {
-    @apply flex items-center rounded-lg border transition-all duration-150 cursor-pointer;
-    @apply text-left text-base hover:text-parchment-200;
-  }
-
-  /* Inventory slot */
-  .inv-slot {
-    @apply relative w-12 h-12 border-2 border-leather-50 rounded-lg overflow-hidden;
-    @apply flex items-center justify-center bg-leather-300;
-  }
-
-  .inv-slot-selected {
-    @apply ring-2 ring-gold ring-offset-1 ring-offset-leather-200;
-  }
-
-  /* Journal tabs */
+  /* =========================================================================
+     JOURNAL / MENUS
+     ========================================================================= */
   .journal-tab {
-    @apply px-4 py-2 font-cinzel cursor-pointer transition-colors;
+    @apply px-4 py-2 font-cinzel text-xs cursor-pointer;
+    color: var(--parch-stain);
   }
 
   .journal-tab-active {
-    @apply text-crimson font-bold;
+    color: var(--wax-deep);
+    box-shadow: inset 0 calc(var(--px) * -1) 0 var(--brass);
   }
 
-  .journal-tab-inactive {
-    @apply text-sepia hover:text-leather-200;
+  .journal-tab-inactive:hover {
+    color: var(--wood);
   }
 
-  /* Menu button */
   .menu-btn {
-    @apply px-6 py-3 bg-leather-200/80 hover:bg-leather-100 border border-gold/50 hover:border-gold;
-    @apply font-cinzel text-parchment-200 hover:text-gold transition-all cursor-pointer;
-    @apply shadow-md hover:shadow-gold-glow;
+    @apply w-full font-cinzel text-xs uppercase tracking-widest cursor-pointer;
+    min-height: 42px;
+    border-style: solid;
+    border-width: var(--chip-slice);
+    border-image-source: url('/sprites/ui/button-default.png');
+    border-image-slice: 12 fill;
+    border-image-width: var(--chip-slice);
+    border-image-repeat: repeat;
+    image-rendering: pixelated;
+    color: var(--parch);
+  }
+  .menu-btn:hover {
+    border-image-source: url('/sprites/ui/button-hover.png');
+    color: var(--spec);
+  }
+  .menu-btn:active {
+    border-image-source: url('/sprites/ui/button-active.png');
+    transform: translate(var(--px), var(--px));
   }
 
-  /* Volume slider */
   .volume-slider {
-    @apply w-full h-2 bg-leather-200 rounded-full appearance-none cursor-pointer;
+    @apply w-full appearance-none cursor-pointer;
+    height: 12px;
+    background: var(--wood);
+    box-shadow: inset var(--px) var(--px) 0 var(--ink);
   }
 
   .volume-slider::-webkit-slider-thumb {
-    @apply appearance-none w-4 h-4 bg-gold rounded-full cursor-pointer;
-    @apply hover:bg-gold-light transition-colors;
+    @apply appearance-none cursor-pointer;
+    width: 12px;
+    height: 18px;
+    background: var(--brass);
+    box-shadow: inset calc(var(--px) * -1) calc(var(--px) * -1) 0 var(--brass-dark);
+  }
+
+  /* Save-slot rows and other list chrome on parchment. */
+  .ui-list-row {
+    @apply w-full text-left text-xs cursor-pointer;
+    padding: 6px 9px;
+    color: var(--wood-lit);
+    background: var(--parch-warm);
+    box-shadow: inset var(--px) var(--px) 0 var(--parch-stain);
+  }
+  .ui-list-row:hover { color: var(--wood); }
+  .ui-list-row--active {
+    color: var(--wood);
+    background: var(--parch);
+    box-shadow: inset 0 0 0 var(--px) var(--brass);
+  }
+
+  .ui-field {
+    @apply w-full text-sm;
+    padding: 6px 9px;
+    color: var(--wood);
+    background: var(--parch-warm);
+    border: none;
+    box-shadow: inset var(--px) var(--px) 0 var(--parch-stain);
+    font-family: inherit;
   }
 }
 
 /* Typewriter effect cursor */
 .typewriter-cursor::after {
   content: '▌';
-  @apply text-leather-200 animate-typing;
+  color: var(--wood-lit);
+  @apply animate-typing;
 }
 
 /* Fade transitions */
