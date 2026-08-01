@@ -21,6 +21,7 @@ import { WalkMask, resolveMove } from '../core/WalkMask';
 import {
   getLocation,
   getLocationItems,
+  getLocationPlateProps,
   getLocationVisual,
   LOCATION_IDS,
   type LocationRuntime,
@@ -177,7 +178,15 @@ interface QuestHotspot {
   labelText: Phaser.GameObjects.Text;
 }
 
-type InteractionTargetType = 'npc' | 'item' | 'quest' | 'transition' | 'lore';
+type InteractionTargetType = 'npc' | 'item' | 'quest' | 'transition' | 'lore' | 'scenery';
+
+/**
+ * Plate-prop labels come from the kits, so some are hand-written sentences
+ * ("The wall of A Famosa") and some are bare type names ("lantern post").
+ * Only the first letter is touched — title-casing the rest would turn the
+ * written ones into "The Wall Of A Famosa".
+ */
+const titleCase = (s: string) => (s ? s.charAt(0).toUpperCase() + s.slice(1) : s);
 
 interface InteractionCandidate {
   type: InteractionTargetType;
@@ -312,6 +321,11 @@ export class GameScene extends Phaser.Scene {
   private plateOverlays: Phaser.GameObjects.Image[] = [];
   private worldItems: WorldItemInstance[] = [];
   private loreObjects: LoreObjectInstance[] = [];
+  /**
+   * Examine-only hotspots for props the compositor painted into the plate.
+   * No display object of their own: the plate already draws them.
+   */
+  private plateHotspots: { key: string; label: string; examineText: string; x: number; y: number }[] = [];
   private transitionHotspots: TransitionHotspot[] = [];
   private isoRenderer: IsometricRenderer | null = null;
   private isIsometric: boolean = false;
@@ -465,6 +479,7 @@ export class GameScene extends Phaser.Scene {
 
     // Create lore objects for this location
     this.createLoreObjects();
+    this.createPlateHotspots();
 
     // Create traversal and quest interaction hotspots
     this.createTransitionHotspots();
@@ -508,6 +523,45 @@ export class GameScene extends Phaser.Scene {
 
     // Initialize tracked objective marker
     this.refreshObjectiveMarker(true);
+
+    // DEV-only acceptance hook. Plate installs have to be walked end to end —
+    // every exit taken through the real switchLocation path, every arrival
+    // checked against the walk mask — and driving that with raw keystrokes is
+    // not repeatable. Stripped from production by the import.meta.env.DEV guard.
+    if (import.meta.env.DEV) {
+      (window as any).__melakaDebug = {
+        location: () => this.currentMap,
+        player: () => ({ x: this.player.x, y: this.player.y }),
+        camera: () => ({
+          x: this.cameras.main.scrollX,
+          y: this.cameras.main.scrollY,
+          w: this.cameras.main.width,
+          h: this.cameras.main.height,
+        }),
+        world: () => this.worldBounds(),
+        timeOfDay: () => this.timeOfDay,
+        // "Can a character stand with their ORIGIN here?" — the same feet-level,
+        // both-shoulders test the movement code uses, not a raw pixel read.
+        walkable: (x: number, y: number) =>
+          this.walkMask?.canStand(x, y + WALK_FOOT_OFFSET, 6 * CHARACTER_SCALE) ?? null,
+        place: (x: number, y: number) => { this.player.setPosition(x, y); },
+        transitions: () => this.transitionHotspots.map((h) => ({
+          target: h.config.targetLocation,
+          label: h.config.label,
+          trigger: h.config.triggerArea,
+          spawnAt: h.config.spawnAt,
+        })),
+        interact: () => this.tryInteract(),
+        counts: () => ({
+          npcs: this.npcs.length,
+          items: this.worldItems.length,
+          lore: this.loreObjects.length,
+          scenery: this.plateHotspots.length,
+          overlays: this.plateOverlays.length,
+          crowd: (this.crowdSystem as any)?.crowdMembers?.length ?? null,
+        }),
+      };
+    }
     this.createInteractionPrompt();
 
     // Subscribe to quest changes to handle stealth mode opacity on theft path
@@ -1341,6 +1395,25 @@ export class GameScene extends Phaser.Scene {
         label,
       });
     });
+  }
+
+  /**
+   * Painted props carry prose but no sprite. Coordinates are already in world
+   * px (LocationData scaled them); anchors are bottom-centre like every other
+   * ground-standing thing, and a prop can legitimately be anchored just off the
+   * frame (a wall running past the edge), which is fine — the radius check in
+   * the interaction scan is what decides whether it is reachable.
+   */
+  private createPlateHotspots() {
+    this.plateHotspots = getLocationPlateProps(this.currentMap)
+      .filter((p: any) => typeof p.examineText === 'string' && p.examineText.length > 0)
+      .map((p: any) => ({
+        key: p.key,
+        label: titleCase(p.label || p.type || p.key),
+        examineText: p.examineText,
+        x: p.x,
+        y: p.y,
+      }));
   }
 
   private createLoreObjects() {
@@ -2586,6 +2659,9 @@ export class GameScene extends Phaser.Scene {
       obj.label.destroy();
     });
     this.loreObjects = [];
+    // Plain data, no display objects to destroy — but it must still be cleared,
+    // or the old location's scenery stays examinable in the new one.
+    this.plateHotspots = [];
     this.transitionHotspots.forEach((hotspot) => {
       hotspot.glow.destroy();
       hotspot.marker.destroy();
@@ -2906,6 +2982,9 @@ export class GameScene extends Phaser.Scene {
       quest: { color: '#F4D66A', backgroundColor: 'rgba(89, 61, 12, 0.84)' },
       transition: { color: '#BEE7FF', backgroundColor: 'rgba(16, 41, 56, 0.82)' },
       lore: { color: '#E7D7B4', backgroundColor: 'rgba(56, 42, 25, 0.82)' },
+      // Painted scenery reads one step quieter than a lore object: it is the
+      // street, not a museum piece.
+      scenery: { color: '#CFC3A6', backgroundColor: 'rgba(44, 36, 24, 0.78)' },
     }[type || 'npc'];
 
     this.interactionPrompt.setText(text);
@@ -3107,6 +3186,29 @@ export class GameScene extends Phaser.Scene {
           }
           this.switchLocation(hotspot.config.targetLocation, hotspot.config.spawnAt);
         },
+      });
+    }
+
+    // Props the Forge compositor PAINTED INTO the plate. They own no sprite —
+    // drawing them again would double-image every crate on the street — so the
+    // data is all that is left of them, and without this loop the examine prose
+    // the content pass wrote for a barrel or a market stall is unreachable in a
+    // Forge location (`props` is empty in every one of them by construction).
+    // Lowest priority and the tightest radius of any candidate: scenery must
+    // never shadow an NPC, an item, a lore object or an exit.
+    for (const p of this.plateHotspots) {
+      const scored = this.scoreInteractionTarget(p.x, p.y, 56);
+      if (!scored) continue;
+
+      candidates.push({
+        type: 'scenery',
+        id: p.key,
+        label: `Examine ${p.label}`,
+        x: p.x,
+        y: p.y,
+        priority: 4,
+        score: scored.score,
+        interact: () => emitGameEvent('message:show', p.label, p.examineText),
       });
     }
 

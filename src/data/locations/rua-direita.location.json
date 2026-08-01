@@ -1,7 +1,7 @@
 {
   "id": "rua-direita",
   "name": "Rua Direita",
-  "coordVersion": 3,
+  "coordVersion": 6,
   "world": {
     "scale": 3,
     "nativeWidth": 640,
@@ -616,8 +616,8 @@
       "y": 219
     },
     "aminah": {
-      "x": 99,
-      "y": 244
+      "x": 102,
+      "y": 239
     },
     "alvares": {
       "x": 440,
@@ -643,8 +643,8 @@
         "height": 100
       },
       "spawnAt": {
-        "x": 247,
-        "y": 113
+        "x": 600,
+        "y": 305
       }
     },
     {
@@ -657,8 +657,8 @@
         "height": 100
       },
       "spawnAt": {
-        "x": 60,
-        "y": 113
+        "x": 34,
+        "y": 325
       }
     },
     {
@@ -671,8 +671,8 @@
         "height": 22
       },
       "spawnAt": {
-        "x": 160,
-        "y": 143
+        "x": 320,
+        "y": 325
       }
     },
     {
@@ -685,8 +685,8 @@
         "height": 20
       },
       "spawnAt": {
-        "x": 247,
-        "y": 113
+        "x": 320,
+        "y": 222
       }
     }
   ],
@@ -2042,8 +2042,7 @@
           }
         ]
       }
-    ],
-    "_note": "maxCrowd is a WORLD budget, not a per-screen one: the composed plate is two viewports wide, so the compositor per-screen figure (7) is doubled to keep the street reading as crowded in view."
+    ]
   },
   "items": [
     {

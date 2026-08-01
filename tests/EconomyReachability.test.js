@@ -317,8 +317,12 @@ describe('Examinable prose', () => {
     test(`${locationId} offers at least 12 examinable objects`, () => {
       const location = loadLocation(locationId);
       const props = (location.props || []).filter((prop) => prop.examineText);
+      // In a Forge location `props` is empty by construction — the compositor
+      // paints them INTO the plate and leaves the prose behind in plateProps,
+      // which GameScene.createPlateHotspots turns back into examine targets.
+      const painted = (location.plateProps || []).filter((prop) => prop.examineText);
       const lore = location.loreObjects || [];
-      expect(props.length + lore.length).toBeGreaterThanOrEqual(12);
+      expect(props.length + painted.length + lore.length).toBeGreaterThanOrEqual(12);
     });
 
     test(`${locationId} props all carry layered examine prose`, () => {

@@ -3,16 +3,16 @@
   "anchors": {
     "a-famosa-gate": {
       "npc:capitao-rodrigues": {
-        "x": 400,
-        "y": 330
+        "x": 738,
+        "y": 690
       },
       "npc:gaspar-mesquita": {
-        "x": 560,
-        "y": 330
+        "x": 1374,
+        "y": 759
       },
       "location:a-famosa-gate": {
-        "x": 480,
-        "y": 380
+        "x": 960,
+        "y": 792
       }
     },
     "rua-direita": {
@@ -21,8 +21,8 @@
         "y": 657
       },
       "npc:aminah": {
-        "x": 297,
-        "y": 732
+        "x": 306,
+        "y": 717
       },
       "npc:alvares": {
         "x": 1320,
@@ -43,34 +43,34 @@
     },
     "st-pauls-church": {
       "npc:padre-tomas": {
-        "x": 470,
-        "y": 330
+        "x": 1248,
+        "y": 744
       },
       "npc:siti": {
-        "x": 600,
-        "y": 345
+        "x": 654,
+        "y": 831
       },
       "poi:siti": {
         "x": 600,
         "y": 345
       },
       "location:st-pauls-church": {
-        "x": 480,
-        "y": 380
+        "x": 960,
+        "y": 984
       }
     },
     "waterfront": {
       "npc:chen-wei": {
-        "x": 470,
-        "y": 330
+        "x": 1641,
+        "y": 753
       },
       "npc:rashid": {
-        "x": 300,
-        "y": 360
+        "x": 393,
+        "y": 687
       },
       "npc:lin-mei": {
-        "x": 650,
-        "y": 330
+        "x": 1284,
+        "y": 831
       },
       "poi:counting-house": {
         "x": 640,
@@ -81,22 +81,22 @@
         "y": 285
       },
       "location:waterfront": {
-        "x": 480,
-        "y": 380
+        "x": 864,
+        "y": 912
       }
     },
     "kampung": {
       "npc:mak-enang": {
-        "x": 470,
-        "y": 330
+        "x": 432,
+        "y": 705
       },
       "npc:pak-salleh": {
-        "x": 600,
-        "y": 345
+        "x": 1266,
+        "y": 792
       },
       "location:kampung": {
-        "x": 480,
-        "y": 380
+        "x": 960,
+        "y": 576
       }
     }
   }

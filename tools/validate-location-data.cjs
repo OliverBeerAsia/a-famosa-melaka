@@ -105,6 +105,15 @@ const CROWD_OFFSCREEN_MARGIN = 24;
 const LIGHT_OFFPLATE_MARGIN = 48;
 
 /**
+ * Same story for animated props: the sway sprite sits on the painted thing it
+ * animates, and the compositor legitimately paints a palm cluster or a laundry
+ * line half over the frame edge, so its anchor lands just outside. The sprites
+ * are 16-32 native px, so an anchor further out than this is animating
+ * something the plate does not show — i.e. coordinate rot, not composition.
+ */
+const ANIM_PROP_OFFPLATE_MARGIN = 24;
+
+/**
  * Characters are positioned by their sprite ORIGIN, but they stand on their
  * feet: a 16x32 sprite at 3x contacts the ground ~44 world px (≈15 native px)
  * below its origin. GameScene samples the walk mask there, so the validator
@@ -117,6 +126,23 @@ const SCENES_DIR = path.join(ROOT, 'assets', 'scenes');
 const MASKS_DIR = path.join(SCENES_DIR, 'masks');
 const OVERLAYS_DIR = path.join(SCENES_DIR, 'overlays');
 const TODS = ['dawn', 'dusk', 'night'];
+
+/**
+ * `plate.background` is a TEXTURE KEY that BootScene must have registered, and
+ * for two locations it is NOT the filename ('scene-a-famosa-gate' loads
+ * scenes/scene-a-famosa.png). A plate rebuild that "tidies" the key to match
+ * the file leaves the runtime asking for a texture nobody loaded — and the
+ * failure is a console.log and an unchanged backdrop, which reads as "the
+ * plate did not update" rather than as an error. So the keys BootScene
+ * registers are read out of it and checked here.
+ */
+const BOOT_SCENE = path.join(ROOT, 'src', 'phaser', 'scenes', 'BootScene.ts');
+const bootSrc = fs.existsSync(BOOT_SCENE) ? fs.readFileSync(BOOT_SCENE, 'utf8') : '';
+const mapBlock = bootSrc.slice(bootSrc.indexOf('const sceneMapping'));
+const bootPlateKeys = new Map(
+  [...mapBlock.slice(0, mapBlock.indexOf('};')).matchAll(/'([\w-]+)':\s*'scenes\/([\w-]+)\.png'/g)]
+    .map((m) => [m[1], m[2]])
+);
 
 /**
  * Walk masks, lazily decoded. R>=128 means walkable; the mask is the
@@ -293,7 +319,7 @@ for (const [id, loc] of Object.entries(locations)) {
   });
 
   (loc.animatedProps || []).forEach((p, i) => {
-    checkPoint(`animatedProps[${i}] (${p.type})`, p);
+    checkPoint(`animatedProps[${i}] (${p.type})`, p, ANIM_PROP_OFFPLATE_MARGIN);
     const sheet = ANIMATED_PROP_SHEETS[p.type];
     if (!sheet) {
       fail(where(`animatedProps[${i}]: unknown type "${p.type}"`));
@@ -309,6 +335,37 @@ for (const [id, loc] of Object.entries(locations)) {
     if (!LIGHT_TYPES.has(l.type)) fail(where(`lights[${i}]: unknown light type "${l.type}"`));
   });
   (loc.fires || []).forEach((f, i) => checkPoint(`fires[${i}]`, f));
+
+  // --- plate texture keys -------------------------------------------------
+  if (bootPlateKeys.size > 0) {
+    const bg = loc.plate?.background;
+    const stem = bootPlateKeys.get(bg);
+    if (!bg) {
+      fail(where('plate.background: missing'));
+    } else if (!stem) {
+      fail(where(`plate.background: "${bg}" is not a key BootScene registers ` +
+        `(sceneMapping has ${[...bootPlateKeys.keys()].join(', ')}) — the day plate would never load`));
+    } else {
+      // The variants must be derived from the SAME file stem the key resolves
+      // to, because relight-plates.cjs writes day and variants together.
+      Object.entries(loc.plate.variants || {}).forEach(([tod, key]) => {
+        if (key !== `${stem}-${tod}`) {
+          fail(where(`plate.variants.${tod}: "${key}" does not match the day plate's file stem ` +
+            `("${stem}") — day and its variants would come from different masters`));
+        }
+      });
+      const dayFile = path.join(SCENES_DIR, `${stem}.png`);
+      if (!fs.existsSync(dayFile)) {
+        fail(where(`plate.background: no day plate at assets/scenes/${stem}.png`));
+      } else {
+        const { width, height } = pngSize(dayFile);
+        if (width !== W * loc.world.scale || height !== H * loc.world.scale) {
+          fail(where(`plate.background: assets/scenes/${stem}.png is ${width}x${height}, ` +
+            `expected ${W * loc.world.scale}x${H * loc.world.scale} — stale plate, run \`npm run forge:relight\``));
+        }
+      }
+    }
+  }
 
   // --- walk mask (Stage 3+: the authoritative collision surface) ----------
   if (loc.plate?.walkMask) {

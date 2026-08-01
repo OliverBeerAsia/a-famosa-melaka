@@ -1,10 +1,23 @@
 {
   "id": "kampung",
   "name": "Kampung Quarter",
+  "coordVersion": 4,
   "world": {
     "scale": 3,
-    "nativeWidth": 320,
-    "nativeHeight": 180
+    "nativeWidth": 640,
+    "nativeHeight": 360
+  },
+  "layoutHash": "695aff32dd21",
+  "generatedBy": "tools/forge/compose-plate.cjs",
+  "sun": {
+    "azimuthDeg": 315,
+    "elevationDeg": 30,
+    "litFace": "+ty",
+    "shadowFace": "+tx",
+    "castOffset": [
+      1,
+      0.5
+    ]
   },
   "plate": {
     "background": "scene-kampung",
@@ -14,69 +27,471 @@
       "night": "scene-kampung-night"
     },
     "runtimeMode": "legacy-backdrop",
+    "camera": "scrolling",
+    "walkMask": "kampung-walk",
     "targetMode": "isometric-2:1",
-    "authoringBasis": "isometric-grid",
+    "authoringBasis": "forge-compositor",
     "anchor": "bottom-center",
     "depthStrategy": "screen-y",
-    "tileWidth": 64,
-    "tileHeight": 32,
-    "isoMapKey": "kampung-iso",
-    "mapFile": "maps/kampung.json"
+    "tileWidth": 32,
+    "tileHeight": 16
   },
   "collision": {
     "rects": [
       {
         "x": 0,
         "y": 0,
-        "width": 320,
-        "height": 57
+        "width": 640,
+        "height": 152
+      },
+      {
+        "x": 24,
+        "y": 152,
+        "width": 16,
+        "height": 8
+      },
+      {
+        "x": 208,
+        "y": 152,
+        "width": 8,
+        "height": 32
+      },
+      {
+        "x": 384,
+        "y": 152,
+        "width": 40,
+        "height": 24
+      },
+      {
+        "x": 496,
+        "y": 152,
+        "width": 16,
+        "height": 8
+      },
+      {
+        "x": 616,
+        "y": 152,
+        "width": 16,
+        "height": 8
+      },
+      {
+        "x": 192,
+        "y": 160,
+        "width": 16,
+        "height": 16
+      },
+      {
+        "x": 216,
+        "y": 160,
+        "width": 16,
+        "height": 32
+      },
+      {
+        "x": 376,
+        "y": 160,
+        "width": 8,
+        "height": 16
+      },
+      {
+        "x": 424,
+        "y": 160,
+        "width": 16,
+        "height": 24
+      },
+      {
+        "x": 72,
+        "y": 168,
+        "width": 16,
+        "height": 32
+      },
+      {
+        "x": 184,
+        "y": 168,
+        "width": 8,
+        "height": 8
+      },
+      {
+        "x": 232,
+        "y": 168,
+        "width": 16,
+        "height": 24
+      },
+      {
+        "x": 440,
+        "y": 168,
+        "width": 8,
+        "height": 8
+      },
+      {
+        "x": 488,
+        "y": 168,
+        "width": 8,
+        "height": 8
+      },
+      {
+        "x": 56,
+        "y": 176,
+        "width": 16,
+        "height": 16
+      },
+      {
+        "x": 88,
+        "y": 176,
+        "width": 16,
+        "height": 24
+      },
+      {
+        "x": 144,
+        "y": 176,
+        "width": 8,
+        "height": 8
+      },
+      {
+        "x": 200,
+        "y": 176,
+        "width": 8,
+        "height": 8
+      },
+      {
+        "x": 248,
+        "y": 176,
+        "width": 16,
+        "height": 8
+      },
+      {
+        "x": 392,
+        "y": 176,
+        "width": 32,
+        "height": 8
       },
       {
         "x": 0,
-        "y": 0,
-        "width": 43,
-        "height": 180
+        "y": 184,
+        "width": 8,
+        "height": 8
       },
       {
-        "x": 277,
-        "y": 0,
-        "width": 43,
-        "height": 180
+        "x": 48,
+        "y": 184,
+        "width": 8,
+        "height": 8
+      },
+      {
+        "x": 104,
+        "y": 184,
+        "width": 16,
+        "height": 8
+      },
+      {
+        "x": 248,
+        "y": 184,
+        "width": 8,
+        "height": 8
+      },
+      {
+        "x": 408,
+        "y": 184,
+        "width": 16,
+        "height": 8
+      },
+      {
+        "x": 584,
+        "y": 184,
+        "width": 32,
+        "height": 16
+      },
+      {
+        "x": 64,
+        "y": 192,
+        "width": 8,
+        "height": 8
+      },
+      {
+        "x": 104,
+        "y": 192,
+        "width": 8,
+        "height": 8
+      },
+      {
+        "x": 232,
+        "y": 192,
+        "width": 8,
+        "height": 8
+      },
+      {
+        "x": 576,
+        "y": 192,
+        "width": 8,
+        "height": 8
+      },
+      {
+        "x": 616,
+        "y": 192,
+        "width": 16,
+        "height": 8
+      },
+      {
+        "x": 80,
+        "y": 200,
+        "width": 16,
+        "height": 8
+      },
+      {
+        "x": 136,
+        "y": 200,
+        "width": 8,
+        "height": 8
+      },
+      {
+        "x": 544,
+        "y": 200,
+        "width": 8,
+        "height": 8
+      },
+      {
+        "x": 592,
+        "y": 200,
+        "width": 24,
+        "height": 8
+      },
+      {
+        "x": 104,
+        "y": 208,
+        "width": 8,
+        "height": 16
+      },
+      {
+        "x": 16,
+        "y": 216,
+        "width": 16,
+        "height": 8
+      },
+      {
+        "x": 288,
+        "y": 216,
+        "width": 16,
+        "height": 8
+      },
+      {
+        "x": 424,
+        "y": 216,
+        "width": 8,
+        "height": 8
+      },
+      {
+        "x": 456,
+        "y": 216,
+        "width": 32,
+        "height": 32
+      },
+      {
+        "x": 440,
+        "y": 224,
+        "width": 16,
+        "height": 16
+      },
+      {
+        "x": 488,
+        "y": 224,
+        "width": 16,
+        "height": 16
+      },
+      {
+        "x": 576,
+        "y": 224,
+        "width": 16,
+        "height": 8
+      },
+      {
+        "x": 336,
+        "y": 232,
+        "width": 16,
+        "height": 8
+      },
+      {
+        "x": 504,
+        "y": 232,
+        "width": 8,
+        "height": 8
+      },
+      {
+        "x": 184,
+        "y": 240,
+        "width": 8,
+        "height": 8
+      },
+      {
+        "x": 112,
+        "y": 256,
+        "width": 8,
+        "height": 8
+      },
+      {
+        "x": 296,
+        "y": 256,
+        "width": 16,
+        "height": 8
+      },
+      {
+        "x": 392,
+        "y": 256,
+        "width": 8,
+        "height": 8
+      },
+      {
+        "x": 80,
+        "y": 264,
+        "width": 8,
+        "height": 8
+      },
+      {
+        "x": 536,
+        "y": 264,
+        "width": 16,
+        "height": 8
+      },
+      {
+        "x": 568,
+        "y": 264,
+        "width": 32,
+        "height": 24
+      },
+      {
+        "x": 40,
+        "y": 272,
+        "width": 32,
+        "height": 24
+      },
+      {
+        "x": 264,
+        "y": 272,
+        "width": 24,
+        "height": 16
+      },
+      {
+        "x": 384,
+        "y": 272,
+        "width": 8,
+        "height": 8
+      },
+      {
+        "x": 560,
+        "y": 272,
+        "width": 8,
+        "height": 8
+      },
+      {
+        "x": 600,
+        "y": 272,
+        "width": 16,
+        "height": 16
+      },
+      {
+        "x": 24,
+        "y": 280,
+        "width": 16,
+        "height": 8
+      },
+      {
+        "x": 72,
+        "y": 280,
+        "width": 16,
+        "height": 16
+      },
+      {
+        "x": 144,
+        "y": 280,
+        "width": 8,
+        "height": 8
+      },
+      {
+        "x": 288,
+        "y": 280,
+        "width": 8,
+        "height": 8
+      },
+      {
+        "x": 232,
+        "y": 288,
+        "width": 8,
+        "height": 8
+      },
+      {
+        "x": 352,
+        "y": 288,
+        "width": 16,
+        "height": 8
+      },
+      {
+        "x": 584,
+        "y": 288,
+        "width": 24,
+        "height": 8
+      },
+      {
+        "x": 56,
+        "y": 296,
+        "width": 16,
+        "height": 8
+      },
+      {
+        "x": 440,
+        "y": 304,
+        "width": 16,
+        "height": 8
+      },
+      {
+        "x": 120,
+        "y": 320,
+        "width": 16,
+        "height": 8
+      },
+      {
+        "x": 176,
+        "y": 320,
+        "width": 16,
+        "height": 40
+      },
+      {
+        "x": 168,
+        "y": 328,
+        "width": 8,
+        "height": 32
+      },
+      {
+        "x": 192,
+        "y": 328,
+        "width": 8,
+        "height": 32
       },
       {
         "x": 0,
-        "y": 153,
-        "width": 320,
-        "height": 27
+        "y": 336,
+        "width": 168,
+        "height": 24
       },
       {
-        "x": 37,
-        "y": 140,
-        "width": 67,
-        "height": 40
-      },
-      {
-        "x": 217,
-        "y": 140,
-        "width": 67,
-        "height": 40
+        "x": 200,
+        "y": 336,
+        "width": 24,
+        "height": 24
       }
     ]
   },
   "spawns": {
     "player": {
-      "x": 160,
-      "y": 147
+      "x": 320,
+      "y": 192
     }
   },
   "npcs": {
     "mak-enang": {
-      "x": 157,
-      "y": 110
+      "x": 144,
+      "y": 235
     },
     "pak-salleh": {
-      "x": 200,
-      "y": 115
+      "x": 422,
+      "y": 264
     }
   },
   "transitions": [
@@ -84,130 +499,626 @@
       "targetLocation": "waterfront",
       "label": "To The Waterfront",
       "triggerArea": {
-        "x": 136,
-        "y": 57,
-        "width": 48,
-        "height": 13
+        "x": 268,
+        "y": 156,
+        "width": 104,
+        "height": 18
       },
       "spawnAt": {
-        "x": 160,
-        "y": 147
+        "x": 452,
+        "y": 340
       }
     }
   ],
-  "props": [
+  "props": [],
+  "plateProps": [
     {
-      "sprite": "cooking-fire",
-      "x": 100,
-      "y": 107,
-      "scale": 2,
-      "examineText": "Three stones, a low fire of coconut husk and mangrove wood, and the smoke kept thin on purpose - husk burns dirty but it burns cheap, and the smoke keeps the mosquitoes off the doorway. Nothing here is only one thing.\n\n*Ash is banked at the edge, still warm. This fire has not been fully out in a long time.*"
+      "key": "scrub-67",
+      "type": "scrub",
+      "x": 544,
+      "y": 146,
+      "label": "scrub",
+      "examineText": false,
+      "interactive": false
     },
     {
-      "sprite": "rice-pot",
-      "x": 114,
-      "y": 111,
-      "scale": 1.7,
-      "examineText": "Rice with a knuckle's depth of water above it, set to the edge of the fire where the heat is gentler. The pot's outside is black to the shoulder and the inside is scoured pale - decades of the same meal, cooked the same way.\n\n*Enough for the house, and a little over. In the kampung the little over is not an accident either.*"
-    },
-    {
-      "sprite": "fishing-net",
-      "x": 230,
-      "y": 100,
-      "scale": 2,
-      "examineText": "A cast net, a jala, gathered in loops on the arm with the lead line running clean. Throwing one so it opens into a full circle takes a boy about two years to learn and a man his whole life to stop being quietly proud of.\n\n*It is folded ready. Someone means to be at the waterline before the light.*"
-    },
-    {
-      "sprite": "pottery",
-      "x": 211,
-      "y": 110,
-      "scale": 1.7,
-      "examineText": "Unglazed earthenware, thrown thick and fired low, sweating faintly in the shade - the sweat is the point, evaporation keeping the water inside cooler than the air. Beside it, one blue-and-white shard from a Chinese jar, kept because it is beautiful.\n\n*Two hundred years of Chinese porcelain has passed through this port. What settles in the kampung is the broken pieces, and they are treasured.*"
-    },
-    {
-      "sprite": "fruit-basket",
-      "x": 87,
-      "y": 100,
-      "scale": 1.7,
-      "examineText": "Rambutan, langsat, a few bananas going over. Woven from split rattan in a hexagonal weave that keeps its shape empty and full alike. The fruit is for the household, or the market, or a neighbour who is short this week - which is decided later.\n\n*In the market this would be priced. Here it is not priced yet. That is the whole difference between the two streets.*"
-    },
-    {
-      "sprite": "woven-mat",
-      "x": 167,
-      "y": 143,
-      "scale": 1.8,
-      "examineText": "Pandan leaf, dried, split, and plaited in a diagonal twill, the border finished with a coloured strip. It is a floor, a table, a bed, and a place for guests to sit, depending on the hour. Rolled up, it is furniture that weighs nothing.\n\n*Portuguese houses in this heat are full of heavy chairs nobody sits in. The kampung solved the problem by declining to have the problem.*"
-    },
-    {
-      "sprite": "water-well",
-      "x": 243,
+      "key": "house-headman",
+      "type": "stilt-house",
+      "x": 406,
       "y": 150,
-      "scale": 2.4,
-      "examineText": "A shallow well, ringed with fitted stone and covered with a board against leaves and children. The water is brackish this near the coast and is used for washing; drinking water comes from further upriver, carried, every day, by somebody.\n\n*The rope has cut a groove into the stone lip perhaps two fingers deep. That groove is measured in generations, not years.*"
+      "label": "The penghulu's house",
+      "examineText": "A little longer than the others and a little higher off the ground. Village business is heard on the verandah, not inside.",
+      "interactive": false
+    },
+    {
+      "key": "scrub-66",
+      "type": "scrub",
+      "x": 48,
+      "y": 151,
+      "label": "scrub",
+      "examineText": false,
+      "interactive": false
+    },
+    {
+      "key": "house-boatwright",
+      "type": "stilt-house",
+      "x": 211,
+      "y": 157,
+      "label": "The boatwright's house",
+      "examineText": "Adzes, a bow drill and half a keel under the house, in the shade where a man can work all day.",
+      "interactive": false
+    },
+    {
+      "key": "house-mak-enang",
+      "type": "stilt-house",
+      "x": 80,
+      "y": 170,
+      "label": "Mak Enang's house",
+      "examineText": "Chengal piles, plank walls, attap over all of it, and a ladder that has been mended so often none of the original wood is left. The crossed boards at the gable keep out what the prayers do not.",
+      "interactive": false
+    },
+    {
+      "key": "bamboo-clump-56",
+      "type": "bamboo-clump",
+      "x": 493,
+      "y": 174,
+      "label": "bamboo clump",
+      "examineText": "A clump of buluh; the whole kampung is built and cooked with it.",
+      "interactive": false
+    },
+    {
+      "key": "bamboo-clump-55",
+      "type": "bamboo-clump",
+      "x": 150,
+      "y": 179,
+      "label": "bamboo clump",
+      "examineText": "A clump of buluh; the whole kampung is built and cooked with it.",
+      "interactive": false
+    },
+    {
+      "key": "house-east",
+      "type": "stilt-house",
+      "x": 602,
+      "y": 182,
+      "label": "A kampung house",
+      "examineText": "A rumah panggung on ironwood piles; the shade beneath it is the family's workshop.",
+      "interactive": false
+    },
+    {
+      "key": "kampung-fence-38",
+      "type": "kampung-fence",
+      "x": 592,
+      "y": 186,
+      "label": "kampung fence",
+      "examineText": "A bamboo fence, lashed with rattan and mended a dozen times.",
+      "interactive": false
+    },
+    {
+      "key": "palm-59",
+      "type": "palm",
+      "x": 362,
+      "y": 188,
+      "label": "palm",
+      "examineText": "A coconut palm, its trunk ringed by a century of fallen fronds.",
+      "interactive": false
+    },
+    {
+      "key": "banana-plant-51",
+      "type": "banana-plant",
+      "x": 0,
+      "y": 186,
+      "label": "banana plant",
+      "examineText": "A clump of pisang, its leaves shredded to ribbons by the monsoon.",
+      "interactive": false
+    },
+    {
+      "key": "kampung-fence-37",
+      "type": "kampung-fence",
+      "x": 8,
+      "y": 194,
+      "label": "kampung fence",
+      "examineText": "A bamboo fence, lashed with rattan and mended a dozen times.",
+      "interactive": false
+    },
+    {
+      "key": "palm-58",
+      "type": "palm",
+      "x": 262,
+      "y": 197,
+      "label": "palm",
+      "examineText": "A coconut palm, its trunk ringed by a century of fallen fronds.",
+      "interactive": false
+    },
+    {
+      "key": "banana-plant-52",
+      "type": "banana-plant",
+      "x": 640,
+      "y": 200,
+      "label": "banana plant",
+      "examineText": "A clump of pisang, its leaves shredded to ribbons by the monsoon.",
+      "interactive": false
+    },
+    {
+      "key": "drying-rack",
+      "type": "drying-rack",
+      "x": 138,
+      "y": 207,
+      "label": "Kain drying",
+      "examineText": "Sarong and kain drying on a bamboo pole, stiff with salt.",
+      "interactive": false
+    },
+    {
+      "key": "surau",
+      "type": "surau",
+      "x": 474,
+      "y": 215,
+      "label": "The surau",
+      "examineText": "The village prayer house. A drum hangs in the porch; it is beaten for prayer, for a death, and for a boat that has not come back.",
+      "interactive": false
+    },
+    {
+      "key": "pot-row-44",
+      "type": "pot-row",
+      "x": 106,
+      "y": 217,
+      "label": "pot row",
+      "examineText": "Water jars set out to catch the afternoon rain.",
+      "interactive": false
+    },
+    {
+      "key": "banana-plant-54",
+      "type": "banana-plant",
+      "x": 26,
+      "y": 219,
+      "label": "banana plant",
+      "examineText": "A clump of pisang, its leaves shredded to ribbons by the monsoon.",
+      "interactive": false
+    },
+    {
+      "key": "rain-tree",
+      "type": "shade-tree",
+      "x": 294,
+      "y": 220,
+      "label": "The rain tree",
+      "examineText": "The whole kampung takes its afternoons under this tree. Every dispute in living memory has been argued out on the roots.",
+      "interactive": false
+    },
+    {
+      "key": "palm-61",
+      "type": "palm",
+      "x": 611,
+      "y": 226,
+      "label": "palm",
+      "examineText": "A coconut palm, its trunk ringed by a century of fallen fronds.",
+      "interactive": false
+    },
+    {
+      "key": "amphora-49",
+      "type": "amphora",
+      "x": 410,
+      "y": 229,
+      "label": "amphora",
+      "examineText": "A tall glazed jar — palm oil, or arrack.",
+      "interactive": false
+    },
+    {
+      "key": "chicken-coop-41",
+      "type": "chicken-coop",
+      "x": 582,
+      "y": 226,
+      "label": "chicken coop",
+      "examineText": "A rattan coop; the birds are asleep in the heat.",
+      "interactive": false
+    },
+    {
+      "key": "drying-rack-35",
+      "type": "drying-rack",
+      "x": 506,
+      "y": 235,
+      "label": "drying rack",
+      "examineText": "Sarong and kain drying on a bamboo pole, stiff with salt.",
+      "interactive": false
+    },
+    {
+      "key": "palm-60",
+      "type": "palm",
+      "x": 54,
+      "y": 242,
+      "label": "palm",
+      "examineText": "A coconut palm, its trunk ringed by a century of fallen fronds.",
+      "interactive": false
+    },
+    {
+      "key": "mats",
+      "type": "mat-rolls",
+      "x": 451,
+      "y": 241,
+      "label": "Mats and a rice mortar",
+      "examineText": "Rolled pandan mats and a rice mortar worn smooth on the inside.",
+      "interactive": false
+    },
+    {
+      "key": "cook-fire-west",
+      "type": "cook-fire",
+      "x": 186,
+      "y": 246,
+      "label": "A cooking fire",
+      "examineText": "A cooking fire under a clay pot; rice, ikan bilis and a great deal of smoke.",
+      "interactive": false
+    },
+    {
+      "key": "basket-46",
+      "type": "basket",
+      "x": 240,
+      "y": 250,
+      "label": "basket",
+      "examineText": "A rattan basket heaped with rambutan and mangosteen.",
+      "interactive": false
+    },
+    {
+      "key": "basket-47",
+      "type": "basket",
+      "x": 253,
+      "y": 255,
+      "label": "basket",
+      "examineText": "A rattan basket heaped with rambutan and mangosteen.",
+      "interactive": false
+    },
+    {
+      "key": "kampung-well",
+      "type": "kampung-well",
+      "x": 394,
+      "y": 256,
+      "label": "The village well",
+      "examineText": "The village well. The apron around it is never dry.",
+      "interactive": false
+    },
+    {
+      "key": "chicken-coop-40",
+      "type": "chicken-coop",
+      "x": 118,
+      "y": 263,
+      "label": "chicken coop",
+      "examineText": "A rattan coop; the birds are asleep in the heat.",
+      "interactive": false
+    },
+    {
+      "key": "pot-row-45",
+      "type": "pot-row",
+      "x": 547,
+      "y": 268,
+      "label": "pot row",
+      "examineText": "Water jars set out to catch the afternoon rain.",
+      "interactive": false
+    },
+    {
+      "key": "basket-48",
+      "type": "basket",
+      "x": 355,
+      "y": 273,
+      "label": "basket",
+      "examineText": "A rattan basket heaped with rambutan and mangosteen.",
+      "interactive": false
+    },
+    {
+      "key": "cook-fire-east",
+      "type": "cook-fire",
+      "x": 464,
+      "y": 279,
+      "label": "A cooking fire",
+      "examineText": "A cooking fire under a clay pot; rice, ikan bilis and a great deal of smoke.",
+      "interactive": false
+    },
+    {
+      "key": "mat-rolls-43",
+      "type": "mat-rolls",
+      "x": 147,
+      "y": 286,
+      "label": "mat rolls",
+      "examineText": "Rolled pandan mats and a rice mortar worn smooth on the inside.",
+      "interactive": false
+    },
+    {
+      "key": "village-stall",
+      "type": "market-stall",
+      "x": 278,
+      "y": 280,
+      "label": "A cloth stall",
+      "examineText": "Batik in three patterns, all of them made forty paces away, all of them cheaper than anything on the Rua Direita.",
+      "interactive": false
+    },
+    {
+      "key": "bamboo-clump-57",
+      "type": "bamboo-clump",
+      "x": 602,
+      "y": 291,
+      "label": "bamboo clump",
+      "examineText": "A clump of buluh; the whole kampung is built and cooked with it.",
+      "interactive": false
+    },
+    {
+      "key": "drying-rack-36",
+      "type": "drying-rack",
+      "x": 237,
+      "y": 293,
+      "label": "drying rack",
+      "examineText": "Sarong and kain drying on a bamboo pole, stiff with salt.",
+      "interactive": false
+    },
+    {
+      "key": "kampung-fence-39",
+      "type": "kampung-fence",
+      "x": 512,
+      "y": 298,
+      "label": "kampung fence",
+      "examineText": "A bamboo fence, lashed with rattan and mended a dozen times.",
+      "interactive": false
+    },
+    {
+      "key": "banana-plant-53",
+      "type": "banana-plant",
+      "x": 448,
+      "y": 309,
+      "label": "banana plant",
+      "examineText": "A clump of pisang, its leaves shredded to ribbons by the monsoon.",
+      "interactive": false
+    },
+    {
+      "key": "scrub-68",
+      "type": "scrub",
+      "x": 368,
+      "y": 314,
+      "label": "scrub",
+      "examineText": false,
+      "interactive": false
+    },
+    {
+      "key": "palm-cluster-62",
+      "type": "palm-cluster",
+      "x": 128,
+      "y": 321,
+      "label": "palm cluster",
+      "examineText": "A stand of coconut palms; the shade under them is the coolest place for a hundred paces.",
+      "interactive": false
+    },
+    {
+      "key": "perahu",
+      "type": "perahu-beached",
+      "x": 182,
+      "y": 328,
+      "label": "A perahu on the bank",
+      "examineText": "Hauled up on rollers above the tideline, seams freshly payed with damar. Whoever owns her has been fishing the strait since before there were Portuguese to sell to.",
+      "interactive": false
+    },
+    {
+      "key": "scrub-69",
+      "type": "scrub",
+      "x": 272,
+      "y": 346,
+      "label": "scrub",
+      "examineText": false,
+      "interactive": false
+    },
+    {
+      "key": "scrub-70",
+      "type": "scrub",
+      "x": 416,
+      "y": 370,
+      "label": "scrub",
+      "examineText": false,
+      "interactive": false
+    },
+    {
+      "key": "house-river",
+      "type": "stilt-house",
+      "x": 56,
+      "y": 270,
+      "label": "The house by the water",
+      "examineText": "A rumah panggung on ironwood piles; the shade beneath it is the family's workshop.",
+      "interactive": false
+    },
+    {
+      "key": "house-south",
+      "type": "stilt-house",
+      "x": 584,
+      "y": 262,
+      "label": "A kampung house",
+      "examineText": "A rumah panggung on ironwood piles; the shade beneath it is the family's workshop.",
+      "interactive": false
+    },
+    {
+      "key": "palm-cluster-63",
+      "type": "palm-cluster",
+      "x": 560,
+      "y": 364,
+      "label": "palm cluster",
+      "examineText": "A stand of coconut palms; the shade under them is the coolest place for a hundred paces.",
+      "interactive": false
+    },
+    {
+      "key": "river-sampan",
+      "type": "sampan",
+      "x": 96,
+      "y": 350,
+      "label": "A sampan",
+      "examineText": "A sampan, sculled with one oar over the stern.",
+      "interactive": false
+    }
+  ],
+  "doors": [],
+  "overlays": [
+    {
+      "key": "kampung-fg-0",
+      "sprite": "kampung-fg-0.png",
+      "x": 9,
+      "y": 170,
+      "width": 119,
+      "height": 151,
+      "depthY": 321,
+      "from": "stilt-house#8"
+    },
+    {
+      "key": "kampung-fg-1",
+      "sprite": "kampung-fg-1.png",
+      "x": 539,
+      "y": 163,
+      "width": 101,
+      "height": 148,
+      "depthY": 311,
+      "from": "stilt-house#9"
+    },
+    {
+      "key": "kampung-fg-2",
+      "sprite": "kampung-fg-2.png",
+      "x": 501,
+      "y": 250,
+      "width": 107,
+      "height": 110,
+      "depthY": 360,
+      "from": "palm-cluster#63"
     }
   ],
   "animatedProps": [
     {
       "type": "smoke",
-      "x": 167,
-      "y": 127
+      "x": 186,
+      "y": 217
     },
     {
       "type": "smoke",
-      "x": 217,
-      "y": 133
+      "x": 464,
+      "y": 251
     },
     {
       "type": "palm-sway",
-      "x": 33,
-      "y": 117
+      "x": 262,
+      "y": 113
     },
     {
       "type": "palm-sway",
-      "x": 267,
-      "y": 107
+      "x": 362,
+      "y": 112
+    },
+    {
+      "type": "palm-sway",
+      "x": 54,
+      "y": 154
+    },
+    {
+      "type": "palm-sway",
+      "x": 611,
+      "y": 146
+    },
+    {
+      "type": "palm-sway",
+      "x": 128,
+      "y": 245
+    },
+    {
+      "type": "awning-flutter",
+      "x": 138,
+      "y": 171
+    },
+    {
+      "type": "awning-flutter",
+      "x": 506,
+      "y": 202
+    },
+    {
+      "type": "awning-flutter",
+      "x": 237,
+      "y": 262
+    },
+    {
+      "type": "awning-flutter",
+      "x": 278,
+      "y": 234
+    },
+    {
+      "type": "seagull",
+      "x": 150,
+      "y": 88
+    },
+    {
+      "type": "seagull",
+      "x": 470,
+      "y": 80
     }
   ],
   "lights": [
     {
+      "x": 186,
+      "y": 216,
       "type": "cookingFire",
-      "x": 110,
-      "y": 52
+      "radius": 58,
+      "nightOnly": true
     },
     {
+      "x": 464,
+      "y": 249,
       "type": "cookingFire",
-      "x": 200,
-      "y": 55
+      "radius": 58,
+      "nightOnly": true
     },
     {
-      "type": "window",
-      "x": 30,
-      "y": 66
+      "x": 186,
+      "y": 227,
+      "type": "cookingFire",
+      "radius": 58,
+      "nightOnly": true
     },
     {
-      "type": "window",
-      "x": 56,
-      "y": 50
+      "x": 464,
+      "y": 261,
+      "type": "cookingFire",
+      "radius": 58,
+      "nightOnly": true
     },
     {
+      "x": 96,
+      "y": 124,
       "type": "window",
-      "x": 258,
-      "y": 54
+      "radius": 38,
+      "nightOnly": true
     },
     {
+      "x": 432,
+      "y": 108,
       "type": "window",
-      "x": 285,
-      "y": 68
+      "radius": 38,
+      "nightOnly": true
+    },
+    {
+      "x": 483,
+      "y": 173,
+      "type": "lantern",
+      "radius": 40,
+      "nightOnly": true
+    },
+    {
+      "x": 584,
+      "y": 216,
+      "type": "window",
+      "radius": 36,
+      "nightOnly": true
     }
   ],
   "fires": [
     {
-      "x": 110,
-      "y": 52
+      "x": 186,
+      "y": 216
     },
     {
-      "x": 200,
-      "y": 55
+      "x": 464,
+      "y": 249
+    },
+    {
+      "x": 186,
+      "y": 227
+    },
+    {
+      "x": 464,
+      "y": 261
     }
   ],
   "audio": {
@@ -254,51 +1165,51 @@
     "fogSpeed": 0.5,
     "hazeTint": 13948590,
     "sunAnchor": {
-      "x": 80,
-      "y": 29
+      "x": 160,
+      "y": 58
     },
     "aoZones": [
       {
         "x": 0,
         "y": 0,
-        "width": 320,
-        "height": 67,
+        "width": 640,
+        "height": 134,
         "alpha": 0.18
       },
       {
-        "x": 117,
-        "y": 73,
-        "width": 87,
-        "height": 50,
+        "x": 234,
+        "y": 146,
+        "width": 174,
+        "height": 100,
         "alpha": 0.15
       }
     ],
     "canopyShadows": [
       {
-        "x": -13,
-        "y": -7,
-        "width": 133,
-        "height": 77,
+        "x": -26,
+        "y": -14,
+        "width": 266,
+        "height": 154,
         "alpha": 0.16
       },
       {
-        "x": 193,
-        "y": -8,
-        "width": 140,
-        "height": 77,
+        "x": 386,
+        "y": -16,
+        "width": 280,
+        "height": 154,
         "alpha": 0.15
       },
       {
-        "x": 83,
-        "y": 50,
-        "width": 140,
-        "height": 43,
+        "x": 166,
+        "y": 100,
+        "width": 280,
+        "height": 86,
         "alpha": 0.09
       }
     ]
   },
   "crowd": {
-    "maxCrowd": 8,
+    "maxCrowd": 10,
     "density": 0.7,
     "crowdTypes": [
       "malay_local",
@@ -307,54 +1218,130 @@
     ],
     "paths": [
       {
-        "start": {
-          "x": 40,
-          "y": 95
-        },
-        "end": {
-          "x": 280,
-          "y": 95
-        }
+        "id": "common-cross",
+        "speed": 14,
+        "points": [
+          {
+            "x": 320,
+            "y": 148
+          },
+          {
+            "x": 318,
+            "y": 200
+          },
+          {
+            "x": 300,
+            "y": 244
+          },
+          {
+            "x": 286,
+            "y": 288
+          },
+          {
+            "x": 270,
+            "y": 322
+          }
+        ]
       },
       {
-        "start": {
-          "x": 280,
-          "y": 108
-        },
-        "end": {
-          "x": 40,
-          "y": 108
-        }
+        "id": "well-round",
+        "speed": 10,
+        "points": [
+          {
+            "x": 392,
+            "y": 254
+          },
+          {
+            "x": 340,
+            "y": 268
+          },
+          {
+            "x": 300,
+            "y": 254
+          },
+          {
+            "x": 348,
+            "y": 238
+          },
+          {
+            "x": 392,
+            "y": 254
+          }
+        ]
       },
       {
-        "start": {
-          "x": 160,
-          "y": 45
-        },
-        "end": {
-          "x": 160,
-          "y": 145
-        }
+        "id": "river-walk",
+        "speed": 13,
+        "points": [
+          {
+            "x": 240,
+            "y": 320
+          },
+          {
+            "x": 180,
+            "y": 328
+          },
+          {
+            "x": 120,
+            "y": 322
+          },
+          {
+            "x": 64,
+            "y": 330
+          }
+        ]
       },
       {
-        "start": {
-          "x": 70,
-          "y": 60
-        },
-        "end": {
-          "x": 230,
-          "y": 130
-        }
+        "id": "house-row",
+        "speed": 16,
+        "points": [
+          {
+            "x": 120,
+            "y": 232
+          },
+          {
+            "x": 220,
+            "y": 244
+          },
+          {
+            "x": 332,
+            "y": 238
+          },
+          {
+            "x": 452,
+            "y": 250
+          },
+          {
+            "x": 548,
+            "y": 240
+          }
+        ]
       },
       {
-        "start": {
-          "x": 230,
-          "y": 60
-        },
-        "end": {
-          "x": 90,
-          "y": 135
-        }
+        "id": "fire-tend",
+        "speed": 8,
+        "points": [
+          {
+            "x": 184,
+            "y": 244
+          },
+          {
+            "x": 206,
+            "y": 262
+          },
+          {
+            "x": 176,
+            "y": 272
+          },
+          {
+            "x": 156,
+            "y": 254
+          },
+          {
+            "x": 184,
+            "y": 244
+          }
+        ]
       }
     ]
   },
@@ -362,76 +1349,76 @@
     {
       "id": "herbs-1",
       "itemId": "medicinal-herbs",
-      "x": 50,
-      "y": 60,
+      "x": 228,
+      "y": 299,
       "description": "Local Malay medicinal herbs."
     }
   ],
   "loreObjects": [
     {
       "id": "keris-display",
-      "x": 60,
-      "y": 77
+      "x": 219,
+      "y": 183
     },
     {
       "id": "gamelan-gong",
-      "x": 83,
-      "y": 67
+      "x": 302,
+      "y": 228
     },
     {
       "id": "malay-manuscript",
-      "x": 117,
-      "y": 67
+      "x": 500,
+      "y": 236
     },
     {
       "id": "medicine-chest",
-      "x": 50,
-      "y": 130
+      "x": 146,
+      "y": 215
     },
     {
       "id": "rice-mortar",
-      "x": 67,
-      "y": 110
+      "x": 250,
+      "y": 258
     },
     {
       "id": "fish-trap",
-      "x": 90,
-      "y": 130
+      "x": 190,
+      "y": 316
     },
     {
       "id": "prayer-mat",
-      "x": 110,
-      "y": 83
+      "x": 476,
+      "y": 236
     },
     {
       "id": "wayang-kulit-puppet",
-      "x": 187,
-      "y": 83
+      "x": 286,
+      "y": 288
     },
     {
       "id": "surau-prayer-niche",
-      "x": 140,
-      "y": 72
+      "x": 452,
+      "y": 236
     },
     {
       "id": "batik-cloth",
-      "x": 217,
-      "y": 67
+      "x": 530,
+      "y": 248
     },
     {
       "id": "healers-herb-rack",
-      "x": 240,
-      "y": 93
+      "x": 245,
+      "y": 301
     },
     {
       "id": "ablution-jar",
-      "x": 167,
-      "y": 133
+      "x": 418,
+      "y": 237
     },
     {
       "id": "coastal-fish-rack",
-      "x": 263,
-      "y": 117
+      "x": 108,
+      "y": 316
     }
   ]
 }

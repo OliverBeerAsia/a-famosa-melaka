@@ -33,6 +33,20 @@
  * CLI
  *   node tools/forge/install-plate.cjs rua-direita
  *   node tools/forge/install-plate.cjs rua-direita --dry
+ *   node tools/forge/install-plate.cjs rua-direita --from tools/forge/install-snapshot
+ *   node tools/forge/install-plate.cjs waterfront --spawn-derived
+ *
+ * --from <dir>       read the accepted run from somewhere other than staging/.
+ *                    Staging is a scratch directory the kit tools re-render at
+ *                    will; installing a REVIEWED plate means installing the
+ *                    exact bytes that were reviewed, so an accepted run is
+ *                    snapshotted out of staging and installed from the copy.
+ * --spawn-derived    take transition spawnAt from the compositor rather than
+ *                    from the prior location file. The default (prior wins) is
+ *                    right when the TARGET plate is unchanged; it is wrong when
+ *                    a whole batch of plates is rebuilt together, because then
+ *                    the prior values are stale coordinates in a plate size
+ *                    that no longer exists.
  */
 
 const fs = require('fs');
@@ -116,7 +130,8 @@ function copy(src, dst, dry) {
 }
 
 async function install(id, opts = {}) {
-  const derivedFile = path.join(STAGING, `${id}.derived.json`);
+  const src = opts.from ? path.resolve(REPO, opts.from) : STAGING;
+  const derivedFile = path.join(src, `${id}.derived.json`);
   const locFile = path.join(LOC_DIR, `${id}.location.json`);
   const derived = JSON.parse(fs.readFileSync(derivedFile, 'utf8'));
   const old = JSON.parse(fs.readFileSync(locFile, 'utf8'));
@@ -128,19 +143,37 @@ async function install(id, opts = {}) {
   const fy = nh / old.world.nativeHeight;
   if (fx !== fy) notes.push(`WARNING: non-uniform rescale ${fx}x${fy} — check composition`);
 
-  const mask = await readMask(path.join(STAGING, `${id}-walk.png`));
+  const mask = await readMask(path.join(src, `${id}-walk.png`));
   if (mask.width !== nw || mask.height !== nh) {
     throw new Error(`walk mask is ${mask.width}x${mask.height}, expected ${nw}x${nh}`);
   }
 
   // --- assets --------------------------------------------------------------
-  const plateStem = old.plate.background;                    // "scene-rua-direita"
-  copy(path.join(STAGING, `${id}@3x.png`), path.join(MASTERS, `${plateStem}.png`), opts.dry);
-  copy(path.join(STAGING, `${id}-walk.png`), path.join(MASKS, `${id}-walk.png`), opts.dry);
+  // TWO DIFFERENT NAMES, and they are not always the same string.
+  //
+  //   plate.background  a TEXTURE KEY. BootScene's sceneMapping registers
+  //                     'scene-a-famosa-gate' -> scenes/scene-a-famosa.png and
+  //                     'scene-st-pauls-church' -> scenes/scene-st-pauls.png.
+  //                     Rewriting it points the runtime at a texture nobody
+  //                     loaded, and the day plate silently fails to appear.
+  //   plateStem         the FILE stem, shared with the ToD variants, and the
+  //                     only thing relight-plates.cjs looks at. Writing the
+  //                     master under the KEY instead left the Forge a-famosa
+  //                     plate stranded in plate-masters/ while relight kept
+  //                     upscaling the superseded 960x540 one into a blur.
+  //
+  // So: the key is carried through untouched, the stem decides the filename.
+  const backgroundKey = old.plate.background;                // "scene-a-famosa-gate"
+  const variantStem = Object.values(old.plate.variants || {})
+    .map((v) => String(v).replace(/-(dawn|dusk|night)$/, ''))
+    .find(Boolean);
+  const plateStem = variantStem || backgroundKey;            // "scene-a-famosa"
+  copy(path.join(src, `${id}@3x.png`), path.join(MASTERS, `${plateStem}.png`), opts.dry);
+  copy(path.join(src, `${id}-walk.png`), path.join(MASKS, `${id}-walk.png`), opts.dry);
   // Overlays are masters, exactly like the plate: relight-plates.cjs reads the
   // native cut-out and writes the 3x day/dawn/dusk/night sprites into assets/.
   (derived.overlays || []).forEach((o) => {
-    copy(path.join(STAGING, o.sprite), path.join(OVERLAY_MASTERS, `${o.key}.png`), opts.dry);
+    copy(path.join(src, o.sprite), path.join(OVERLAY_MASTERS, `${o.key}.png`), opts.dry);
   });
 
   // --- rescale + re-snap the design data the compositor does not own --------
@@ -168,16 +201,39 @@ async function install(id, opts = {}) {
   });
 
   // --- transitions: compositor owns the trigger, design owns the target ----
+  // Two exits can lead to the SAME place (rua-direita reaches A Famosa by the
+  // west street and by the south gate), so pairing has to be one-to-one: match
+  // each new trigger to the CLOSEST unclaimed old one, by rescaled centre.
+  // Matching on "which side of the plate centre" instead put both of those on
+  // the same prior entry, and the second one silently inherited the first's
+  // label — two identically-named exits in the travel menu.
+  const unclaimed = [...(old.transitions || [])];
+  const centre = (r) => ({ x: r.x + r.width / 2, y: r.y + r.height / 2 });
   const transitions = (derived.transitions || []).map((t) => {
-    const prior = (old.transitions || []).find(
-      (o) => o.targetLocation === t.targetLocation && Math.sign(o.triggerArea.x - old.world.nativeWidth / 2) === Math.sign(t.triggerArea.x - nw / 2)
-    ) || (old.transitions || []).find((o) => o.targetLocation === t.targetLocation);
+    const c = centre(t.triggerArea);
+    let bestIdx = -1;
+    let bestD2 = Infinity;
+    unclaimed.forEach((o, i) => {
+      if (o.targetLocation !== t.targetLocation) return;
+      const oc = centre(o.triggerArea);
+      const dx = oc.x * fx - c.x;
+      const dy = oc.y * fy - c.y;
+      const d2 = dx * dx + dy * dy;
+      if (d2 < bestD2) { bestD2 = d2; bestIdx = i; }
+    });
+    const prior = bestIdx >= 0 ? unclaimed.splice(bestIdx, 1)[0] : null;
     const merged = {
       targetLocation: t.targetLocation,
       label: (prior && prior.label) || t.label,
       triggerArea: t.triggerArea,
-      // spawnAt lands in the TARGET plate, which this rebuild does not touch.
-      spawnAt: (prior && prior.spawnAt) || t.spawnAt,
+      // spawnAt lands in the TARGET plate, which this rebuild does not touch —
+      // so the prior file's value normally wins. When a whole BATCH of plates
+      // is rebuilt together the targets do change underneath us, and then the
+      // prior value is a stale coordinate in a plate size that no longer
+      // exists; --spawn-derived hands the choice back to the layout.
+      spawnAt: opts.spawnDerived
+        ? (t.spawnAt || (prior && prior.spawnAt))
+        : ((prior && prior.spawnAt) || t.spawnAt),
     };
     ['requirements', 'showWhenLocked', 'lockedLabel', 'blockedMessage'].forEach((k) => {
       if (prior && prior[k] !== undefined) merged[k] = prior[k];
@@ -192,11 +248,24 @@ async function install(id, opts = {}) {
   }));
   const fires = lights.filter((l) => l.type === 'cookingFire').map((l) => ({ x: l.x, y: l.y }));
 
-  const animatedProps = (derived.animatedProps || []).map((p) => ({
-    type: ANIM_TYPE_MAP[p.type] || p.type,
-    x: Math.round(p.x),
-    y: Math.round(p.y),
-  }));
+  // An animated prop is a sway/flicker sprite drawn ON TOP of the thing the
+  // plate already paints, so it may sit slightly off-frame — the compositor
+  // legitimately puts a palm cluster or a laundry line half over the edge.
+  // Past about a sprite width out there is nothing left on the plate for it to
+  // animate, and it is just an invisible ticking tween.
+  const ANIM_OFFPLATE_MARGIN = 24;
+  const animatedProps = (derived.animatedProps || [])
+    .filter((p) => {
+      const on = p.x >= -ANIM_OFFPLATE_MARGIN && p.x <= nw + ANIM_OFFPLATE_MARGIN
+        && p.y >= -ANIM_OFFPLATE_MARGIN && p.y <= nh + ANIM_OFFPLATE_MARGIN;
+      if (!on) notes.push(`animatedProp "${p.type}" at (${p.x},${p.y}) is off the plate — dropped`);
+      return on;
+    })
+    .map((p) => ({
+      type: ANIM_TYPE_MAP[p.type] || p.type,
+      x: Math.round(p.x),
+      y: Math.round(p.y),
+    }));
 
   // --- the merged document -------------------------------------------------
   const next = {
@@ -211,7 +280,7 @@ async function install(id, opts = {}) {
     generatedBy: derived.generatedBy,
     sun: derived.sun,
     plate: {
-      background: plateStem,
+      background: backgroundKey,
       variants: old.plate.variants,
       runtimeMode: 'legacy-backdrop',
       // The camera scrolls wherever the world is bigger than the 960x540
@@ -234,10 +303,15 @@ async function install(id, opts = {}) {
     // as examinable hotspots (label + examineText), never as sprites — drawing
     // them again would double-image every crate on the street.
     props: [],
-    plateProps: (derived.props || []).map((p) => ({
-      ...p,
-      type: p.type || (p.key || '').replace(new RegExp(`^${id}-`), ''),
-    })),
+    // Full-canvas painted fields (the sea, a canopy band, the distant sails)
+    // have no anchor point — they are not a thing you can walk up to and
+    // examine, so they are not hotspots and carry no coordinate.
+    plateProps: (derived.props || [])
+      .filter((p) => Number.isFinite(p.x) && Number.isFinite(p.y))
+      .map((p) => ({
+        ...p,
+        type: p.type || (p.key || '').replace(new RegExp(`^${id}-`), ''),
+      })),
     doors: derived.doors || [],
     overlays: derived.overlays || [],
     animatedProps,
@@ -290,14 +364,21 @@ module.exports = { install, snapToWalkable, readMask };
 if (require.main === module) {
   const argv = process.argv.slice(2);
   const dry = argv.includes('--dry');
-  const ids = argv.filter((a) => !a.startsWith('--'));
+  const spawnDerived = argv.includes('--spawn-derived');
+  let from = null;
+  const ids = [];
+  for (let i = 0; i < argv.length; i++) {
+    if (argv[i] === '--from') { from = argv[++i]; continue; }
+    if (argv[i].startsWith('--')) continue;
+    ids.push(argv[i]);
+  }
   if (!ids.length) {
-    console.error('usage: node tools/forge/install-plate.cjs <location-id> [--dry]');
+    console.error('usage: node tools/forge/install-plate.cjs <location-id> [--dry] [--from <dir>] [--spawn-derived]');
     process.exit(1);
   }
   (async () => {
     for (const id of ids) {
-      const r = await install(id, { dry });
+      const r = await install(id, { dry, from, spawnDerived });
       console.log(`${r.id}${dry ? ' (dry run)' : ''}`);
       Object.entries(r.counts).forEach(([k, v]) => console.log(`  ${k.padEnd(16)} ${v}`));
       r.notes.forEach((n) => console.log(`  · ${n}`));

@@ -1,10 +1,23 @@
 {
   "id": "a-famosa-gate",
   "name": "A Famosa Fortress Gate",
+  "coordVersion": 4,
   "world": {
     "scale": 3,
-    "nativeWidth": 320,
-    "nativeHeight": 180
+    "nativeWidth": 640,
+    "nativeHeight": 360
+  },
+  "layoutHash": "eed9fcbd8f3a",
+  "generatedBy": "tools/forge/compose-plate.cjs",
+  "sun": {
+    "azimuthDeg": 315,
+    "elevationDeg": 30,
+    "litFace": "+ty",
+    "shadowFace": "+tx",
+    "castOffset": [
+      1,
+      0.5
+    ]
   },
   "plate": {
     "background": "scene-a-famosa-gate",
@@ -14,57 +27,357 @@
       "night": "scene-a-famosa-night"
     },
     "runtimeMode": "legacy-backdrop",
+    "camera": "scrolling",
+    "walkMask": "a-famosa-gate-walk",
     "targetMode": "isometric-2:1",
-    "authoringBasis": "isometric-grid",
+    "authoringBasis": "forge-compositor",
     "anchor": "bottom-center",
     "depthStrategy": "screen-y",
-    "tileWidth": 64,
-    "tileHeight": 32,
-    "isoMapKey": "a-famosa-gate-iso",
-    "mapFile": "maps/a-famosa-gate.json"
+    "tileWidth": 32,
+    "tileHeight": 16
   },
   "collision": {
     "rects": [
       {
         "x": 0,
         "y": 0,
-        "width": 320,
-        "height": 57
+        "width": 640,
+        "height": 192
       },
       {
         "x": 0,
-        "y": 0,
-        "width": 43,
-        "height": 180
+        "y": 192,
+        "width": 296,
+        "height": 16
       },
       {
-        "x": 277,
-        "y": 0,
-        "width": 43,
-        "height": 180
+        "x": 344,
+        "y": 192,
+        "width": 296,
+        "height": 16
       },
       {
-        "x": 0,
-        "y": 168,
-        "width": 320,
-        "height": 12
+        "x": 216,
+        "y": 216,
+        "width": 8,
+        "height": 8
+      },
+      {
+        "x": 416,
+        "y": 216,
+        "width": 8,
+        "height": 8
+      },
+      {
+        "x": 464,
+        "y": 224,
+        "width": 8,
+        "height": 8
+      },
+      {
+        "x": 584,
+        "y": 232,
+        "width": 16,
+        "height": 8
+      },
+      {
+        "x": 80,
+        "y": 240,
+        "width": 8,
+        "height": 8
+      },
+      {
+        "x": 264,
+        "y": 240,
+        "width": 8,
+        "height": 8
+      },
+      {
+        "x": 360,
+        "y": 240,
+        "width": 8,
+        "height": 8
+      },
+      {
+        "x": 520,
+        "y": 240,
+        "width": 16,
+        "height": 8
+      },
+      {
+        "x": 40,
+        "y": 248,
+        "width": 8,
+        "height": 16
+      },
+      {
+        "x": 392,
+        "y": 256,
+        "width": 16,
+        "height": 16
+      },
+      {
+        "x": 120,
+        "y": 264,
+        "width": 8,
+        "height": 8
+      },
+      {
+        "x": 584,
+        "y": 264,
+        "width": 16,
+        "height": 8
+      },
+      {
+        "x": 128,
+        "y": 272,
+        "width": 8,
+        "height": 8
+      },
+      {
+        "x": 168,
+        "y": 272,
+        "width": 24,
+        "height": 24
+      },
+      {
+        "x": 568,
+        "y": 272,
+        "width": 8,
+        "height": 16
+      },
+      {
+        "x": 16,
+        "y": 280,
+        "width": 16,
+        "height": 8
+      },
+      {
+        "x": 160,
+        "y": 280,
+        "width": 8,
+        "height": 16
+      },
+      {
+        "x": 560,
+        "y": 280,
+        "width": 8,
+        "height": 8
+      },
+      {
+        "x": 576,
+        "y": 280,
+        "width": 8,
+        "height": 8
+      },
+      {
+        "x": 592,
+        "y": 280,
+        "width": 16,
+        "height": 8
+      },
+      {
+        "x": 88,
+        "y": 288,
+        "width": 16,
+        "height": 8
+      },
+      {
+        "x": 520,
+        "y": 288,
+        "width": 8,
+        "height": 16
+      },
+      {
+        "x": 48,
+        "y": 296,
+        "width": 16,
+        "height": 8
+      },
+      {
+        "x": 208,
+        "y": 296,
+        "width": 8,
+        "height": 16
+      },
+      {
+        "x": 360,
+        "y": 296,
+        "width": 16,
+        "height": 8
+      },
+      {
+        "x": 104,
+        "y": 304,
+        "width": 16,
+        "height": 24
+      },
+      {
+        "x": 424,
+        "y": 304,
+        "width": 8,
+        "height": 8
+      },
+      {
+        "x": 96,
+        "y": 312,
+        "width": 8,
+        "height": 8
+      },
+      {
+        "x": 120,
+        "y": 312,
+        "width": 8,
+        "height": 8
+      },
+      {
+        "x": 480,
+        "y": 312,
+        "width": 16,
+        "height": 16
+      },
+      {
+        "x": 208,
+        "y": 320,
+        "width": 8,
+        "height": 16
+      },
+      {
+        "x": 472,
+        "y": 320,
+        "width": 8,
+        "height": 8
+      },
+      {
+        "x": 496,
+        "y": 320,
+        "width": 8,
+        "height": 8
+      },
+      {
+        "x": 576,
+        "y": 320,
+        "width": 8,
+        "height": 8
+      },
+      {
+        "x": 56,
+        "y": 328,
+        "width": 8,
+        "height": 32
+      },
+      {
+        "x": 200,
+        "y": 328,
+        "width": 8,
+        "height": 8
+      },
+      {
+        "x": 216,
+        "y": 328,
+        "width": 8,
+        "height": 8
+      },
+      {
+        "x": 408,
+        "y": 328,
+        "width": 16,
+        "height": 8
+      },
+      {
+        "x": 536,
+        "y": 328,
+        "width": 16,
+        "height": 8
+      },
+      {
+        "x": 40,
+        "y": 336,
+        "width": 16,
+        "height": 24
+      },
+      {
+        "x": 64,
+        "y": 336,
+        "width": 16,
+        "height": 24
+      },
+      {
+        "x": 160,
+        "y": 336,
+        "width": 24,
+        "height": 8
+      },
+      {
+        "x": 544,
+        "y": 336,
+        "width": 16,
+        "height": 24
+      },
+      {
+        "x": 24,
+        "y": 344,
+        "width": 16,
+        "height": 16
+      },
+      {
+        "x": 80,
+        "y": 344,
+        "width": 24,
+        "height": 16
+      },
+      {
+        "x": 160,
+        "y": 344,
+        "width": 16,
+        "height": 8
+      },
+      {
+        "x": 528,
+        "y": 344,
+        "width": 16,
+        "height": 16
+      },
+      {
+        "x": 560,
+        "y": 344,
+        "width": 16,
+        "height": 16
+      },
+      {
+        "x": 16,
+        "y": 352,
+        "width": 8,
+        "height": 8
+      },
+      {
+        "x": 512,
+        "y": 352,
+        "width": 16,
+        "height": 8
+      },
+      {
+        "x": 576,
+        "y": 352,
+        "width": 16,
+        "height": 8
       }
     ]
   },
   "spawns": {
     "player": {
-      "x": 160,
-      "y": 147
+      "x": 320,
+      "y": 264
     }
   },
   "npcs": {
     "capitao-rodrigues": {
-      "x": 133,
-      "y": 110
+      "x": 246,
+      "y": 230
     },
     "gaspar-mesquita": {
-      "x": 187,
-      "y": 110
+      "x": 458,
+      "y": 253
     }
   },
   "transitions": [
@@ -72,42 +385,42 @@
       "targetLocation": "rua-direita",
       "label": "To Rua Direita",
       "triggerArea": {
-        "x": 136,
-        "y": 57,
-        "width": 48,
-        "height": 13
+        "x": 300,
+        "y": 190,
+        "width": 40,
+        "height": 20
       },
       "spawnAt": {
         "x": 320,
-        "y": 326
+        "y": 336
       }
     },
     {
       "targetLocation": "rua-direita",
       "label": "To Rua Direita (Main Street)",
       "triggerArea": {
-        "x": 261,
-        "y": 93,
-        "width": 14,
-        "height": 53
+        "x": 624,
+        "y": 288,
+        "width": 16,
+        "height": 64
       },
       "spawnAt": {
-        "x": 26,
-        "y": 248
+        "x": 34,
+        "y": 250
       }
     },
     {
       "targetLocation": "waterfront",
       "label": "To The Waterfront Service Gate",
       "triggerArea": {
-        "x": 136,
-        "y": 156,
-        "width": 48,
-        "height": 13
+        "x": 268,
+        "y": 344,
+        "width": 104,
+        "height": 16
       },
       "spawnAt": {
-        "x": 160,
-        "y": 73
+        "x": 132,
+        "y": 330
       },
       "requirements": {
         "worldFlagsAny": [
@@ -122,114 +435,341 @@
       "blockedMessage": "The service gate stays closed until customs, dockside, or the garrison has a reason to trust your passage."
     }
   ],
-  "props": [
+  "props": [],
+  "plateProps": [
     {
-      "sprite": "cannon",
-      "x": 83,
-      "y": 100,
-      "scale": 2,
-      "examineText": "A gate piece, not a sea piece: short, heavy, and laid to sweep the approach road rather than reach the strait. The elevation screw is seized with rust; nobody has needed to raise it in eleven years, and everybody assumes someone else has checked.\n\n*It is aimed at the road every trader in Melaka must walk to enter the city. That is not an accident of placement. That is the argument.*"
+      "key": "a-famosa-wall",
+      "type": "fortress-wall",
+      "x": -64,
+      "y": 202,
+      "label": "The wall of A Famosa",
+      "examineText": "Laterite cut out of the hill it stands on, two fathoms thick at the base, raised by Albuquerque's men in five months out of the stones of the sultan's mosque and the tombs of his fathers. Nobody in Melaka has forgotten which stones.",
+      "interactive": false
     },
     {
-      "sprite": "cannon",
-      "x": 233,
-      "y": 100,
-      "scale": 2,
-      "examineText": "Its twin, and better kept - the touch hole is clean, the bore has been swabbed, and someone has chalked a powder charge on the carriage cheek in a careful hand. A gun crew's pride is a small thing that becomes very large twice in a century.\n\n*Between the two pieces, a worn patch of stone where the watch stands out of the sun. The guns have never fired in anger. The standing has been continuous.*"
+      "key": "guarita-west",
+      "type": "sentry-box",
+      "x": 218,
+      "y": 217,
+      "label": "A sentry box",
+      "examineText": "A guarita. The sentry inside it can see three miles of strait.",
+      "interactive": false
     },
     {
-      "sprite": "crate",
-      "x": 100,
-      "y": 87,
-      "scale": 1.9,
-      "examineText": "Pinewood, iron-strapped, Goa marks burned into the end grain and a customs chalk mark over them - a number, a date, and a second number in a different hand. Somewhere a ledger says what is inside. The chalk says only that it was counted, and by whom.\n\n*The second hand is smaller and leans. Someone amended the figure after the counting was done.*"
+      "key": "lantern-post-44",
+      "type": "lantern-post",
+      "x": 32,
+      "y": 225,
+      "label": "lantern post",
+      "examineText": "A pitch lantern on an iron bracket.",
+      "interactive": false
     },
     {
-      "sprite": "cargo-crate",
-      "x": 111,
-      "y": 91,
-      "scale": 1.9,
-      "examineText": "Heavier stock, dovetailed rather than nailed, the kind used for goods that must not shift on a long swell: porcelain, glass, instruments. Slats have been prised and renailed at one corner - opened for inspection, or opened for something else.\n\n*Melaka's wealth spends most of its life in the dark, inside boxes, being carried by men who will never own any of it.*"
+      "key": "lantern-post-45",
+      "type": "lantern-post",
+      "x": 598,
+      "y": 225,
+      "label": "lantern post",
+      "examineText": "A pitch lantern on an iron bracket.",
+      "interactive": false
     },
     {
-      "sprite": "barrel",
-      "x": 221,
-      "y": 87,
-      "scale": 1.9,
-      "examineText": "Salt beef in brine, by the smell and the weight of the stave. Ship's victuals for the garrison, stacked where the shade holds longest against the wall. In this climate the brine is the only thing between the meat and the flies.\n\n*Soldiers here die of fever and bad food far more often than of Acehnese shot. No plaque commemorates that.*"
+      "key": "arms-rack",
+      "type": "arms-rack",
+      "x": 160,
+      "y": 231,
+      "label": "A rack of pikes",
+      "examineText": "A rack of pikes and halberds, hafts polished by nervous hands.",
+      "interactive": false
     },
     {
-      "sprite": "rope-coil",
-      "x": 207,
-      "y": 143,
-      "scale": 1.8,
-      "examineText": "Coir line, coiled sunwise and flaked to dry - coconut-husk rope, twisted in the kampungs and sold to every fleet that touches this coast. It swells in seawater, floats, and forgives rough handling, which is why Portuguese carracks rig with it despite calling it a native product.\n\n*The empire's ships are held together by cordage the empire does not know how to make.*"
+      "key": "gun-west",
+      "type": "cannon",
+      "x": 86,
+      "y": 240,
+      "label": "A bronze gun",
+      "examineText": "A demi-culverin cast in Goa, the arms of the Crown on her breech and a name — Sao Jorge — cut under them. She has been fired twice in twelve years, both times in salute.",
+      "interactive": false
     },
     {
-      "sprite": "anchor",
-      "x": 253,
-      "y": 150,
-      "scale": 1.9,
-      "examineText": "A stocked iron anchor with one fluke snapped clean, dragged up from the quay to await a smith who has not come. The break is old and brown. Iron is expensive here; it will be reforged into something else long before it is thrown away.\n\n*Everything that fails in Melaka is eventually reforged into something else. Ships, fortunes, and men alike.*"
+      "key": "guard-brazier",
+      "type": "brazier",
+      "x": 314,
+      "y": 248,
+      "label": "A guard's brazier",
+      "examineText": "A charcoal brazier; skewers of grilled fish sputter over it.",
+      "interactive": false
+    },
+    {
+      "key": "powder",
+      "type": "powder-store",
+      "x": 45,
+      "y": 255,
+      "label": "Powder barrels",
+      "examineText": "Powder barrels under a tarred canvas; no one smokes within twenty paces.",
+      "interactive": false
+    },
+    {
+      "key": "gate-padrao",
+      "type": "padrao",
+      "x": 278,
+      "y": 274,
+      "label": "The padrão",
+      "examineText": "A stone pillar cut with the Cross of the Order of Christ. Every governor since Albuquerque has been sworn in beside it, and every one of them has had the same complaint: too few men, too little powder, and a wall too long to hold.",
+      "interactive": false
+    },
+    {
+      "x": 400,
+      "y": 264,
+      "key": "pelourinho",
+      "label": "The pelourinho",
+      "type": "pelourinho"
+    },
+    {
+      "x": 176,
+      "y": 299,
+      "key": "praca-well",
+      "label": "The praça well",
+      "type": "praca-well"
+    },
+    {
+      "key": "lantern-post-46",
+      "type": "lantern-post",
+      "x": 310,
+      "y": 305,
+      "label": "lantern post",
+      "examineText": "A pitch lantern on an iron bracket.",
+      "interactive": false
+    },
+    {
+      "key": "trough",
+      "type": "water-trough",
+      "x": 368,
+      "y": 302,
+      "label": "A stone trough",
+      "examineText": "A stone trough; the water is warm and green.",
+      "interactive": false
+    },
+    {
+      "key": "gate-stall",
+      "type": "market-stall",
+      "x": 112,
+      "y": 316,
+      "label": "A stall by the gate",
+      "examineText": "The gate is the only place in Melaka where every road meets, so this is the only place in Melaka where you can buy anything at the wrong price and be glad of it.",
+      "interactive": false
+    },
+    {
+      "key": "lantern-post-47",
+      "type": "lantern-post",
+      "x": 470,
+      "y": 355,
+      "label": "lantern post",
+      "examineText": "A pitch lantern on an iron bracket.",
+      "interactive": false
+    }
+  ],
+  "doors": [
+    {
+      "x": 33,
+      "y": 364,
+      "face": "ty"
+    }
+  ],
+  "overlays": [
+    {
+      "key": "a-famosa-gate-fg-0",
+      "sprite": "a-famosa-gate-fg-0.png",
+      "x": 8,
+      "y": 239,
+      "width": 110,
+      "height": 121,
+      "depthY": 360,
+      "from": "townhouse#2"
+    },
+    {
+      "key": "a-famosa-gate-fg-1",
+      "sprite": "a-famosa-gate-fg-1.png",
+      "x": 499,
+      "y": 232,
+      "width": 107,
+      "height": 128,
+      "depthY": 360,
+      "from": "townhouse#3"
+    },
+    {
+      "key": "a-famosa-gate-fg-2",
+      "sprite": "a-famosa-gate-fg-2.png",
+      "x": 589,
+      "y": 282,
+      "width": 51,
+      "height": 78,
+      "depthY": 360,
+      "from": "palm-cluster#51"
     }
   ],
   "animatedProps": [
     {
       "type": "torch",
-      "x": 100,
-      "y": 100
+      "x": 278,
+      "y": 138
     },
     {
       "type": "torch",
-      "x": 227,
-      "y": 103
+      "x": 362,
+      "y": 138
     },
     {
-      "type": "flag",
-      "x": 160,
+      "type": "smoke",
+      "x": 314,
+      "y": 230
+    },
+    {
+      "type": "awning-flutter",
+      "x": 48,
+      "y": 26
+    },
+    {
+      "type": "awning-flutter",
+      "x": 112,
+      "y": 269
+    },
+    {
+      "type": "awning-flutter",
+      "x": 486,
+      "y": 275
+    },
+    {
+      "type": "awning-flutter",
+      "x": 54,
+      "y": 262
+    },
+    {
+      "type": "seagull",
+      "x": 120,
       "y": 40
+    },
+    {
+      "type": "seagull",
+      "x": 470,
+      "y": 32
+    },
+    {
+      "type": "palm-sway",
+      "x": -6,
+      "y": 270
+    },
+    {
+      "type": "palm-sway",
+      "x": 640,
+      "y": 303
+    },
+    {
+      "type": "awning-flutter",
+      "x": 88,
+      "y": 304
     }
   ],
   "lights": [
     {
-      "type": "torch",
-      "x": 144,
-      "y": 52
+      "x": 32,
+      "y": 181,
+      "type": "lantern",
+      "radius": 46,
+      "nightOnly": true
     },
     {
-      "type": "torch",
-      "x": 176,
-      "y": 52
+      "x": 598,
+      "y": 181,
+      "type": "lantern",
+      "radius": 46,
+      "nightOnly": true
     },
     {
-      "type": "torch",
-      "x": 83,
-      "y": 16
+      "x": 314,
+      "y": 218,
+      "type": "cookingFire",
+      "radius": 52,
+      "nightOnly": true
     },
     {
-      "type": "torch",
-      "x": 237,
-      "y": 16
+      "x": 310,
+      "y": 261,
+      "type": "lantern",
+      "radius": 46,
+      "nightOnly": true
     },
     {
-      "type": "torch",
-      "x": 55,
-      "y": 64
+      "x": 470,
+      "y": 313,
+      "type": "lantern",
+      "radius": 46,
+      "nightOnly": true
     },
     {
-      "type": "torch",
-      "x": 292,
-      "y": 95
+      "x": 33,
+      "y": 320,
+      "type": "lantern",
+      "radius": 42
+    },
+    {
+      "x": 38,
+      "y": 298,
+      "type": "window",
+      "radius": 34,
+      "nightOnly": true
+    },
+    {
+      "x": 89,
+      "y": 299,
+      "type": "window",
+      "radius": 34,
+      "nightOnly": true
+    },
+    {
+      "x": 278,
+      "y": 138,
+      "type": "lantern",
+      "radius": 54,
+      "nightOnly": true
+    },
+    {
+      "x": 362,
+      "y": 138,
+      "type": "lantern",
+      "radius": 54,
+      "nightOnly": true
+    },
+    {
+      "x": 314,
+      "y": 234,
+      "type": "cookingFire",
+      "radius": 50,
+      "nightOnly": true
+    },
+    {
+      "x": 128,
+      "y": 183,
+      "type": "lantern",
+      "radius": 40,
+      "nightOnly": true
+    },
+    {
+      "x": 512,
+      "y": 183,
+      "type": "lantern",
+      "radius": 40,
+      "nightOnly": true
     }
   ],
   "fires": [
     {
-      "x": 144,
-      "y": 52
+      "x": 314,
+      "y": 218
     },
     {
-      "x": 176,
-      "y": 52
+      "x": 314,
+      "y": 234
     }
   ],
   "audio": {
@@ -276,44 +816,44 @@
     "fogSpeed": 0.45,
     "hazeTint": 14993043,
     "sunAnchor": {
-      "x": 87,
-      "y": 30
+      "x": 174,
+      "y": 60
     },
     "aoZones": [
       {
         "x": 0,
         "y": 0,
-        "width": 320,
-        "height": 73,
+        "width": 640,
+        "height": 146,
         "alpha": 0.2
       },
       {
-        "x": 100,
-        "y": 63,
-        "width": 120,
-        "height": 37,
+        "x": 200,
+        "y": 126,
+        "width": 240,
+        "height": 74,
         "alpha": 0.18
       }
     ],
     "canopyShadows": [
       {
-        "x": -7,
-        "y": -13,
-        "width": 140,
-        "height": 73,
+        "x": -14,
+        "y": -26,
+        "width": 280,
+        "height": 146,
         "alpha": 0.16
       },
       {
-        "x": 230,
-        "y": -10,
-        "width": 113,
-        "height": 63,
+        "x": 460,
+        "y": -20,
+        "width": 226,
+        "height": 126,
         "alpha": 0.12
       }
     ]
   },
   "crowd": {
-    "maxCrowd": 6,
+    "maxCrowd": 12,
     "density": 0.5,
     "crowdTypes": [
       "portuguese_soldier",
@@ -322,44 +862,152 @@
     ],
     "paths": [
       {
-        "start": {
-          "x": 50,
-          "y": 110
-        },
-        "end": {
-          "x": 275,
-          "y": 110
-        }
+        "id": "gate-queue",
+        "speed": 15,
+        "points": [
+          {
+            "x": 320,
+            "y": 214
+          },
+          {
+            "x": 318,
+            "y": 250
+          },
+          {
+            "x": 322,
+            "y": 290
+          },
+          {
+            "x": 318,
+            "y": 340
+          }
+        ]
       },
       {
-        "start": {
-          "x": 275,
-          "y": 130
-        },
-        "end": {
-          "x": 50,
-          "y": 130
-        }
+        "id": "plaza-east",
+        "speed": 20,
+        "points": [
+          {
+            "x": 40,
+            "y": 300
+          },
+          {
+            "x": 200,
+            "y": 292
+          },
+          {
+            "x": 360,
+            "y": 300
+          },
+          {
+            "x": 520,
+            "y": 292
+          },
+          {
+            "x": 624,
+            "y": 300
+          }
+        ]
       },
       {
-        "start": {
-          "x": 160,
-          "y": 62
-        },
-        "end": {
-          "x": 160,
-          "y": 160
-        }
+        "id": "plaza-west",
+        "speed": 18,
+        "points": [
+          {
+            "x": 624,
+            "y": 262
+          },
+          {
+            "x": 460,
+            "y": 268
+          },
+          {
+            "x": 300,
+            "y": 260
+          },
+          {
+            "x": 140,
+            "y": 268
+          },
+          {
+            "x": 24,
+            "y": 262
+          }
+        ]
       },
       {
-        "start": {
-          "x": 70,
-          "y": 80
-        },
-        "end": {
-          "x": 250,
-          "y": 150
-        }
+        "id": "guard-round",
+        "speed": 10,
+        "points": [
+          {
+            "x": 236,
+            "y": 232
+          },
+          {
+            "x": 286,
+            "y": 244
+          },
+          {
+            "x": 242,
+            "y": 258
+          },
+          {
+            "x": 196,
+            "y": 246
+          },
+          {
+            "x": 236,
+            "y": 232
+          }
+        ]
+      },
+      {
+        "id": "stall-browse",
+        "speed": 11,
+        "points": [
+          {
+            "x": 140,
+            "y": 318
+          },
+          {
+            "x": 196,
+            "y": 330
+          },
+          {
+            "x": 140,
+            "y": 342
+          },
+          {
+            "x": 92,
+            "y": 328
+          },
+          {
+            "x": 140,
+            "y": 318
+          }
+        ]
+      },
+      {
+        "id": "south-road",
+        "speed": 16,
+        "points": [
+          {
+            "x": 320,
+            "y": 356
+          },
+          {
+            "x": 318,
+            "y": 330
+          },
+          {
+            "x": 330,
+            "y": 306
+          },
+          {
+            "x": 322,
+            "y": 282
+          }
+        ]
       }
     ]
   },
@@ -367,68 +1015,68 @@
     {
       "id": "cargo-manifest-1",
       "itemId": "cargo-manifest",
-      "x": 87,
-      "y": 59,
+      "x": 206,
+      "y": 227,
       "description": "A copied manifest listing cargo, port dues, and inspection marks."
     },
     {
       "id": "key-warehouse-1",
       "itemId": "key-warehouse",
-      "x": 140,
-      "y": 73,
+      "x": 184,
+      "y": 307,
       "description": "A heavy key for a bonded warehouse door."
     }
   ],
   "loreObjects": [
     {
       "id": "portuguese-coat-of-arms",
-      "x": 160,
-      "y": 65
+      "x": 300,
+      "y": 212
     },
     {
       "id": "albuquerque-plaque",
-      "x": 110,
-      "y": 68
+      "x": 270,
+      "y": 282
     },
     {
       "id": "cannon-bronze",
-      "x": 67,
-      "y": 100
+      "x": 94,
+      "y": 248
     },
     {
       "id": "powder-magazine-cask",
-      "x": 57,
-      "y": 127
+      "x": 53,
+      "y": 263
     },
     {
       "id": "fortress-watch-lantern",
-      "x": 233,
-      "y": 83
+      "x": 590,
+      "y": 233
     },
     {
       "id": "fortress-banner-line",
-      "x": 187,
-      "y": 67
+      "x": 540,
+      "y": 240
     },
     {
       "id": "gate-customs-ledger",
-      "x": 207,
-      "y": 72
+      "x": 226,
+      "y": 225
     },
     {
       "id": "service-route-lantern",
-      "x": 263,
-      "y": 113
+      "x": 318,
+      "y": 313
     },
     {
       "id": "seized-goods-chest",
-      "x": 250,
-      "y": 137
+      "x": 120,
+      "y": 324
     },
     {
       "id": "inspection-scale",
-      "x": 227,
-      "y": 100
+      "x": 408,
+      "y": 272
     }
   ]
 }
