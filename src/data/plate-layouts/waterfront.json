@@ -134,11 +134,21 @@
       "ruts": [
         {
           "s": 36.5,
-          "w": 0.34
+          "w": 0.2,
+          "gauge": 0.6,
+          "wobble": 0.15,
+          "ddFrom": -22,
+          "ddTo": 22,
+          "fade": 6
         },
         {
           "s": 38.4,
-          "w": 0.28
+          "w": 0.18,
+          "gauge": 0.56,
+          "wobble": 0.13,
+          "ddFrom": -16,
+          "ddTo": 25,
+          "fade": 6
         }
       ],
       "hotspots": [
@@ -180,11 +190,21 @@
       "ruts": [
         {
           "s": 43.2,
-          "w": 0.4
+          "w": 0.22,
+          "gauge": 0.64,
+          "wobble": 0.18,
+          "ddFrom": -24,
+          "ddTo": 26,
+          "fade": 7
         },
         {
           "s": 44.8,
-          "w": 0.3
+          "w": 0.18,
+          "gauge": 0.56,
+          "wobble": 0.14,
+          "ddFrom": -18,
+          "ddTo": 20,
+          "fade": 6
         }
       ],
       "hotspots": [

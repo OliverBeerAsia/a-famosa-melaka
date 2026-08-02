@@ -2,7 +2,7 @@
   "id": "rua-direita",
   "name": "Rua Direita",
   "generatedBy": "tools/forge/compose-plate.cjs",
-  "layoutHash": "464daa73d665",
+  "layoutHash": "000acda5d7db",
   "world": {
     "scale": 3,
     "nativeWidth": 640,

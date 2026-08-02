@@ -2,7 +2,7 @@
   "id": "kampung",
   "name": "The Kampung Quarter",
   "generatedBy": "tools/forge/compose-plate.cjs",
-  "layoutHash": "695aff32dd21",
+  "layoutHash": "76fe771259e7",
   "world": {
     "scale": 3,
     "nativeWidth": 640,

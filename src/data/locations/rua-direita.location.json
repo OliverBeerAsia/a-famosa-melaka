@@ -1,13 +1,13 @@
 {
   "id": "rua-direita",
   "name": "Rua Direita",
-  "coordVersion": 7,
+  "coordVersion": 8,
   "world": {
     "scale": 3,
     "nativeWidth": 640,
     "nativeHeight": 360
   },
-  "layoutHash": "464daa73d665",
+  "layoutHash": "000acda5d7db",
   "generatedBy": "tools/forge/compose-plate.cjs",
   "sun": {
     "azimuthDeg": 315,

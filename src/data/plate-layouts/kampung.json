@@ -77,8 +77,13 @@
       "light": 3,
       "ruts": [
         {
-          "s": 31.0,
-          "w": 0.3
+          "s": 31,
+          "w": 0.18,
+          "gauge": 0.56,
+          "wobble": 0.15,
+          "ddFrom": -18,
+          "ddTo": 20,
+          "fade": 6
         }
       ],
       "hotspots": [

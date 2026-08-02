@@ -87,15 +87,30 @@
       "ruts": [
         {
           "s": 31.4,
-          "w": 0.4
+          "w": 0.22,
+          "gauge": 0.64,
+          "wobble": 0.17,
+          "ddFrom": -26,
+          "ddTo": 27,
+          "fade": 7
         },
         {
           "s": 33.1,
-          "w": 0.34
+          "w": 0.2,
+          "gauge": 0.58,
+          "wobble": 0.14,
+          "ddFrom": -20,
+          "ddTo": 24,
+          "fade": 6
         },
         {
           "s": 27.2,
-          "w": 0.26
+          "w": 0.18,
+          "gauge": 0.6,
+          "wobble": 0.19,
+          "ddFrom": -13,
+          "ddTo": 28,
+          "fade": 8
         }
       ],
       "hotspots": [

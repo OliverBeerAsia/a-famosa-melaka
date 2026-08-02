@@ -160,7 +160,8 @@ function flagstone(opts) {
  * density is driven by `hotspots` (stall fronts, doorways, the well), so the
  * street looks used where people actually stand.
  *
- * opts.ruts:     [{ s, w }]  cart ruts on constant tx+ty lines
+ * opts.ruts:     [{ s, w, gauge, wobble, ddFrom, ddTo, fade }] cart TRACKS —
+ *                a wandering pair of wheel grooves; see the block below
  * opts.hotspots: [{ s, dd, r }] screen-space density centres (r in px)
  */
 function trodden(opts) {
@@ -187,23 +188,53 @@ function trodden(opts) {
     const hm = hash2(Math.floor((tx + wob2) / 1.15), Math.floor((ty + wob) / 1.15), seed + 5);
     if (hm > 0.93) s += 1; else if (hm < 0.07) s -= 1;
 
-    // cart ruts: two-value grooves along the street
-    for (let k = 0; k < ruts.length; k++) {
-      const d = Math.abs(s0 - ruts[k].s);
-      const w = ruts[k].w === undefined ? 0.34 : ruts[k].w;
-      if (d < w) {
-        // broken, not continuous — a rut fades in and out along its length
-        if (hash2(Math.floor(dd / 2.2), k, seed + 17) > 0.22) s -= (d < w * 0.45 ? 2 : 1);
-      }
-    }
-
-    // incident density: 0 in the open street, 1 at a stall front or doorway
+    // incident density: 0 in the open street, 1 at a stall front or doorway.
+    // Computed BEFORE the ruts, because the ruts use it too — a cart track is
+    // deepest where carts actually stop.
     let dens = 0;
     for (let k = 0; k < hots.length; k++) {
       const dx = (dd - hots[k].dd) * 16, dy = (s0 - hots[k].s) * 8;
       const t = 1 - Math.sqrt(dx * dx + dy * dy) / (hots[k].r || 40);
       if (t > dens) dens = t;
     }
+
+    // --- CART TRACKS -----------------------------------------------------
+    // A rut used to be ONE groove on a constant tx+ty line, which projects to a
+    // dead-straight screen-horizontal band running the full width of the plate.
+    // With the material seams dressed it became the most line-like thing left
+    // on rua-direita — the same defect one layer down.
+    //
+    // A cart does not leave a groove, it leaves a PAIR of them at axle gauge,
+    // and the pair wanders, because nobody drives a bullock cart along a ruled
+    // line. So each entry is now a TRACK: two grooves `gauge` apart, wandering
+    // together on a slow two-frequency wobble, broken into segments, deeper and
+    // more continuous where the hotspots say carts stop, and faded out well
+    // before the edge of the plate so it never runs off the frame.
+    for (let k = 0; k < ruts.length; k++) {
+      const R = ruts[k];
+      const dd0 = R.ddFrom === undefined ? -1e9 : R.ddFrom;
+      const dd1 = R.ddTo === undefined ? 1e9 : R.ddTo;
+      if (dd < dd0 || dd > dd1) continue;
+      const fade = R.fade === undefined ? 6 : R.fade;
+      const edge = clamp(Math.min(dd - dd0, dd1 - dd) / Math.max(0.001, fade), 0, 1);
+      if (edge <= 0) continue;
+      const amp = R.wobble === undefined ? 0.16 : R.wobble;
+      const wander = Math.sin(dd * 0.21 + k * 1.7) * amp
+                   + Math.sin(dd * 0.068 + k * 2.9) * amp * 0.7;
+      const gauge = R.gauge === undefined ? 0.60 : R.gauge;
+      const w = R.w === undefined ? 0.22 : R.w;
+      for (let side = -1; side <= 1; side += 2) {
+        const d = Math.abs(s0 - (R.s + wander + side * gauge * 0.5));
+        if (d >= w) continue;
+        // segment breaks: a track fades in and out along its length, and is
+        // more continuous where the traffic actually is
+        const seg = Math.floor(dd / 1.5);
+        const onProb = (0.52 + 0.36 * dens) * edge;
+        if (hash2(seg, k * 2 + (side > 0 ? 1 : 0), seed + 17) > onProb) continue;
+        s -= (d < w * 0.5 ? 2 : 1);
+      }
+    }
+
     if (dens > 0) {
       const hd = hash2(Math.floor(tx / 0.22), Math.floor(ty / 0.22), seed + 13);
       if (hd > 1 - 0.10 * dens) s -= 1;        // scuffed / damp underfoot

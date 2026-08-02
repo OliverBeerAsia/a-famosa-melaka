@@ -1,13 +1,13 @@
 {
   "id": "kampung",
   "name": "Kampung Quarter",
-  "coordVersion": 4,
+  "coordVersion": 5,
   "world": {
     "scale": 3,
     "nativeWidth": 640,
     "nativeHeight": 360
   },
-  "layoutHash": "695aff32dd21",
+  "layoutHash": "76fe771259e7",
   "generatedBy": "tools/forge/compose-plate.cjs",
   "sun": {
     "azimuthDeg": 315,

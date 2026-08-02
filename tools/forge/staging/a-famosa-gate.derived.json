@@ -2,7 +2,7 @@
   "id": "a-famosa-gate",
   "name": "A Famosa Fortress Gate",
   "generatedBy": "tools/forge/compose-plate.cjs",
-  "layoutHash": "c5ece6b730c3",
+  "layoutHash": "ed5666facad0",
   "world": {
     "scale": 3,
     "nativeWidth": 640,
