@@ -613,7 +613,7 @@ Fifteen testable assertions. Each is a thing a tester can sit down and observe.
 | **A8** | At 13:05 in the kampung, Pak Salleh is observed walking from the landing to the surau (479,233) and kneeling. He is at the riverbank, not the surau, for maghrib at 18:45. |
 | **A9** | At 12:00 on Rua Direita the bell rings, Gomes bares his head, and **Alvares does not stop weighing**. |
 | **A10** | At 18:00 on the waterfront, Chen Wei walks to the counting-house door and the window light comes on; Lin Mei locks the door over ~4 s; at 19:00 the light goes out and a bar drops. All three are observable from the quay without entering any interaction. |
-| **A11** | At 23:00 **at least one human is visible across the five locations taken together** (the night watch qualifies), and the waterfront patrol is running. Empty streets at that hour are correct — see the amendment note below. |
+| **A11** | At 23:00 **at least one human is visible across the five locations taken together** (the night watch qualifies), and the waterfront patrol is running. A Famosa Gate has a sentry at the guarita at 03:00 — `residents.json a-famosa-gate.gate-sentry`, `hours: [0, 24]`. Empty streets at that hour are correct — see the amendment note below. |
 | **A12** | With `?crowdstats=1`, on-screen crowd + residents at 13:00 is ≥6 on Rua Direita, ≥5 on the waterfront, ≥4 at A Famosa Gate, ≥3 in the kampung, ≥2 on the church hill. |
 | **A13** | Opening Gomes's warehouse strongbox sets `saw-gomes-books` and yields a manifest showing three voyages; the later truth-confrontation acknowledges it. |
 | **A14** | `key-warehouse` (a-famosa-gate 184,307) opens the waterfront `bonded-chest` and nothing else opens it. |

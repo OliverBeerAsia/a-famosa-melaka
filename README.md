@@ -1,156 +1,77 @@
 # A Famosa: Streets of Golden Melaka
 
-A historical pixel-art adventure RPG set in Portuguese Melaka circa 1580. Each location renders as a cohesive hand-painted pixel-art plate with the player, NPCs, and interactive props composited on top as Y-sorted sprites for Ultima VII-style overlap, holding a strong Ultima VIII-quality target for density, mood, physicality, and readability.
+**Melaka, 1580.** The richest port east of Goa, held by a Portuguese garrison that never has enough men, in a city where five communities trade, pray, and keep careful books about one another. A merchant's trading seal has gone missing — and depending on how you get it back, you'll learn exactly how this town really works.
 
-## Release Snapshot
+A pixel-art adventure RPG in the spirit of Ultima VII: one small city, rendered dense and alive, where everyone has a name, a daily routine, and an opinion about the customs shed.
 
-- Current release: `v0.10.0`
-- Engine: Phaser 3 + React + TypeScript
-- Rendering: painted scene plates (legacy-backdrop mode) with Y-sorted composited sprites
-- Native canvas: `960x540` (plates authored at native `320x180`, scaled up)
-- Art bar: historical Melaka first, Ultima VIII minimum
+![The market on Rua Direita at mid-morning](docs/media/shot-rua-day.png)
 
-## What v0.10.0 Adds
+## A city that goes about its day
 
-- Each of the five locations now renders as a single cohesive painted pixel-art plate, with the player, NPCs, and interactive props composited on top as Y-sorted sprites for true Ultima VII-style overlap
-- Scene plates are produced by a Claude-managed pipeline with no external image-generation API keys: Canva MCP (Magic Media) generates a true 2:1 isometric empty plaza, then `tools/post-process-scene.cjs` palette-quantizes, Bayer-dithers, and pixelates it down to the native `320x180` grid before install to `assets/scenes/`
-- Master exports and provenance are tracked in `tools/canva-sources/MANIFEST.json`; the procedural engine under `tools/ultima8-graphics/` produces the gameplay kit (tiles, props, sprites, portraits, UI)
-- Interactive props are curated, pixel-positioned sprites declared via `legacyProps` in `src/data/environment-objects.json`
-- Visual identity tightened toward cohesive chunky pixel art (Skald / Ultima VIII feel): strict indexed palette, ordered dithering, and a background pixel grid matched to the `3x` sprite grid
-- The isometric tilemap renderer is retained but dormant; the painted-plate path is the shipping world
+Every named character keeps real hours. Aminah sets up her market stall before dawn; Padre Tomás takes the church door at his appointed times; the tally clerks work the quay until the light goes. Stand around at seven in the evening and you'll see people *walk home* — and hear a shutter run in its track, or a cloth curtain fall, depending on which quarter you're in. At night the streets empty, the lanterns come up out of phase with one another, and the watch begins his rounds.
 
-## Quick Start
+![The same street at a quarter to ten](docs/media/shot-rua-night.png)
 
-### Requirements
+Chickens scatter in the kampung. Dust kicks up under foot traffic. The strait turns bronze at dusk and actually moves. Pier boards creak — not every step, about one in four, which turns out to be the difference between a sound effect and a rhythm section.
 
-- Node.js 16+
-- npm
+![The waterfront at dusk](docs/media/shot-waterfront-dusk.png)
 
-### Development
+## One seal, four ways to get it
+
+Fernão Gomes has lost the seal his whole trade depends on, and Chen Wei is holding it against a 500-cruzado debt. You can talk your way through the dispute, take a side, raise the money honestly — there's paid work at the warehouse, a pepper lot going cheap, and a counting-house clerk who has noticed a discrepancy — or go to the quay after the shutter bar drops, douse a lantern or two, and mind the watchman's rounds. Getting caught costs a fine, the loot, and your standing. It doesn't end the game. The second time, it ends *that option*.
+
+![Talking with Mak Enang in the kampung](docs/media/shot-dialogue.png)
+
+The people you'll deal with were written as people, not quest dispensers: the healer who charges Portuguese doctors double for the remedies they call superstition, the priest whose kindness and whose theology arrive in the same breath, the guild representative who will explain — precisely — why a contract beats mercy. The year matters too. Church names, monsoon winds, currency, and the sieges everyone still remembers are period-checked, and the parts of colonial life that games usually leave out aren't left out.
+
+![The kampung in the evening](docs/media/shot-kampung.png)
+
+## Play it
 
 ```bash
 npm install
-npm run dev
+npm run dev        # then open http://localhost:3000
 ```
 
-The dev server runs at `http://localhost:3000`.
+Arrow keys or WASD to walk, **Space** to talk, take, and examine (most things examine), **I** inventory, **J** journal, **Esc** pause. A full day-night cycle runs about an hour of real time; rest to skip ahead.
 
-### Core Commands
+## How it's made
+
+Everything in the game — plates, sprites, portraits, UI chrome, music, ambience, sound effects — comes out of deterministic tools that live in this repo. No hand-drawn assets, no external image services. Each location is a layout file that a compositor renders into the painted plate, its walk mask, its foreground occluders, and its engine data in a single pass, so the art and the collision can never disagree. Rebuild any of it:
 
 ```bash
-npm run dev
-npm run build
-npm run preview
-npm test -- --runInBand
-npm run validate:all
-npm run electron
-npm run package:mac
+npm run forge:relight        # re-derive all time-of-day plate variants
+npm run generate:portraits   # all 15 portraits from seeded feature libraries
+npm run generate:audio       # 7 scores + ambient beds + SFX, offline-synthesized
+npm run validate:all         # the gates: palette canon, byte determinism,
+                             # walkability, prop scale, style rules
 ```
 
-### Scene Plate Pipeline
+The visual rules are strict and machine-enforced: one 50-colour palette with hue-shifted ramps, one northwest sun, a 3-pixel grid shared by world, portraits, UI, and typography, zero anti-aliasing anywhere — measured against a benchmark checklist derived from the games this one is chasing (Ultima VII/VIII, Commandos, Baldur's Gate). CI fails on a single off-palette pixel.
 
-Scene plates come from Canva MCP (Magic Media) raw exports, then are post-processed to the native pixel grid. To re-bake a plate from a raw master:
+**Stack:** Phaser 3 + React + TypeScript · Vite · vitest (400+ tests) · Electron packaging
 
-```bash
-node tools/post-process-scene.cjs <raw> assets/scenes/<scene>.png --width 960 --height 540 --spread 26 --pixelate 3
-```
-
-Master exports and provenance live in `tools/canva-sources/MANIFEST.json`.
-
-## Current Shipping Bar
-
-### World and presentation
-
-- Five major locations, each a cohesive painted plate with Y-sorted composited sprites: `A Famosa Gate`, `Rua Direita`, `St. Paul's Church`, `Waterfront`, `Kampung`
-- Active customs-corruption spine linking `Rua Direita`, `Waterfront`, `A Famosa Gate`, and `Kampung`
-- Time-of-day atmosphere with dawn, day, dusk, and night readability
-- Contextual loading, onboarding, HUD, dialogue, and inventory presentation
-- Save/load with exact location restore and cleaner new-game reset semantics
-
-### Characters and art
-
-- Fourteen named gameplay sheets on the live `64x192` / `4x6` contract
-- Ten `16x32` crowd-role sprites for the runtime background population layer
-- Unique VGA-style portraits for the named dialogue cast
-- Complete player-facing item icon set in `assets/sprites/ui/items/`
-
-### Validation
-
-- Runtime asset manifest controls gameplay-facing map, tile, character, and prop loading
-- `npm run validate:art -- --strict` enforces gameplay art contract compliance
-- Jest coverage includes save/load, visual integrity, customs-route locking, and regression checks around map richness, quest gating, and portrait coverage
-
-## Controls
-
-- `Arrow Keys` / `WASD`: move
-- `Space`: interact, talk, take, or travel depending on target
-- `I`: inventory
-- `J`: journal
-- `Esc`: pause
-- `F6-F10`: debug travel
-- `T` / `Y`: debug time controls
-
-## Project Structure
+### Repo tour
 
 ```text
-assets/
-  scenes/                Painted scene plates (the shipping world)
-  maps/                  Tiled JSON maps for the dormant iso tilemap renderer
-  sprites/
-    characters/          Named gameplay sheets
-    crowd/               Crowd role silhouettes
-    portraits/           VGA-style dialogue portraits
-    objects/             Prop and animated object art
-    tiles/               Base and isometric tile art
-    ui/items/            Player-facing item icons
-tools/
-  post-process-scene.cjs Palette-quantize + dither + pixelate scene plates
-  canva-sources/         Master scene exports and provenance (MANIFEST.json)
-  ultima8-graphics/      Procedural gameplay-kit generators
-docs/
-  PROJECT_BRIEFING.md    Product and world vision
-  PROJECT_SETUP.md       Runtime, asset, and release workflow
-  RELEASE_NOTES_v0.9.0.md
-  LESSONS_LEARNED.md
-  TODO.md
-src/
-  phaser/                BootScene, GameScene, runtime systems
-  components/            React UI and screens
-  stores/                Zustand game state
-  data/                  NPCs, items, quests, locations, manifests
-tests/                   Jest regression coverage
-tools/                   Art generation and validation scripts
+assets/            generated art + audio (Git LFS)
+src/data/          the world as data: locations, NPCs, schedules, quests,
+                   residents, openables, the night watch
+src/phaser/        engine: a thin GameScene over tested systems
+                   (time, lighting, NPCs, camera, detection, atmosphere...)
+src/components/    React UI on the parchment-and-brass chrome kit
+tools/forge/       the art pipeline: palette canon, plate compositor,
+                   kits, relighting, portraits, validators
+tools/generate-audio/  offline music + ambience + SFX synthesis
+docs/design/       living-world spec, 1580 historical audit, game-feel spec
 ```
 
-## Release Verification
+## Where it's going
 
-`v0.10.0` was verified with:
+Next cycle's board: mouse input with click-to-move, enterable interiors, the customs-spine quests rebuilt to the main quest's standard, fireflies over the kampung river, and whatever the playtest notes demand. Design documents with every parameter cited live in [`docs/design/`](docs/design/); release history in [CHANGELOG.md](CHANGELOG.md) and [PROJECT_STATUS.md](PROJECT_STATUS.md).
 
-```bash
-npm test -- --runInBand
-npm run build
-npm run validate:all
-```
+## Credits & historical note
 
-## Documentation
+Design, art direction, code, music, and historical review by a team of Claude agents orchestrated in Claude Code, with live playtesting and art direction by Oliver. The 1580 grounding draws on Tomé Pires' *Suma Oriental*, Manuel Godinho de Erédia, and the scholarship of Luís Filipe Thomaz and Sanjay Subrahmanyam. Built with respect for the five communities of old Melaka; corrections from people who know this history are welcome.
 
-- [docs/README.md](docs/README.md)
-- [docs/PROJECT_BRIEFING.md](docs/PROJECT_BRIEFING.md)
-- [docs/PROJECT_SETUP.md](docs/PROJECT_SETUP.md)
-- [docs/DESIGN_STANDARDS.md](docs/DESIGN_STANDARDS.md)
-- [docs/RPG_EXPANSION_PLAN.md](docs/RPG_EXPANSION_PLAN.md)
-- [docs/ATMOSPHERIC_SYSTEMS.md](docs/ATMOSPHERIC_SYSTEMS.md)
-- [docs/RELEASE_NOTES_v0.9.0.md](docs/RELEASE_NOTES_v0.9.0.md)
-- [docs/LESSONS_LEARNED.md](docs/LESSONS_LEARNED.md)
-- [docs/TODO.md](docs/TODO.md)
-- [PROJECT_STATUS.md](PROJECT_STATUS.md)
-- [CHANGELOG.md](CHANGELOG.md)
-- [TESTING.md](TESTING.md)
-
-## Historical Frame
-
-The game is set in 1580 Melaka under Portuguese rule. The visual and systemic bar is not generic tropical fantasy. Commercial, sacred, domestic, and military spaces should read as plausible places within a colonial port city shaped by Portuguese, Malay, Chinese, Indian, and Arab presence.
-
-## License
-
-MIT
+*MIT licensed. Melaka's real history is longer, harder, and better than any game — go read about it.*

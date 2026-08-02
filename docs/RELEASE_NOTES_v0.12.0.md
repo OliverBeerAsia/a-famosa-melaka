@@ -1,6 +1,6 @@
 # Release Notes — v0.12.0 "The Living City"
 
-**Date:** 2026-08-02 (draft — finalize at tag time)
+**Date:** 2026-08-02
 **Branch:** `graphics-overhaul-local`
 
 Where v0.11.0 rebuilt Melaka's streets, v0.12.0 moves people, light, and weather into them. This is the release where the city stops posing for a painting and starts going about its day.
@@ -51,4 +51,10 @@ Where v0.11.0 rebuilt Melaka's streets, v0.12.0 moves people, light, and weather
 - CI gates grew: grade-LUT drift gate (the double-grade can never return), SFX key-existence gate (missing audio fails the build), canon gate now covers UI and item icons. Legacy allowlist down to 4 entries.
 - Known follow-ups tracked for v0.13: contact-metric gate revision, CI boot smoke test, aoZones plate bake, water-texture layout switch, fauna tier 2.
 
-_(Living-world specifics — schedules, residents, openables, detection numbers — to be finalized from world-engineer's landing report.)_
+## The living world, specifically
+
+- Hour-by-hour schedules for all 14 named NPCs: stations anchored to painted props, walk routes as A*-filled hints, departures planned so the player sees the transit rather than the aftermath; "indoors" is a walk to a real door, a quarter-correct sound (shutter vs curtain vs iron-bound door), and a fade.
+- 15 unnamed residents with seeded, non-repeating bark sets; crowd pacing rebuilt from measurement (steady-state populations went from 0.3–1.1 on screen to 5–16 at midday, and the cap actually binds now, with fauna headroom preserved).
+- The counting-house night watch: an 18-waypoint patrol timed at 47.5s with authored dwells, cone + peripheral + light-multiplier detection, lantern-dousing on four lamp posts, and a fail-forward caught chain (fine, receipt, confiscation, reputation — a second catch closes the theft path only; 445 of the 500-cruzado debt remains raisable).
+- 14 openable containers via the interaction provider seam, persisted in world flags; the warehouse key opens exactly one chest.
+- Final test count: **406** (from 127 at v0.11.0); the spec's acceptance checklist was run in-engine, with two assertions amended for cause (both documented inline: the detection assertion contradicted the detection model's own lantern radius; the 23:00 street-population assertion asked 1580 Melaka to behave like a stage set).

@@ -2,6 +2,23 @@
 
 All notable changes to A Famosa: Streets of Golden Melaka.
 
+## [0.12.0] - 2026-08-02
+
+### The Living City
+
+Full details in `docs/RELEASE_NOTES_v0.12.0.md`.
+
+### Added
+- **Living world**: hour-by-hour schedules for all 14 NPCs (they walk, work, and go home through real doors with quarter-correct sounds); 15 ambient residents with barks; A* pathfinding over walkmasks; the counting-house night watch (timed patrol, light-based detection, lantern dousing, fail-forward consequences); 14 persistent openables; measured crowd-pacing rebuild (0.3–1.1 → 5–16 on screen at midday).
+- **Game feel**: MelakaPostFX pipeline (replaces 15 blend rects + 9 perpetual tweens), grade-LUT strips with an anti-double-grade CI gate, animation phase desync (benchmark item 9: 100% lockstep → 0%), 21-event feedback table + 12 new SFX behind a key-existence gate, practical lantern flicker, dust/cloth/creak surface responses, animated dusk-bronze water, fauna tier 1.
+- **Engine**: GameScene decomposed 4,060 → 728 lines over 14 systems + 9 pure tested core modules (+279 tests, 406 total); quest hotspots moved to data and re-anchored from open water to the counting-house door; world items truly grounded (alpha-scan + contact shadows); typography standard applied to all Phaser text.
+- **Art**: Forge title panorama (dusk harbour) on title/loading; graveyard seam, wheel-track cart traffic, tiled-course roofs (tartan killed), 2px ropes, compositor contact-definition pass (+contrast on all five plates), 27 item icons redrawn at true native, portrait polish (real morion, Aminah's tudung, fold clusters), prop clarity/scale pass with a calibrated prop-ruler gate in CI.
+- **Typography**: two pixel-native faces on measured integer grids everywhere; fonts self-hosted (23KB) so offline builds can't regress; `font-display: block`.
+- **History**: 1580 audit applied — Igreja Madre de Deus naming, the 1568–1575 sieges, the Iberian interregnum, monsoon/port corrections, Kapitan China and diocesan institutions, slavery addressed through Siti's legal status, Mak Enang's counter-narrative to the conquest myth.
+
+### Fixed
+- Teardown crashes breaking location transitions (two classes); floating world items; animated props drawing into the FX band; theft hotspots in open water; synchronized animation lockstep; the fuzzy system-font HUD clock; A Famosa silently shipping a stale plate under green validators (new plate/key gate); ruler-edged ground insets on three plates; 1px pike-haft "scratch" lines.
+
 ## [0.11.0] - 2026-08-01
 
 ### The Forge Overhaul
