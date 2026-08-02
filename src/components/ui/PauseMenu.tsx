@@ -93,19 +93,24 @@ export function PauseMenu({ onReturnToTitle }: PauseMenuProps) {
       <div className="absolute inset-0 bg-black/70" />
 
       {/* Panel */}
-      <div className="relative w-[400px] max-h-[94vh] overflow-y-auto">
+      {/* Two columns. The type ladder made every label taller, and the rule is
+          that the container gives way, never the size — a single 400px column
+          pushed "Return to Title" below the fold on a 768px-tall window. */}
+      <div className="relative w-[min(680px,94vw)] max-h-[94vh] overflow-y-auto">
         {/* Main container */}
         <div className="ui-panel-shell">
           <div className="ui-parchment-panel">
             {/* Title */}
-            <h2 className="ui-heading text-base text-center mb-3">
+            <h2 className="ui-heading text-center mb-3">
               PAUSED
             </h2>
 
+            <div className="grid gap-x-6 gap-y-3 sm:grid-cols-2">
+
             {/* Volume sliders */}
-            <div className="space-y-2 mb-3">
+            <div className="space-y-2">
               <div>
-                <label className="block ui-body font-crimson text-sm mb-1">
+                <label className="block ui-body type-body mb-1">
                   Music Volume
                 </label>
                 <input
@@ -124,7 +129,7 @@ export function PauseMenu({ onReturnToTitle }: PauseMenuProps) {
               </div>
 
               <div>
-                <label className="block ui-body font-crimson text-sm mb-1">
+                <label className="block ui-body type-body mb-1">
                   Sound Effects
                 </label>
                 <input
@@ -143,7 +148,7 @@ export function PauseMenu({ onReturnToTitle }: PauseMenuProps) {
               </div>
 
               <div>
-                <label className="block ui-body font-crimson text-sm mb-1">
+                <label className="block ui-body type-body mb-1">
                   Ambient Sounds
                 </label>
                 <input
@@ -162,7 +167,7 @@ export function PauseMenu({ onReturnToTitle }: PauseMenuProps) {
               </div>
 
               <div>
-                <label className="block ui-body font-crimson text-sm mb-1">
+                <label className="block ui-body type-body mb-1">
                   Visual Quality
                 </label>
                 <select
@@ -181,7 +186,7 @@ export function PauseMenu({ onReturnToTitle }: PauseMenuProps) {
                 </select>
               </div>
 
-              <label className="flex items-center gap-2 text-sm ui-body font-crimson">
+              <label className="flex items-center gap-2 ui-body type-body">
                 <input
                   type="checkbox"
                   checked={dynamicVisualQuality}
@@ -194,36 +199,35 @@ export function PauseMenu({ onReturnToTitle }: PauseMenuProps) {
                 />
                 Dynamic quality scaling
               </label>
-              <p className="ui-body-soft text-xs">
+              <p className="ui-body-soft type-body">
                 Runtime profile: <span className="ui-accent capitalize">{resolvedVisualQuality}</span>
               </p>
             </div>
 
-            {/* Save slots */}
-            <div className="mb-3">
-              <p className="ui-body font-crimson text-sm mb-2">Save Slot</p>
-              <div className="space-y-1 max-h-24 overflow-y-auto pr-1">
+            {/* Save slots + actions */}
+            <div className="flex flex-col">
+              <p className="ui-body type-body mb-2">Save Slot</p>
+              <div className="space-y-1 max-h-[168px] overflow-y-auto pr-1">
                 {slots.map((slot) => (
                   <button
                     key={slot.index}
                     onClick={() => setSelectedSlot(slot.index)}
                     className={`ui-list-row ${slot.index === selectedSlot ? 'ui-list-row--active' : ''}`}
                   >
-                    <span className="font-semibold">Slot {slot.index}</span>
+                    <span>Slot {slot.index}</span>
                     <span className="mx-2">•</span>
                     <span>{slot.isEmpty ? 'Empty' : `${slot.locationName} • ${formatPlaytime(slot.playtime)}`}</span>
                     {!slot.isEmpty && (
-                      <span className="block text-[10px] mt-0.5">
+                      <span className="block type-tag mt-1">
                         {formatTimestamp(slot.timestamp)}
                       </span>
                     )}
                   </button>
                 ))}
               </div>
-            </div>
 
-            {/* Menu buttons */}
-            <div className="space-y-2">
+            {/* Menu buttons — same column as the slots they act on */}
+            <div className="space-y-2 mt-3">
               <button
                 onClick={handleResume}
                 className="menu-btn"
@@ -252,6 +256,8 @@ export function PauseMenu({ onReturnToTitle }: PauseMenuProps) {
                 Return to Title
               </button>
             </div>
+            </div>
+            </div>
 
             {/* Instructions */}
             <div className="text-center mt-3">
@@ -259,7 +265,7 @@ export function PauseMenu({ onReturnToTitle }: PauseMenuProps) {
                 [ESC] Resume
               </span>
               {status && (
-                <p className="ui-accent text-xs mt-2">{status}</p>
+                <p className="ui-accent type-body mt-2">{status}</p>
               )}
             </div>
           </div>

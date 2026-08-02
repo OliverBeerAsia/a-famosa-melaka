@@ -146,7 +146,7 @@ export function InventoryPanel() {
             <div className="flex items-center justify-between gap-4">
               <div>
                 <p className="ui-caption">Satchel inventory</p>
-                <h2 className="ui-heading text-xl tracking-wide">
+                <h2 className="ui-heading">
                   Merchant&apos;s Satchel
                 </h2>
               </div>
@@ -154,10 +154,10 @@ export function InventoryPanel() {
               <div className="ui-money-pill">
                 <img src="/sprites/ui/coin-icon.png" alt="" className="ui-money-coin" />
                 <div className="text-right">
-                  <div className="font-cinzel text-sm leading-none" style={{ color: 'var(--brass)' }}>
+                  <div className="type-numeral" style={{ color: 'var(--brass)' }}>
                     {money}
                   </div>
-                  <div className="text-[10px] uppercase tracking-[0.16em]" style={{ color: 'var(--brass-dark)' }}>
+                  <div className="type-tag" style={{ color: 'var(--brass-dark)' }}>
                     cruzados
                   </div>
                 </div>
@@ -176,7 +176,7 @@ export function InventoryPanel() {
 
               <div className="flex-1 min-w-0 flex flex-col">
                 <div className="ui-description-panel flex-1">
-                  <p className="ui-body font-crimson text-base leading-relaxed min-h-[84px]">
+                  <p className="ui-body type-body min-h-[84px]">
                     {description}
                   </p>
                 </div>

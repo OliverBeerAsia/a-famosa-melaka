@@ -35,9 +35,12 @@ const locationData: Record<string, {
     portugueseName: 'The Main Street',
     description: 'The commercial heart of Portuguese Melaka. Here merchants from three continents haggle over spices, silk, and secrets.',
   },
+  // "St. Paul's" is the DUTCH name, given after 1641. In 1580 the Jesuits'
+  // church on the hill is the Igreja Madre de Deus, so the subtitle carries the
+  // English gloss — the same way Rua Direita does above.
   'st-pauls-church': {
-    name: "St. Paul's Church",
-    portugueseName: 'Igreja de São Paulo',
+    name: 'Igreja Madre de Deus',
+    portugueseName: 'Church of the Mother of God',
     description: 'Atop the hill overlooking the strait, this stone church stands as a beacon of faith in a land far from home.',
   },
   'waterfront': {
@@ -114,12 +117,12 @@ export function LoadingScreen({ locationId, mode = 'arrival', onComplete }: Load
               {mode === 'transition' ? 'Crossing Melaka' : 'Anno Domini 1580'}
             </p>
 
-            <h1 className="ui-heading text-2xl mt-2 leading-tight">
+            <h1 className="ui-heading mt-2">
               {location.name}
             </h1>
 
             {location.portugueseName && (
-              <h2 className="font-crimson ui-body-soft text-xl italic mt-1">
+              <h2 className="ui-body-soft type-body mt-1">
                 {location.portugueseName}
               </h2>
             )}
@@ -131,7 +134,7 @@ export function LoadingScreen({ locationId, mode = 'arrival', onComplete }: Load
               <div className="ui-rule flex-1" />
             </div>
 
-            <p className="font-crimson ui-body text-lg leading-relaxed px-2">
+            <p className="ui-body type-body px-2">
               {mode === 'transition'
                 ? `${location.description} Keep your bearings. The next district tells its story before anyone speaks.`
                 : location.description}

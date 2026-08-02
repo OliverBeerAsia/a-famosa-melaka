@@ -1,3 +1,39 @@
+/* Self-hosted pixel fonts (assets/fonts/ -> served at /fonts/). No CDN — see
+   index.html. unicode-range mirrors Google's latin / latin-ext split so the
+   browser fetches only what a page's glyphs need ("Fernão" pulls latin-ext). */
+@font-face {
+  font-family: 'Press Start 2P';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/press-start-2p-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Press Start 2P';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/press-start-2p-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'VT323';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/vt323-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'VT323';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/vt323-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -37,17 +73,73 @@
   --rod-slice: 24px;     /* scroll-rod.png */
 }
 
+/* ===========================================================================
+   TYPOGRAPHY STANDARD                    (docs/design/typography-standard.md)
+   ===========================================================================
+   The chrome rule is "author at native, ship at an integer multiple". Type
+   obeys the SAME rule: a bitmap face has a design grid, and a font-size that
+   is not an integer multiple of that grid rasterises with uneven stems — some
+   1px, some 2px — which is the type equivalent of a half-pixel sprite.
+
+   TWO FAMILIES. No third face, ever.
+     display  Press Start 2P   design grid  8px   advance 1.00em   x-height .75em
+     body     VT323            design grid 10px   advance 0.40em   x-height .40em
+
+   LEGAL SIZES — measured, not guessed (see the doc for the probe):
+     display  8 / 16 / 24 / 32 / 40      (multiples of 8)
+     body        20 / 30 / 40            (multiples of 10)
+   12px Press Start 2P renders 'H' with alternating 1px and 2px stems; 15px
+   VT323 sits below the x-height floor. Neither is legal. If a string does not
+   fit at a legal size, the CONTAINER changes, never the size.
+
+   x3 IS THE WORLD TIER. display 24px and body 30px are exactly three design
+   pixels per glyph pixel — the same density as the plates, the sprites and the
+   chrome. Those are the defaults; 16/20 is the denser secondary tier, and
+   display 8px is for micro tags only.
+
+   MINIMUM SIZE. Nothing below a 5px on-screen x-height. display 8px -> 6px,
+   body 20px -> 8px. Both clear it; anything smaller does not exist.
+
+   LETTER-SPACING IN INTEGER PX, NEVER em. 0.18em at 24px is 4.32px, which
+   lands glyph origins on fractional pixels and produces visibly uneven gaps.
+
+   NO SYNTHETIC EMPHASIS. Both faces ship a single weight and no italic, so
+   font-weight:700 thickens stems unevenly (it clogs VT323's counters) and
+   font-style:italic shears them into staircases. `font-synthesis: none` below
+   enforces this at the engine level. Emphasise with COLOUR, CASE or SPACING.
+
+   TEXT OVER THE WORLD never floats raw: it sits on a hardwood chip or a
+   parchment panel. Where a backing is impossible, .type-on-world adds one hard
+   offset shadow of exactly one glyph-pixel (--glyph) in --ink. Never blurred.
+
+   The .type-* classes themselves are defined at the BOTTOM of this file, not
+   here. They and the .ui-* classes share a layer and a specificity, so the one
+   declared last wins; a .type-h2 written next to a .ui-heading has to be able
+   to override the heading's default size. Order is the override mechanism.
+   =========================================================================== */
+:root {
+  --font-display: 'Press Start 2P', 'Courier New', monospace;
+  --font-body: 'VT323', 'Courier New', monospace;
+}
+
 @layer base {
   body {
-    @apply font-crimson;
+    font-family: var(--font-body);
+    font-size: 20px;
+    line-height: 30px;
     color: var(--parch);
-    /* pixel fonts must not be smoothed — that is the same crime as AA on art */
+    /* Load-bearing. A bitmap face rendered with AA is the same crime as a soft
+       edge on a sprite: it turns 1px stems into grey mush. */
     -webkit-font-smoothing: none;
     -moz-osx-font-smoothing: unset;
+    /* Belt and braces for the no-synthetic-emphasis rule: even if a stray
+       font-bold or italic survives, the engine will not fake it. */
+    font-synthesis: none;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply font-cinzel;
+    font-family: var(--font-display);
+    font-weight: 400;
   }
 
   img {
@@ -114,12 +206,12 @@
      TYPE ON PARCHMENT
      ========================================================================= */
   .ui-caption {
-    @apply text-xs uppercase tracking-[0.18em];
+    @apply type-caption;
     color: var(--wood-lit);
   }
 
   .ui-heading {
-    @apply font-cinzel font-bold;
+    @apply type-h1;
     color: var(--wax-deep);
   }
 
@@ -142,23 +234,23 @@
   }
 
   .ui-dialogue-text {
-    @apply font-crimson text-2xl leading-relaxed;
+    @apply type-body-lg;
     color: var(--wood);
   }
 
   .ui-keys {
-    @apply text-sm font-mono;
+    @apply type-body;
     color: var(--wood-lit);
   }
 
   /* Same key legend, but standing on the world / a dark screen instead of paper. */
   .ui-keys-dark {
-    @apply text-sm font-mono;
+    @apply type-body;
     color: var(--parch-warm);
   }
 
   .ui-title-dark {
-    @apply font-cinzel font-bold;
+    @apply type-h1;
     color: var(--brass);
   }
 
@@ -210,7 +302,7 @@
     border-image-width: var(--chip-slice);
     border-image-repeat: repeat;
     image-rendering: pixelated;
-    @apply font-cinzel text-xs tracking-widest uppercase cursor-pointer;
+    @apply type-h2 uppercase cursor-pointer;
     color: var(--parch);
     padding: 0 6px;
   }
@@ -317,8 +409,10 @@
     border-image-repeat: repeat;
     image-rendering: pixelated;
     color: var(--parch);
-    font-size: 1.05rem;
-    line-height: 1.15;
+    font-family: var(--font-body);
+    font-size: 20px;
+    line-height: 24px;
+    --glyph: 2px;
   }
   .ui-topic-btn:hover {
     border-image-source: url('/sprites/ui/topic-row-hover.png');
@@ -335,13 +429,13 @@
   }
 
   .ui-topic-number {
-    @apply font-cinzel text-sm;
+    @apply type-h2;
     color: var(--brass);
     flex-shrink: 0;
   }
 
   .ui-topic-tag {
-    @apply text-xs uppercase tracking-[0.14em];
+    @apply type-tag;
     color: var(--parch-warm);
     flex-shrink: 0;
   }
@@ -376,12 +470,12 @@
   .ui-item-fallback {
     width: 100%;
     height: 100%;
-    @apply flex items-center justify-center font-cinzel text-lg;
+    @apply flex items-center justify-center type-h2;
     color: var(--parch);
   }
 
   .ui-quantity-badge {
-    @apply absolute text-[10px] font-mono;
+    @apply absolute type-tag;
     right: -3px;
     bottom: -3px;
     color: var(--parch);
@@ -429,16 +523,19 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-family: 'Press Start 2P', monospace;
+    font-family: var(--font-display);
+    font-size: 16px;   /* display ladder */
     color: var(--spec);
-    font-size: 16px;
   }
 
   /* =========================================================================
      JOURNAL / MENUS
      ========================================================================= */
+  /* Body face, not display: three display-16 tabs are 576px wide and the
+     journal is 620px. The container does not get to push the size off-grid,
+     so the tabs take the narrower face at the same x-height. */
   .journal-tab {
-    @apply px-4 py-2 font-cinzel text-xs cursor-pointer;
+    @apply px-3 py-2 type-caption cursor-pointer;
     color: var(--parch-stain);
   }
 
@@ -452,8 +549,8 @@
   }
 
   .menu-btn {
-    @apply w-full font-cinzel text-xs uppercase tracking-widest cursor-pointer;
-    min-height: 42px;
+    @apply w-full type-h2 uppercase cursor-pointer;
+    min-height: 48px;
     border-style: solid;
     border-width: var(--chip-slice);
     border-image-source: url('/sprites/ui/button-default.png');
@@ -489,7 +586,7 @@
 
   /* Save-slot rows and other list chrome on parchment. */
   .ui-list-row {
-    @apply w-full text-left text-xs cursor-pointer;
+    @apply w-full text-left type-body cursor-pointer;
     padding: 6px 9px;
     color: var(--wood-lit);
     background: var(--parch-warm);
@@ -503,7 +600,7 @@
   }
 
   .ui-field {
-    @apply w-full text-sm;
+    @apply w-full type-body;
     padding: 6px 9px;
     color: var(--wood);
     background: var(--parch-warm);
@@ -512,6 +609,49 @@
     font-family: inherit;
   }
 }
+
+@layer components {
+  /* =========================================================================
+     THE TYPE LADDER — declared LAST so that a .type-* class always beats the
+     .ui-* class it is written beside. See the TYPOGRAPHY block at the top of
+     this file for the standard these implement.
+     =========================================================================
+     --- the ladder. --glyph is one design pixel at that size. ------------- */
+  .type-title  { font-family: var(--font-display); font-size: 40px; line-height: 48px; --glyph: 5px; }
+  .type-h1     { font-family: var(--font-display); font-size: 24px; line-height: 32px; --glyph: 3px; }
+  .type-h2     { font-family: var(--font-display); font-size: 16px; line-height: 24px; --glyph: 2px; }
+  .type-tag    { font-family: var(--font-display); font-size: 8px;  line-height: 12px; --glyph: 1px;
+                 text-transform: uppercase; letter-spacing: 1px; }
+  .type-body   { font-family: var(--font-body);    font-size: 20px; line-height: 30px; --glyph: 2px; }
+  .type-body-lg{ font-family: var(--font-body);    font-size: 30px; line-height: 42px; --glyph: 3px; }
+
+  /* Tabular numerals — clocks and money must not reflow as digits change. */
+  .type-numeral {
+    font-family: var(--font-display);
+    font-size: 16px; line-height: 24px; --glyph: 2px;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0;
+  }
+
+  /* Small uppercase label. Body face, not display: at the same footprint it
+     carries an 8px x-height where display 8px carries 6px. */
+  .type-caption {
+    font-family: var(--font-body);
+    font-size: 20px; line-height: 24px; --glyph: 2px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+
+  /* Caption with the tracking removed — for a long flavour line that has to
+     share a row with a key legend. 2px x 27 characters is 54px of pure air. */
+  .type-caption-tight { letter-spacing: 0; }
+
+  /* The one backing rule for type that cannot sit on a plate. */
+  .type-on-world {
+    text-shadow: var(--glyph) var(--glyph) 0 var(--ink);
+  }
+}
+
 
 /* Typewriter effect cursor */
 .typewriter-cursor::after {

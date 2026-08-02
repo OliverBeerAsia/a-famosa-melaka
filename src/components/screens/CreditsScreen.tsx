@@ -30,7 +30,7 @@ export function CreditsScreen({ onClose }: CreditsScreenProps) {
           <div className="ui-parchment-panel text-center">
             <div className="ui-scroll-rod mb-4" />
 
-            <h1 className="ui-heading text-2xl mb-1">A FAMOSA</h1>
+            <h1 className="ui-heading mb-1">A FAMOSA</h1>
             <p className="ui-caption">Streets of Golden Melaka</p>
 
             <div className="flex items-center justify-center gap-4 my-4">
@@ -39,7 +39,7 @@ export function CreditsScreen({ onClose }: CreditsScreenProps) {
               <div className="ui-rule flex-1" />
             </div>
 
-            <div className="space-y-5 font-crimson ui-body text-lg">
+            <div className="space-y-5 ui-body type-body">
               <section>
                 <h2 className="ui-caption ui-accent mb-1">Design &amp; Development</h2>
                 <p>Created with Claude Code</p>
@@ -54,7 +54,7 @@ export function CreditsScreen({ onClose }: CreditsScreenProps) {
 
               <section>
                 <h2 className="ui-caption ui-accent mb-1">Historical Acknowledgment</h2>
-                <p className="text-base leading-relaxed ui-body">
+                <p className="ui-body type-body">
                   This game is inspired by the multicultural history of Melaka (Malacca),
                   a UNESCO World Heritage Site. We honor the diverse peoples—Malay,
                   Chinese, Indian, Arab, and Portuguese—who built this remarkable trading port.
@@ -63,7 +63,7 @@ export function CreditsScreen({ onClose }: CreditsScreenProps) {
 
               <section>
                 <h2 className="ui-caption ui-accent mb-1">Technology</h2>
-                <div className="flex justify-center gap-3 text-base">
+                <div className="flex justify-center gap-3">
                   <span>React</span>
                   <span className="ui-accent">•</span>
                   <span>Phaser 3</span>

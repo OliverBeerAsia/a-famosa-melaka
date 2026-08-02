@@ -31,7 +31,7 @@ const TOPIC_DISPLAY_NAMES: Record<string, string> = {
   'weather': 'The Weather',
   'food': 'Local Food',
   'captain': 'The Captain',
-  'church': 'St. Paul\'s Church',
+  'church': 'The Church on the Hill',
   'rumors': 'Rumors',
   'family': 'Your Family',
   'advice': 'Advice',
@@ -313,11 +313,11 @@ export function DialogueBox() {
               heights stay close and the parchment has no dead corner. */}
           <div className="hidden md:block w-[276px] shrink-0">
             <PortraitImage npcId={portraitKey} npcName={currentNPC.name} />
-            <h3 className="ui-heading text-base leading-tight mt-3">
+            <h3 className="ui-heading type-h2 mt-3">
               {currentNPC.name}
             </h3>
             {currentNPC.title && (
-              <p className="ui-body-soft text-base italic leading-snug">
+              <p className="ui-body-soft type-body">
                 {currentNPC.title}
               </p>
             )}
@@ -327,7 +327,7 @@ export function DialogueBox() {
           <div className="flex-1 min-w-0 flex flex-col">
             {/* Repeated for the narrow layout, where the portrait is hidden. */}
             <div className="md:hidden mb-2">
-              <h3 className="ui-heading text-base leading-tight">{currentNPC.name}</h3>
+              <h3 className="ui-heading type-h2">{currentNPC.name}</h3>
               <p className="ui-caption">{locationLabel}</p>
             </div>
 
@@ -387,7 +387,7 @@ export function DialogueBox() {
                     ? '[1-9] ask • [0/←→] more topics • [ESC] close'
                     : '[1-9] ask • [ESC] close'}
               </span>
-              <span className="ui-caption truncate">Melaka remembers everything</span>
+              <span className="ui-caption type-caption-tight truncate">Melaka remembers</span>
             </div>
           </div>
         </div>

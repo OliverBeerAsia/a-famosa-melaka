@@ -69,12 +69,14 @@ export function HUD() {
   // Format time string
   const timeString = `${time.hour.toString().padStart(2, '0')}:${time.minute.toString().padStart(2, '0')}`;
 
-  // Time of day indicator color
-  const timeColors = {
-    dawn: 'text-orange-300',
-    day: 'text-gold',
-    dusk: 'text-orange-400',
-    night: 'text-blue-300',
+  // Time of day is carried by the CLOCK'S COLOUR, not by a second word beside
+  // it: "Day 1 · day" read as a stutter, and the typography standard says to
+  // emphasise with colour rather than with more type. All four are canon.
+  const timeColors: Record<string, string> = {
+    dawn: '#F5C860',   // lantern-flame
+    day: '#D8A428',    // brass
+    dusk: '#B47844',   // terracotta-3
+    night: '#6098C8',  // sky-2
   };
 
   // Don't show during dialogue to reduce clutter
@@ -171,20 +173,21 @@ export function HUD() {
       <div className="absolute top-0 left-0 right-0 p-4 flex justify-between items-start pointer-events-none">
         {/* Location indicator */}
         <div className="ui-chip">
-          <span className="font-cinzel text-xs" style={{ color: 'var(--parch)' }}>{location.name}</span>
+          <span className="type-h2" style={{ color: 'var(--parch)' }}>{location.name}</span>
         </div>
 
         {/* Time indicator */}
         <div className="ui-chip flex flex-col items-end">
-          <div className="flex items-center gap-2">
-            <span className={`font-mono text-lg ${timeColors[time.timeOfDay]}`}>
-              {timeString}
-            </span>
-            <span className="text-xs capitalize" style={{ color: 'var(--parch-warm)' }}>
-              ({time.timeOfDay})
-            </span>
-          </div>
-          <span className="text-[10px]" style={{ color: 'var(--parch-warm)' }}>Day {time.day}</span>
+          <span
+            className="type-numeral"
+            style={{ color: timeColors[time.timeOfDay] || 'var(--brass)' }}
+            title={time.timeOfDay}
+          >
+            {timeString}
+          </span>
+          <span className="type-caption" style={{ color: 'var(--parch-warm)' }}>
+            Day {time.day}
+          </span>
         </div>
       </div>
 
@@ -192,25 +195,25 @@ export function HUD() {
       {(trackedQuestName && trackedObjective) || tutorialHint ? (
         <div className="absolute top-20 left-4 max-w-[420px] pointer-events-none">
           <div className="ui-chip">
-            <p className="font-cinzel text-[10px] uppercase tracking-wide" style={{ color: 'var(--brass)' }}>
+            <p className="type-caption" style={{ color: 'var(--brass)' }}>
               {trackedQuestName && trackedObjective ? 'Quest Tracker' : tutorialHint?.title}
             </p>
             {trackedQuestName && trackedObjective ? (
               <>
-                <p className="text-sm font-semibold" style={{ color: 'var(--parch)' }}>{trackedQuestName}</p>
-                <p className="text-xs" style={{ color: 'var(--parch-warm)' }}>{formatObjective(trackedObjective)}</p>
+                <p className="type-body" style={{ color: 'var(--parch)' }}>{trackedQuestName}</p>
+                <p className="type-body" style={{ color: 'var(--parch-warm)' }}>{formatObjective(trackedObjective)}</p>
                 {trackedObjectiveLocation && trackedObjectiveLocation !== location.id && (
-                  <p className="text-[11px] mt-1" style={{ color: 'var(--brass)' }}>
+                  <p className="type-body mt-1" style={{ color: 'var(--brass)' }}>
                     Travel to {getLocationName(trackedObjectiveLocation)}
                   </p>
                 )}
               </>
             ) : (
-              <p className="text-xs leading-5" style={{ color: 'var(--parch-warm)' }}>{tutorialHint?.text}</p>
+              <p className="type-body" style={{ color: 'var(--parch-warm)' }}>{tutorialHint?.text}</p>
             )}
 
             {trackedQuestName && trackedObjective && currentHighlights.length > 0 && (
-              <div className="mt-2 space-y-1 text-[11px]">
+              <div className="mt-2 space-y-1 type-body">
                 {currentHighlights.map((current) => (
                   <p
                     key={current.id}
@@ -234,23 +237,23 @@ export function HUD() {
       {!isPaused && travelHint && (
         <div className="absolute bottom-4 right-4 pointer-events-none">
           <div className="ui-chip max-w-[320px]">
-            <p className="font-cinzel text-[10px] uppercase tracking-wide mb-1" style={{ color: 'var(--brass)' }}>Travel Guidance</p>
-            <p className="text-xs leading-5" style={{ color: 'var(--parch)' }}>{travelHint}</p>
+            <p className="type-caption mb-1" style={{ color: 'var(--brass)' }}>Travel Guidance</p>
+            <p className="type-body" style={{ color: 'var(--parch)' }}>{travelHint}</p>
           </div>
         </div>
       )}
 
       {!onboarding.hasCompletedTutorialBanner && (
-        <div className="absolute bottom-20 left-0 right-0 mx-auto w-[min(480px,90vw)] z-50 pointer-events-auto">
+        <div className="absolute bottom-20 left-0 right-0 mx-auto w-[min(560px,92vw)] z-50 pointer-events-auto">
           <div className="ui-panel-shell text-center">
           <div className="ui-parchment-panel">
-            <h4 className="ui-heading text-xs uppercase tracking-wider mb-2">
+            <h4 className="ui-heading type-h2 mb-2">
               Streets of Melaka — Controls
             </h4>
-            <p className="ui-body-soft text-sm italic leading-relaxed mb-3 px-2 pb-2">
+            <p className="ui-body-soft type-body mb-3 px-2 pb-2">
               Year 1580. The Portuguese fortress of A Famosa stands as a golden gateway to the East, but beneath the spice trade lies a web of debt, faith, and secrets...
             </p>
-            <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-left ui-body text-sm my-3 py-2">
+            <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-left ui-body my-3 py-2">
               {[
                 ['[W,A,S,D] / [Arrows]', 'Move Character'],
                 ['[Space] / [Click]', 'Interact / Dialogue'],
@@ -258,8 +261,8 @@ export function HUD() {
                 ['[J] Key', 'Open Quest Journal'],
               ].map(([keys, label]) => (
                 <div key={keys} className="leading-tight">
-                  <span className="ui-accent font-mono font-bold block">{keys}</span>
-                  <span className="ui-body-soft">{label}</span>
+                  <span className="ui-accent type-body block">{keys}</span>
+                  <span className="ui-body-soft type-body">{label}</span>
                 </div>
               ))}
             </div>
@@ -291,10 +294,10 @@ export function HUD() {
           <div className="absolute inset-0 bg-black/75 flex items-center justify-center z-[100] pointer-events-auto">
             <div className="ui-panel-shell max-w-md w-full animate-fade-in text-center mx-4 relative">
             <div className="ui-parchment-panel">
-              <h3 className="ui-heading text-base mb-2 uppercase tracking-wider">
+              <h3 className="ui-heading mb-2">
                 {currentStage.description || 'Make Your Choice'}
               </h3>
-              <p className="ui-body-soft text-base mb-6 italic leading-relaxed">
+              <p className="ui-body-soft type-body mb-6">
                 {bQuest.name}
               </p>
               <div className="space-y-3">
@@ -312,7 +315,7 @@ export function HUD() {
                       }`}
                     >
                       <div className="flex justify-between items-center">
-                        <span className="font-semibold text-base">{path.name}</span>
+                        <span className="type-body">{path.name}</span>
                         {!check.allowed && (
                           <span className="ui-topic-tag">
                             Locked
@@ -320,10 +323,10 @@ export function HUD() {
                         )}
                       </div>
                       {path.description && (
-                        <p className="text-sm mt-1 leading-normal" style={{ color: 'var(--parch-warm)' }}>{path.description}</p>
+                        <p className="type-body mt-1" style={{ color: 'var(--parch-warm)' }}>{path.description}</p>
                       )}
                       {!check.allowed && check.reason && (
-                        <p className="text-xs mt-1 italic leading-normal" style={{ color: 'var(--parch-warm)' }}>
+                        <p className="type-body mt-1" style={{ color: 'var(--parch-warm)' }}>
                           Requires: {check.reason}
                         </p>
                       )}

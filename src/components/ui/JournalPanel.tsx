@@ -143,16 +143,16 @@ export function JournalPanel() {
           Chronicle
         </h3>
         {questEntries.length > entries.length && (
-          <p className="ui-body-soft text-xs italic mb-2">
+          <p className="ui-body-soft type-body mb-2">
             Showing the most recent {entries.length} of {questEntries.length} entries.
           </p>
         )}
         {entries.map((entry) => (
           <div key={entry.id} className="mb-3">
-            <span className="ui-keys text-xs">
+            <span className="ui-keys">
               [{entry.timeString}]
             </span>
-            <p className="ui-body font-crimson text-base mt-1 whitespace-pre-line">
+            <p className="ui-body type-body mt-1 whitespace-pre-line">
               {entry.text}
             </p>
           </div>
@@ -172,14 +172,14 @@ export function JournalPanel() {
               <div className="space-y-2">
                 {narrativeCurrents.slice(0, 3).map((current) => (
                   <div key={current.id}>
-                    <p className="ui-body text-base font-semibold">{current.title}</p>
-                    <p className="ui-body-soft text-sm leading-5">{current.text}</p>
+                    <p className="ui-body type-body">{current.title}</p>
+                    <p className="ui-body-soft type-body">{current.text}</p>
                   </div>
                 ))}
               </div>
             </div>
           ) : null}
-          <p className="ui-body-soft italic">
+          <p className="ui-body-soft type-body">
             No active quests.
             <br />
             Speak with townsfolk to find work...
@@ -197,8 +197,8 @@ export function JournalPanel() {
             <div className="space-y-2">
               {narrativeCurrents.slice(0, 3).map((current) => (
                 <div key={current.id}>
-                  <p className="ui-body text-base font-semibold">{current.title}</p>
-                  <p className="ui-body-soft text-sm leading-5">{current.text}</p>
+                  <p className="ui-body type-body">{current.title}</p>
+                  <p className="ui-body-soft type-body">{current.text}</p>
                 </div>
               ))}
             </div>
@@ -209,7 +209,7 @@ export function JournalPanel() {
 
       return (
         <div key={quest.id} className="mb-4">
-          <h3 className="font-crimson ui-body font-semibold flex items-center gap-2">
+          <h3 className="ui-body type-body flex items-center gap-2">
             <span className="ui-accent">⚜</span>
             {quest.name}
           </h3>
@@ -219,14 +219,14 @@ export function JournalPanel() {
                 {stage.objectives.map((obj) => (
                   <li
                     key={obj.id}
-                    className={`flex items-center gap-2 text-sm ${
+                    className={`flex items-center gap-2 type-body ${
                       obj.completed ? 'ui-done' : 'ui-body-soft'
                     }`}
                   >
                     {trackedObjective?.questId === quest.id && trackedObjective?.objectiveId === obj.id ? (
-                      <span className="ui-accent text-xs">◆</span>
+                      <span className="ui-accent type-body">◆</span>
                     ) : (
-                      <span className="ui-body-soft text-xs">·</span>
+                      <span className="ui-body-soft type-body">·</span>
                     )}
                     <span>{obj.completed ? '✓' : '○'}</span>
                     <button
@@ -247,10 +247,10 @@ export function JournalPanel() {
 
               {stage.isBranching && stage.availablePaths?.length ? (
                 <div className="mt-3 ml-4 ui-description-panel">
-                  <p className="ui-body-soft text-sm mb-2">
+                  <p className="ui-body-soft type-body mb-2">
                     Paths now emerge through conversation, evidence, payment, or after-dark risk in the world.
                   </p>
-                  <ul className="space-y-1 text-sm ui-body">
+                  <ul className="space-y-1 ui-body type-body">
                     {stage.availablePaths.map((path) => (
                       <li key={path.id}>
                         <span className="ui-accent">•</span> {path.name}
@@ -274,7 +274,7 @@ export function JournalPanel() {
   const renderJournal = (entries: JournalEntry[]) => {
     if (entries.length === 0) {
       return (
-        <p className="ui-body-soft italic">
+        <p className="ui-body-soft type-body">
           Journal is empty.
           <br />
           Your adventures await...
@@ -284,10 +284,10 @@ export function JournalPanel() {
 
     return [...entries].reverse().slice(0, MAX_RENDERED_ENTRIES).map((entry) => (
       <div key={entry.id} className="mb-3">
-        <span className="ui-keys text-xs">
+        <span className="ui-keys">
           [{entry.timeString}]
         </span>
-        <p className="ui-body font-crimson text-base mt-1 whitespace-pre-line">
+        <p className="ui-body type-body mt-1 whitespace-pre-line">
           {entry.text}
         </p>
       </div>
@@ -310,10 +310,10 @@ export function JournalPanel() {
             {/* Header */}
             <div className="text-center pb-2">
               <div className="ui-scroll-rod mb-2" />
-              <h2 className="ui-heading text-base">
+              <h2 className="ui-heading">
                 EXPLORER&apos;S JOURNAL
               </h2>
-              <p className="ui-body-soft text-sm italic">
+              <p className="ui-body-soft type-body">
                 Melaka, Anno Domini 1580
               </p>
             </div>

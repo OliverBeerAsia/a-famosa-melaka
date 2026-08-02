@@ -5,10 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>A Famosa: Streets of Golden Melaka</title>
 
-  <!-- Historical Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+  <!-- Pixel fonts are SELF-HOSTED (assets/fonts/, @font-face in src/styles/index.css).
+       No CDN: a packaged offline Electron build must not fall back to system
+       monospace — that regression is exactly the typography bug fixed in v0.12. -->
+  <link rel="preload" href="/fonts/press-start-2p-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/vt323-latin.woff2" as="font" type="font/woff2" crossorigin>
 
   <style>
     * {

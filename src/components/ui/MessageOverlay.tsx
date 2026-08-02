@@ -29,16 +29,16 @@ export function MessageOverlay({ title, text, onClose }: MessageOverlayProps) {
             <div className="flex items-start justify-between gap-4">
               <div>
                 <p className="ui-caption ui-accent">Discovery</p>
-                <h2 className="ui-heading text-base">{title}</h2>
+                <h2 className="ui-heading">{title}</h2>
               </div>
-              <button onClick={onClose} className="ui-body-soft hover:text-[var(--wood)] text-sm">
+              <button onClick={onClose} className="ui-body-soft hover:text-[var(--wood)] type-body">
                 Close
               </button>
             </div>
 
             <div className="ui-rule my-3" />
 
-            <p className="ui-body font-crimson text-lg leading-6 whitespace-pre-line">
+            <p className="ui-body type-body whitespace-pre-line">
               {text}
             </p>
 

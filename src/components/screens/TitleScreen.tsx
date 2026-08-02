@@ -88,14 +88,14 @@ export function TitleScreen({ onNewGame, onContinue, onCredits }: TitleScreenPro
             otherwise ghost behind this one. */}
         <div className="ui-dialogue-shell w-[min(680px,86vw)]">
           <div className="ui-parchment-panel py-4">
-            <h1 className="ui-heading text-4xl tracking-wide leading-none">
+            <h1 className="ui-heading type-title">
               A FAMOSA
             </h1>
             <div className="ui-rule my-3 mx-auto w-[70%]" />
-            <h2 className="font-cinzel text-base tracking-widest ui-body">
+            <h2 className="type-h2 ui-body">
               Streets of Golden Melaka
             </h2>
-            <p className="font-crimson ui-body-soft text-lg italic mt-2">
+            <p className="ui-body-soft type-body mt-2">
               Portuguese Malacca, Anno Domini 1580
             </p>
           </div>
@@ -109,7 +109,7 @@ export function TitleScreen({ onNewGame, onContinue, onCredits }: TitleScreenPro
               onClick={() => item.enabled && item.action()}
               onMouseEnter={() => item.enabled && setSelectedIndex(index)}
               disabled={!item.enabled}
-              className={`ui-btn block w-[264px] mx-auto text-base ${
+              className={`ui-btn block w-[312px] mx-auto ${
                 item.enabled && index === selectedIndex ? 'ui-btn--selected' : ''
               }`}
               style={{ minHeight: 48 }}
@@ -127,7 +127,7 @@ export function TitleScreen({ onNewGame, onContinue, onCredits }: TitleScreenPro
 
       {/* Footer */}
       <div className="absolute bottom-6 left-0 right-0 text-center">
-        <p className="ui-caption" style={{ color: 'var(--wood-hi)' }}>
+        <p className="type-caption" style={{ color: 'var(--wood-hi)' }}>
           A Pixel Art Adventure RPG chasing the density and mood of Ultima VIII
         </p>
       </div>
