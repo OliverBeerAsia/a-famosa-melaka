@@ -12,6 +12,7 @@
 import Phaser from 'phaser';
 import { GAME_WIDTH, GAME_HEIGHT } from '../game';
 import { DEPTH_UI_NOTIFICATION, DEPTH_UI_NAME_CARD } from './depth';
+import { TEXT_COLOR, TYPE, textStyle } from './typography';
 
 /** Toast near the top of the screen: fades in, holds, fades out. */
 export function showNotification(scene: Phaser.Scene, text: string): Phaser.GameObjects.Text {
@@ -19,12 +20,9 @@ export function showNotification(scene: Phaser.Scene, text: string): Phaser.Game
     GAME_WIDTH / 2,
     GAME_HEIGHT * 0.2,
     text,
-    {
-      font: 'bold 18px Cinzel, Georgia, serif',
-      color: '#F4B41A',
-      stroke: '#000000',
-      strokeThickness: 3,
-    }
+    // display 16: a toast is a button-tier legend, and toasts run long
+    // ("Acquired: Letter of Commendation") — see the note in showLocationCard.
+    textStyle(TYPE.displayLabel, { color: TEXT_COLOR.brass, align: 'center' })
   );
   notification.setOrigin(0.5, 0.5);
   notification.setScrollFactor(0);
@@ -56,12 +54,13 @@ export function showNotification(scene: Phaser.Scene, text: string): Phaser.Game
 
 /** The big location title shown on arrival. */
 export function showLocationCard(scene: Phaser.Scene, name: string): Phaser.GameObjects.Text {
-  const titleText = scene.add.text(GAME_WIDTH / 2, GAME_HEIGHT / 3, name, {
-    font: 'bold 32px Cinzel, Georgia, serif',
-    color: '#F4B41A',
-    stroke: '#000000',
-    strokeThickness: 3,
-  });
+  // display 24 — the world tier, exactly as the standard specifies for the
+  // location name card. Location names are short ("A Famosa Fortress" is the
+  // longest at 17 glyphs = 408px), so they fit the viewport at this rung.
+  const titleText = scene.add.text(
+    GAME_WIDTH / 2, GAME_HEIGHT / 3, name,
+    textStyle(TYPE.displayWorld, { color: TEXT_COLOR.brass })
+  );
   titleText.setOrigin(0.5, 0.5);
   titleText.setScrollFactor(0);
   titleText.setDepth(DEPTH_UI_NAME_CARD);

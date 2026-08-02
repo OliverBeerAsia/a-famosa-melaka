@@ -25,6 +25,7 @@ import { useQuestStore } from '../../stores/questStore';
 import objectiveMarkersData from '../../data/objective-markers.json';
 import questHotspotData from '../../data/quest-hotspots.json';
 import type { SystemContext } from '../core/SystemContext';
+import { TEXT_COLOR, TYPE, textStyle } from '../core/typography';
 import {
   INTERACTION_PRIORITY,
 } from '../core/interactionScore';
@@ -253,12 +254,10 @@ export class QuestTriggerSystem {
     beacon.setDepth(990);
     beacon.setBlendMode(Phaser.BlendModes.ADD);
 
-    const label = this.scene.add.text(definition.anchor.x, definition.anchor.y - 38, 'Objective', {
-      font: '11px Cinzel, Georgia, serif',
-      color: '#F4E6BE',
-      stroke: '#000000',
-      strokeThickness: 2,
-    });
+    const label = this.scene.add.text(
+      definition.anchor.x, definition.anchor.y - 38, 'OBJECTIVE',
+      textStyle(TYPE.displayTag, { color: TEXT_COLOR.parchWarm })
+    );
     label.setOrigin(0.5, 1);
     label.setDepth(991);
 
@@ -344,12 +343,10 @@ export class QuestTriggerSystem {
     marker.setStrokeStyle(2, 0x3b2509, 1);
     marker.setDepth(979);
 
-    const labelText = this.scene.add.text(config.x, config.y - 22, config.label, {
-      font: 'italic 11px Cinzel, Georgia, serif',
-      color: '#F4E6BE',
-      stroke: '#000000',
-      strokeThickness: 2,
-    });
+    const labelText = this.scene.add.text(
+      config.x, config.y - 22, config.label,
+      textStyle(TYPE.body, { color: TEXT_COLOR.parch })
+    );
     labelText.setOrigin(0.5, 1);
     labelText.setDepth(980);
     labelText.setVisible(false);

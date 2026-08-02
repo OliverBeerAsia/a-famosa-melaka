@@ -312,13 +312,18 @@ export class EnvironmentObjectSystem {
 
   /**
    * Create a flag wave effect.
+   *
+   * Depth goes through `worldDepth` like everything else in the world. Raw y
+   * was safe only while the world was exactly the 540px viewport; in a
+   * 1080-tall scrolling world any prop below y=800 lands INSIDE the FX band and
+   * draws over the fog and the colour grade (a-famosa's palm at y=909 did).
    */
   private createFlagWave(x: number, y: number): void {
     if (this.scene.textures.exists('flag-wave') && this.scene.anims.exists('flag-flutter')) {
       const flag = this.scene.add.sprite(x, y, 'flag-wave');
       flag.setOrigin(0.5, 1);
       flag.setScale(3);
-      flag.setDepth(y - 10);
+      flag.setDepth(worldDepth(y - 10));
       flag.play('flag-flutter');
       this.animatedPlacements.push({
         sprite: flag,
@@ -328,7 +333,7 @@ export class EnvironmentObjectSystem {
     }
 
     const flag = this.scene.add.rectangle(x, y, 24, 16, 0xCC2020, 0.9);
-    flag.setDepth(y - 10);
+    flag.setDepth(worldDepth(y - 10));
 
     const tween = this.scene.tweens.add({
       targets: flag,
@@ -355,7 +360,7 @@ export class EnvironmentObjectSystem {
       const palm = this.scene.add.sprite(x, y, 'palm-frond');
       palm.setOrigin(0.5, 1);
       palm.setScale(3);
-      palm.setDepth(y);
+      palm.setDepth(worldDepth(y));
       palm.play('palm-sway');
 
       this.animatedPlacements.push({
@@ -370,7 +375,7 @@ export class EnvironmentObjectSystem {
     const palm = this.scene.add.image(x, y, 'palm-tree');
     palm.setOrigin(0.5, 1);
     palm.setScale(3);
-    palm.setDepth(y);
+    palm.setDepth(worldDepth(y));
 
     const tween = this.scene.tweens.add({
       targets: palm,
@@ -396,7 +401,7 @@ export class EnvironmentObjectSystem {
       const awning = this.scene.add.sprite(x, y, 'awning-flutter');
       awning.setOrigin(0.5, 0);
       awning.setScale(3);
-      awning.setDepth(y - 20);
+      awning.setDepth(worldDepth(y - 20));
       awning.play('awning-flutter-anim');
 
       this.animatedPlacements.push({
@@ -411,7 +416,7 @@ export class EnvironmentObjectSystem {
     const awning = this.scene.add.image(x, y, 'awning');
     awning.setOrigin(0.5, 0);
     awning.setScale(3);
-    awning.setDepth(y - 20);
+    awning.setDepth(worldDepth(y - 20));
 
     const tween = this.scene.tweens.add({
       targets: awning,
@@ -491,7 +496,7 @@ export class EnvironmentObjectSystem {
     }
 
     const emitter = this.scene.add.particles(0, 0, texKey, config);
-    emitter.setDepth(y + 10);
+    emitter.setDepth(worldDepth(y + 10));
     this.particleEmitters.push(emitter);
   }
 

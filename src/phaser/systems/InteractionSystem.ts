@@ -16,6 +16,7 @@
 import Phaser from 'phaser';
 import { GAME_WIDTH, GAME_HEIGHT } from '../game';
 import { DEPTH_UI_PROMPT } from '../core/depth';
+import { TYPE, textStyle } from '../core/typography';
 import type { SystemContext } from '../core/SystemContext';
 import {
   directionBetween,
@@ -90,19 +91,23 @@ export class InteractionSystem {
   }
 
   createPrompt() {
+    // display 16, not the standard's example of 24.
+    //
+    // The standard's own rule is "if a string does not fit at a legal size, the
+    // container changes — never the size", and this container CANNOT change: it
+    // is pinned to the 960px viewport. At 24px the longest real prompt
+    // ("[Space] Travel to St Paul's Church Hill", 39 glyphs) is 936px before
+    // padding and overflows. 16px is the next legal rung down and the ladder's
+    // designated size for button-tier legends, which is what a prompt is.
     this.prompt = this.scene.add.text(
       GAME_WIDTH / 2,
       GAME_HEIGHT - 28,
       '',
-      {
-        font: 'bold 16px Cinzel, Georgia, serif',
-        color: '#F4E6C8',
-        stroke: '#000000',
-        strokeThickness: 4,
+      textStyle(TYPE.displayLabel, {
         align: 'center',
         backgroundColor: 'rgba(26, 14, 7, 0.78)',
         padding: { x: 10, y: 6 },
-      }
+      })
     );
     this.prompt.setOrigin(0.5, 1);
     this.prompt.setScrollFactor(0);

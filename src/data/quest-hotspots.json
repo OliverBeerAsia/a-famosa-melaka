@@ -1,0 +1,35 @@
+{
+  "_meta": {
+    "purpose": "Scripted, quest-stage-gated interaction points in the world. These are the triggers that only exist while a quest is at a particular stage, which is why they live here rather than in <id>.location.json — the location schema has no notion of quest stage.",
+    "coordinateSpace": "NATIVE plate px, same as <id>.location.json. QuestTriggerSystem multiplies by the location's world.scale exactly once, on load.",
+    "availabilityContract": "`stages` lists the quest stage ids at which the hotspot exists at all; `timeOfDay` narrows it further. Both must pass. The predicate itself stays in QuestTriggerSystem — this file supplies WHERE and WHAT, not HOW."
+  },
+  "hotspots": [
+    {
+      "id": "merchants-seal-counting-house-entry",
+      "locationId": "waterfront",
+      "label": "Slip into the counting house",
+      "questId": "merchants-seal",
+      "stages": ["choose-path", "theft-attempt", "theft-choice"],
+      "timeOfDay": ["night"],
+      "x": 570,
+      "y": 262,
+      "radius": 30,
+      "onInteract": "merchants-seal:stealth-counting-house",
+      "_note": "COUNTING_HOUSE_DOOR fallback anchor from docs/design/data-drafts/theft-waterfront-night.draft.json — the walkable dirt strip on the south face of the customs-shed block, directly below the `customs-house` prop at (570,241). Replaces the pre-scrolling hardcode (620,250), which was authored against the old 960x540 waterfront and resolves to open water on the 640x360 plate. Moves to the draft's PRIMARY (596,296) once the counting-house building module lands in the waterfront plate layout."
+    },
+    {
+      "id": "merchants-seal-drawer-search",
+      "locationId": "waterfront",
+      "label": "Search the ledger drawer",
+      "questId": "merchants-seal",
+      "stages": ["theft-success"],
+      "timeOfDay": ["night"],
+      "x": 570,
+      "y": 262,
+      "radius": 26,
+      "onInteract": "merchants-seal:search-drawer",
+      "_note": "Shares the door anchor: the draft gives no separate interior anchor, and the drawer is reached THROUGH the door, so the player stands in the same place for both. Replaces the pre-scrolling hardcode (575,235), which also resolved to water."
+    }
+  ]
+}

@@ -24,6 +24,7 @@
 
 import Phaser from 'phaser';
 import { worldDepth } from '../core/depth';
+import { TEXT_COLOR, TYPE, textStyle } from '../core/typography';
 import { getLocationPlateProps } from '../core/LocationData';
 import type { SystemContext } from '../core/SystemContext';
 import { EnvironmentObjectSystem } from './EnvironmentObjectSystem';
@@ -83,11 +84,15 @@ interface WorldItemData {
   description: string;
 }
 
-/** Shared furniture for a world object: sprite, ground glow, pip, hover label. */
+/**
+ * Shared furniture for a world object: sprite, contact shadow, ground glow,
+ * pip, hover label.
+ */
 interface PlacedObject {
   sprite: Phaser.GameObjects.Image;
   anchorX: number;
   anchorY: number;
+  shadow: Phaser.GameObjects.Ellipse;
   glow: Phaser.GameObjects.Ellipse;
   marker: Phaser.GameObjects.Arc;
   label: Phaser.GameObjects.Text;
@@ -122,6 +127,57 @@ export interface WorldObjectDeps {
   /** Toast for pickups. */
   notify(text: string): void;
 }
+
+/**
+ * Transparent padding, in source px, below the last opaque row of a texture.
+ *
+ * Item icons are drawn as UI glyphs inside a 48x48 canvas, so a bottom-anchored
+ * sprite puts the CANVAS bottom on the ground and leaves the drawn object
+ * hovering above it. Measured once per texture and cached — the scan is a few
+ * thousand pixels and the result never changes.
+ */
+const groundPaddingCache = new Map<string, number>();
+
+function groundPadding(scene: Phaser.Scene, textureKey: string): number {
+  const cached = groundPaddingCache.get(textureKey);
+  if (cached !== undefined) return cached;
+
+  let padding = 0;
+  try {
+    const source = scene.textures.get(textureKey).getSourceImage() as CanvasImageSource & {
+      width: number; height: number;
+    };
+    const scratchKey = `${textureKey}-ground-scan`;
+    const canvas = scene.textures.createCanvas(scratchKey, source.width, source.height);
+    if (canvas) {
+      canvas.context.clearRect(0, 0, source.width, source.height);
+      canvas.context.drawImage(source, 0, 0);
+      const rgba = canvas.context.getImageData(0, 0, source.width, source.height).data;
+      scene.textures.remove(scratchKey);
+
+      for (let y = source.height - 1; y >= 0; y -= 1) {
+        let rowHasInk = false;
+        for (let x = 0; x < source.width; x += 1) {
+          if (rgba[(y * source.width + x) * 4 + 3] > 8) { rowHasInk = true; break; }
+        }
+        if (rowHasInk) break;
+        padding += 1;
+      }
+    }
+  } catch {
+    // A texture we cannot scan simply gets no correction.
+    padding = 0;
+  }
+
+  groundPaddingCache.set(textureKey, padding);
+  return padding;
+}
+
+/** Contact shadow proportions, per the art bible: >=60% of foot width. */
+const SHADOW_WIDTH_RATIO = 0.72;
+const SHADOW_FLATTEN = 0.34;
+const SHADOW_MIN_WIDTH = 14;
+const SHADOW_ALPHA = 0.3;
 
 export class WorldObjectSystem {
   private readonly scene: Phaser.Scene;
@@ -161,7 +217,14 @@ export class WorldObjectSystem {
     this.environment.setTimeOfDay(this.ctx.timeOfDay());
   }
 
-  /** Shared furniture builder: glow, pip and hidden label around a sprite. */
+  /**
+   * Shared furniture builder: contact shadow, ground glow, pip and hidden label.
+   *
+   * The shadow is what stops a composited object reading as levitating. At our
+   * character:screen ratio it is not optional decoration — an object with no
+   * contact shadow sits at chest height no matter where its base is, which is
+   * exactly how the pickups used to read.
+   */
   private decorate(
     sprite: Phaser.GameObjects.Image,
     x: number,
@@ -170,14 +233,24 @@ export class WorldObjectSystem {
     style: {
       glow: { w: number; h: number; color: number; alpha: number };
       pip: { radius: number; color: number; alpha: number; strokeAlpha: number };
-      font: string;
       color: string;
     },
   ): PlacedObject {
     const markerY = y - Math.max(22, sprite.displayHeight) - 8;
 
+    // Contact shadow, on the ground directly under the object's base. Drawn
+    // just behind the sprite so the sprite always sits on top of it.
+    const shadowWidth = Math.max(SHADOW_MIN_WIDTH, sprite.displayWidth * SHADOW_WIDTH_RATIO);
+    const shadow = this.scene.add.ellipse(
+      x, y, shadowWidth, shadowWidth * SHADOW_FLATTEN, 0x000000,
+      SHADOW_ALPHA * this.ctx.visualProfile().shadowAlphaMultiplier,
+    );
+    shadow.setDepth(Math.max(0, sprite.depth - 1));
+
+    // Interaction glow, hugging the base so it reads as ground contact rather
+    // than a halo floating in front of the object.
     const glow = this.scene.add.ellipse(
-      x, y - 4, style.glow.w, style.glow.h, style.glow.color, style.glow.alpha
+      x, y, style.glow.w, style.glow.h, style.glow.color, style.glow.alpha
     );
     glow.setDepth(979);
     glow.setBlendMode(Phaser.BlendModes.ADD);
@@ -187,17 +260,17 @@ export class WorldObjectSystem {
     marker.setStrokeStyle(1, 0x3b2509, style.pip.strokeAlpha);
     marker.setDepth(sprite.depth + 1);
 
-    const label = this.scene.add.text(x, markerY - 12, labelText, {
-      font: style.font,
-      color: style.color,
-      stroke: '#000000',
-      strokeThickness: 2,
-    });
+    // Floating world-space label: body 20 with the hard one-glyph shadow, per
+    // the standard's rule for text that cannot have a plate behind it.
+    const label = this.scene.add.text(
+      x, markerY - 12, labelText,
+      textStyle(TYPE.body, { color: style.color })
+    );
     label.setOrigin(0.5, 1);
     label.setDepth(sprite.depth + 2);
     label.setVisible(false);
 
-    return { sprite, anchorX: x, anchorY: y, glow, marker, label };
+    return { sprite, anchorX: x, anchorY: y, shadow, glow, marker, label };
   }
 
   private createWorldItems() {
@@ -206,17 +279,21 @@ export class WorldObjectSystem {
 
     worldItems.forEach((item) => {
       const spriteKey = this.resolveWorldItemSpriteKey(item.itemId);
+      const scale = this.getWorldItemScale(spriteKey);
       const sprite = this.scene.add.image(item.x, item.y, spriteKey);
+      // Bottom-centre anchored, then pushed down by whatever transparent
+      // padding the icon carries under its last opaque row, so the DRAWN base
+      // lands on item.y rather than the canvas edge.
       sprite.setOrigin(0.5, 1);
-      sprite.setScale(this.getWorldItemScale(spriteKey));
+      sprite.setScale(scale);
+      sprite.y = item.y + groundPadding(this.scene, spriteKey) * scale;
       sprite.setDepth(worldDepth(item.y));
 
       const itemName = ITEM_DEFINITIONS[item.itemId]?.name || item.itemId;
       const placed = this.decorate(sprite, item.x, item.y, itemName, {
         glow: { w: 26, h: 13, color: 0xF4B41A, alpha: 0.1 },
         pip: { radius: 3.5, color: 0xF4B41A, alpha: 0.7, strokeAlpha: 0.8 },
-        font: '12px Cinzel, Georgia, serif',
-        color: '#F4E6BE',
+        color: TEXT_COLOR.parch,
       });
 
       this.items.push({
@@ -261,13 +338,13 @@ export class WorldObjectSystem {
       const sprite = this.scene.add.image(x, y, spriteKey);
       sprite.setOrigin(0.5, 1);
       sprite.setScale(2); // match prop scale on the plate (3x was oversized)
+      sprite.y = y + groundPadding(this.scene, spriteKey) * 2;
       sprite.setDepth(worldDepth(y));
 
       const placed = this.decorate(sprite, x, y, obj.name, {
         glow: { w: 28, h: 14, color: 0xD4AF37, alpha: 0.06 },
         pip: { radius: 3, color: 0xD4AF37, alpha: 0.55, strokeAlpha: 0.7 },
-        font: 'italic 11px Cinzel, Georgia, serif',
-        color: '#D4AF37',
+        color: TEXT_COLOR.brass,
       });
 
       this.lore.push({
@@ -431,6 +508,7 @@ export class WorldObjectSystem {
 
   private destroyPlaced(placed: PlacedObject) {
     placed.sprite.destroy();
+    placed.shadow.destroy();
     placed.glow.destroy();
     placed.marker.destroy();
     placed.label.destroy();

@@ -244,6 +244,7 @@ export class GameScene extends Phaser.Scene {
 
     this.questTriggers = new QuestTriggerSystem(this, this.ctx, {
       notify: (text) => this.showNotification(text),
+      worldScale: () => this.location?.world.scale ?? 1,
     });
     this.questTriggers.create();
 

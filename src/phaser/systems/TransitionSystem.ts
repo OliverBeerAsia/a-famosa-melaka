@@ -20,6 +20,7 @@ import { getLocation } from '../core/LocationData';
 import { getLocationName } from '../../data/locationNames';
 import { meetsConditionalRequirements } from '../core/requirements';
 import { showLocationCard } from '../core/notify';
+import { TEXT_COLOR, TYPE, textStyle } from '../core/typography';
 import { emitGameEvent } from '../eventBridge';
 import type { SystemContext } from '../core/SystemContext';
 import {
@@ -111,12 +112,7 @@ export class TransitionSystem {
       const label = this.scene.add.text(
         x, y - 24,
         available ? transition.label : (transition.lockedLabel || transition.label),
-        {
-          font: 'italic 11px Cinzel, Georgia, serif',
-          color: '#F4E6BE',
-          stroke: '#000000',
-          strokeThickness: 2,
-        }
+        textStyle(TYPE.body, { color: TEXT_COLOR.parch })
       );
       label.setOrigin(0.5, 1);
       label.setDepth(980);
