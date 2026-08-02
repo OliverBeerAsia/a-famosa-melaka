@@ -64,8 +64,26 @@ function measure(id) {
 }
 
 const argv = process.argv.slice(2);
+
+/**
+ * `--all` means every WORLD, not every file in the folder.
+ *
+ * This metric samples walkable pixels that touch blocked ones. A title or
+ * loading panorama (`"kind": "screen"`) has no walk mask worth the name — it is
+ * a picture, not somewhere you can stand — so the handful of boundary pixels it
+ * does produce are meaningless, and reporting a FAIL against them is a false
+ * alarm that trains everyone to ignore the gate. Screens are skipped, and named
+ * explicitly on the command line if anyone ever wants the number anyway.
+ */
+function isScreen(id) {
+  try {
+    return JSON.parse(fs.readFileSync(path.join(LAYOUTS, `${id}.json`), 'utf8')).kind === 'screen';
+  } catch (e) { return false; }
+}
+
 const ids = argv.includes('--all')
-  ? fs.readdirSync(LAYOUTS).filter((f) => f.endsWith('.json')).map((f) => f.replace(/\.json$/, ''))
+  ? fs.readdirSync(LAYOUTS).filter((f) => f.endsWith('.json'))
+    .map((f) => f.replace(/\.json$/, '')).filter((id) => !isScreen(id))
   : argv.filter((a) => !a.startsWith('--'));
 
 console.log('benchmark #17 (strict, per-boundary-pixel)   gate: >=25% separation');

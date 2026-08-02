@@ -336,22 +336,27 @@
   /* The one scrim for every full-screen backdrop.
      Built on the canon's shadow anchors (#0C0C18 void / #181830 violet), never
      neutral black, so an interstitial sits in the same night as the world.
-     It is OPAQUE in the top and bottom bands on purpose: the placeholder
-     title/loading plates have their own titles baked into them, and a
-     translucent scrim lets those ghost through behind our chrome. The middle
-     band stays open so the skyline silhouette still reads. */
+
+     It used to be fully OPAQUE in a band top and bottom. That was a workaround,
+     not a design: the placeholder title/loading plates had "A FAMOSA" and
+     "MELAKA 1580" PAINTED INTO THEM, and a translucent scrim let that baked
+     type ghost through behind the real React chrome, so the bands existed
+     purely to hide two strips of somebody else's typography.
+
+     tools/forge/title-screen.cjs replaced both plates with a composed panorama
+     that carries no text at all, so the workaround is gone and this is an EVEN
+     VEIL again — a little heavier at the very bottom, where the menu sits, and
+     nowhere opaque. The whole roadstead reads behind the title. */
   .ui-screen-scrim {
     position: absolute;
     inset: 0;
     background: linear-gradient(
       180deg,
-      #0C0C18 0%,
-      #0C0C18 20%,
-      rgba(24, 24, 48, 0.55) 34%,
-      rgba(24, 24, 48, 0.68) 60%,
-      rgba(12, 12, 24, 0.95) 74%,
-      #0C0C18 80%,
-      #0C0C18 100%
+      rgba(12, 12, 24, 0.58) 0%,
+      rgba(24, 24, 48, 0.44) 26%,
+      rgba(24, 24, 48, 0.42) 52%,
+      rgba(12, 12, 24, 0.56) 78%,
+      rgba(12, 12, 24, 0.72) 100%
     );
     pointer-events: none;
   }

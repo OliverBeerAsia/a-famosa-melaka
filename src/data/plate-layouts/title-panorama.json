@@ -27,6 +27,7 @@
     "shoulder; the roadstead with a Fujian junk, a Gujarati dhow and the lighters",
     "working between them; the quay in the near foreground with its lamps lit."
   ],
+  "kind": "screen",
   "canvas": { "width": 320, "height": 180 },
   "iso": { "tileWidth": 32, "tileHeight": 16, "originX": 160, "originY": 0 },
   "horizon": { "skyTo": 84, "skyTop": 0, "skyBottom": 3, "groundFrom": 84 },
