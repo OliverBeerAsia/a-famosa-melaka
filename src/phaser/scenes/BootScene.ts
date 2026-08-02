@@ -67,8 +67,9 @@ export class BootScene extends Phaser.Scene {
     });
     this.loadingText.setOrigin(0.5);
 
-    // Progress bar background
-    this.add.rectangle(width / 2, height / 2, 400, 20, 0x2A1A0A);
+    // Progress bar background — hardwood trough, brass fill (kit palette;
+    // the full gauge-trough asset needs a two-phase loader, deferred)
+    this.add.rectangle(width / 2, height / 2, 400, 20, 0x24101C);
 
     // Progress bar
     this.progressBar = this.add.graphics();
@@ -76,7 +77,7 @@ export class BootScene extends Phaser.Scene {
     // Progress events
     this.load.on('progress', (value: number) => {
       this.progressBar.clear();
-      this.progressBar.fillStyle(0xD4AF37, 1);
+      this.progressBar.fillStyle(0xD8A428, 1);
       this.progressBar.fillRect(width / 2 - 198, height / 2 - 8, 396 * value, 16);
     });
 
