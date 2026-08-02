@@ -66,7 +66,12 @@ def('crate-stack', { collide: 0.9, examine: 'Crates stacked two high, roped agai
 function sackBody(s, iso, tx, ty, z, h, seed, ramp) {
   const c = iso.toScreen(tx, ty, z);
   const R = P.RAMPS[ramp || 'earth'];
-  const wMax = 8;
+  // A SACK IS TALLER THAN IT IS WIDE. At wMax 8 the body came out 16px across
+  // against a 17px height — square, and a square soft mass with a rounded top
+  // is a BOULDER, which is exactly how the play session read the sack piles.
+  // Narrowing the belly is the whole fix: the same drawing at 12px wide and
+  // 17 tall reads as a sack of rice immediately.
+  const wMax = 6;
   for (let v = 0; v < h; v++) {
     const t = v / h;
     // profile: wide belly (t~0.3), waisted shoulder (t~0.82), pinched neck
@@ -88,8 +93,10 @@ function sackBody(s, iso, tx, ty, z, h, seed, ramp) {
   }
   // gathered neck + cord tie + the little ears of surplus cloth above it
   const ny = Math.round(c.y) - h;
-  for (let dx = -3; dx <= 3; dx++) s.setHex(Math.round(c.x) + dx, ny + 1, step(R, dx < 0 ? 2 : 1));
-  for (let dx = -2; dx <= 2; dx++) s.setHex(Math.round(c.x) + dx, ny, step(R, 0));
+  // the CORD is the label on this object — two dark rows with a lit pixel above
+  for (let dx = -3; dx <= 3; dx++) s.setHex(Math.round(c.x) + dx, ny + 2, step(R, 0));
+  for (let dx = -3; dx <= 3; dx++) s.setHex(Math.round(c.x) + dx, ny + 1, step(P.RAMPS.timber, dx < 0 ? 3 : 1));
+  for (let dx = -2; dx <= 2; dx++) s.setHex(Math.round(c.x) + dx, ny, step(R, dx < 0 ? 3 : 1));
   s.setHex(Math.round(c.x) - 3, ny - 1, step(R, 3));
   s.setHex(Math.round(c.x) - 2, ny - 2, step(R, 4));
   s.setHex(Math.round(c.x) + 2, ny - 1, step(R, 2));
@@ -177,8 +184,19 @@ def('pot-row', { collide: 0.8, examine: 'Water jars set out to catch the afterno
     contactShadow(s, iso, o.tx + dx, o.ty + dy, 0.38);
     isoCyl(s, iso, {
       tx: o.tx + dx, ty: o.ty + dy, r: 0.34, h, material: 'terracotta', seed: (o.seed || 1) + i,
-      profile: (t) => 0.6 + 0.8 * Math.sin(Math.PI * clamp(t * 0.88 + 0.06, 0, 1)),
+      // waisted in at the neck so the jar has a SHOULDER — the old profile was
+      // a plain bulge, and a bulge with a rounded top is a rock
+      profile: (t) => (t > 0.84 ? 0.52 : 0.6 + 0.8 * Math.sin(Math.PI * clamp(t * 0.88 + 0.06, 0, 1))),
     });
+    // the rim: a lit lip and the dark mouth under it. Two rows, and they are
+    // what turns a terracotta lump into a water jar at 13 native px.
+    const cc = iso.toScreen(o.tx + dx + 0.02, o.ty + dy + 0.02, h);
+    for (let k = -4; k <= 4; k++) {
+      const t = Math.abs(k) / 4;
+      if (t > 1) continue;
+      s.setHex(Math.round(cc.x) + k, Math.round(cc.y) - 1, step(P.RAMPS.terracotta, k < 0 ? 4 : 3));
+      s.setHex(Math.round(cc.x) + k, Math.round(cc.y), step(P.RAMPS.terracotta, 0));
+    }
   });
 });
 

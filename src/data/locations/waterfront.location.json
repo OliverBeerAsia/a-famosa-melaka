@@ -1,7 +1,7 @@
 {
   "id": "waterfront",
   "name": "The Waterfront",
-  "coordVersion": 7,
+  "coordVersion": 8,
   "world": {
     "scale": 3,
     "nativeWidth": 640,

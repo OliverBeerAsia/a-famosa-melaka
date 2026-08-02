@@ -729,17 +729,22 @@ def('anchor-stock', { collide: 0.6, examine: 'A ship\'s anchor, stock and all, l
   const seed = o.seed || 5;
   contactShadow(s, iso, o.tx, o.ty, 1.0, 0.34);
   const c = iso.toScreen(o.tx, o.ty, 0);
-  const H = o.h || 46;
-  const lean = o.lean === undefined ? 7 : o.lean;
+  // A FORGED IRON ANCHOR, not a wire coat-hanger. It stood 59px — nearly two
+  // player heights of quay clutter — on a 3px shank, so it read as a spindly
+  // cross rather than as the heaviest object on the dock. Shorter and much
+  // thicker: an anchor is defined by its MASS, and at this size mass means
+  // width. The shank now tapers from 5px at the crown to 4px at the throat.
+  const H = o.h || 34;
+  const lean = o.lean === undefined ? 6 : o.lean;
   const iron = P.RAMPS.stone;
   const cx = Math.round(c.x), cy = Math.round(c.y);
   const shankX = (v) => cx + Math.round(lean * (v / H));
-  // shank
   for (let v = 0; v < H; v++) {
     const x = shankX(v);
-    s.setHex(x - 1, cy - 4 - v, step(iron, 4));
-    s.setHex(x, cy - 4 - v, step(iron, 3));
-    s.setHex(x + 1, cy - 4 - v, step(iron, 1));
+    const wide = v < H * 0.72 ? 2 : 1;          // thicker toward the throat
+    for (let k = -wide; k <= wide; k++) {
+      s.setHex(x + k, cy - 4 - v, step(iron, k < 0 ? 4 : k === 0 ? 3 : k === wide ? 0 : 1));
+    }
   }
   // ring at the head
   const hx = shankX(H), hy = cy - 4 - H;

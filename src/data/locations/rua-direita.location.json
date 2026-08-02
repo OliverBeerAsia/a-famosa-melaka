@@ -1,7 +1,7 @@
 {
   "id": "rua-direita",
   "name": "Rua Direita",
-  "coordVersion": 10,
+  "coordVersion": 11,
   "world": {
     "scale": 3,
     "nativeWidth": 640,

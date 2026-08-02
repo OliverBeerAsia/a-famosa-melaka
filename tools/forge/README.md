@@ -461,3 +461,23 @@ a regression, not an exemption.
 - The plate masters are Canva-era exports with heavy ordered dither. The
   coherence pass tames the worst of what relighting does to that dither, but the
   real fix is Stage 3 composing plates from the Forge kits.
+
+### Line-weight rule, and its one standing exception
+
+Every rope, cord, stay and haft in the kits is **at least 2 native px** — a
+strand and its own shade — and ropes go through `primitives.cjs ropeSpan()`,
+which also picks each column's value off the background it crosses (dark timber
+over sky, light earth over a shadowed facade). One native pixel is below this
+art's minimum feature size: a 40-60px run of it reads as a scratch on the image,
+not as a cord, and it is worst at night when the plate darkens around it and the
+line does not.
+
+**The standing exception, approved permanently: ship rigging on `junk` and
+`dhow` stays 1px DASHED.** Taut standing rigging seen across open water is the
+one case where a broken hairline is the correct read; drawing it at 2px solid
+makes every hull look cobwebbed. It is deliberate, it is not an oversight, and
+it should not be "fixed".
+
+`tools/forge/prop-ruler.cjs` audits the rest — drawn height against a declared
+real-world size class, outline ratio (no prop may carry a uniform dark keyline),
+and contact-shadow presence per benchmark #13.

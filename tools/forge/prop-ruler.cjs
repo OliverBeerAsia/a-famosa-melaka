@@ -42,6 +42,18 @@ const REVIEW = path.join(REPO, 'docs/art-bible/forge/review/prop-ruler.png');
 
 /**
  * SIZE CLASSES, in native px of drawn height. The player is 32.
+ *
+ * CALIBRATION NOTE. The first run flagged four props. Rendering them against a
+ * 32px player bar showed THREE were the CLASS being wrong, not the art: a cloth
+ * rack and a potted palm are things you walk past at head height, and a stack
+ * of bales reaches a man's chest. Those classes were corrected rather than the
+ * props shrunk — a ruler that makes you cut down good art to satisfy a number
+ * somebody guessed is worse than no ruler. Only `anchor-stock` was a real
+ * defect — but only in its SILHOUETTE. Checked against reality, a carrack
+ * anchor is 2.5-3.5 m, and the player's 32px is about 1.75 m, so 46-64px is the
+ * honest band for one: `waistHigh` was wrong and so was the `chestHigh` I first
+ * corrected it to. It is classed `overhead` and the fix was thickening the
+ * shank, which is what actually made it read as forged iron rather than wire.
  * A prop not listed here is unclassified and only gets the outline/contact
  * checks — add it to a class when you know what it is meant to be.
  */
@@ -62,9 +74,9 @@ const SIZES = {
   'rope-coil': 'handheld', bench: 'kneeHigh', 'water-trough': 'waistHigh',
   bollard: 'kneeHigh', 'lantern-post': 'overhead', brazier: 'waistHigh',
   'step-stone': 'handheld', 'market-stall': 'overhead', 'signboard-chinese': 'overhead',
-  'cloth-rack': 'chestHigh', handcart: 'chestHigh', 'potted-palm': 'chestHigh',
+  'cloth-rack': 'overhead', handcart: 'chestHigh', 'potted-palm': 'overhead',
   'banana-clump': 'structure', 'chicken-coop': 'kneeHigh', 'laundry-line': 'structure',
-  'bale-stack': 'waistHigh', 'net-pile': 'kneeHigh', 'anchor-stock': 'waistHigh',
+  'bale-stack': 'chestHigh', 'net-pile': 'kneeHigh', 'anchor-stock': 'overhead',
   capstan: 'waistHigh', 'drying-rack-fish': 'overhead', 'mat-rolls': 'kneeHigh',
   'rice-mortar': 'kneeHigh', 'arms-rack': 'overhead', cannon: 'waistHigh',
   'powder-store': 'chestHigh', 'sentry-box': 'structure', gravestone: 'kneeHigh',

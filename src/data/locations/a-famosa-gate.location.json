@@ -1,7 +1,7 @@
 {
   "id": "a-famosa-gate",
   "name": "A Famosa Fortress Gate",
-  "coordVersion": 7,
+  "coordVersion": 8,
   "world": {
     "scale": 3,
     "nativeWidth": 640,
