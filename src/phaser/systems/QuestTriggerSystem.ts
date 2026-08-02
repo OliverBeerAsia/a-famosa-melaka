@@ -23,6 +23,7 @@ import { emitGameEvent } from '../eventBridge';
 import { useDialogueStore } from '../../stores/dialogueStore';
 import { useQuestStore } from '../../stores/questStore';
 import objectiveMarkersData from '../../data/objective-markers.json';
+import questHotspotData from '../../data/quest-hotspots.json';
 import type { SystemContext } from '../core/SystemContext';
 import {
   INTERACTION_PRIORITY,
@@ -60,7 +61,48 @@ interface QuestHotspot {
 export interface QuestTriggerDeps {
   /** Toast for scripted feedback ("You recover the trading seal."). */
   notify(text: string): void;
+  /** Native -> world px scale for the current location. */
+  worldScale(): number;
 }
+
+/** A hotspot definition as authored in src/data/quest-hotspots.json. */
+interface QuestHotspotDef {
+  id: string;
+  locationId: string;
+  label: string;
+  questId: string;
+  stages: string[];
+  timeOfDay?: string[];
+  x: number;
+  y: number;
+  radius: number;
+  onInteract: string;
+}
+
+/**
+ * The scripted effects a hotspot can fire, keyed by the `onInteract` token in
+ * the data. Availability is data (which stage, which hour); the EFFECT stays
+ * code, because these are quest beats with real consequences rather than
+ * anything a schema should be inventing.
+ */
+type HotspotEffect = (system: QuestTriggerSystem) => void;
+
+const HOTSPOT_EFFECTS: Record<string, HotspotEffect> = {
+  'merchants-seal:stealth-counting-house': (system) => {
+    const quest = useQuestStore.getState().activeQuests.find((q) => q.id === 'merchants-seal');
+    if (!quest) return;
+    if (quest.currentStageId === 'choose-path') {
+      emitGameEvent('quest:path:request', 'theft');
+    }
+    useQuestStore.getState().recordLocation(system.locationId());
+    useQuestStore.getState().recordStealth('counting-house');
+    system.notify('You sneak close to the counting house door...');
+  },
+  'merchants-seal:search-drawer': (system) => {
+    useQuestStore.getState().recordSearch('counting-house-drawer');
+    system.notify('You recover the trading seal.');
+  },
+};
 
 export class QuestTriggerSystem {
   private readonly scene: Phaser.Scene;
@@ -235,49 +277,54 @@ export class QuestTriggerSystem {
 
   // -- quest hotspots ------------------------------------------------------
 
+  /** Exposed for the hotspot effects table. */
+  locationId(): string { return this.ctx.locationId(); }
+  notify(text: string) { this.deps.notify(text); }
+
   /**
-   * Build this location's scripted hotspots.
+   * Build this location's scripted hotspots from src/data/quest-hotspots.json.
    *
-   * The demo ships two, both on the waterfront theft path. They stay as code
-   * rather than data because their availability reads quest STAGE, which no
-   * declarative form in the location schema expresses yet; the shape here is
-   * deliberately the one a data-driven version would take.
+   * Coordinates are authored in NATIVE plate px like every other per-location
+   * coordinate in the project, and scaled here exactly once. The previous
+   * hardcodes were authored against the pre-scrolling 960x540 waterfront and
+   * pointed at open water on the 640x360 plate; they only appeared to work
+   * because their 90/78px reach bled back onto the quay.
    */
   create() {
     this.destroyHotspots();
-    if (this.ctx.locationId() !== 'waterfront') return;
 
-    this.hotspots.push(this.makeHotspot({
-      id: 'merchants-seal-counting-house-entry',
-      label: 'Slip into the counting house',
-      x: 620,
-      y: 250,
-      radius: 90,
-      isAvailable: () => this.isTheftEntryAvailable(),
-      onInteract: () => {
-        const quest = useQuestStore.getState().activeQuests.find((q) => q.id === 'merchants-seal');
-        if (!quest) return;
-        if (quest.currentStageId === 'choose-path') {
-          emitGameEvent('quest:path:request', 'theft');
-        }
-        useQuestStore.getState().recordLocation(this.ctx.locationId());
-        useQuestStore.getState().recordStealth('counting-house');
-        this.deps.notify('You sneak close to the counting house door...');
-      },
-    }));
+    const scale = this.deps.worldScale();
+    const defs = (questHotspotData as { hotspots: QuestHotspotDef[] }).hotspots
+      .filter((def) => def.locationId === this.ctx.locationId());
 
-    this.hotspots.push(this.makeHotspot({
-      id: 'merchants-seal-drawer-search',
-      label: 'Search the ledger drawer',
-      x: 575,
-      y: 235,
-      radius: 78,
-      isAvailable: () => this.isDrawerAvailable(),
-      onInteract: () => {
-        useQuestStore.getState().recordSearch('counting-house-drawer');
-        this.deps.notify('You recover the trading seal.');
-      },
-    }));
+    defs.forEach((def) => {
+      const effect = HOTSPOT_EFFECTS[def.onInteract];
+      if (!effect) {
+        console.warn(
+          `[QuestTriggerSystem] hotspot '${def.id}' names effect '${def.onInteract}', `
+          + 'which has no implementation — skipping it.'
+        );
+        return;
+      }
+
+      this.hotspots.push(this.makeHotspot({
+        id: def.id,
+        label: def.label,
+        x: def.x * scale,
+        y: def.y * scale,
+        radius: def.radius * scale,
+        isAvailable: () => this.isDefAvailable(def),
+        onInteract: () => effect(this),
+      }));
+    });
+  }
+
+  /** Stage gate AND hour gate; both must pass. */
+  private isDefAvailable(def: QuestHotspotDef): boolean {
+    const stage = useQuestStore.getState().getQuestStage(def.questId);
+    if (!stage || !def.stages.includes(stage.id)) return false;
+    if (def.timeOfDay && !def.timeOfDay.includes(this.ctx.timeOfDay())) return false;
+    return true;
   }
 
   private makeHotspot(config: {
@@ -308,18 +355,6 @@ export class QuestTriggerSystem {
     labelText.setVisible(false);
 
     return { ...config, glow, marker, labelText };
-  }
-
-  private isTheftEntryAvailable(): boolean {
-    const stage = useQuestStore.getState().getQuestStage('merchants-seal');
-    if (!stage) return false;
-    return ['choose-path', 'theft-attempt', 'theft-choice'].includes(stage.id)
-      && this.ctx.timeOfDay() === 'night';
-  }
-
-  private isDrawerAvailable(): boolean {
-    const stage = useQuestStore.getState().getQuestStage('merchants-seal');
-    return Boolean(stage?.id === 'theft-success' && this.ctx.timeOfDay() === 'night');
   }
 
   // -- interaction ---------------------------------------------------------

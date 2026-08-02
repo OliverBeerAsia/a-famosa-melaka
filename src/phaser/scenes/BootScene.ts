@@ -57,10 +57,13 @@ export class BootScene extends Phaser.Scene {
     // Background
     this.add.rectangle(width / 2, height / 2, width, height, 0x0a0806);
 
-    // Loading text
+    // Loading text — display face per docs/design/typography-standard.md
+    // ("Applying this to Phaser"): legal size, hard 1-glyph-pixel shadow.
     this.loadingText = this.add.text(width / 2, height / 2 - 40, 'Loading...', {
-      font: '24px Cinzel, Georgia, serif',
-      color: '#D4AF37',
+      fontFamily: '"Press Start 2P", monospace',
+      fontSize: '24px',
+      color: '#F0D498',
+      shadow: { offsetX: 3, offsetY: 3, color: '#24101C', blur: 0, fill: true },
     });
     this.loadingText.setOrigin(0.5);
 
@@ -77,8 +80,13 @@ export class BootScene extends Phaser.Scene {
       this.progressBar.fillRect(width / 2 - 198, height / 2 - 8, 396 * value, 16);
     });
 
+    // Category label only — raw asset keys ("sfx-wind-hilltop") are not
+    // player-facing copy.
     this.load.on('fileprogress', (file: Phaser.Loader.File) => {
-      this.loadingText.setText(`Loading: ${file.key}`);
+      const kind = file.type === 'audio' ? 'sounds'
+        : file.type === 'image' || file.type === 'spritesheet' ? 'artwork'
+        : 'the city';
+      this.loadingText.setText(`Loading ${kind}...`);
     });
   }
 
