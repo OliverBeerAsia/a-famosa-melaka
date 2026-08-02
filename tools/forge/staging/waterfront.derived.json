@@ -2,7 +2,7 @@
   "id": "waterfront",
   "name": "The Waterfront Quay",
   "generatedBy": "tools/forge/compose-plate.cjs",
-  "layoutHash": "3403a767e681",
+  "layoutHash": "fd687a853649",
   "world": {
     "scale": 3,
     "nativeWidth": 640,
@@ -497,6 +497,12 @@
         "x": 608,
         "y": 296,
         "width": 16,
+        "height": 8
+      },
+      {
+        "x": 0,
+        "y": 304,
+        "width": 24,
         "height": 8
       },
       {

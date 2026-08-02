@@ -500,10 +500,18 @@ def('arms-rack', { collide: 0.5, examine: 'A rack of pikes and halberds, hafts p
   isoBox(s, iso, { tx: o.tx, ty: o.ty, w: 0.9, d: 0.28, h: 4, material: 'timber', seed: seed + 1 });
   const a = iso.toScreen(o.tx + 0.05, o.ty + 0.14, 0);
   for (let i = 0; i < 6; i++) {
-    const x = Math.round(a.x) + i * 5;
+    const x = Math.round(a.x) + i * 6;
     const lean = (i % 2) ? 1 : -1;
+    // TWO PIXELS OF HAFT, not one. Six 46px-tall single-pixel verticals is six
+    // scratches on the image — below the 3px minimum feature size, and the most
+    // conspicuous thing on the parade ground once the ground seams were dressed.
+    // A pike shaft is round: a lit side and a shade side is the minimum that
+    // reads as a shaft rather than as a rendering artefact.
     for (let v = 0; v < 46; v++) {
-      s.setHex(x + Math.round(lean * v * 0.06), Math.round(a.y) - 2 - v, step(P.RAMPS.timber, i % 2 ? 3 : 1));
+      const hx = x + Math.round(lean * v * 0.06);
+      const y = Math.round(a.y) - 2 - v;
+      s.setHex(hx, y, step(P.RAMPS.timber, i % 2 ? 4 : 2));
+      s.setHex(hx + 1, y, step(P.RAMPS.timber, i % 2 ? 2 : 0));
     }
     // head: a pike point or a halberd axe
     const hx = x + Math.round(lean * 46 * 0.06), hy = Math.round(a.y) - 48;

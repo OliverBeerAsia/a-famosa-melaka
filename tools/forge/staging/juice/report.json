@@ -1,0 +1,199 @@
+{
+  "fxOn": {
+    "rua-direita-day": {
+      "lens": {
+        "postFX": true,
+        "lut": "lut-rua-direita-day",
+        "vignette": 0.28,
+        "grain": 0.024,
+        "haze": 0.036000000000000004
+      },
+      "surfacePool": {
+        "live": 0,
+        "capacity": 24
+      },
+      "benchmark9": {
+        "propPhases": {},
+        "flickerPhases": {
+          "BAB": {
+            "instances": 10,
+            "samples": 16,
+            "lockstepRate": 0,
+            "meanMaxShare": 0.444,
+            "worstMaxShare": 0.6
+          },
+          "BBA": {
+            "instances": 4,
+            "samples": 16,
+            "lockstepRate": 0,
+            "meanMaxShare": 0.516,
+            "worstMaxShare": 0.75
+          },
+          "BACBA": {
+            "instances": 3,
+            "samples": 16,
+            "lockstepRate": 0,
+            "meanMaxShare": 0.5,
+            "worstMaxShare": 0.667
+          }
+        }
+      },
+      "actualLocation": "rua-direita",
+      "actualPhase": "day"
+    },
+    "rua-direita-night": {
+      "lens": {
+        "postFX": true,
+        "lut": "lut-rua-direita-night",
+        "vignette": 0.28,
+        "grain": 0.031200000000000002,
+        "haze": 0.096
+      },
+      "surfacePool": {
+        "live": 0,
+        "capacity": 24
+      },
+      "benchmark9": {
+        "propPhases": {},
+        "flickerPhases": {
+          "BAB": {
+            "instances": 10,
+            "samples": 24,
+            "lockstepRate": 0,
+            "meanMaxShare": 0.442,
+            "worstMaxShare": 0.6
+          },
+          "BBA": {
+            "instances": 4,
+            "samples": 24,
+            "lockstepRate": 0,
+            "meanMaxShare": 0.51,
+            "worstMaxShare": 0.75
+          },
+          "BACBA": {
+            "instances": 3,
+            "samples": 24,
+            "lockstepRate": 0,
+            "meanMaxShare": 0.486,
+            "worstMaxShare": 0.667
+          }
+        }
+      },
+      "actualLocation": "rua-direita",
+      "actualPhase": "night"
+    },
+    "waterfront-day": {
+      "lens": {
+        "postFX": true,
+        "lut": "lut-waterfront-day",
+        "vignette": 0.22,
+        "grain": 0.02,
+        "haze": 0.0585
+      },
+      "surfacePool": {
+        "live": 4,
+        "capacity": 24
+      },
+      "benchmark9": {
+        "propPhases": {
+          "seagull": {
+            "instances": 3,
+            "samples": 16,
+            "lockstepRate": 0.125,
+            "meanMaxShare": 0.667,
+            "worstMaxShare": 1
+          },
+          "awning-flutter": {
+            "instances": 5,
+            "samples": 16,
+            "lockstepRate": 0,
+            "meanMaxShare": 0.538,
+            "worstMaxShare": 0.8
+          },
+          "palm-sway": {
+            "instances": 2,
+            "samples": 16,
+            "lockstepRate": 0.313,
+            "meanMaxShare": 0.656,
+            "worstMaxShare": 1
+          }
+        },
+        "flickerPhases": {
+          "BAB": {
+            "instances": 7,
+            "samples": 16,
+            "lockstepRate": 0,
+            "meanMaxShare": 0.473,
+            "worstMaxShare": 0.571
+          }
+        }
+      },
+      "actualLocation": "waterfront",
+      "actualPhase": "day"
+    },
+    "waterfront-night": {
+      "lens": {
+        "postFX": true,
+        "lut": "lut-waterfront-night",
+        "vignette": 0.22,
+        "grain": 0.026000000000000002,
+        "haze": 0.156
+      },
+      "surfacePool": {
+        "live": 0,
+        "capacity": 24
+      },
+      "benchmark9": {
+        "propPhases": {
+          "seagull": {
+            "instances": 3,
+            "samples": 24,
+            "lockstepRate": 0.125,
+            "meanMaxShare": 0.708,
+            "worstMaxShare": 1
+          },
+          "awning-flutter": {
+            "instances": 5,
+            "samples": 24,
+            "lockstepRate": 0,
+            "meanMaxShare": 0.533,
+            "worstMaxShare": 0.8
+          },
+          "palm-sway": {
+            "instances": 2,
+            "samples": 24,
+            "lockstepRate": 0.25,
+            "meanMaxShare": 0.625,
+            "worstMaxShare": 1
+          }
+        },
+        "flickerPhases": {
+          "BAB": {
+            "instances": 7,
+            "samples": 24,
+            "lockstepRate": 0,
+            "meanMaxShare": 0.458,
+            "worstMaxShare": 0.571
+          }
+        }
+      },
+      "actualLocation": "waterfront",
+      "actualPhase": "night"
+    }
+  },
+  "fxOff": {
+    "lens": {
+      "postFX": false,
+      "lut": null,
+      "vignette": 0.196
+    }
+  },
+  "shots": [
+    "tools/forge/staging/juice/fxon-rua-direita-day.png",
+    "tools/forge/staging/juice/fxon-rua-direita-night.png",
+    "tools/forge/staging/juice/fxon-waterfront-day.png",
+    "tools/forge/staging/juice/fxon-waterfront-night.png",
+    "tools/forge/staging/juice/fxoff-rua-direita-day.png"
+  ],
+  "errors": []
+}

@@ -1,0 +1,59 @@
+{
+  "water": {
+    "placed": {
+      "nx": 312,
+      "ny": 158
+    },
+    "distinct": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "last": {
+      "active": true,
+      "frame": 4,
+      "frames": 8,
+      "periodMs": 2400
+    },
+    "errors": []
+  },
+  "kampung": {
+    "count": 5,
+    "crowd": 10,
+    "ids": [
+      "ayam-kampung",
+      "village-dog"
+    ],
+    "allStanding": true,
+    "maxDepth": 620,
+    "moved": "3/5",
+    "states": [
+      "ayam-kampung:idle",
+      "ayam-kampung:idle",
+      "ayam-kampung:walk",
+      "ayam-kampung:walk",
+      "village-dog:rest"
+    ],
+    "errors": []
+  },
+  "rua-direita": {
+    "count": 2,
+    "crowd": 16,
+    "ids": [
+      "rock-dove"
+    ],
+    "allStanding": true,
+    "maxDepth": 401,
+    "moved": "1/2",
+    "states": [
+      "rock-dove:idle",
+      "rock-dove:idle"
+    ],
+    "errors": []
+  }
+}

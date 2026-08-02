@@ -26,7 +26,7 @@ const clamp = (v, lo, hi) => (v < lo ? lo : v > hi ? hi : v);
 
 // primitives now live in primitives.cjs so every kit can share them without a
 // require cycle through this file.
-const { ellipsePts, contactShadow, isoBox, isoCyl, post, cloth } = PRIM;
+const { ellipsePts, contactShadow, isoBox, isoCyl, post, cloth, ropeSpan } = PRIM;
 
 // --- cooperage / cargo ------------------------------------------------------
 def('barrel', { collide: 0.55, examine: 'A stout oak barrel, hooped in iron.' }, (s, iso, o) => {
@@ -324,8 +324,7 @@ def('market-stall', { collide: 1.4, examine: 'A market stall, its awning bleache
     }
   }
 
-  posts.slice(2).forEach(([dx, dy]) =>
-    post(s, iso, { tx: o.tx + dx, ty: o.ty + dy, h: canopyH, material: 'timber', w: 3 }));
+  // NEAR POSTS ARE DRAWN AFTER THE CANOPY — see below.
 
   // canopy: a shallow gable of striped cloth
   const stripe = culture === 'chinese' ? P.RAMPS.terracotta
@@ -351,6 +350,18 @@ def('market-stall', { collide: 1.4, examine: 'A market stall, its awning bleache
     }
     T.shadePixel(s, x, yy + scallop, 0.35);
   }
+
+  /**
+   * THE NEAR POSTS GO ON LAST.
+   *
+   * They used to be drawn before the canopy, so the canopy covered them and the
+   * two front uprights simply stopped where the cloth began — the posts read as
+   * passing BEHIND a canopy they are actually holding up, which is why the stall
+   * structure looked broken. Painter's order for this object is: far posts ->
+   * counter and goods -> canopy -> NEAR POSTS, exactly as you would build it.
+   */
+  posts.slice(2).forEach(([dx, dy]) =>
+    post(s, iso, { tx: o.tx + dx, ty: o.ty + dy, h: canopyH, material: 'timber', w: 3 }));
 });
 
 def('signboard-chinese', { collide: 0.35, examine: 'A lacquered guild board, its gilt characters flaking.' }, (s, iso, o) => {
@@ -524,49 +535,6 @@ def('chicken-coop', { collide: 0.7, examine: 'A rattan coop; the birds are aslee
   }
 });
 
-/**
- * A ROPE, drawn so it survives at native resolution.
- *
- * THE DEFECT THIS FIXES. A rope used to be one pixel of `earth[1]` per column.
- * One native pixel is BELOW the minimum feature size of this art — every other
- * detail in the game is at least 3px — so a 60px run of it does not read as a
- * cord slung between two buildings, it reads as a SCRATCH ON THE IMAGE. At
- * night, when the plate around it goes dark and the line does not, it is the
- * most conspicuous thing on the screen.
- *
- * Two fixes, and both are needed:
- *
- *  1. TWO PIXELS OF WEIGHT — a strand and its own shade underneath. That is
- *     the minimum that reads as a round thing rather than as a hairline.
- *  2. IT PICKS ITS VALUE OFF WHAT IT CROSSES. A rope runs from a wall, over
- *     the sky, onto another wall, and no single colour reads against all of
- *     them: dark on sky, and it vanishes against the shadowed façade; light
- *     enough for the façade, and it stripes the sky. So each column samples
- *     the pixel it is about to cover and takes the dark treatment over a
- *     bright background and the light one over a dark background. Both
- *     treatments are canon and hue-shifted (timber over sky, earth over
- *     masonry), never a grey.
- */
-function ropeSpan(s, ax, ay, bx, by, opts) {
-  const o = opts || {};
-  const x0 = Math.round(Math.min(ax, bx)), x1 = Math.round(Math.max(ax, bx));
-  const span = Math.max(1, x1 - x0);
-  const sag = o.sag === undefined ? Math.max(3, span * 0.10) : o.sag;
-  const yAt = (x) => {
-    const t = (x - x0) / span;
-    return Math.round(ay + (by - ay) * t + Math.sin(Math.PI * t) * sag);
-  };
-  const T = P.RAMPS.timber, E = P.RAMPS.earth;
-  for (let x = x0; x <= x1; x++) {
-    const y = yAt(x);
-    const u = s.get(x, y);
-    // treat empty (nothing painted yet) as sky — it is, on a plate
-    const bright = !u || u.a !== 255 || (0.299 * u.r + 0.587 * u.g + 0.114 * u.b) > 96;
-    s.setHex(x, y, bright ? step(T, 1) : step(E, 3));
-    s.setHex(x, y + 1, bright ? step(T, 0) : step(E, 2));
-  }
-  return yAt;
-}
 
 def('laundry-line', { collide: 0, examine: 'Washing strung between the upper storeys.' }, (s, iso, o) => {
   const a = iso.toScreen(o.tx, o.ty, o.z || 60);
@@ -602,4 +570,4 @@ require('./arch-malay.cjs');
 require('./arch-fortress.cjs');
 require('./arch-church.cjs');
 
-module.exports = { PROPS, isoBox, isoCyl, post, cloth, contactShadow, ellipsePts };
+module.exports = { PROPS, isoBox, isoCyl, post, cloth, contactShadow, ellipsePts, ropeSpan };

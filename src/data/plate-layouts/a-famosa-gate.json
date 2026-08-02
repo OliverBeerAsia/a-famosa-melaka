@@ -92,8 +92,7 @@
       "light": 3,
       "n": 1.4,
       "surface": "stone",
-      "walkable": true,
-      "variance": 0.4
+      "walkable": true
     },
     {
       "id": "gate-threshold",
@@ -108,16 +107,117 @@
       "light": 2,
       "n": 1.2,
       "surface": "stone",
-      "walkable": true,
-      "variance": 0.4
+      "walkable": true
     },
     {
       "id": "parade-ground",
       "shape": {
-        "sFrom": 30,
-        "sTo": 42,
-        "ddFrom": -15,
-        "ddTo": 15
+        "poly": [
+          {
+            "s": 30.63,
+            "dd": -15
+          },
+          {
+            "s": 30.97,
+            "dd": -11.5
+          },
+          {
+            "s": 29.36,
+            "dd": -7.5
+          },
+          {
+            "s": 29.56,
+            "dd": -3.5
+          },
+          {
+            "s": 30.49,
+            "dd": 0.5
+          },
+          {
+            "s": 29.33,
+            "dd": 4.5
+          },
+          {
+            "s": 29.17,
+            "dd": 8.5
+          },
+          {
+            "s": 30.81,
+            "dd": 12
+          },
+          {
+            "s": 30.48,
+            "dd": 15
+          },
+          {
+            "s": 32.5,
+            "dd": 15.83
+          },
+          {
+            "s": 35,
+            "dd": 14.17
+          },
+          {
+            "s": 37.5,
+            "dd": 14.1
+          },
+          {
+            "s": 40,
+            "dd": 15.53
+          },
+          {
+            "s": 42.08,
+            "dd": 14.5
+          },
+          {
+            "s": 40.7,
+            "dd": 10.5
+          },
+          {
+            "s": 41.88,
+            "dd": 6.5
+          },
+          {
+            "s": 42.7,
+            "dd": 2.5
+          },
+          {
+            "s": 41.51,
+            "dd": -1.5
+          },
+          {
+            "s": 42.06,
+            "dd": -5.5
+          },
+          {
+            "s": 43.28,
+            "dd": -9.5
+          },
+          {
+            "s": 41.94,
+            "dd": -13
+          },
+          {
+            "s": 41.2,
+            "dd": -15
+          },
+          {
+            "s": 40,
+            "dd": -13.98
+          },
+          {
+            "s": 37.5,
+            "dd": -14.86
+          },
+          {
+            "s": 35,
+            "dd": -16.07
+          },
+          {
+            "s": 32.5,
+            "dd": -14.95
+          }
+        ]
       },
       "texture": "trodden",
       "material": "earth",
@@ -175,10 +275,48 @@
     {
       "id": "south-road",
       "shape": {
-        "sFrom": 42,
-        "sTo": 48,
-        "ddFrom": -6,
-        "ddTo": 6
+        "poly": [
+          {
+            "s": 42,
+            "dd": -5.26
+          },
+          {
+            "s": 43.5,
+            "dd": -5.38
+          },
+          {
+            "s": 45,
+            "dd": -6.77
+          },
+          {
+            "s": 46.5,
+            "dd": -6.24
+          },
+          {
+            "s": 48,
+            "dd": -5.63
+          },
+          {
+            "s": 48,
+            "dd": 6.49
+          },
+          {
+            "s": 46.5,
+            "dd": 5.09
+          },
+          {
+            "s": 45,
+            "dd": 5.46
+          },
+          {
+            "s": 43.5,
+            "dd": 6.54
+          },
+          {
+            "s": 42,
+            "dd": 5.73
+          }
+        ]
       },
       "texture": "trodden",
       "material": "earth",
@@ -767,6 +905,64 @@
       "len": 2,
       "z": 64,
       "seed": 93,
+      "examine": false
+    },
+    {
+      "type": "plot-kerb",
+      "edgeOf": "parade-ground",
+      "s": 36,
+      "dd": 0,
+      "depthAt": 29.5,
+      "h": 3,
+      "block": 12,
+      "robbed": 0.22,
+      "tuftEvery": 0,
+      "stoneEvery": 30,
+      "gutter": true,
+      "scatter": 0.3,
+      "scatterMat": "earth",
+      "seed": 301,
+      "collide": false,
+      "examine": false
+    },
+    {
+      "type": "plot-kerb",
+      "edgeOf": "south-road",
+      "edgeFrom": 0,
+      "edgeTo": 3,
+      "s": 45,
+      "dd": -6,
+      "depthAt": 41.5,
+      "h": 3,
+      "block": 13,
+      "robbed": 0.18,
+      "tuftEvery": 0,
+      "stoneEvery": 0,
+      "gutter": true,
+      "scatter": 0.26,
+      "scatterMat": "earth",
+      "seed": 303,
+      "collide": false,
+      "examine": false
+    },
+    {
+      "type": "plot-kerb",
+      "edgeOf": "south-road",
+      "edgeFrom": 5,
+      "edgeTo": 8,
+      "s": 45,
+      "dd": 6,
+      "depthAt": 41.6,
+      "h": 3,
+      "block": 13,
+      "robbed": 0.18,
+      "tuftEvery": 0,
+      "stoneEvery": 0,
+      "gutter": true,
+      "scatter": 0.26,
+      "scatterMat": "earth",
+      "seed": 305,
+      "collide": false,
       "examine": false
     }
   ],

@@ -693,14 +693,32 @@ function well(surface, iso, spec, out) {
       return step(stone, sIdx);
     });
   }
-  // coping rim + dark water
+  /**
+   * COPING RIM, SHAFT AND WATER.
+   *
+   * This used to be a single test: anything inside 0.42 of the mouth became the
+   * void anchor, which meant two thirds of the well head was one flat black
+   * ellipse. At game zoom that is not a well, it is a HOLE IN THE PLATE with a
+   * stick over it — which is exactly what the play session called it.
+   *
+   * A well reads from four things, and it needs all four at this size: a wide
+   * lit COPING you could sit on, the dark UNDERCUT beneath its inner edge, the
+   * shaft falling away, and — the one that does the most work — a WATER GLINT,
+   * because the eye needs to be told there is a surface down there rather than
+   * an absence. The glint sits toward the NW like every other specular here.
+   */
   surface.fillPoly(ellipsePts(c.x, c.y - wallH, rx, ry, 40), (uu, vv, x, y) => {
     const dx = (x + 0.5 - c.x) / rx, dy = (y + 0.5 - (c.y - wallH)) / ry;
     const d2 = dx * dx + dy * dy;
-    if (d2 < 0.42) {
-      return d2 < 0.28 ? P.ANCHORS['shadow-void'] : step(P.RAMPS.water, 1);
+    if (d2 < 0.30) {
+      // the water, well down the shaft: near-black, with the sky caught on it
+      const gx = dx + 0.34, gy = dy + 0.30;
+      const glint = (gx * gx + gy * gy) < 0.055;
+      if (glint) return step(P.RAMPS.water, 3);
+      return d2 < 0.16 ? P.ANCHORS['shadow-void'] : step(P.RAMPS.water, 0);
     }
-    return step(stone, dy < -0.1 ? 3 : 4);
+    if (d2 < 0.44) return step(stone, 0);          // the undercut under the coping
+    return step(stone, dy < -0.1 ? 3 : 4);         // the coping itself
   });
 
   // timber A-frame + windlass + bucket
@@ -712,14 +730,25 @@ function well(surface, iso, spec, out) {
       const t = k / 26;
       const x = Math.round(bx + (c.x - bx) * t * 0.55);
       const y = Math.round(c.y - wallH + 3 - k);
-      surface.setHex(x, y, step(timber, i === 0 ? 4 : 2));
-      surface.setHex(x + 1, y, step(timber, i === 0 ? 3 : 1));
+      surface.setHex(x, y, step(timber, i === 0 ? 4 : 3));
+      surface.setHex(x + 1, y, step(timber, i === 0 ? 3 : 2));
+      surface.setHex(x + 2, y, step(timber, i === 0 ? 1 : 0));
     }
   });
-  for (let x = Math.round(c.x - rx * 0.5); x <= Math.round(c.x + rx * 0.5); x++) {
+  // THE WINDLASS: a drum you could turn, not a flat bar. Four rows with a lit
+  // top and a shaded belly reads as a cylinder; three flat rows read as a stick.
+  for (let x = Math.round(c.x - rx * 0.62); x <= Math.round(c.x + rx * 0.62); x++) {
+    surface.setHex(x, topY + 1, step(timber, 3));
     surface.setHex(x, topY + 2, step(timber, 4));
     surface.setHex(x, topY + 3, step(timber, 2));
     surface.setHex(x, topY + 4, step(timber, 1));
+    surface.setHex(x, topY + 5, step(timber, 0));
+  }
+  // the crank handle, off the near end — the detail that names the object
+  {
+    const hx = Math.round(c.x + rx * 0.62);
+    for (let k = 0; k < 4; k++) surface.setHex(hx + k, topY + 3, step(timber, 3));
+    for (let k = 0; k < 4; k++) surface.setHex(hx + 3, topY + 3 + k, step(timber, 2));
   }
   // rope + bucket
   for (let k = 0; k < 14; k++) surface.setHex(Math.round(c.x + 1), topY + 5 + k, step(P.RAMPS.earth, 3));

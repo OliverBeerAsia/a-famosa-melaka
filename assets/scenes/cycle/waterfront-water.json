@@ -1,0 +1,24 @@
+{
+  "$schema": "melaka-forge/water-cycle@1",
+  "generatedBy": "tools/forge/compose-plate.cjs --cycle — regenerate with `npm run forge:cycle`, do not hand-edit",
+  "id": "waterfront",
+  "bbox": {
+    "x": 0,
+    "y": 78,
+    "w": 640,
+    "h": 250
+  },
+  "frames": 8,
+  "periodMs": 2400,
+  "offsetMs": 0,
+  "order": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ]
+}

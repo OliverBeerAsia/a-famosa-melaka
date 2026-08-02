@@ -31,6 +31,7 @@ const ARCH = require('./arch-portuguese.cjs');
 const { def } = require('./registry.cjs');
 const {
   ellipsePts, contactShadow, footprintRim, isoBox, isoCyl, post, lineTo, waterReflection, mast, clamp,
+  ropeSpan,
 } = require('./primitives.cjs');
 
 const step = T.step;
@@ -366,7 +367,7 @@ def('quay-crane', { collide: 0.7, examine: 'Shear-legs for swinging cargo out of
     T.aoBand(s, Math.round(c.x + dx), Math.round(c.y) + 2, 3, 0.42);
   });
   // back stay
-  lineTo(s, apex.x, apex.y, c.x + 26, c.y - 4, step(P.RAMPS.earth, 2), { dash: 0 });
+  ropeSpan(s, apex.x, apex.y, c.x + 26, c.y - 4, { sag: 2 });   // the stay
   // sheave block + fall
   for (let v = 0; v < 5; v++) for (let k = -3; k <= 3; k++) s.setHex(apex.x + k, apex.y + v, step(tim, k < 0 ? 4 : 1));
   const hookY = apex.y + (o.hook === undefined ? 30 : o.hook);
@@ -425,7 +426,7 @@ def('drying-rack-fish', { collide: 0.9, examine: 'Split ikan bilis drying on rat
   for (let row = 0; row < 3; row++) {
     const y0 = Math.round(a.y) - 24 + row * 8;
     const y1 = Math.round(b.y) - 24 + row * 8;
-    lineTo(s, a.x, y0, b.x, y1, step(P.RAMPS.timber, 3));
+    ropeSpan(s, a.x, y0, b.x, y1, { sag: 1.5 });
     const n = Math.round(Math.abs(b.x - a.x));
     for (let k = 3; k < n - 2; k += 4) {
       const t = k / n;

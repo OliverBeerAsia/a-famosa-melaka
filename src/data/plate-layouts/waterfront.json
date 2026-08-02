@@ -117,16 +117,73 @@
       "light": 3,
       "n": 1.5,
       "surface": "stone",
-      "walkable": true,
-      "variance": 0.36
+      "walkable": true
     },
     {
       "id": "godown-apron",
       "shape": {
-        "sFrom": 33,
-        "sTo": 41,
-        "ddFrom": 1,
-        "ddTo": 21
+        "poly": [
+          {
+            "s": 33.92,
+            "dd": 1
+          },
+          {
+            "s": 33.35,
+            "dd": 5
+          },
+          {
+            "s": 32.04,
+            "dd": 9
+          },
+          {
+            "s": 32.92,
+            "dd": 13
+          },
+          {
+            "s": 33.29,
+            "dd": 17
+          },
+          {
+            "s": 32.14,
+            "dd": 21
+          },
+          {
+            "s": 35,
+            "dd": 21.35
+          },
+          {
+            "s": 37,
+            "dd": 19.92
+          },
+          {
+            "s": 39,
+            "dd": 20.6
+          },
+          {
+            "s": 41.9,
+            "dd": 20.5
+          },
+          {
+            "s": 40.42,
+            "dd": 16.5
+          },
+          {
+            "s": 40.04,
+            "dd": 12.5
+          },
+          {
+            "s": 41.41,
+            "dd": 8.5
+          },
+          {
+            "s": 40.93,
+            "dd": 4.5
+          },
+          {
+            "s": 40.25,
+            "dd": 1
+          }
+        ]
       },
       "texture": "trodden",
       "material": "earth",
@@ -179,10 +236,56 @@
     {
       "id": "landward-road",
       "shape": {
-        "sFrom": 41,
-        "sTo": 47,
-        "ddFrom": -22,
-        "ddTo": 22
+        "poly": [
+          {
+            "s": 40.88,
+            "dd": -22
+          },
+          {
+            "s": 39.85,
+            "dd": -17
+          },
+          {
+            "s": 41.1,
+            "dd": -12
+          },
+          {
+            "s": 41.59,
+            "dd": -7
+          },
+          {
+            "s": 40.53,
+            "dd": -2
+          },
+          {
+            "s": 41.22,
+            "dd": 3
+          },
+          {
+            "s": 42.1,
+            "dd": 8
+          },
+          {
+            "s": 40.74,
+            "dd": 13
+          },
+          {
+            "s": 40.32,
+            "dd": 18
+          },
+          {
+            "s": 41.41,
+            "dd": 22
+          },
+          {
+            "s": 47,
+            "dd": 22
+          },
+          {
+            "s": 47,
+            "dd": -22
+          }
+        ]
       },
       "texture": "trodden",
       "material": "earth",
@@ -230,10 +333,40 @@
     {
       "id": "slipway-sand",
       "shape": {
-        "sFrom": 38.5,
-        "sTo": 43,
-        "ddFrom": -21,
-        "ddTo": -12
+        "poly": [
+          {
+            "s": 39.32,
+            "dd": -21
+          },
+          {
+            "s": 38.31,
+            "dd": -18
+          },
+          {
+            "s": 37.62,
+            "dd": -15
+          },
+          {
+            "s": 38.7,
+            "dd": -12
+          },
+          {
+            "s": 42.73,
+            "dd": -12
+          },
+          {
+            "s": 42.04,
+            "dd": -15
+          },
+          {
+            "s": 43.26,
+            "dd": -18
+          },
+          {
+            "s": 43.48,
+            "dd": -21
+          }
+        ]
       },
       "texture": "sand",
       "material": "earth",
@@ -1183,6 +1316,44 @@
       "key": "godown-near",
       "label": "The near godown",
       "examineText": "Sailcloth, cordage and pitch. The smell of it carries two streets inland."
+    },
+    {
+      "type": "plot-kerb",
+      "edgeOf": "godown-apron",
+      "s": 37,
+      "dd": 11,
+      "depthAt": 32.5,
+      "h": 3,
+      "block": 12,
+      "robbed": 0.2,
+      "tuftEvery": 0,
+      "stoneEvery": 28,
+      "gutter": true,
+      "scatter": 0.3,
+      "scatterMat": "earth",
+      "seed": 311,
+      "collide": false,
+      "examine": false
+    },
+    {
+      "type": "plot-kerb",
+      "edgeOf": "landward-road",
+      "edgeFrom": 0,
+      "edgeTo": 8,
+      "s": 41,
+      "dd": 0,
+      "depthAt": 40.5,
+      "h": 3,
+      "block": 14,
+      "robbed": 0.1,
+      "tuftEvery": 0,
+      "stoneEvery": 0,
+      "gutter": true,
+      "scatter": 0.3,
+      "scatterMat": "earth",
+      "seed": 313,
+      "collide": false,
+      "examine": false
     }
   ],
   "blocked": [

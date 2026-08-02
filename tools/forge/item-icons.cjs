@@ -290,6 +290,39 @@ const ICONS = {
 
   cloves_unused: null,
 
+  /**
+   * The Stage 5 openables put eggs in two chicken coops (dependency D7), and a
+   * coop that yields a flag instead of an egg is a coop that is pretending.
+   *
+   * Two eggs in a nest of straw: the ovoid reads at 16px only if the highlight
+   * is a single NW pixel and the shadow side is two ramp steps down, which is
+   * the same light model every other icon in this drawer is built to.
+   */
+  egg: (s) => {
+    // nest: a shallow bowl of dry straw
+    for (let x = 2; x <= 13; x++) px(s, x, 13, st(EA, hash2(x, 13, 7) < 0.4 ? 2 : 1));
+    for (let x = 3; x <= 12; x++) px(s, x, 12, st(EA, hash2(x, 12, 7) < 0.5 ? 3 : 2));
+    line(s, 2, 12, 4, 11, st(EA, 2));
+    line(s, 13, 12, 11, 11, st(EA, 1));
+
+    // the two eggs, back one first so the front overlaps it
+    const egg = (cx, cy, rx, ry) => {
+      for (let y = -ry; y <= ry; y++) {
+        for (let x = -rx; x <= rx; x++) {
+          // Slightly ovoid: narrower at the top, which is what stops it reading
+          // as a ball bearing.
+          const squash = 1 + (y < 0 ? 0.22 : 0);
+          if ((x * x) / (rx * rx / squash) + (y * y) / (ry * ry) > 1) continue;
+          const lit = (-x) + (-y) * 0.7;
+          px(s, cx + x, cy + y, st(SK, lit > 2 ? 5 : lit > 0 ? 4 : lit > -2 ? 3 : 2));
+        }
+      }
+      px(s, cx - 1, cy - 2, st(W, 4));   // the one NW specular pixel
+    };
+    egg(10, 8, 3, 4);
+    egg(6, 9, 3, 4);
+  },
+
   'spice-sample': (s) => {
     // a measured heap of turmeric on a folded paper — a SAMPLE, not a sack
     for (let i = 2; i <= 13; i++) px(s, i, 13, st(W, 3));
