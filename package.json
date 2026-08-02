@@ -15,12 +15,12 @@
     "package:win": "npm run build && electron-builder --win",
     "package:linux": "npm run build && electron-builder --linux",
     "package:all": "npm run build && electron-builder --mac --win --linux",
-    "pretest": "node tools/validate-gameplay-assets.cjs && node tools/validate-location-data.cjs && node tools/forge/validate-canon.cjs && node tools/validate-style.cjs && node tools/forge/grade-lut.cjs --check",
+    "pretest": "node tools/validate-gameplay-assets.cjs && node tools/validate-location-data.cjs && node tools/forge/validate-canon.cjs && node tools/validate-style.cjs && node tools/forge/grade-lut.cjs --check && node tools/forge/prop-ruler.cjs --strict",
     "prebuild": "node tools/validate-gameplay-assets.cjs && node tools/validate-location-data.cjs && node tools/forge/validate-canon.cjs --fast && node tools/forge/grade-lut.cjs --check",
     "test": "vitest run",
     "test:watch": "vitest",
     "validate:art": "node tools/validate-gameplay-assets.cjs",
-    "validate:all": "node tools/validate-gameplay-assets.cjs && node tools/validate-location-data.cjs && node tools/forge/validate-canon.cjs && node tools/validate-style.cjs",
+    "validate:all": "node tools/validate-gameplay-assets.cjs && node tools/validate-location-data.cjs && node tools/forge/validate-canon.cjs && node tools/validate-style.cjs && node tools/forge/prop-ruler.cjs --strict",
     "generate:character-sheets": "node tools/generate-character-sheets-v2.cjs",
     "generate:crowd": "node tools/generate-crowd-silhouettes.cjs",
     "generate:tiles": "node tools/ultima8-graphics/generate-all.cjs",
@@ -56,7 +56,8 @@
     "audit:art": "npm run validate:art -- --report docs/art-bible/art-audit-structural.md && npm run validate:style -- --report docs/art-bible/art-audit-style.md",
     "validate:locations": "node tools/validate-location-data.cjs",
     "forge:cycle": "node tools/forge/compose-plate.cjs src/data/plate-layouts/waterfront.json --cycle && node tools/forge/compose-plate.cjs src/data/plate-layouts/kampung.json --cycle",
-    "forge:fauna-sheets": "node tools/forge/fauna-sheets.cjs"
+    "forge:fauna-sheets": "node tools/forge/fauna-sheets.cjs",
+    "validate:props": "node tools/forge/prop-ruler.cjs --strict"
   },
   "keywords": [
     "phaser",
