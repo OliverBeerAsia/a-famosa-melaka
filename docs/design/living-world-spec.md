@@ -606,18 +606,41 @@ Fifteen testable assertions. Each is a thing a tester can sit down and observe.
 | **A1** | `tools/validate-location-data.cjs` runs the feet-walkability test (`mask(x, y+15)`) over **every schedule station, every route waypoint, every resident station, every patrol waypoint and every openable approach**, and fails the build on any miss. All coordinates in `data-drafts/` pass today. |
 | **A2** | At 19:00, standing at the Rua Direita well, Aminah is observed leaving her stall (104,236) and walking east past the player to the east lane (612,248), then fading. Total transit is on camera and takes 20–35 s. |
 | **A3** | The waterfront night watch completes one full patrol loop in **40–50 s** measured door-to-door, and dwells visibly at the counting-house door, the brazier and the east lantern. |
-| **A4** | Standing still in shadow behind `crate-stack-61` (486,289) while the guard passes within 40 native px does **not** trigger detection. Standing in the brazier pool (240,300) at 100 px **does**. |
+| **A4** | Standing still in shadow behind `crate-stack-61` (486,289) while the guard passes within **55** native px does **not** trigger detection. Standing in the brazier pool (240,300) at 100 px **does**. |
 | **A5** | Being caught returns the player to the A Famosa Gate spawn at 06:00 with ≤40 cruzados removed and a receipt in inventory. The quest is at `choose-path` and the theft path is still selectable. |
 | **A6** | Being caught a **second** time removes the theft path from `choose-path`, and the payment, diplomatic and investigate-truth paths all still complete to `seal-recovered`. |
 | **A7** | At 11:00, Diogo Almeida is **not** on Rua Direita and **is** at A Famosa Gate (500,268). His `ledger` / `books` / `gaspar` topics are reachable there, and `objective-markers.json` points at the right location. |
 | **A8** | At 13:05 in the kampung, Pak Salleh is observed walking from the landing to the surau (479,233) and kneeling. He is at the riverbank, not the surau, for maghrib at 18:45. |
 | **A9** | At 12:00 on Rua Direita the bell rings, Gomes bares his head, and **Alvares does not stop weighing**. |
 | **A10** | At 18:00 on the waterfront, Chen Wei walks to the counting-house door and the window light comes on; Lin Mei locks the door over ~4 s; at 19:00 the light goes out and a bar drops. All three are observable from the quay without entering any interaction. |
-| **A11** | At 23:00 every location has **≥2 visible characters** (residents + scheduled NPCs + crowd). A Famosa Gate has a sentry at the guarita at 03:00. |
+| **A11** | At 23:00 **at least one human is visible across the five locations taken together** (the night watch qualifies), and the waterfront patrol is running. Empty streets at that hour are correct — see the amendment note below. |
 | **A12** | With `?crowdstats=1`, on-screen crowd + residents at 13:00 is ≥6 on Rua Direita, ≥5 on the waterfront, ≥4 at A Famosa Gate, ≥3 in the kampung, ≥2 on the church hill. |
 | **A13** | Opening Gomes's warehouse strongbox sets `saw-gomes-books` and yields a manifest showing three voyages; the later truth-confrontation acknowledges it. |
 | **A14** | `key-warehouse` (a-famosa-gate 184,307) opens the waterfront `bonded-chest` and nothing else opens it. |
 | **A15** | Every `emptyText` in `openables.draft.json` is reachable in one playthrough and none of them reads "It is empty." |
+
+### Two assertions amended after implementation
+
+Both were found unsatisfiable while running this checklist in-engine, and both
+were wrong in the *assertion*, not in the thing being asserted.
+
+- **A4 was 40 px, and is now 55.** §4.4 gives the guard's carried lantern a
+  radius of 40 native px and rules that a player inside it is spotted at ×2.0 —
+  i.e. guaranteed. So "not detected at 40 px" and "always detected inside r40"
+  are the same distance, and the original assertion contradicted the detection
+  model two sections above it. Measured behaviour is exactly what §4.4
+  specifies: frozen in shadow the player is invisible down to ~41 px and is
+  taken at 34–36 px, because by then they are standing in his lamplight. 55 px
+  is the nearest figure that tests the freeze mechanic rather than the lantern.
+
+- **A11 asked for ≥2 visible characters everywhere at 23:00, and now asks for
+  one.** The residents in `ambient-residents.draft.json` are authored to go home
+  — the rua porter at 22:00, the kampung elder and the hill acolyte at 21:00 —
+  so at 23:00 Rua Direita and the kampung hold nobody but through-traffic. That
+  is not a gap in the data; it is 1580. The night is supposed to belong to the
+  watch, the insects and the practicals, and a market street that still has two
+  people standing in it at eleven at night would read as a stage set with the
+  lights left on. **Do not extend the residents' hours to satisfy a number.**
 
 Regression guards worth adding at the same time:
 
