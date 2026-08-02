@@ -663,7 +663,7 @@
     },
     {
       "targetLocation": "st-pauls-church",
-      "label": "Climb to St. Paul's",
+      "label": "Climb to the Church Hill",
       "triggerArea": {
         "x": 484,
         "y": 126,
@@ -716,7 +716,7 @@
       "x": 518,
       "y": 142,
       "label": "padrao",
-      "examineText": "A padrão cut with the Cross of the Order of Christ, set where the lane climbs to St Paul's.",
+      "examineText": "A padrão cut with the Cross of the Order of Christ, set where the lane climbs to the church on the hill.",
       "interactive": true
     },
     {
@@ -887,7 +887,7 @@
       "x": 221,
       "y": 196,
       "label": "step stone",
-      "examineText": "A mounting block, hollowed by two centuries of boots.",
+      "examineText": "A mounting block, hollowed by seventy years of boots.",
       "interactive": false
     },
     {
@@ -923,7 +923,7 @@
       "x": 582,
       "y": 207,
       "label": "step stone",
-      "examineText": "A mounting block, hollowed by two centuries of boots.",
+      "examineText": "A mounting block, hollowed by seventy years of boots.",
       "interactive": false
     },
     {
@@ -950,7 +950,7 @@
       "x": 394,
       "y": 214,
       "label": "signboard chinese",
-      "examineText": "A guild board: the Melaka Chinese kongsi, gilt characters flaking in the salt air.",
+      "examineText": "A board in gilt characters, flaking in the salt air. The names are the Fujian houses; the seal at the foot is the Kapitan's, which the fortress recognises and which therefore, in this street, is the only signature that settles anything.",
       "interactive": true
     },
     {
@@ -967,9 +967,9 @@
       "type": "crate-stack",
       "x": 678,
       "y": 216,
-      "label": "crate stack",
-      "examineText": "Crates stacked two high, roped against the rain.",
-      "interactive": false
+      "label": "warehouse crates",
+      "examineText": "Four men are unloading, and two of them are working the way men work when they will not be paid at the end of it — steadily, without hurry, without once looking up at the man counting.\n\n*Half the hands on this street are owned. Not most of the Malays, who came in from the kampung this morning and will go home tonight. The ones from Bengal, from Coromandel, from Mozambique — brought here in a hold and entered in a household book, the same book that lists the furniture.*\n\n*Nobody remarks on it. That is what it looks like when a thing is normal.*",
+      "interactive": true
     },
     {
       "key": "banana-clump-27",

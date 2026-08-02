@@ -1,0 +1,241 @@
+{
+  "_meta": {
+    "purpose": "Stage 5 draft data for the counting-house night break-in: the merchants-seal `theft` path turned into a real scene on the shipped waterfront plate. Companion prose, rationale and dialogue drafts are in ../living-world-spec.md section 4.",
+    "coordinateSpace": "NATIVE 640x360 waterfront px. Feet are at (x, y+15). Every waypoint below was verified walkable at feet level against assets/scenes/masks/waterfront-walk.png.",
+    "currentState": "src/data/quests/merchants-seal.json stages theft-attempt / theft-choice / theft-success are pure state machine: two objectives (`location`+`stealth`, then `search`) resolved by two hardcoded hotspots in GameScene.ts createQuestHotspots() at (620,250) and (575,235). Those two coordinates are in the PRE-SCROLLING 960x540 space; against the current 1920x1080 world they resolve to native (207,83) and (192,78), which is open harbour water — there is no walkable pixel within 40px of either. The theft path is therefore currently unreachable-by-design and reachable-by-accident only because the hotspot radius is 90/78 world px. Fixing those two numbers is a prerequisite for everything below.",
+    "designGoal": "Caught is not game over. Caught is expensive, public, and recoverable — and the second attempt is harder because the world remembered the first."
+  },
+
+  "anchors": {
+    "COUNTING_HOUSE_DOOR": {
+      "fallback": { "x": 570, "y": 262 },
+      "primary": { "x": 596, "y": 296 },
+      "_note": "FALLBACK ships today: (570,262) is the walkable dirt strip on the SOUTH face of the customs-shed block (blocked mass x536-616, y232-256 in the walk mask), directly below the `customs-house` prop at (570,241). PRIMARY (596,296) applies once the counting-house building module lands in src/data/plate-layouts/waterfront.json — see dependencies D1 in living-world-spec.md. Everything else in this file is authored against the FALLBACK and shifts by (+26,+34) under the primary."
+    },
+    "COUNTING_HOUSE_WINDOW_LIGHT": {
+      "x": 578, "y": 214, "radius": 30, "type": "window", "nightOnly": true, "hours": [18, 19],
+      "_note": "NEW light entry for waterfront.location.json. On at 18:00 when Chen Wei goes in to lock up, out at 19:00 when he leaves. It is the only light in the game with an hours window, and it is the whole telegraph: the player learns the building's identity by watching who turns its light off."
+    },
+    "PLAYER_ENTRY": {
+      "fromRuaDireita": { "x": 34, "y": 325 },
+      "_note": "rua-direita.location.json transitions[1].spawnAt. The player enters the waterfront at the far SOUTH-WEST corner, 550 native px from the counting-house door. The approach is a real traversal of the whole quay, not two steps."
+    }
+  },
+
+  "nightWatch": {
+    "activeHours": [22, 4],
+    "sprite": "crowd-portuguese-guard",
+    "carriesLantern": true,
+    "lanternLight": { "radius": 40, "type": "lantern", "followsGuard": true },
+    "speed": 90,
+    "_speedNote": "world px/s, matching CROWD_TYPES.portuguese_soldier's 105 reduced for a night pace. At 90 the loop below is 28.7s of walking + 15s of dwell = 43.7s, inside the 40-50s acceptance band.",
+
+    "patrol": [
+      { "id": "W1",  "x": 600, "y": 272, "dwell": 6, "face": "down", "lit": false, "_at": "the counting-house door / guild-board (630,262). He STARTS here." },
+      { "id": "W2",  "x": 556, "y": 262, "dwell": 0, "lit": false, "_at": "south face of the customs house" },
+      { "id": "W3",  "x": 523, "y": 267, "dwell": 0, "lit": false },
+      { "id": "W4",  "x": 470, "y": 286, "dwell": 0, "lit": false, "_at": "bonded-chest / crate-stack-61 (486,289)" },
+      { "id": "W5",  "x": 432, "y": 300, "dwell": 0, "lit": false },
+      { "id": "W6",  "x": 366, "y": 288, "dwell": 0, "lit": false, "_at": "below godown-pepper (371,266)" },
+      { "id": "W7",  "x": 326, "y": 270, "dwell": 0, "lit": false, "_at": "lantern-post-95 (326,270) — he passes UNDER the lamp post but the pool (326,228) r46 does not reach the ground here" },
+      { "id": "W8",  "x": 296, "y": 272, "dwell": 0, "lit": false },
+      { "id": "W9",  "x": 240, "y": 300, "dwell": 5, "face": "right", "lit": "L4", "_at": "the quay brazier — he warms his hands in full view. The player can see him from 200px away." },
+      { "id": "W10", "x": 240, "y": 246, "dwell": 0, "lit": "L4" },
+      { "id": "W11", "x": 262, "y": 232, "dwell": 0, "lit": false, "_at": "the nets (246,232) — a dark pocket on the upper quay" },
+      { "id": "W12", "x": 300, "y": 222, "dwell": 0, "lit": "L3" },
+      { "id": "W13", "x": 359, "y": 213, "dwell": 0, "lit": "L3+L7" },
+      { "id": "W14", "x": 420, "y": 214, "dwell": 0, "lit": "L7" },
+      { "id": "W15", "x": 490, "y": 216, "dwell": 0, "lit": false, "_at": "THE GAP — the one dark stretch of the upper quay, between the godown window and the customs lantern. The escape route." },
+      { "id": "W16", "x": 556, "y": 228, "dwell": 0, "lit": "L6" },
+      { "id": "W17", "x": 610, "y": 224, "dwell": 4, "face": "down", "lit": "L2", "_at": "he stops under the east lantern and looks DOWN at the counting-house door, 51px away, inside detection range." },
+      { "id": "W18", "x": 600, "y": 238, "dwell": 0, "lit": false }
+    ],
+
+    "timing": {
+      "loopSeconds": 43.7,
+      "arrivalsFromLoopStart": { "W1": 0, "W2": 7.9, "W3": 9.0, "W4": 10.9, "W5": 12.2, "W6": 14.5, "W7": 16.0, "W8": 17.0, "W9": 19.1, "W10": 25.9, "W11": 26.8, "W12": 28.1, "W13": 30.1, "W14": 32.1, "W15": 34.4, "W16": 36.7, "W17": 38.5, "W18": 43.1 },
+      "doorUnwatchedWindow": { "fromSeconds": 9.6, "toSeconds": 37.4, "durationSeconds": 27.8,
+        "_note": "The interval during which no patrol point is within detection range of COUNTING_HOUSE_DOOR. 27.8s is the design budget: ~9s to cross the last dark stretch from the nets, 6s to work the lock, 4s to open and slip in, 8s of slack for a player who mistimes it once." }
+    },
+
+    "senses": {
+      "visionRangeNative": 64,
+      "visionArcDegrees": 90,
+      "peripheralRangeNative": 20,
+      "_arcNote": "Facing is the direction of travel; during a dwell it is the `face` value. The lantern he carries IS the cone, drawn as a real light pool — the player never has to guess where he is looking.",
+
+      "lightModifiers": [
+        { "case": "player feet inside any nightOnly light pool", "visionRange": 1.6, "peripheral": 1.0,
+          "_note": "102 native px. Standing in the brazier pool at (240,300) is visible from the far side of the godowns." },
+        { "case": "player feet inside the guard's own lantern pool (r40)", "visionRange": 2.0, "peripheral": 2.0,
+          "_note": "Being inside his lantern is a guaranteed spot within 1s. There is no 'walking past him in the dark' at arm's length." },
+        { "case": "player feet in shadow (no pool)", "visionRange": 0.55, "peripheral": 1.0,
+          "_note": "35 native px." },
+        { "case": "player in shadow AND stationary for >1.0s", "visionRange": 0.7, "peripheral": 0.7,
+          "_note": "Multiplies with the shadow case: 24 native px. Freezing behind the bale stack works, and it is the only mechanic in the scene the player has to discover rather than be told." },
+        { "case": "player behind a walk-behind occluder (waterfront overlays fg-0 palm-cluster 577,270 / fg-1 godown 165,283)", "visionRange": 0.0,
+          "_note": "Hard occlusion. The two shipped foreground overlays become cover, which is free — they already have geometry and depth." }
+      ],
+
+      "noise": [
+        { "action": "walk on `wood` surface (the pier, x32-160 y184-248)", "alertRadiusNative": 34 },
+        { "action": "walk on `stone` or `dirt`", "alertRadiusNative": 0 },
+        { "action": "run (any surface)", "alertRadiusNative": 48 },
+        { "action": "open an openable", "alertRadiusNative": 40, "oneShot": true },
+        { "action": "fail a lock attempt", "alertRadiusNative": 56, "oneShot": true }
+      ],
+
+      "states": {
+        "unaware": { "_note": "Walks the loop. Lantern steady." },
+        "suspicious": {
+          "enterWhen": "player detected for >0.35s cumulative, or any noise event inside alertRadius",
+          "behaviour": "stops, turns toward the last-known point, raises the lantern (pool r40 -> r56 for 2s), walks to the point, sweeps 3s, returns to the nearest patrol waypoint and resumes",
+          "durationSeconds": 6,
+          "decayToUnawareSeconds": 12,
+          "_note": "A suspicious guard is OFF his timetable. The doorUnwatchedWindow above is void until he re-enters `unaware`, and the player must re-read him rather than re-count."
+        },
+        "alerted": {
+          "enterWhen": "player detected for >1.2s cumulative while suspicious, OR player detected within 24 native px in any state",
+          "behaviour": "shouts once, closes on the player at 140 world px/s. If he touches the player -> caught. If the player leaves the waterfront or reaches the transition trigger before he closes -> escape.",
+          "_note": "No combat. He is not a health bar; he is a consequence."
+        }
+      }
+    },
+
+    "raisedStakes": {
+      "trigger": { "worldFlagsAny": ["theft-attempt-1-failed"] },
+      "changes": [
+        "SECOND WATCHMAN on the upper quay only, running W10->W18 in REVERSE, phase-offset half a loop. The W15 dark gap is now covered and the doorUnwatchedWindow collapses from 27.8s to ~7s.",
+        "The counting-house shutter is BARRED. Opening it now requires the `key-warehouse` item, which already exists in the world at a-famosa-gate.location.json items[1] (184,307). Without it the door interaction returns 'The shutter is barred from the inside since the last time.' and costs 2s of standing still.",
+        "The east lantern-post-96 (646,257) is relit every night regardless of dousing, and a doused lamp now raises `night-watch-alerted` immediately instead of on the guard's next pass."
+      ],
+      "_designNote": "The raised stakes are all made of things the player already saw fail. The bar is on the door he was caught at; the second guard covers the gap he used; the key is an item he has walked past a dozen times at the gate. Nothing new is introduced at the moment of punishment."
+    }
+  },
+
+  "dousableLights": [
+    { "lightIndex": 1, "light": { "x": 150, "y": 198 }, "prop": "lantern-post-94", "propXY": { "x": 150, "y": 240 }, "approach": { "x": 150, "y": 240 } },
+    { "lightIndex": 2, "light": { "x": 646, "y": 215 }, "prop": "lantern-post-96", "propXY": { "x": 646, "y": 257 }, "approach": { "x": 632, "y": 268 },
+      "_note": "THE one that matters — light 2 is the pool the guard stands in at W17 while looking down at the door. Dousing it costs 3s and removes his best sightline." },
+    { "lightIndex": 3, "light": { "x": 326, "y": 228 }, "prop": "lantern-post-95", "propXY": { "x": 326, "y": 270 }, "approach": { "x": 326, "y": 282 } },
+    { "lightIndex": 5, "light": { "x": 128, "y": 313 }, "prop": "lantern-post-97", "propXY": { "x": 128, "y": 353 }, "approach": { "x": 119, "y": 344 } }
+  ],
+  "_dousableNote": "Verified relationship: for all four lantern posts on the waterfront, light.y == prop.y - 42 and light.x == prop.x exactly. The lantern-post props ARE the practicals; nothing new needs painting to make dousing legible. Lights 4 (the brazier), 6, 7, 8 and 9 are building/fire lights with no post prop and are NOT dousable — 6 and 7 in particular are the reason the upper quay can never be made fully dark.",
+  "_dousableCost": "Dousing is not free. On his next pass the guard sees the dead lamp, enters `suspicious` at that waypoint, relights it over 10s, and `night-watch-alerted` rises by one. At alert level 2 the guard's visionRange gains +20%; at level 3 he stops patrolling and posts at W1 for the rest of the night, which ends the attempt without ever catching the player. That is the cleanest possible failure: nothing happened to you, and you still lost.",
+
+  "telegraphs": [
+    { "id": "T1", "when": "18:00 daily", "what": "Chen Wei walks the full east quay from (480,196) back to the door and goes in. The counting-house window light comes on.", "source": "npc-schedules.draft.json chen-wei 18:00 slot" },
+    { "id": "T2", "when": "18:00 daily", "what": "Lin Mei walks to the same door, turns her back, and locks it with an audible key over 4s.", "source": "npc-schedules.draft.json lin-mei 18:00 beat" },
+    { "id": "T3", "when": "19:00 daily", "what": "The counting-house window light goes OUT and the shutter bar drops. From here the building is a dark rectangle with a seal in it.", "source": "chen-wei 19:00 exit effect `shutter-bar`" },
+    { "id": "T4", "when": "22:00 daily", "what": "Rashid leaves the brazier for the dhow. The brazier keeps burning. The last friendly face on the quay goes, and the light that will give the player away stays.", "source": "npc-schedules.draft.json rashid 22:00 slot" },
+    { "id": "T5", "when": "22:00 daily", "what": "The night watch appears at W1 and begins the loop. The first thing the player ever sees him do is stand at the door the player wants.", "source": "this file, nightWatch.patrol" },
+    { "id": "T6", "when": "on approach, any time", "what": "The guard's lantern pool arrives around a corner ~1.4s before he does. Light leads the man, always.", "source": "nightWatch.lanternLight" },
+    { "id": "T7", "when": "dialogue", "what": "Pak Salleh's shipped `tides` topic already gives the rule — 'The Portuguese post their guard by the church bell. The bell rings at the same hour all year. The water does not. You could build a whole life in the gap between those two facts.' Add an unlock from it (see dialogueHooks.new below) that hands the player the actual patrol rhythm.", "source": "src/data/npcs.json pak-salleh.topics.tides" }
+  ],
+
+  "consequenceChain": {
+    "onSuccess": {
+      "_note": "Unchanged from the shipped quest. merchants-seal theft-success already sets reputation chinese -30, worldChanges seal-stolen / chen-wei-hostile / customs-skittish, flags player-is-thief — and five NPCs already have written greetingVariants for it (fernao-gomes, capitao-rodrigues, padre-tomas, aminah, chen-wei, rashid). The scene above is what makes that price feel earned instead of announced.",
+      "addFlags": ["counting-house-entered"],
+      "addReputation": { "chinese-merchants": -30 },
+      "_repNote": "src/data/quests/merchants-seal.json uses faction key `chinese` while src/data/npcs.json chen-wei.topics.seal-advance.availability uses `chinese-merchants`. One of them is not being read. Pick one and migrate — see living-world-spec.md dependencies D6."
+    },
+
+    "onCaught": {
+      "sequence": [
+        "Guard shout SFX, 300ms hold, fade to black over 600ms. No combat, no death screen.",
+        "Fade in at a-famosa-gate spawns.player (320,264) at 06:00 the following day, facing up toward the gate.",
+        "Capitão Rodrigues is at his 06:00 station (278,286), 42px away, facing the player. He speaks first, unprompted (see dialogueHooks.new capitao-rodrigues.night-complaint).",
+        "Journal entry written."
+      ],
+      "flags": {
+        "set": ["caught-at-counting-house", "theft-attempt-1-failed", "night-watch-doubled"],
+        "clear": ["night-watch-alerted"],
+        "setOnSecondCatch": ["theft-attempt-2-failed", "player-known-thief", "theft-path-closed"]
+      },
+      "reputation": { "chinese-merchants": -10, "portuguese": -6 },
+      "_repNote": "Deliberately far lighter than the -30 for a SUCCESSFUL theft. Getting caught trying is embarrassing; getting away with it is the thing Chen Wei will not forgive.",
+      "confiscation": [
+        { "what": "cruzados", "amount": "min(playerMoney, 40)", "as": "fine, receipted", "_note": "Gaspar Mesquita's `gratuities` topic — 'there are donations to fortress maintenance, for which a receipt is issued - I issue them myself' — means the fine comes with a piece of paper. Give the player the paper. It is funnier and more damning than taking the money silently." },
+        { "what": "trading-seal", "condition": "if held", "as": "returned to Chen Wei", "sets": ["seal-returned-to-chen"] },
+        { "what": "key-warehouse", "condition": "if held", "as": "confiscated", "_note": "Which means the second attempt's barred shutter now needs the key re-obtained. The punishment has teeth without being a wall." }
+      ],
+      "questState": {
+        "onFirstCatch": "merchants-seal returns to stage `choose-path`. The `theft` path stays available with requirements gaining `worldFlagsNone: [\"theft-path-closed\"]`. Journal: the attempt is recorded as a fact, not erased.",
+        "onSecondCatch": "`theft-path-closed` set. The theft path disappears from choose-path. payment, diplomatic and investigate-truth all remain completable — this is the fail-forward: the player has spent two nights and 40 cruzados and lost nothing that closes the quest.",
+        "_economyNote": "The 40-cruzado fine is survivable against the shipped 525-raisable economy (Alvares 40 + pepper 55 + Rudra 180 + Chen Wei advance 250). Two catches cost 80, leaving 445 against a 500 debt — the player must then also do the pepper run they might have skipped. Losing makes the honest path longer, not impossible."
+      },
+      "absolution": {
+        "topic": "padre-tomas.confession-theft",
+        "availability": { "worldFlagsAny": ["caught-at-counting-house"] },
+        "cost": { "money": 20 },
+        "effect": { "reputation": { "chinese-merchants": 5 }, "flags": ["confessed-theft"] },
+        "_note": "Padre Tomás's shipped greetingVariant for seal-stolen/player-is-thief already offers exactly this: 'the door of that confessional is open, and that a burden set down early is a smaller burden than one carried into the dry season.' The topic is the promise being kept. `confessed-theft` softens the wary greetings on aminah and rashid."
+      }
+    }
+  },
+
+  "dialogueHooks": {
+    "existingToReuse": [
+      { "npc": "capitao-rodrigues", "path": "dialogue.greetingVariants[0]", "when": ["seal-stolen", "player-is-thief"], "_text": "'A counting house was entered at night and a strongbox opened. No complaint has been laid...'  — already written, already correct for the SUCCESSFUL theft." },
+      { "npc": "chen-wei", "path": "dialogue.greetingVariants[0]", "when": ["seal-stolen", "player-is-thief"], "_text": "'The seal left this house through a window instead of a door...'" },
+      { "npc": "padre-tomas", "path": "dialogue.greetingVariants[1]", "when": ["seal-stolen", "player-is-thief"], "_text": "the confessional offer — the hook for `confession-theft` below." },
+      { "npc": "aminah", "path": "dialogue.greetingVariants[0]", "when": ["seal-stolen", "player-is-thief"] },
+      { "npc": "rashid", "path": "dialogue.greetingVariants[0]", "when": ["seal-stolen", "player-is-thief"] },
+      { "npc": "fernao-gomes", "path": "dialogue.greetingVariants[0]", "when": ["seal-stolen", "player-is-thief"] },
+      { "npc": "pak-salleh", "path": "dialogue.topics.tides", "_note": "the scouting hint, already shipped. Add `unlocks: [\"the-gap\"]`." },
+      { "npc": "chen-wei", "path": "dialogue.topics.seal-advance.availability.worldFlagsNone", "_change": "add \"caught-at-counting-house\" alongside the existing \"player-is-thief\" and \"seal-stolen\". A house does not advance 250 cruzados to a man its own watchman dragged off the quay." },
+      { "npc": "lin-mei", "path": "dialogue.greetingVariants", "_gap": "Lin Mei has NO thief variant while every other principal does. She is the person who locked that door. She needs one — draft below." }
+    ],
+
+    "new": [
+      {
+        "npc": "pak-salleh", "topic": "the-gap", "requires": ["tides"],
+        "text": "*sets the net down, which he does not often do* You want to know when. All right. The watch goes on at the second bell after dark and he walks it the same way every night, east end to the fires and back along the top. A man could count it. I have counted it, standing in water to my knees, because there is nothing else to look at. *picks the net back up* I am not telling you to do anything. I am telling you what the water shows me, the same as I would tell you where the bar is. What you do at the bar is your business and your boat.",
+        "journalEntry": "Pak Salleh laid out the night watch without once saying what he thought I meant to do with it: on at the second bell after dark, east end to the fires and back along the upper quay, the same way every night. He was careful to call it something the river had shown him rather than something he had told me."
+      },
+      {
+        "npc": "capitao-rodrigues", "topic": "night-complaint",
+        "availability": { "worldFlagsAny": ["caught-at-counting-house"] },
+        "text": "*does not sit, does not offer you a seat* My watchman took you off the quay at two in the morning and no merchant has laid a complaint, which means I am holding a man nobody will accuse. So I have fined you for being where you were and I have written it down, and the writing is the part that matters. *taps the ledger once* Understand me. I do not much care about a strongbox. I care that a garrison which cannot say who was on its quay at two in the morning is a garrison that finds out about the next thing far too late. Go and be somewhere else."
+      },
+      {
+        "npc": "chen-wei", "topic": "broken-shutter",
+        "availability": { "worldFlagsAny": ["theft-attempt-1-failed"] },
+        "text": "*continues writing for rather longer than is comfortable* A shutter on the east face was worked at, and the man who worked at it was taken by the fortress watch rather than by mine, which spares us both a conversation. I have had a bar put on it. *sets the brush down* I will say one thing and then we will discuss the account. You came to this house openly once and I wrote that down too, in the same book. Both entries are still there. Neither cancels the other, and I would not insult you by pretending otherwise."
+      },
+      {
+        "npc": "chen-wei", "topic": "restitution",
+        "requires": ["broken-shutter"],
+        "availability": { "worldFlagsAny": ["theft-attempt-1-failed"], "worldFlagsNone": ["player-known-thief"] },
+        "text": "You want to know whether the account is closed to you. It is not. A debt is a number and a number does not take offence. *precisely* What has changed is the terms. I will still take five hundred cruzados from your hand and I will still put the seal in it. I will no longer write you an advance, because an advance is a bet on a man's habits and I have now watched one of yours. Do not ask for mercy where a contract will do.",
+        "_note": "Closes the loop on his shipped `advice` topic verbatim, and states in one line exactly which economy branch the player just lost."
+      },
+      {
+        "npc": "lin-mei", "greetingVariant": true,
+        "when": { "worldFlagsAny": ["seal-stolen", "player-is-thief", "theft-attempt-1-failed"] },
+        "text": "*does not look up, does not stop* I locked that door at six as I lock it every day at six, and I have been asked four times this week whether I am certain. I am certain. I am certain because it is the two hundred and eleventh time this year and I have written each one down. *now she looks up* If you have figures for me, give them to me. If you have anything else, give it to Master Chen."
+      },
+      {
+        "npc": "padre-tomas", "topic": "confession-theft",
+        "availability": { "worldFlagsAny": ["caught-at-counting-house"] },
+        "takesMoney": 20,
+        "text": "*draws the curtain across without being asked* You do not need to tell me what you did; the fortress has told half the city and told it badly. I want to know the other thing. *quietly* Were you frightened, or were you angry? Because a frightened man has done something stupid and may be counselled, and an angry man has done something he meant, and must be met differently. ... Thank you. That is an honest answer and it cost you more than the alms did. Go and be seen at Mass on Sunday, in the front third, where people will look at you. Penance is not suffering, my child. Penance is being visible again.",
+        "journalEntry": "Padre Tomás heard my confession for the counting house and asked only whether I had been frightened or angry. He set the penance as being seen — front third, Sunday Mass, where the people I embarrassed myself in front of would have to look at me. Twenty cruzados in alms. He seemed to think the money was the least of it."
+      },
+      {
+        "npc": "rashid", "topic": "night-watch",
+        "availability": { "worldFlagsAny": ["rashid-trusts-player", "dockside-cover"] },
+        "text": "*laughs, then does not* The watch. Yes. He is a boy from Braga who has been in this heat for nine months and hates every plank of this quay, and he walks it exactly as he was told to walk it because he has decided that doing it correctly is the only thing here that belongs to him. *turns the cup* I tell you this so you will not think of him as a lock. He is not a lock. He is somebody's son standing in the dark for eight hours, and whatever you are turning over in your head, you will have to get past him, not around what he is."
+      }
+    ]
+  },
+
+  "engineFixesRequired": [
+    "GameScene.ts:1602 questHotspot `merchants-seal-counting-house-entry` (620,250) -> COUNTING_HOUSE_DOOR native (570,262) scaled by world.scale. Currently resolves into open water.",
+    "GameScene.ts:1622 questHotspot `merchants-seal-drawer-search` (575,235) -> same anchor. Currently resolves into open water.",
+    "Better: move both into waterfront.location.json as `openables` entries (see openables.draft.json O1) and delete the hardcoded table, per the Stage 1 rule that no per-location coordinate lives in TypeScript.",
+    "merchants-seal.json choose-path availablePaths[3] (`theft`) requirements: add `worldFlagsNone: [\"theft-path-closed\"]`.",
+    "merchants-seal.json theft-attempt objectives: the `stealth` objective should complete on entering the building, not on approaching the hotspot, so that being caught before entry does not silently satisfy it."
+  ]
+}

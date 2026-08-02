@@ -59,8 +59,8 @@
       "id": "choose-path",
       "description": "Decide how to recover the seal.",
       "isBranching": true,
-      "journalEntry": "Chen Wei admits to holding the seal as collateral for a 500 cruzado debt Gomes owes. I have several options:\n- Pay the debt (500 cruzados). I do not have it, but it can be raised: Alvares pays 40 at the signing for a tin-tally contract; Aminah can put me onto a bahar of rain-damp Kedah pepper for 20 that a short counting house will take at 55; Chen Wei will cut a sample of his bonded silk for Rudra Mudaliar, who advances against the lot; and Chen Wei himself will write the remainder as an advance against my signed undertaking, if this house trusts me by then.\n- Help Chen Wei with his customs problem - but his silk is booked onto the Canton junk that clears on the fourth day, and after that there is nothing left to release.\n- Investigate whether Gomes' debt is legitimate\n- Find another way...",
-      "warning": "Chen Wei's silk sails for Canton on the fourth day. The customs favour is worth nothing to him after that.",
+      "journalEntry": "Chen Wei admits to holding the seal as collateral for a 500 cruzado debt Gomes owes. I have several options:\n- Pay the debt (500 cruzados). I do not have it, but it can be raised: Alvares pays 40 at the signing for a tin-tally contract; Aminah can put me onto a bahar of rain-damp Kedah pepper for 20 that a short counting house will take at 55; Chen Wei will cut a sample of his bonded silk for Rudra Mudaliar, who advances against the lot; and Chen Wei himself will write the remainder as an advance against my signed undertaking, if this house trusts me by then.\n- Help Chen Wei with his customs problem - but his silk is booked onto the Macau junk that clears on the fourth day, and after that there is nothing left to release.\n- Investigate whether Gomes' debt is legitimate\n- Find another way...",
+      "warning": "Chen Wei's silk sails for Macau on the fourth day. The customs favour is worth nothing to him after that.",
       "npcDialogueOverrides": {
         "chen-wei": {
           "settle-debt": {

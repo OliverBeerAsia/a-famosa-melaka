@@ -96,7 +96,7 @@
           "text": "I attend Mass on Sundays. Padre Tomás means well, though he speaks as if faith alone can balance a ledger."
         },
         "rumors": {
-          "text": "There are English privateers nosing near the straits. When they come, they bring hard bargains and harder guns."
+          "text": "An English ship was trading in the Moluccas last season and none of ours could lay a hand on her. When men like that find the straits, they will bring hard bargains and harder guns."
         },
         "family": {
           "text": "My brother trades in Goa. My father never came home from the sea. Melaka has taught me that distance is expensive."
@@ -214,13 +214,13 @@
           "text": "I command eighty Portuguese soldiers and two hundred local auxiliaries. Not enough. Never enough. We are surrounded by millions who remember the old sultanate. Vigilance is survival."
         },
         "war": {
-          "text": "I fought at Diu in '38, when the Ottoman fleet came to drive us from India. We held, barely. Lost my brother there. *touches scar on face* War teaches you that glory is a lie told by those who never held the line."
+          "text": "January of '75. A hundred and thirteen sail came up out of the south - forty of them galleys, oars in the water, and the Acehnese do not row for exercise. *touches scar on face* Five years, and I still count sails before I count anything else. My brother went into the water off the bar and did not come out of it. War teaches you that glory is a lie told by those who never held the line."
         },
         "sultan": {
           "text": "The old Sultanate of Melaka fell, but the Sultan's heirs plot from Johor. They want their city back. The Acehnese raid our shipping. We are an island of Portugal in a sea of enemies."
         },
         "english": {
-          "text": "*spits* English privateers. Now they sniff around these waters like sharks smelling blood. If Drake's spawn pushes into the straits, war will follow."
+          "text": "*spits* An Englishman was at Ternate. Sat down with Babullah - the same Babullah who put our people out of that fortress five years ago - bought his cloves, and went off west, and nobody caught him. *flat* They have not come into the straits. They have found out that they can."
         },
         "locals": {
           "text": "The Malays? Some are loyal, many are not. They smile and bow, but they remember the conquest. The Chinese keep to themselves - they care only for profit. Trust no one completely."
@@ -313,7 +313,7 @@
       }
     ],
     "dialogue": {
-      "greeting": "Peace be with you, my child. What brings you to the Church of St. Paul? Here, all are welcome in God's house.",
+      "greeting": "Peace be with you, my child. What brings you up the hill to Madre de Deus? Here, all are welcome in God's house - the Fathers took this chapel from Our Lady of the Annunciation and gave her a grander title, but she was a sailor's thank-offering first and she has never quite stopped being one.",
       "greetingMorning": "The Lord's blessings on this new day. Have you come to join us for morning contemplation?",
       "greetingVariants": [
         {
@@ -346,7 +346,12 @@
           "text": "This city is a testament to God's providence - a meeting place of nations. So many peoples, so many faiths. The Tower of Babel reversed! Yet we must guide them to the one true path."
         },
         "church": {
-          "text": "St. Paul's was built on the ruins of a local chief's home. From darkness, light. The stones came from a Hindu temple - now they serve Christ. This is the pattern of holy progress."
+          "text": "A captain named Coelho promised Our Lady a chapel if she brought him out of a storm in the China sea, and in 1521 he paid. The Fathers were given the deeds in Saint Francis Xavier's own hand and have been enlarging her ever since. *gestures down the slope* The Sultan's istana stood below us, by the water, not here. What is under these stones is only the hill.",
+          "unlocks": ["bishop"]
+        },
+        "bishop": {
+          "text": "His Lordship's cathedral is down there in the town, and I am up here, and we both understand the arrangement perfectly. *carefully* The Sé has the parishes, the registers, the marriages and the burials, and Melaka has been a diocese in its own right since '58 - we are not a mission station any longer, whatever Goa likes to imply. The Society has this hill and the school. *a small pause* There is a Dominican father down there who holds that we have made too many allowances to these people - that we teach them Christ in their own words until the words are all that is left. He is not a stupid man. That is what makes him difficult.",
+          "requires": ["church"]
         },
         "captain": {
           "text": "Capitão Rodrigues is a devout man in his way - he attends Mass, confesses regularly. But he sees only enemies where I see souls to be saved. The sword and the cross must work together, yet he trusts only the sword."
@@ -597,7 +602,7 @@
           "when": { "worldFlagsAny": ["merchant-seal-settled"] }
         },
         {
-          "text": "The junk sailed without my silk. Forty bolts sit in a bonded shed until the next northeast wind, which is to say until next year. Do not speak to me of the customs house today.",
+          "text": "The junk sailed without my silk. Forty bolts sit in a bonded shed until the wind comes round to the south-west, which is to say until next year. Do not speak to me of the customs house today.",
           "when": { "worldFlagsAny": ["silk-consignment-shipped"] }
         }
       ],
@@ -611,7 +616,12 @@
           "requires": ["seal"]
         },
         "guild": {
-          "text": "The Chinese merchant families have kept accounts in Melaka since before the fortress mattered. Ledgers remember what rulers try to forget."
+          "text": "The Chinese merchant families have kept accounts in Melaka since before the fortress mattered. Ledgers remember what rulers try to forget.",
+          "unlocks": ["kapitan"]
+        },
+        "kapitan": {
+          "text": "There is a Kapitan over the Chinese of this city. The fortress appointed him eight years ago and pays him nothing, which is how you know they think the arrangement is favourable to them. He settles our disputes, he answers for our conduct, and when a Chinese is accused, it is his door the guard knocks on, not the Ouvidor's. *sets the brush down* You imagine my house is old here. It is not. For fifty years after the conquest almost no junk came down from Fujian at all - the Emperor forbade the sea, and men who sailed anyway were pirates in his eyes and smugglers in everyone else's. Thirteen years ago he permitted it again. Fifty licences a year, out of one port in Zhangzhou. *precisely* Everything you see in this room is thirteen years old and could be taken away by an edict I will not hear about for six months. That is why I am careful. Not temperament. Exposure.",
+          "requires": ["guild"]
         },
         "zheng-he": {
           "text": "Admiral Zheng He came here with great fleets from the Ming court. My family remembers those voyages well."
@@ -635,16 +645,16 @@
           "availability": { "dayBefore": 4 }
         },
         "side-deal": {
-          "text": "Bring me proof the customs officer will back off, and I will release the seal. Honor for honor. Bring it before the junk clears for Canton on the fourth day, or the trade is worthless to us both.",
+          "text": "Bring me proof the customs officer will back off, and I will release the seal. Honor for honor. Bring it before the junk clears for Macau on the fourth day, or the trade is worthless to us both.",
           "requires": ["alternative"],
           "questPath": "diplomatic",
           "availability": { "dayBefore": 4 }
         },
         "silk-consignment": {
-          "text": "Forty bolts of patterned Nanking weave, bonded at the gate under a customs seal, booked onto the junk that clears for Canton on the fourth day. Whether the bolts move or rot, my creditors in Macau are paid on the same date. That is the whole of my impatience, and I would rather you understood it than admired it.",
+          "text": "Forty bolts of patterned Nanking weave, bonded at the gate under a customs seal, booked onto the junk that clears for Macau on the fourth day. Whether the bolts move or rot, my creditors there are paid on the same date. That is the whole of my impatience, and I would rather you understood it than admired it.",
           "requires": ["alternative"],
           "unlocks": ["silk-sample-errand"],
-          "journalEntry": "Chen Wei's silk is not merely stock - it is forty bolts of patterned Nanking weave bonded at the customs gate, booked onto a junk that clears for Canton on the fourth day. His creditors in Macau are paid on that date whether the cargo sails or not. His impatience over the seal is arithmetic, not malice."
+          "journalEntry": "Chen Wei's silk is not merely stock - it is forty bolts of patterned Nanking weave bonded at the customs gate, booked onto a junk that clears for Macau on the fourth day. His creditors there are paid on that date whether the cargo sails or not. His impatience over the seal is arithmetic, not malice."
         },
         "silk-sample-errand": {
           "text": "Since you are short of coin and long on legs: one bolt out of the forty, wrapped, chopped, marked with the lot number. Carry it up Rua Direita to Rudra Mudaliar. He has bought Nanking weave from this house for twenty years and he buys by the hand, not the eye. If the bolt satisfies him he will advance against the whole lot, and the advance is yours to bring back to me against Gomes's account. I lose nothing either way. That is why I can afford to be generous.",
@@ -806,7 +816,7 @@
           "text": "Advice from old Rashid? *thinks* Trust the wind, but never the calm. Trust a friend, but never his silence. And never trust any man - Portuguese, Arab, or otherwise - who tells you unprompted that he will not cheat you. An honest man does not think of it."
         },
         "future": {
-          "text": "There are northern ships everyone whispers about. I met some in Aceh. Cold eyes, calculating. They want what Portugal has. They will get it, I think. The Portuguese are too proud, too few. Change is coming to these waters."
+          "text": "There are northern ships everyone whispers about. A man in Aceh had spoken with one of them, off the clove islands. Cold eyes, calculating. They want what Portugal has. They will get it, I think. The Portuguese are too proud, too few. Change is coming to these waters."
         },
         "after-the-seal": {
           "text": "The whole quay watched you carry that business from one end of the harbour to the other, and the quay does not forget who finished a thing. *taps the boards beside him* When you need a hull going west - Aden, Hormuz, anywhere the wind will take her - you come to me first and we will not discuss the price at length.",
@@ -828,7 +838,7 @@
     "name": "Siti",
     "sprite": "siti",
     "title": "Young Servant",
-    "description": "A young Malay woman who has fled to St. Paul's Church seeking sanctuary. She is scared but dignified, and her story holds the key to exposing a powerful man's cruelty.",
+    "description": "A young Malay woman who has fled to the church on the hill seeking sanctuary. She is scared but dignified, and her story holds the key to exposing a powerful man's cruelty.",
     "culture": "malay",
     "location": "st-pauls-church",
     "position": { "x": 160, "y": 180 },
@@ -850,10 +860,10 @@
           "text": "*wrings hands* I was a servant in the household of Senhor Alvares. He is a powerful man, a tin merchant. When I could no longer bear his cruelty, I fled. The Padre took me in, but I fear Alvares will come looking."
         },
         "sanctuary": {
-          "text": "The Padre says the church is a place of sanctuary — that even Portuguese law cannot touch me here. But Alvares has powerful friends. I do not know how long the walls of God's house will protect a Malay servant girl."
+          "text": "The Padre says the church is a place of sanctuary. He says it carefully, and I have learned to hear when a man is being careful. *quietly* Senhor Alvares did not hire me. He bought me. There is a paper in his house with a price on it and my name is on the paper, and the law of this city says the paper is true. The Padre says God does not read that paper. I believe he believes it. I do not know whether the Ouvidor believes it, and the Ouvidor is the one who will be asked."
         },
         "fear": {
-          "text": "*voice drops* He beat his servants. Not just me — all of us. But I saw worse. He cheats the local miners, takes their tin ore for nothing, threatens their families. He hides behind his wealth and his Portuguese name."
+          "text": "*voice drops* He beat his servants. Not just me — all of us. But I saw worse. He cheats the men who bring the tin down. Not the miners — he never sees a miner. The boatmen. He weighs their ore light and grades it low and writes it in a book, and when they argue he shows them the book. That is how he does it. With a book."
         },
         "melaka": {
           "text": "I was born in the kampung. My mother still lives there — Mak Enang, the healer. She does not know I am here. I did not want to bring trouble to her door. Perhaps... could you tell her I am safe?"
@@ -938,7 +948,7 @@
           "journalEntry": "Alvares paid 40 cruzados at the signing for a tally contract - sixty bahar of Perak tin weighed, marked and witnessed into the bonded shed, with any shortfall coming out of my fee first. He was exact about the money and exact about the terms. He was also, in his way, proud of both."
         },
         "servant-girl": {
-          "text": "A girl of mine ran to the priests on the hill and they took her in like a stray cat. *finally looks up* She will say I was cruel. They always say cruelty. What she means is that I required of her precisely what I required of everyone, and she found she had no aptitude for being required of. Padre Tomás may feed her as long as his charity lasts. I have a household to run and a shipment to move.",
+          "text": "A girl of mine ran to the priests on the hill and they took her in like a stray cat. *finally looks up* She will say I was cruel. They always say cruelty. What she means is that I required of her precisely what I required of everyone, and she found she had no aptitude for being required of. *returns to the manifest* She is entered in my household book at eleven cruzados. I do not raise my voice about eleven cruzados. But the book is the book, and the priests may keep her exactly as long as it amuses them to argue with a book.",
           "availability": { "talkedTo": ["siti"] }
         }
       },
@@ -997,7 +1007,12 @@
           "text": "*sighs* My grandson works on the docks now. Carrying crates for the Portuguese. Good money, he says. But he comes home with bruises and a hard look in his eyes. The docks change a boy. Not always for the better."
         },
         "melaka": {
-          "text": "I remember when the old Sultan's flag still flew. I was a girl then. The Portuguese came with their cannons and their God. We bent like bamboo in the wind — we did not break. Bamboo outlasts the storm."
+          "text": "I remember when the old Sultan's flag still flew. I was a girl then. The Portuguese came with their cannons and their God. We bent like bamboo in the wind — we did not break. Bamboo outlasts the storm.",
+          "unlocks": ["conquest"]
+        },
+        "conquest": {
+          "text": "*does not stop grinding* They tell it in the fortress that we opened the gates. I was small when it happened and my grandmother was a woman grown, and she was here. There were no gates opened. They came over the bridge twice, and the second time they stayed, and it took them the better part of a month and a great many of their own dead. *sets the pestle down* But it is a better story their way. Their way, they won because we were faithless, and if we were faithless then losing was our own doing and nobody up there need think about it again. Every conqueror tells that story, child. Ask a Javanese about the Malays sometime. We tell it too.",
+          "requires": ["melaka"]
         },
         "portuguese": {
           "text": "Some are kind, some are cruel — like any people. The priest on the hill, he has a good heart even if his God confuses him. But the merchants? They see us as tools, not people. Tools wear out and are thrown away."
@@ -1082,7 +1097,7 @@
           "text": "Melaka is a city of cargo disguised as prayer, diplomacy, and rumor. If you want the truth of it, read the ledgers rather than the sermons."
         },
         "silk-detention": {
-          "text": "The Chinese silk. Yes. Forty bolts, bonded, detained pending clarification of the declared value - the manifest says one figure and the quality says another, and until that is reconciled the bolts stay under seal. *adjusts a page a quarter-inch* I am aware a junk clears for Canton on the fourth day. I did not schedule the junk. If Senhor Chen finds the timing inconvenient he might reflect that the inconvenience is entirely within his own power to resolve, and has been since Monday.",
+          "text": "The Chinese silk. Yes. Forty bolts, bonded, detained pending clarification of the declared value - the manifest says one figure and the quality says another, and until that is reconciled the bolts stay under seal. *adjusts a page a quarter-inch* I am aware a junk clears for Macau on the fourth day. I did not schedule the junk. If Senhor Chen finds the timing inconvenient he might reflect that the inconvenience is entirely within his own power to resolve, and has been since Monday.",
           "requires": ["customs"],
           "availability": { "dayBefore": 4 }
         },
@@ -1274,7 +1289,7 @@
           "journalEntry": "Lin Mei paid 55 cruzados for the bahar of damp pepper without once mentioning the damp. The Banten manifest was short by exactly that weight; she was buying an afternoon free of questions, not pepper. Aminah's read of the counting house was precise."
         },
         "silk-clock": {
-          "text": "Forty bolts, bonded at the gate, booked onto the junk that clears for Canton on the fourth day. The junk does not wait; the wind does not negotiate; Macau expects payment on the date whether the cargo moves or not. So there is a clock in this room, and Master Chen listens to it while men talk to him about honour.",
+          "text": "Forty bolts, bonded at the gate, booked onto the junk that clears for Macau on the fourth day. The junk does not wait; the wind does not negotiate; Macau expects payment on the date whether the cargo moves or not. So there is a clock in this room, and Master Chen listens to it while men talk to him about honour.",
           "requires": ["manifest"]
         },
         "figures": {
@@ -1424,16 +1439,21 @@
       "greeting": "A good contract outlasts any ruler.",
       "topics": {
         "about": {
-          "text": "My family has traded in these straits since the days of the Sultanate. The rulers change, but the need for Coromandel cloth does not."
+          "text": "My family has traded in these straits since the days of the Sultanate. The rulers change, but the need for Coromandel cloth does not.",
+          "unlocks": ["nina-chatu"]
+        },
+        "nina-chatu": {
+          "text": "You want to know how a merchant survives a conquest. *sets down the cloth* There was a Kling of this city named Nina Chatu, a very great man, greater than I shall ever be. When the Portuguese came he judged which way the thing would fall, and he judged correctly, and he gave them boats and grain and his own credit, and Albuquerque made him bendahara over the whole trade of Melaka. *evenly* Within four years they had accused him, ruined him, and taken everything. He died owing money to men he had made rich. So. When you ask me why I do not befriend the fortress - I am not brave, and I am not principled. I have simply read the ledger.",
+          "requires": ["about"]
         },
         "trade": {
           "text": "Fine cottons from Pulicat, painted Chintz from Masulipatam. These are the currencies that buy spices in the eastern islands. Spices move west, but cotton moves east."
         },
         "union": {
-          "text": "They speak of a new Spanish King in Lisbon. The garrison captains look anxious, but a merchant only cares if the port customs remain stable."
+          "text": "There is no King in Lisbon at all, which is a stranger thing than a bad one. The boy died in Africa and the old Cardinal followed him, and now Castile and Bragança are both counting their cousins. *turns a bolt over* My cartaz bears a seal. A seal must belong to someone. The captains here look anxious about the throne; I am anxious about the seal."
         },
         "english": {
-          "text": "The English privateers? Yes, Drake has shown them the route. If they bring silver, we trade. But if they bring fire, these straits will burn."
+          "text": "The English? One of them sat down with Babullah at Ternate and bought cloves, and sailed away west, and no one laid a hand on him. They have not found these straits yet. If they bring silver, we trade. But if they bring fire, these straits will burn."
         },
         "gomes": {
           "text": "Fernão is a good partner, but too hot-headed. In business, anger is a bad ledger entry."

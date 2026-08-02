@@ -1,0 +1,274 @@
+{
+  "_meta": {
+    "purpose": "Stage 5 draft `openables` array for src/data/locations/<id>.location.json — the minimal Ultima VII container verb. 12 objects across the 5 plates, every one of them anchored to a prop that is ALREADY PAINTED on the shipped plate.",
+    "coordinateSpace": "NATIVE 640x360 px. `anchor` is the painted prop's own {x,y} from plateProps (or the loreObjects entry). `approach` is where the player must stand; it is an ORIGIN point and was verified walkable at (x, y+15) against the location's walk mask.",
+    "designRule": "An openable is NOT a new prop. It is a flag on a prop that already exists, plus contents, plus two lines of prose. The whole feature ships without a single new sprite — the only art cost is an optional 2-frame open/closed state per prop TYPE (8 types below), and the Tier-0 fallback is no state change at all plus a notification.",
+    "schema": {
+      "id": "unique within the location",
+      "prop": "the plateProps.key or loreObjects.id it hangs on. MUST exist.",
+      "anchor": "{x,y} copied from that prop",
+      "approach": "{x,y} walkable station for the player",
+      "label": "verb-phrase shown on the interaction prompt",
+      "lock": "null | { needs: itemId, flagsAny: [...], flagsNone: [...] }",
+      "contents": "array of { itemId, count } | { money } | { flag } | null",
+      "onOpen": "flags set / reputation / notification text",
+      "emptyText": "one line, shown when the container has already been emptied. This is the line the player will read most often — it is the writing that matters.",
+      "witnessed": "true = opening while ambient crowd or a named NPC is within 80 native px and in daylight sets `petty-theft-witnessed`",
+      "reopenable": "true = a container that refills or is simply a place to look (wells, coops); false = one-shot"
+    },
+    "note": "Prop prose quoted in `_examine` below is the SHIPPED examineText from the location file, reproduced so the writer of the openable text can match its voice."
+  },
+
+  "waterfront": [
+    {
+      "id": "counting-house-drawer",
+      "prop": "customs-house",
+      "anchor": { "x": 570, "y": 241 },
+      "approach": { "x": 556, "y": 262 },
+      "label": "Force the ledger drawer",
+      "_note": "THE quest openable. src/data/quests/merchants-seal.json theft-success objective is {type:'search', target:'counting-house-drawer'} — this is that target, given a body. Anchor moves to (596,296) once the counting-house building module lands (dependencies D1).",
+      "_examine": "Every bale on this quay is written into a ledger inside, in Portuguese, from a tally kept in Chinese, of goods measured in Malay bahar. Three chances to disagree.",
+      "lock": { "needs": null, "flagsAny": ["counting-house-entered"], "flagsNone": [] },
+      "_lockNote": "Not lockpicked — the lock is the guard and the door. Once inside, the drawer opens. Second attempt requires `key-warehouse` for the barred shutter, not for the drawer.",
+      "contents": [ { "itemId": "trading-seal", "count": 1 } ],
+      "onOpen": {
+        "flags": ["seal-stolen", "player-is-thief"],
+        "reputation": { "chinese-merchants": -30 },
+        "notification": "The seal is cold in your hand."
+      },
+      "emptyText": "The drawer runs on beeswax and does not squeak, which you noticed at the time and have thought about since.",
+      "witnessed": false,
+      "reopenable": false
+    },
+    {
+      "id": "bonded-chest",
+      "prop": "bonded-chest",
+      "anchor": { "x": 478, "y": 297 },
+      "approach": { "x": 478, "y": 297 },
+      "label": "Open the bonded chest",
+      "_propSource": "waterfront.location.json loreObjects; prose in src/data/historical-objects.json — 'A locked chest used to secure goods that have entered bonded storage.'",
+      "lock": { "needs": "key-warehouse", "flagsAny": [], "flagsNone": [] },
+      "_lockNote": "key-warehouse already exists in the world at a-famosa-gate.location.json items[1] (184,307) and has never had a lock to fit. This gives the shipped key a shipped door.",
+      "contents": [ { "money": 30 }, { "itemId": "letter-of-credit", "count": 1 } ],
+      "onOpen": { "flags": ["bonded-chest-opened"], "notification": "Duty paid on paper, and thirty cruzados that were not on the paper." },
+      "emptyText": "Sound wood, sound iron, and a smell of pepper that will outlast the chest.",
+      "witnessed": true,
+      "reopenable": false
+    },
+    {
+      "id": "tin-godown-door",
+      "prop": "godown-tin",
+      "anchor": { "x": 506, "y": 276 },
+      "approach": { "x": 501, "y": 295 },
+      "label": "Try the barred door",
+      "_examine": "Tin ingots from Perak, stacked like loaves. The door is barred and the bar is new.",
+      "lock": { "needs": "key-warehouse", "flagsAny": ["dockside-cover", "quest-complete:customs-ledger"], "flagsNone": [] },
+      "_lockNote": "Key AND standing. Alvares's tin under bond is not a thing you walk into with a borrowed key and no reason.",
+      "contents": [ { "money": 15 }, { "flag": "saw-the-tin-shortfall" } ],
+      "onOpen": { "notification": "Sixty bahar on the manifest. You count fifty-four stacks and stop counting." },
+      "emptyText": "The bar goes back across easily. It is a new bar and it has not yet learned to stick.",
+      "witnessed": true,
+      "reopenable": true
+    },
+    {
+      "id": "quay-water-cask",
+      "prop": "barrel-open-68",
+      "anchor": { "x": 627, "y": 267 },
+      "approach": { "x": 616, "y": 272 },
+      "label": "Look in the open cask",
+      "_examine": "An open cask, half full of brackish water.",
+      "lock": null,
+      "contents": [ { "money": 2 } ],
+      "onOpen": { "notification": "Two cruzados in the sediment. Somebody was hiding them or somebody was drunk." },
+      "emptyText": "Rainwater, a drowned gecko, and the reflection of a man who checks casks.",
+      "witnessed": false,
+      "reopenable": false
+    },
+    {
+      "id": "stencilled-crate",
+      "prop": "crate-63",
+      "anchor": { "x": 448, "y": 238 },
+      "approach": { "x": 448, "y": 250 },
+      "label": "Prise open the crate",
+      "_examine": "A pine crate stencilled with a merchant's mark.",
+      "lock": null,
+      "contents": [ { "itemId": "spice-sample", "count": 1 } ],
+      "onOpen": { "notification": "Nutmeg, still in its mace. Somebody will notice the lid." },
+      "emptyText": "The lid sits crooked now. It will sit crooked until it reaches Goa.",
+      "witnessed": true,
+      "reopenable": false
+    }
+  ],
+
+  "rua-direita": [
+    {
+      "id": "gomes-warehouse-strongbox",
+      "prop": "crate-37",
+      "anchor": { "x": 266, "y": 183 },
+      "approach": { "x": 240, "y": 156 },
+      "label": "Open the warehouse strongbox",
+      "_note": "The Gomes warehouse container. It sits in the warehouse yard beside the `warehouse-side` door (rua-direita.location.json doors[2], 236,144), the door his 07:00 schedule slot enters through. His shipped `rest` topic — 'my warehouse has a clean cot' — establishes that the player is welcome in this yard, which is what makes the strongbox a moral question rather than a lock.",
+      "lock": { "needs": null, "flagsAny": ["quest-active:merchants-seal"], "flagsNone": [] },
+      "contents": [ { "money": 12 }, { "itemId": "cargo-manifest", "count": 1 }, { "flag": "saw-gomes-books" } ],
+      "onOpen": {
+        "flags": ["saw-gomes-books"],
+        "notification": "Twelve cruzados, a manifest, and three voyages entered where he told you there was one.",
+        "_note": "SETS UP the investigate-truth path without spoiling it: the player who opens this box has physically seen what Rashid's `gomes-debt` override tells them later. If `saw-gomes-books` is set, the truth-confrontation stage should offer a harder opening line."
+      },
+      "emptyText": "He does not lock it. That is either trust or the certainty that nobody would dare, and after this week you are no longer sure which.",
+      "witnessed": true,
+      "reopenable": false
+    },
+    {
+      "id": "alvares-tally-crates",
+      "prop": "crate-stack-62",
+      "anchor": { "x": 224, "y": 304 },
+      "approach": { "x": 224, "y": 304 },
+      "label": "Open the tally crates",
+      "_examine": "Crates stacked two high, roped against the rain.",
+      "lock": { "needs": null, "flagsAny": ["alvares-tally-contract"], "flagsNone": [] },
+      "_lockNote": "Opening these while under Alvares's tally contract is the JOB. Opening them without it is theft and `witnessed` will catch it — the cooper resident stands 44px away from 07:00 to 18:00.",
+      "contents": [ { "money": 0 }, { "flag": "tin-tally-checked" } ],
+      "onOpen": { "notification": "Ingot, mark, weight. Ingot, mark, weight. Forty cruzados is beginning to look like a wage rather than a gift." },
+      "emptyText": "Roped again, exactly as you found them. He will check the knots.",
+      "witnessed": true,
+      "reopenable": true
+    },
+    {
+      "id": "runners-handcart",
+      "prop": "handcart-22",
+      "anchor": { "x": 24, "y": 282 },
+      "approach": { "x": 36, "y": 288 },
+      "label": "Search the handcart",
+      "_examine": "A two-wheeled handcart, shafts resting on the cobbles.",
+      "lock": null,
+      "contents": [ { "itemId": "cargo-manifest", "count": 1 } ],
+      "onOpen": { "notification": "A copy of a copy, in a fine upright secretary hand — and the fee column leaning." },
+      "_note": "Diogo Almeida's `handwriting` topic verbatim: 'Senhor Mesquita writes a fine upright secretary hand, very even - except in the fee column, where the letters lean.' Finding it in a cart before Diogo says it makes his line land as confirmation instead of exposition.",
+      "emptyText": "Straw, a broken seal-wafer, and the smell of somebody else's morning.",
+      "witnessed": false,
+      "reopenable": false
+    },
+    {
+      "id": "street-chicken-coop",
+      "prop": "chicken-coop-57",
+      "anchor": { "x": 13, "y": 295 },
+      "approach": { "x": 26, "y": 300 },
+      "label": "Open the coop",
+      "lock": null,
+      "contents": [ { "itemId": "egg", "count": 2 } ],
+      "onOpen": {
+        "notification": "Two eggs, and one hen now loose on Rua Direita.",
+        "flags": ["loosed-a-chicken"],
+        "_note": "Spawns a `crowd-malay-child` chasing a chicken sprite along the `near-pavement` crowd path for 60s. Aminah gets a one-off bark. This is the only joke in the openables set and it should be the only one."
+      },
+      "emptyText": "The hen has not forgiven you and neither, apparently, has the street.",
+      "witnessed": true,
+      "reopenable": true
+    }
+  ],
+
+  "a-famosa-gate": [
+    {
+      "id": "powder-store",
+      "prop": "powder",
+      "anchor": { "x": 45, "y": 255 },
+      "approach": { "x": 45, "y": 268 },
+      "label": "Open the powder barrels",
+      "_examine": "Powder barrels",
+      "lock": { "needs": null, "flagsAny": [], "flagsNone": ["magazine-tampered"] },
+      "contents": [ { "flag": "magazine-tampered" } ],
+      "onOpen": {
+        "flags": ["magazine-tampered"],
+        "reputation": { "portuguese": -20 },
+        "notification": "Serpentine powder, badly stored. A sentry is already walking toward you.",
+        "_note": "The one openable in the game that is purely a trap. Rodrigues's `duty` and `garrison` topics establish exactly how he would take this. It costs the player nothing they need and 20 points of the faction whose Capitão gates the diplomatic path — which is a lesson, not a wall."
+      },
+      "emptyText": "Somebody has put a new seal on the head since you last looked at it. You are fairly sure that is about you.",
+      "witnessed": true,
+      "reopenable": false
+    },
+    {
+      "id": "gate-stall-box",
+      "prop": "gate-stall",
+      "anchor": { "x": 112, "y": 316 },
+      "approach": { "x": 112, "y": 328 },
+      "label": "Open the stall box",
+      "_examine": "A stall by the gate",
+      "lock": null,
+      "contents": [ { "money": 5 } ],
+      "onOpen": { "notification": "Five cruzados in small coin, under a folded cloth." },
+      "emptyText": "String, a comb, a tin cup, and the day's takings gone somewhere sensible.",
+      "witnessed": true,
+      "reopenable": false
+    }
+  ],
+
+  "st-pauls-church": [
+    {
+      "id": "churchyard-well-bucket",
+      "prop": "churchyard-well",
+      "anchor": { "x": 282, "y": 299 },
+      "approach": { "x": 282, "y": 310 },
+      "label": "Haul up the bucket",
+      "lock": null,
+      "contents": [ { "itemId": "rosary", "count": 1 } ],
+      "onOpen": {
+        "notification": "Somebody's rosary, down there long enough to have gone green.",
+        "_note": "st-pauls-church.location.json already places a `rosary` world item at (290,307), eight pixels from the well. Move that item INTO the bucket instead of leaving it lying on the flagstones, and the plate stops looking like a shop floor."
+      },
+      "emptyText": "Cold, and further down than the hill suggests. The rope is longer than the church is tall.",
+      "witnessed": false,
+      "reopenable": true
+    }
+  ],
+
+  "kampung": [
+    {
+      "id": "healers-mat-roll",
+      "prop": "mats",
+      "anchor": { "x": 451, "y": 241 },
+      "approach": { "x": 451, "y": 254 },
+      "label": "Unroll the mats",
+      "_examine": "Mats and a rice mortar",
+      "lock": null,
+      "contents": [ { "itemId": "medicinal-herbs", "count": 1 } ],
+      "onOpen": {
+        "notification": "Tongkat ali, kacip fatimah, misai kucing — bundled, labelled in a hand you cannot read.",
+        "_note": "Mak Enang's `healing` topic names those three plants exactly. Finding them named and bundled before she explains them is the difference between lore and a world."
+      },
+      "emptyText": "Rolled and tied the way she ties them, which is not the way you tied them.",
+      "witnessed": true,
+      "reopenable": true
+    },
+    {
+      "id": "kampung-coop",
+      "prop": "chicken-coop-40",
+      "anchor": { "x": 118, "y": 263 },
+      "approach": { "x": 118, "y": 276 },
+      "label": "Open the coop",
+      "lock": null,
+      "contents": [ { "itemId": "egg", "count": 3 } ],
+      "onOpen": { "notification": "Three eggs, still warm. In the kampung this is not theft unless you take all of them." },
+      "emptyText": "Empty this morning, and the hens have an opinion about who is responsible.",
+      "witnessed": true,
+      "reopenable": true
+    }
+  ],
+
+  "_itemsRequired": [
+    { "itemId": "egg", "status": "NEW — needs a definition in the item table and a 16x16 icon. Value 1 cruzado. See dependencies D7." },
+    { "itemId": "trading-seal", "status": "exists — src/data/quests/merchants-seal.json items" },
+    { "itemId": "letter-of-credit", "status": "exists — same" },
+    { "itemId": "cargo-manifest", "status": "exists — a-famosa-gate.location.json items[0]" },
+    { "itemId": "spice-sample", "status": "exists — rua-direita.location.json items[1]" },
+    { "itemId": "medicinal-herbs", "status": "exists — kampung.location.json items[0]" },
+    { "itemId": "rosary", "status": "exists — st-pauls-church.location.json items[0]" },
+    { "itemId": "key-warehouse", "status": "exists — a-famosa-gate.location.json items[1], currently unlocks nothing" }
+  ],
+
+  "_propTypesNeedingOpenState": [
+    "customs-shed (or counting-house)", "chest", "godown", "barrel-open", "crate", "crate-stack", "handcart", "chicken-coop", "market-stall", "mat-rolls", "powder-store", "churchyard-well"
+  ],
+  "_openStateFallback": "Tier-0: no sprite change at all. The prompt reads 'Open the X', the notification fires, and the label flips to the emptyText on subsequent examines. Tier-1: a 1-frame lid-ajar variant per prop TYPE (12 sprites, all reusable across every instance of that type on every plate). Tier-2: a 2-frame open animation. The set is worth shipping at Tier-0 on day one; the value is in the contents and the prose, not the hinge."
+}

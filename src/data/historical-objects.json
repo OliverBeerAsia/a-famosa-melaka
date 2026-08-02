@@ -196,8 +196,8 @@
       "sprite": "abacus",
       "interaction": "examine",
       "description": "A wooden counting frame with bamboo rods and beads.",
-      "examineText": "The suanpan - the Chinese counting board. Two beads above the divider, five below. In skilled hands, calculations flow like water.\n\n*The Chinese have used this tool for over a thousand years. While Portuguese merchants struggle with quill and paper, a Chinese accountant clicks through complex sums in heartbeats. No wonder they dominate the trade.*",
-      "historicalNote": "The Chinese abacus was an essential tool of commerce. Skilled operators could perform calculations faster than written arithmetic, giving Chinese merchants a practical advantage in trade negotiations."
+      "examineText": "The suanpan - the Chinese counting board. Two beads above the divider, five below. In skilled hands, calculations flow like water.\n\n*The Portuguese clerks across the yard use quill, paper and Hindu-Arabic figures and arrive at the same answer at roughly the same speed. The advantage was never the beads. It is that this house has had correspondents in Fujian for forty years and knows what a picul fetched in Zhangzhou last season, and the Portuguese clerk knows what it fetched in Lisbon eighteen months ago.*",
+      "historicalNote": "The suanpan was the standard reckoning tool of Chinese commerce and fast in trained hands, but the commercial edge of Melaka's Chinese houses rested on capital, kinship networks and current price information from the China ports rather than on any calculating device."
     },
     "bonded-warehouse-ledger": {
       "id": "bonded-warehouse-ledger",
@@ -284,8 +284,8 @@
       "sprite": "stone-ruins",
       "interaction": "examine",
       "description": "Crumbling stone foundations of an older structure.",
-      "examineText": "Before the church, before the Portuguese, this hilltop held the Sultan's palace. These stones are what remain - foundations repurposed, walls torn down, a history deliberately erased.\n\n*The Portuguese built their church on the highest point, where the Sultan once ruled. A message in architecture: the old powers are gone. Christ reigns now.*\n\n*But the Malays remember. In the kampung, they still tell stories of the old Sultanate. Memories are harder to demolish than palaces.*",
-      "historicalNote": "The Portuguese systematically destroyed mosques and palaces after the conquest, using the materials to build churches and fortifications. St. Paul's Church was built on the site of the Sultan's compound."
+      "examineText": "Foundations, and a line of cut stone running down toward the water. The istana stood here - not on the crown of the hill, but below it, where a ruler could hear the river.\n\n*Nobody quarried this. It was simply left. The mosque and the royal tombs were quarried, and they are up there now, holding up a wall.*\n\n*Which is its own kind of message: the palace was allowed to rot, the mosque was not allowed to exist.*",
+      "historicalNote": "The sultan's istana stood at the foot of the hill by the river, not on the summit. The Portuguese demolition programme took its stone from the congregational mosque and the royal tombs to build A Famosa; the chapel on the summit was raised on bare ground in 1521."
     },
     "processional-cross": {
       "id": "processional-cross",
@@ -296,7 +296,7 @@
       "interaction": "examine",
       "description": "A weathered cross set beside the hill path where processions pause before climbing to the church.",
       "examineText": "The base is worn smooth by hands and shoulders. Clergy, soldiers, widows, and schoolchildren all stop here on feast days before making the final ascent to the church above.\n\n*The hill teaches devotion through effort. One climbs, sweats, slows, and arrives prepared to feel sacred space as relief.*",
-      "historicalNote": "Processional markers and crosses helped structure Catholic devotional movement in Portuguese settlements. The climb to St. Paul's would have been a religious as well as physical ascent."
+      "historicalNote": "Processional markers and crosses helped structure Catholic devotional movement in Portuguese settlements. The climb to the church on the hill would have been a religious as well as physical ascent."
     },
     "mission-study-lantern": {
       "id": "mission-study-lantern",
@@ -482,8 +482,8 @@
       "sprite": "pelourinho",
       "interaction": "examine",
       "description": "A stone pillory column standing in the town square.",
-      "examineText": "The pelourinho — a pillory, the mark of Portuguese municipal authority planted in every colonial settlement from Brazil to Macau. This one stands in Rua Direita as a symbol that this is, legally and spiritually, Portuguese soil.\n\nCriminals are shackled here for public humiliation. But its true purpose is symbolic: it declares that Portuguese law — not the Sultan's adat — governs this street.\n\n*The iron shackles are rusted but functional. Fresh scratches on the stone suggest recent use.*",
-      "historicalNote": "The pelourinho was a standard feature of Portuguese colonial towns, serving both as an instrument of punishment and a symbol of the sovereign authority of the Portuguese crown over the settlement."
+      "examineText": "The pelourinho — a pillory, the mark of Portuguese municipal authority planted in every colonial settlement from Brazil to Macau. This one stands in Rua Direita to declare that this is, legally and spiritually, Portuguese soil.\n\n*Which is true of the stone, and true of the street, and gets less true with every hundred paces you walk from it. The Malays still answer to a bendahara. The harbour communities still answer to their shahbandars. The Chinese answer to a Kapitan the fortress itself appointed. The pillory declares one law; the town runs on four, and the fortress has decided not to notice, because noticing would cost money.*\n\n*The iron shackles are rusted but functional. Fresh scratches on the stone suggest recent use.*",
+      "historicalNote": "The pelourinho was a standard feature of Portuguese colonial towns, serving both as an instrument of punishment and a symbol of crown authority. In practice Portuguese Melaka retained the sultanate's bendahara, temenggong and shahbandars to keep order and trade moving, and appointed a Kapitan China over the Chinese community in 1572 — a legally plural city in which the pillory's claim was loudly asserted and quietly untrue."
     },
     "pepper-pile": {
       "id": "pepper-pile",

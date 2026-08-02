@@ -1,0 +1,105 @@
+{
+  "_meta": {
+    "purpose": "Stage 5 crowd pacing fix. Measured diagnosis, then the target numbers, then the two ways to reach them.",
+    "sourceOfTruth": "src/phaser/systems/CrowdSystem.ts + the `crowd` block of each src/data/locations/<id>.location.json.",
+    "benchmarkTarget": "Item 10 of the 20-item benchmark checklist: '>=2 ambient crowd NPCs per public screen, >=5 on Rua Direita, each with >=2-frame idle and a walk path.' The checklist counts PER SCREEN, i.e. per 320x180 native viewport — not per plate."
+  },
+
+  "diagnosis": {
+    "theBug": "Crowd population is governed by the SPAWN INTERVAL, not by maxCrowd. CrowdSystem.trySpawnCrowdMember() fires once per tick at `3000 / density` ms and spawns at most one member; each member is destroyed when its tween chain completes. Steady-state population is therefore (mean route duration) / (spawn interval), and maxCrowd only ever acts as a ceiling — which on every one of the five locations it never reaches.",
+    "theSecondBug": "The world grew 4x at v0.11.0 (640x360 native scrolling, 960x540 viewport) and the crowd budget did not. The viewport shows one quarter of the plate area, so the on-screen count is roughly a quarter of the world count.",
+    "theThirdBug": "The per-path `speed` field authored in every location file (e.g. `\"speed\": 22`) is DEAD DATA. CrowdSystem uses CROWD_TYPES[typeName].speed and never reads path.speed. Either wire it (as a per-path multiplier — it is genuinely useful for making the crane gang shuffle and the street traffic stride) or delete it from the schema. Right now it silently lies to the author.",
+
+    "measured": [
+      { "location": "a-famosa-gate", "maxCrowd": 12, "density": 0.5, "spawnIntervalSec": 6.0, "meanRouteSec": 9.6, "steadyStateWorld": 1.6, "approxOnScreen": 0.4 },
+      { "location": "rua-direita", "maxCrowd": 14, "density": 1.0, "spawnIntervalSec": 3.0, "meanRouteSec": 13.3, "steadyStateWorld": 4.4, "approxOnScreen": 1.1 },
+      { "location": "waterfront", "maxCrowd": 14, "density": 0.8, "spawnIntervalSec": 3.75, "meanRouteSec": 10.2, "steadyStateWorld": 2.7, "approxOnScreen": 0.7 },
+      { "location": "st-pauls-church", "maxCrowd": 8, "density": 0.3, "spawnIntervalSec": 10.0, "meanRouteSec": 10.7, "steadyStateWorld": 1.1, "approxOnScreen": 0.3 },
+      { "location": "kampung", "maxCrowd": 10, "density": 0.7, "spawnIntervalSec": 4.29, "meanRouteSec": 8.2, "steadyStateWorld": 1.9, "approxOnScreen": 0.5 }
+    ],
+    "_measurementMethod": "Route length summed over each path's polyline in native px, x3 for world px, divided by the mean CROWD_TYPES speed of that location's crowdTypes list. Reproducible; the numbers above are exact for the shipped data.",
+    "_verdict": "Every location is between 0.3 and 1.1 ambient crowd members on screen at midday. The benchmark asks for 2 to 5. 'A Famosa reads sparse' is not a perception problem — the location holds 1.6 people and shows 0.4 of them. 'Crowded' is one of the seven atmosphere keywords in CLAUDE.md and it is currently the only one the engine actively contradicts."
+  },
+
+  "targets": {
+    "_note": "worldTarget is the steady-state population across the whole 640x360 plate. onScreenTarget is worldTarget x 0.25 corrected upward for the fact that routes cluster around the plate centre where the player usually is.",
+    "rua-direita":      { "worldTarget": 22, "onScreenTarget": 6, "benchmarkMin": 5, "maxCrowd": 24, "density": 5.0 },
+    "waterfront":       { "worldTarget": 18, "onScreenTarget": 5, "benchmarkMin": 2, "maxCrowd": 20, "density": 5.3 },
+    "a-famosa-gate":    { "worldTarget": 14, "onScreenTarget": 4, "benchmarkMin": 2, "maxCrowd": 16, "density": 4.4 },
+    "kampung":          { "worldTarget": 10, "onScreenTarget": 3, "benchmarkMin": 2, "maxCrowd": 12, "density": 3.7 },
+    "st-pauls-church":  { "worldTarget": 6,  "onScreenTarget": 2, "benchmarkMin": 2, "maxCrowd": 8,  "density": 1.7 },
+    "_densityFormula": "density = 3 * worldTarget / meanRouteSec. These values assume the CURRENT one-spawn-per-tick engine and the CURRENT route sets. If either changes, recompute."
+  },
+
+  "fixA_dataOnly": {
+    "_summary": "Change five `crowd.density` values, five `crowd.maxCrowd` values, and the three quality caps. No engine logic changes. Ships in an hour.",
+    "locationEdits": {
+      "rua-direita":     { "maxCrowd": 24, "density": 5.0 },
+      "waterfront":      { "maxCrowd": 20, "density": 5.3 },
+      "a-famosa-gate":   { "maxCrowd": 16, "density": 4.4 },
+      "kampung":         { "maxCrowd": 12, "density": 3.7 },
+      "st-pauls-church": { "maxCrowd": 8,  "density": 1.7 }
+    },
+    "engineConstants": {
+      "file": "src/phaser/systems/CrowdSystem.ts",
+      "getMaxCrowdCap": { "low": 10, "balanced": 24, "high": 32 },
+      "_was": { "low": 5, "balanced": 10, "high": 15 },
+      "_note": "The `balanced` cap of 10 is currently BELOW four of the five new maxCrowd values and would silently clamp the whole fix. This is the change that actually unlocks the others."
+    },
+    "risk": "Spawn interval on Rua Direita becomes 600ms. Members still enter from route endpoints, so the world visibly 'fills from the edges' for the first ~12s after a location load, and the initial burst (maxCrowd * 0.5, one per 200ms) is 12 sprites in 2.4s all walking from the same handful of start points. Acceptable, but Fix B removes it."
+  },
+
+  "fixB_spawnModel": {
+    "_summary": "The correct fix. Three small changes to CrowdSystem, after which `maxCrowd` means what the author thinks it means and `density` becomes a top-up rate.",
+    "changes": [
+      {
+        "id": "B1",
+        "what": "trySpawnCrowdMember() tops up toward effectiveMax instead of adding one per tick: `while (count < effectiveMax && spawnedThisTick < 2) spawn()`. Keep the 3000/density tick.",
+        "why": "maxCrowd becomes the binding constraint. Author intent and engine behaviour agree for the first time."
+      },
+      {
+        "id": "B2",
+        "what": "Give each new member a random start offset t in [0, 0.6] along its route, positioning it at that point and shortening the first leg accordingly.",
+        "why": "Kills the 'fills from the edges' tell. A location load now presents a street that was already busy rather than one that starts empty and populates."
+      },
+      {
+        "id": "B3",
+        "what": "Add a per-path `weight` (default 1) and pick paths weighted rather than uniformly, and honour the existing dead `speed` field as a per-path multiplier on CROWD_TYPES speed.",
+        "why": "Loops like `crane-gang` (6s) currently receive the same share of spawns as `west-east-street` (22s), so short loops churn and long routes are underpopulated. Weighting by route duration evens the visible distribution. Wiring `speed` makes the crane gang shuffle and the street traffic stride, which is free variety."
+      }
+    ],
+    "locationEditsUnderFixB": {
+      "_note": "With B1 in place, density is only the top-up rate; set it so a location refills within ~15s of a mass exit (rain), and set maxCrowd to the worldTarget.",
+      "rua-direita":     { "maxCrowd": 22, "density": 1.6 },
+      "waterfront":      { "maxCrowd": 18, "density": 1.4 },
+      "a-famosa-gate":   { "maxCrowd": 14, "density": 1.2 },
+      "kampung":         { "maxCrowd": 10, "density": 1.0 },
+      "st-pauls-church": { "maxCrowd": 6,  "density": 0.7 }
+    }
+  },
+
+  "timeOfDayCurve": {
+    "file": "src/phaser/systems/CrowdSystem.ts TIME_DENSITY",
+    "current": { "dawn": 0.3, "day": 1.0, "dusk": 0.6, "night": 0.2 },
+    "proposed": { "dawn": 0.45, "day": 1.0, "dusk": 0.8, "night": 0.15 },
+    "_rationale": "Dusk is the busiest hour of a tropical trading port, not a 40% reduction — the heat has broken, the lighters are up, the market is clearing stock, and the Angelus has just rung. Raise dusk to 0.8. Night goes DOWN to 0.15, not up, because the ambient residents (see ambient-residents.draft.json) now provide the night floor and they are a far better night population than randomly-routed transients: they are where they should be, doing something, with a bark.",
+    "residentFloor": {
+      "rua-direita": 3, "waterfront": 3, "a-famosa-gate": 3, "kampung": 3, "st-pauls-church": 3,
+      "_ofWhichNocturnal": { "a-famosa-gate": 1, "rua-direita": 1, "waterfront": 0, "st-pauls-church": 1, "kampung": 1 },
+      "_note": "gate-sentry is 24h; rua-arcade-porter runs to 22:00; hill-acolyte to 21:00; kampung-elder to 21:00. Combined with Rudra under his lantern (to 22:00), Rashid at the brazier (to 22:00), Siti in the porch (all night) and the night watch (22:00-04:00), the 'city empty after 22:00' failure is fixed by schedule and residents rather than by more crowd."
+    }
+  },
+
+  "perLocationNotes": {
+    "a-famosa-gate": "The sparsest location and the one the player SPAWNS INTO (a-famosa-gate.location.json spawns.player 320,264 is the game's first screen). It has six authored paths and three crowd types, but `gate-queue` (4.1s) and `south-road` (2.5s) are so short they churn — a body appears, walks 90 native px, and vanishes. Extend both: gate-queue should run from (320,214) down to (320,356) through the whole plaza, and south-road should join it rather than duplicate it. Also add `arab_trader` and `chinese_merchant` to crowdTypes — a customs gate with only Portuguese and Malay through it is the one place in Melaka where the cargo of four cultures physically has to pass.",
+    "rua-direita": "Already the densest and still only 1.1 on screen. It has the richest crowdTypes list (6) and the best path set. It needs nothing except the numbers. Under Fix A it is the location most likely to reveal a perf ceiling; measure there first.",
+    "waterfront": "`crane-gang` (6s) and `customs-queue` (4.5s) are working loops that should be nearly always occupied — give them weight 2.5 under B3. `pier-walk` runs out onto the wooden pier where the mask is a 16px-wide diagonal strip; verify no member clips off it after the weighting change.",
+    "st-pauls-church": "Deliberately quiet and should stay so — 2 on screen is the target, not 5. But the `priest` crowd type at speed 60 on the 19.6s `crest-walk` is a member visible for 20 seconds walking in a straight line, which reads as a bug rather than as calm. Give crest-walk a 3s pause waypoint at the view-bench (224,186).",
+    "kampung": "The only location whose crowd is culturally homogeneous by design, which is correct. Its problem is that `fire-tend` (4.3s) and `well-round` (7.2s) are the two loops that actually characterise a village and they get 2/5 of the spawns. Weight them to 3."
+  },
+
+  "acceptanceMeasurement": {
+    "method": "Add a dev overlay (URL param ?crowdstats=1) printing: world crowd count, on-screen crowd count (members whose sprite intersects the camera worldView), resident count, named-NPC count. Screenshot each location at 08:00 / 13:00 / 19:00 / 23:00.",
+    "pass": "on-screen crowd + residents >= benchmarkMin at 08:00, 13:00 and 19:00; >= 2 at 23:00 on a-famosa-gate and rua-direita; frame time within 10% of the pre-change baseline at `balanced` quality on the busiest screen."
+  }
+}

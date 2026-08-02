@@ -145,7 +145,7 @@
       "npcDialogueOverrides": {
         "padre-tomas": {
           "sanctuary-consequence": {
-            "text": "Alvares has complained to the Governor. There will be... inquiries. But something unexpected has happened. Other servants from his household have come forward. They speak of cruelties, of theft from THEM. *slight smile* The light of truth, once lit, spreads. Alvares may find himself the one facing judgment. Siti will remain here, under Church protection, until this matter resolves. Thank you, my friend. You helped me find my courage."
+            "text": "Alvares has complained to the Capitão. There will be... inquiries. But something unexpected has happened. Other servants from his household have come forward. They speak of cruelties, of theft from THEM. *slight smile* The light of truth, once lit, spreads. Alvares may find himself the one facing judgment. Siti will remain here, under Church protection, until this matter resolves. Thank you, my friend. You helped me find my courage."
           }
         }
       },
@@ -211,7 +211,7 @@
       "npcDialogueOverrides": {
         "capitao-rodrigues": {
           "alvares-evidence": {
-            "text": "*reviews papers* Abuse of servants, false accusations, and smuggling to avoid crown duties. *cold smile* Senhor Alvares has been busy. I will order his arrest. The Governor will hear of this - Alvares' connections cannot protect him from these charges. As for the woman Siti, her name will be cleared. *looks at you with new respect* You have done good work. Justice in Melaka is... difficult. But not impossible."
+            "text": "*reviews papers* Abuse of servants, false accusations, and smuggling to avoid crown duties. *cold smile* Senhor Alvares has been busy. I will order his arrest. The Ouvidor will hear of this - Alvares' connections cannot protect him from these charges. As for the woman Siti, her name will be cleared. *looks at you with new respect* You have done good work. Justice in Melaka is... difficult. But not impossible."
           }
         }
       },

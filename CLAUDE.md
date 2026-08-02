@@ -119,7 +119,7 @@ A Portuguese merchant (Fernão Gomes) has lost his trading seal. Player investig
 - **Padre Tomás**: Jesuit priest (St. Paul's Church)
 - **Aminah**: Malay market vendor (Market stalls)
 - **Chen Wei**: Chinese guild representative (Waterfront counting house)
-- **Rashid**: Arab sailor, comic relief (Docked dhow)
+- **Rashid**: Omani sailor and navigator — warm, quick-witted, carries the weight of a family four thousand miles away; humor is his manner, not his function (Docked dhow)
 
 ## Atmosphere & Mood
 
