@@ -7,6 +7,9 @@
 
 import Phaser from 'phaser';
 import runtimeAssetManifest from '../../data/runtime-asset-manifest.json';
+import feedbackAudio from '../../data/feedback-audio.json';
+import waterCycleData from '../../data/water-cycle.json';
+import faunaData from '../../data/fauna.json';
 import type { TileVariantManifest } from '../core/tileVariants';
 import { ITEM_DEFINITIONS } from '../../stores/inventoryStore';
 import { anyLocationUsesIsometric, getLocation, LOCATION_IDS } from '../core/LocationData';
@@ -20,6 +23,8 @@ const ISO_TILE_IDS = runtimeAssetManifest.tiles.isometric as readonly string[];
 const TILE_VARIANTS = runtimeAssetManifest.tileVariants as TileVariantManifest;
 const STATIC_OBJECT_IDS = runtimeAssetManifest.objects.static as readonly string[];
 const ITEM_ICON_IDS = Object.keys(ITEM_DEFINITIONS);
+/** The 12 v0.12 feedback SFX. Shared with the build's key-existence gate. */
+const FEEDBACK_SFX = feedbackAudio.keys as readonly string[];
 
 /**
  * True only if at least one location's plate.runtimeMode is 'isometric'.
@@ -181,6 +186,33 @@ export class BootScene extends Phaser.Scene {
         frameHeight: sheet.frameHeight,
       });
     });
+
+    // Flicker delta pools: three palette states per radius class, laid over
+    // the plate's BAKED light pools (tools/forge/flame-pools.cjs).
+    [34, 42, 50, 58].forEach((r) => {
+      this.load.spritesheet(`flame-pool-${r}`, `sprites/effects/flame-pool-${r}.png`, {
+        frameWidth: r * 2,
+        frameHeight: r * 2,
+      });
+    });
+
+    // Dust for the surface responses: 12x4 native, three 4x4 frames.
+    this.load.spritesheet('fx-dust', 'sprites/particles/dust.png', {
+      frameWidth: 4,
+      frameHeight: 4,
+    });
+
+    // Ambient fauna (tools/forge/fauna-sheets.cjs). Frame sizes come from the
+    // roster's own `clips` block, so a sheet can never be sliced on numbers
+    // that disagree with the data driving it.
+    Object.entries(
+      (faunaData as { clips: Record<string, { frameWidth: number; frameHeight: number }> }).clips,
+    ).forEach(([key, clip]) => {
+      this.load.spritesheet(key, `sprites/objects/${key}-sheet.png`, {
+        frameWidth: clip.frameWidth,
+        frameHeight: clip.frameHeight,
+      });
+    });
   }
 
   private loadSceneBackgrounds() {
@@ -210,6 +242,57 @@ export class BootScene extends Phaser.Scene {
     });
 
     this.loadPlateCompanions();
+    this.loadGradeLuts();
+    this.loadWaterCycle();
+  }
+
+  /**
+   * Pre-rendered water palette-cycle frames (waterfront 8, kampung 6, x4 ToD).
+   *
+   * All four times of day are loaded, not just the current one: the hour can
+   * change while you stand on the quay, and a cycle that has to fetch its
+   * frames mid-crossfade would stall exactly when the water is most visible.
+   * Total on disk is ~600 KB for all 56.
+   */
+  private loadWaterCycle() {
+    const regions = (waterCycleData as { regions: Record<string, { frames: number }> }).regions;
+    Object.entries(regions).forEach(([id, region]) => {
+      (['day', 'dawn', 'dusk', 'night'] as const).forEach((tod) => {
+        for (let n = 0; n < region.frames; n++) {
+          this.load.image(`water-${id}-${tod}-${n}`, `scenes/cycle/${id}-${tod}-water-${n}.png`);
+        }
+      });
+    });
+  }
+
+  /**
+   * The 20 runtime grade LUTs sampled by `MelakaPostFX` (5 locations x 4 phases,
+   * 256x16 px, ~2.5 KB each — 50 KB for the whole set).
+   *
+   * They are LINEAR-filtered on purpose, against the game's global
+   * `pixelArt: true` NEAREST default: the shader does one hardware-bilinear tap
+   * per blue slice and lerps between them, which is what keeps a 16^3 lattice
+   * from banding an otherwise smooth gradient into 16 steps. The strip layout
+   * keeps bilinear inside its own slice, so no colour ever bleeds across a
+   * slice seam.
+   */
+  private loadGradeLuts() {
+    const phases = ['day', 'dawn', 'dusk', 'night'] as const;
+    LOCATION_IDS.forEach((id) => {
+      phases.forEach((phase) => {
+        this.load.image(`lut-${id}-${phase}`, `scenes/luts/${id}-${phase}.png`);
+      });
+    });
+    this.load.once(Phaser.Loader.Events.COMPLETE, () => {
+      LOCATION_IDS.forEach((id) => {
+        phases.forEach((phase) => {
+          const key = `lut-${id}-${phase}`;
+          if (this.textures.exists(key)) {
+            this.textures.get(key).setFilter(Phaser.Textures.FilterMode.LINEAR);
+          }
+        });
+      });
+    });
   }
 
   /**
@@ -275,6 +358,12 @@ export class BootScene extends Phaser.Scene {
       'sfx-crowd-murmur',
       'sfx-birds-tropical',
       'sfx-wind-hilltop',
+      // v0.12 feedback batch (game-feel spec §3.3). Every one of these is
+      // referenced by the feedback event table, so a missing file is a build
+      // failure in tools/validate-gameplay-assets.cjs rather than a silent
+      // no-op at runtime — the exact failure mode Stage 1 found in the five
+      // transition stings.
+      ...FEEDBACK_SFX,
     ];
     sfx.forEach((sound) => {
       this.load.audio(sound, `audio/sfx/${sound}.wav`);

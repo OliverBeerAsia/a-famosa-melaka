@@ -232,8 +232,22 @@ function compose(rawLayout, opts) {
     const strength = sh.strength === undefined ? 0.30 : sh.strength;
     polys.forEach((poly) => {
       const pts = poly.map((p) => iso.toScreen(p.tx, p.ty, 0));
+      // THE EDGE OF A SHADE BAND IS NOT A RULER LINE.
+      // The band itself is right — it is the ambient shade of a roofed but
+      // unwalled space — but a flat rhombus of darkening stops dead on four
+      // straight screen edges, and beside a market stall that reads as a
+      // rectangular patch cut out of the ground rather than as shadow. So the
+      // outer two pixels are ordered-dithered out: the ONE legal dither, a
+      // 2-3px band at a transition, not a feather across the whole shape.
+      const xs = pts.map((q) => q.x), ys = pts.map((q) => q.y);
+      const x0 = Math.min(...xs), x1 = Math.max(...xs);
+      const y0 = Math.min(...ys), y1 = Math.max(...ys);
       plate.fillPoly(pts, (u, v, x, y) => {
-        T.shadePixel(plate, x, y, T.checker2(x, y) ? strength : strength * 0.55);
+        const near = Math.min(x - x0, x1 - x, y - y0, y1 - y);
+        let t = strength;
+        if (near < 3) t *= (near + 0.5) / 3;              // ramp out at the rim
+        if (near < 3 && T.bayer(x, y) > (near + 0.5) / 3) t = 0;
+        if (t > 0) T.shadePixel(plate, x, y, T.checker2(x, y) ? t : t * 0.55);
         return null;
       });
     });
@@ -568,6 +582,7 @@ function contactDefinition(plate, walk, groundOnly, opts) {
     frontier = next;
   }
 
+  const LIFT_CEIL = o.liftCeiling === undefined ? 96 : o.liftCeiling;
   const PALE = P.RAMPS.earth[4];
   const VIOLET = P.ANCHORS['shadow-violet'];
   for (let i = 0; i < W * H; i++) {
@@ -576,10 +591,31 @@ function contactDefinition(plate, walk, groundOnly, opts) {
     const src = seed[i];
     // for rings past the first, judge against the ORIGINAL mass, not the ring
     const massI = d === 1 ? src : (seed[src] >= 0 ? seed[src] : src);
-    const massL = lumaAt(massI), groundL = lumaAt(i);
+    /**
+     * JUDGE THE MASS, NOT ITS CONTACT COURSE.
+     *
+     * Sampling only the boundary pixel gets the wall's own dark plinth — every
+     * building kit draws one — so a limewashed house reported itself as DARK,
+     * the pass chose the pale "dust" ring, and the result was a bright band
+     * hugging a bright wall with a dark course between them. That reads as an
+     * outline glow, i.e. the opposite of grounding. Look a few pixels up into
+     * the mass as well and take the brighter reading, so the polarity is
+     * decided by the wall the player actually sees.
+     */
+    const mx = massI % W, my = (massI / W) | 0;
+    let massL = lumaAt(massI);
+    for (let k = 2; k <= 5; k++) {
+      const up = (my - k) * W + mx;
+      if (my - k >= 0 && isMass(up)) massL = Math.max(massL, lumaAt(up));
+    }
+    const groundL = lumaAt(i);
     if (Math.abs(massL - groundL) / 255 >= target) continue;   // already reads
     const x = i % W, y = (i / W) | 0;
-    const dark = massL > groundL;
+    // The lift is the exceptional case and has to EARN itself: the mass must be
+    // dark in absolute terms, not merely darker than the ground. Without that
+    // floor, two mid-value surfaces a few luma apart still triggered a pale
+    // ring, which is where the remaining halos came from.
+    const dark = massL > groundL || massL >= LIFT_CEIL;
     // THE FIRST RING IS SOLID. It is also the only ring the benchmark samples
     // — the metric compares a walkable pixel with the blocked pixel it TOUCHES —
     // so this is both the honest way to draw a contact occlusion (the last
@@ -735,11 +771,299 @@ function hashLayout(layout) {
 // ---------------------------------------------------------------------------
 // CLI
 // ---------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
+// WATER CYCLE STRIPS  (--cycle)
+// ---------------------------------------------------------------------------
+/**
+ * Ultima VII cycled the palette in place, 100 ms a step, and its harbour moved
+ * for free. We cannot: our plates ship as RGBA composites with the time of day
+ * and the practicals already baked in, and this compositor emits no index map,
+ * so there is nothing to rotate at runtime.
+ *
+ * THEREFORE: cycle offline, swap at runtime. This emits, per location and per
+ * time of day, N frames of the WATER BBOX ONLY — everything outside the water
+ * polygons is fully transparent, so a frame composites over the plate as a
+ * patch rather than replacing it. The engine swaps one texture per period tick
+ * (see systems/WaterCycleSystem) and that is the entire runtime cost.
+ *
+ * WHAT MOVES AND WHAT DOES NOT. Only the crest/trough banding and the glitter
+ * advance between frames. The base value field — the mottling that carries the
+ * water's depth and its current patches — is IDENTICAL in every frame. That
+ * distinction is the whole difference between water shimmering and water
+ * boiling.
+ *
+ * SPEC DEVIATION, and it is a load-bearing one. The game-feel spec says each
+ * frame "re-evaluates `texture.cjs water()` with the wave-band phase
+ * advanced". It does not, because `water()` PAINTS NOTHING ON THE SHIPPING
+ * PLATES: both water regions are authored as `texture:"dirt", material:"water"`
+ * (waterfront `backdrop` + ground `basin`, kampung ground `river`), so the
+ * pixels under our feet come from `dirt()` — a tile-space value-noise field
+ * with no wave bands and no glitter at all. Driving the cycle from `water()`
+ * would animate a surface that is not the one on screen, and every frame would
+ * pop against the plate. So the base value comes from the layout's OWN shader,
+ * exactly as the plate got it, and the spec's banding recipe is applied on top
+ * of it as a delta. Switching the layouts to `texture:"water"` is the other
+ * way to close this, but that is a plate re-render and belongs to the art track.
+ *
+ * SEAMLESS LOOPING. The crest pattern is keyed on `band % BAND_PERIOD` and the
+ * phase advances exactly BAND_PERIOD bands over the loop, so frame N-1 hands
+ * back to frame 0 with the wave field in the same state. Key it on the raw
+ * band index instead — the obvious way — and the loop jumps by one band every
+ * time it wraps.
+ *
+ * DETERMINISTIC: no Math.random, no Date.now. Same layout -> same bytes.
+ */
+
+/** How many bands the crest pattern repeats over, and travels, per loop. */
+const BAND_PERIOD = 4;
+
+/** Per-location cycle timing (game-feel spec §2.2). */
+const CYCLE_SPECS = {
+  waterfront: { frames: 8, periodMs: 2400, offsetMs: 0, glint: true },
+  kampung: { frames: 6, periodMs: 1800, offsetMs: 700, glint: false },
+};
+
+/** Integer hash in [0,1). Mirrors texture.cjs so the bands sit on its lattice. */
+function cycHash(a, b, seed) {
+  let h = Math.imul((a | 0) * 374761393 + (b | 0) * 668265263 + (seed | 0) * 1274126177, 1);
+  h = (h ^ (h >>> 13)) >>> 0;
+  h = Math.imul(h, 1274126177) >>> 0;
+  return ((h ^ (h >>> 16)) >>> 0) / 4294967296;
+}
+
+/**
+ * The crest/trough delta for one pixel at one phase, in RAMP STEPS.
+ *
+ * Straight out of the spec's §2.2 banding: a compressed vertical coordinate so
+ * crests crowd toward the horizon, each crest broken into segments along x so
+ * the surface reads as chop and not as corduroy.
+ */
+function crestDelta(x, y, horizonY, phaseBands, seed) {
+  const dy = Math.max(0, y - horizonY);
+  const bandF = Math.pow(dy, 0.68) * 0.62 + phaseBands;
+  const band = Math.floor(bandF);
+  const frac = bandF - band;
+  const key = ((band % BAND_PERIOD) + BAND_PERIOD) % BAND_PERIOD;
+  const segW = 12 + Math.floor(cycHash(key, 1, seed) * 18);
+  const seg = Math.floor((x + key * 17) / segW);
+  if (cycHash(key, seg, seed) <= 0.48) return 0;
+  if (frac > 0.82) return 1;    // crest
+  if (frac > 0.66) return -1;   // trough
+  return 0;
+}
+
+/**
+ * Emit the water cycle strips for a layout. Returns the manifest.
+ *
+ * `relight` is injected (tools/forge/relight-plates.cjs `relightNative`) so the
+ * frames go through the SAME lookup the plate did, at the same plate-relative
+ * column — which is what keeps dusk water on its warm bronze ramp
+ * (water-3 #C6924F -> water-4 #F8AE57) instead of drifting grey.
+ */
+function composeCycle(rawLayout, opts) {
+  const o = opts || {};
+  const W = rawLayout.canvas.width, H = rawLayout.canvas.height;
+  const iso = ISO.createIso(rawLayout.iso);
+  const layout = normalizeLayout(rawLayout, iso);
+  const id = layout.id;
+  const spec = CYCLE_SPECS[id];
+  if (!spec) return null;
+
+  const hz = layout.horizon || {};
+  const horizonY = hz.skyTo === undefined ? 76 : hz.skyTo;
+  const groundTop = hz.groundFrom === undefined ? 0 : hz.groundFrom;
+
+  const isWater = (g) => g && (g.surface === 'water' || g.material === 'water');
+  const regions = (layout.ground || []).map((g, i) => ({
+    i, g,
+    polys: shapePolys(g.shape),
+    shader: groundShader(Object.assign({ seed: 100 + i }, g)),
+    z: g.z || 0,
+    water: isWater(g),
+  }));
+  const backdrop = layout.backdrop
+    ? {
+      shader: groundShader(Object.assign({ seed: 7 }, layout.backdrop)),
+      water: isWater(layout.backdrop),
+    }
+    : null;
+
+  if (!regions.some((r) => r.water) && !(backdrop && backdrop.water)) return null;
+
+  // ---- 1. water mask + bbox, using the SAME top-most-wins test the plate did
+  const mask = new Uint8Array(W * H);
+  const shaderAt = new Array(W * H);
+  const tileAt = new Array(W * H);
+  let minX = W, minY = H, maxX = -1, maxY = -1;
+  for (let y = groundTop; y < H; y++) {
+    for (let x = 0; x < W; x++) {
+      let hit = null;
+      for (let k = regions.length - 1; k >= 0; k--) {
+        const r = regions[k];
+        const t = iso.toTile(x + 0.5, y + 0.5, r.z);
+        let inside = false;
+        for (const poly of r.polys) { if (ISO.tileInPoly(t.tx, t.ty, poly)) { inside = true; break; } }
+        if (inside) { hit = { r, t }; break; }
+      }
+      let water = false;
+      let shader = null;
+      let tile = null;
+      if (hit) {
+        water = hit.r.water;
+        shader = hit.r.shader;
+        tile = hit.t;
+      } else if (backdrop) {
+        water = backdrop.water;
+        shader = backdrop.shader;
+        tile = iso.toTile(x + 0.5, y + 0.5, 0);
+      }
+      if (!water) continue;
+      const p = y * W + x;
+      mask[p] = 1;
+      shaderAt[p] = shader;
+      tileAt[p] = tile;
+      if (x < minX) minX = x;
+      if (x > maxX) maxX = x;
+      if (y < minY) minY = y;
+      if (y > maxY) maxY = y;
+    }
+  }
+  if (maxX < 0) return null;
+
+  const bbox = { x: minX, y: minY, w: maxX - minX + 1, h: maxY - minY + 1 };
+  const ramp = P.RAMPS.water;
+  const rampIndex = new Map(ramp.map((hex, i) => [hex.toUpperCase(), i]));
+  const seed = 77;
+
+  // ---- 2. frames
+  const frames = [];
+  for (const tod of (o.tods || ['day', 'dawn', 'dusk', 'night'])) {
+    for (let n = 0; n < spec.frames; n++) {
+      const phaseBands = (n / spec.frames) * BAND_PERIOD;
+      const surface = new Surface(bbox.w, bbox.h);
+      for (let y = bbox.y; y <= maxY; y++) {
+        for (let x = bbox.x; x <= maxX; x++) {
+          const p = y * W + x;
+          if (!mask[p]) continue;                       // stays transparent
+          const t = tileAt[p];
+          const base = shaderAt[p](t.tx, t.ty, x, y);
+          if (!base) continue;
+          // The base value field is IDENTICAL every frame; only this delta moves.
+          let s = rampIndex.get(String(base).toUpperCase());
+          if (s === undefined) {
+            // Not a water-ramp colour (a shallows transition band). Leave it
+            // exactly as the plate painted it rather than guessing a step.
+            surface.setHex(x - bbox.x, y - bbox.y, base);
+            continue;
+          }
+          s += crestDelta(x, y, horizonY, phaseBands, seed);
+          let hex = ramp[Math.max(0, Math.min(ramp.length - 1, s))];
+          // Glitter: rare, per-frame, and only on the seaward half. The spec's
+          // `seed + n*101` — it does not need frame-to-frame continuity,
+          // because a glint is a discrete event, not a moving object.
+          if (spec.glint) {
+            const near = 1 - Math.min(1, (y - horizonY) / Math.max(1, maxY - horizonY));
+            if (cycHash(x >> 1, y >> 1, seed + 3 + n * 101) > 0.9985 - near * 0.0008) {
+              hex = P.ACCENTS['sun-specular'];
+            }
+          }
+          surface.setHex(x - bbox.x, y - bbox.y, hex);
+        }
+      }
+      // ---- 3. relight through the plate's OWN lookup, at the plate's column
+      if (o.relight && tod !== 'day') {
+        o.relight(
+          { data: surface.data, width: surface.width, height: surface.height },
+          tod,
+          { originX: bbox.x, originY: bbox.y, plateW: W },
+        );
+      }
+      frames.push({ tod, n, surface });
+    }
+  }
+
+  return {
+    id,
+    bbox,
+    frames: spec.frames,
+    periodMs: spec.periodMs,
+    offsetMs: spec.offsetMs,
+    order: Array.from({ length: spec.frames }, (_, i) => i),
+    images: frames,
+  };
+}
+
+function runCycle(rawLayout, outDir) {
+  const { relightNative } = require('./relight-plates.cjs');
+  const res = composeCycle(rawLayout, { relight: relightNative });
+  if (!res) {
+    console.log(`cycle      ${rawLayout.id}: no material:"water" region — nothing to emit`);
+    return null;
+  }
+  fs.mkdirSync(outDir, { recursive: true });
+  res.images.forEach(({ tod, n, surface }) => {
+    surface.writePNG(path.join(outDir, `${res.id}-${tod}-water-${n}.png`));
+  });
+  const manifest = {
+    $schema: 'melaka-forge/water-cycle@1',
+    generatedBy: 'tools/forge/compose-plate.cjs --cycle — regenerate with `npm run forge:cycle`, do not hand-edit',
+    id: res.id,
+    bbox: res.bbox,
+    frames: res.frames,
+    periodMs: res.periodMs,
+    offsetMs: res.offsetMs,
+    order: res.order,
+  };
+  fs.writeFileSync(
+    path.join(outDir, `${res.id}-water.json`),
+    JSON.stringify(manifest, null, 2) + '\n',
+  );
+
+  // The engine needs the bbox and the timings BEFORE any asset load resolves
+  // (BootScene has to know which frame keys to request), so the manifests are
+  // also merged into one module under src/data. Merged, not overwritten: the
+  // two locations are emitted by separate runs.
+  const enginePath = path.resolve(__dirname, '../../src/data/water-cycle.json');
+  let doc = {
+    $schema: 'melaka-forge/water-cycle@1',
+    generatedBy: 'tools/forge/compose-plate.cjs --cycle — regenerate with `npm run forge:cycle`, do not hand-edit',
+    note: 'Pre-rendered palette-cycle frames for every material:"water" region, per time of day. Frames are POST-LUT by construction (relit through the same lookup the plate was), and cover the water bbox only — every pixel outside the water polygons is transparent, so a frame composites over the plate as a patch. Emitted at native plate px; the runtime multiplies by world.scale exactly once.',
+    regions: {},
+  };
+  if (fs.existsSync(enginePath)) {
+    try { doc = Object.assign(doc, JSON.parse(fs.readFileSync(enginePath, 'utf8'))); } catch { /* rewrite */ }
+  }
+  doc.regions = doc.regions || {};
+  doc.regions[res.id] = {
+    bbox: res.bbox, frames: res.frames, periodMs: res.periodMs,
+    offsetMs: res.offsetMs, order: res.order,
+  };
+  const ordered = {};
+  Object.keys(doc.regions).sort().forEach((k) => { ordered[k] = doc.regions[k]; });
+  doc.regions = ordered;
+  fs.writeFileSync(enginePath, JSON.stringify(doc, null, 2) + '\n');
+  console.log(
+    `cycle      ${res.id}  bbox ${res.bbox.w}x${res.bbox.h} @ ${res.bbox.x},${res.bbox.y}  `
+    + `${res.frames}f/${res.periodMs}ms x4 ToD = ${res.images.length} png`
+  );
+  return manifest;
+}
+
 function run(argv) {
   const file = argv.find((a) => !a.startsWith('--'));
-  if (!file) { console.error('usage: compose-plate.cjs <layout.json> [--out DIR] [--review] [--scale 3]'); process.exit(1); }
+  if (!file) { console.error('usage: compose-plate.cjs <layout.json> [--out DIR] [--review] [--scale 3] [--cycle]'); process.exit(1); }
   const outDir = argFlag(argv, '--out') || path.resolve(__dirname, 'staging');
   const layout = JSON.parse(fs.readFileSync(path.resolve(file), 'utf8'));
+
+  // `--cycle` is a SEPARATE, additive output: it emits the water strips and
+  // stops, so it can never touch the plate, the walk mask or the derived
+  // engine document. Running it is not a plate re-render.
+  if (argv.includes('--cycle')) {
+    const cycleOut = argFlag(argv, '--cycle-out')
+      || path.resolve(__dirname, '../../assets/scenes/cycle');
+    return runCycle(layout, cycleOut);
+  }
+
   const t0 = Date.now();
   const res = compose(layout, {});
   fs.mkdirSync(outDir, { recursive: true });
@@ -803,6 +1127,9 @@ function argFlag(argv, name) {
   return i >= 0 && argv[i + 1] && !argv[i + 1].startsWith('--') ? argv[i + 1] : null;
 }
 
-module.exports = { compose, deriveCollisionRects, SURFACE_IDS, groundShader, run, sdd, bandPoly, normalizeLayout };
+module.exports = {
+  compose, deriveCollisionRects, SURFACE_IDS, groundShader, run, sdd, bandPoly, normalizeLayout,
+  composeCycle, runCycle, crestDelta, CYCLE_SPECS, BAND_PERIOD,
+};
 
 if (require.main === module) run(process.argv.slice(2));

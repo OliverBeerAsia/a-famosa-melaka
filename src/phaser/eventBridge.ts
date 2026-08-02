@@ -114,6 +114,33 @@ export interface GameEvents {
   'quest:complete': [questId: string, resolution: string];
   'message:show': [title: string, text: string];
 
+  // -- v0.12 feedback event table (docs/design/game-feel-spec.md §3) --------
+  //
+  // These eight names exist so the feedback table is reachable from ONE place
+  // (`systems/FeedbackSystem`) instead of every emitter growing its own
+  // `playSfx` call. Seven are the rows the spec marks NEW; `ui:page:turn` is
+  // the eighth, added because §3.3 requests `sfx-page-turn` "for journal/topic
+  // paging" and gives it no event to fire from.
+  //
+  /** A painted-in prop was examined (distinct from a pickable `item:examine`). */
+  'prop:examine': [label: string, description: string];
+  /** A journal discovery or rumour landed — quieter than `quest:advance`. */
+  'journal:updated': [entryId: string, category: string];
+  /** The player took an exit; fires as the fade starts, not when it ends. */
+  'world:transition:start': [fromLocation: string, toLocation: string];
+  /** The new location is built and on screen. */
+  'world:transition:complete': [locationId: string];
+  'player:rest:start': [hours: number];
+  'player:rest:complete': [hour: number, timeOfDay: string];
+  /**
+   * An interaction was refused. `physical` separates a locked door or a
+   * blocked route (which may shake the camera) from a conversational refusal
+   * (which must never shake it) — see the shake policy in FeedbackSystem.
+   */
+  'feedback:denied': [message: string, physical: boolean];
+  /** A page of the journal or a dialogue topic list was turned. */
+  'ui:page:turn': [];
+
   // React -> Phaser events
   'ui:inventory:toggle': [];
   'ui:journal:toggle': [];

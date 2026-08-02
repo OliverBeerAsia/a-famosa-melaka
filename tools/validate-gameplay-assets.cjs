@@ -541,6 +541,8 @@ async function validate(spec) {
   validateRuntimeManifest(runtimeManifest, spec, findings);
   validateMapParity(runtimeManifest, findings);
   validateEnvironmentObjectParity(runtimeManifest, findings);
+  validateFeedbackAudio(findings);
+  validateGradeLuts(findings);
 
   return {
     spec,
@@ -548,6 +550,73 @@ async function validate(spec) {
     scannedCount: pngFiles.length,
     counts,
   };
+}
+
+/**
+ * SFX key-existence gate.
+ *
+ * Every key the feedback event table plays must have a file on disk. The
+ * failure mode this exists to stop is the one Stage 1 found in the five
+ * transition stings: `AudioSystem.playSfx` guards with `cache.audio.exists`,
+ * so a missing sound is not an error at runtime — it is SILENCE, which is
+ * indistinguishable from "we did not wire that event yet". Make it a build
+ * failure instead. Source of truth: src/data/feedback-audio.json, which
+ * BootScene loads from directly.
+ */
+function validateFeedbackAudio(findings) {
+  const listPath = path.join(repoRoot, 'src', 'data', 'feedback-audio.json');
+  if (!fs.existsSync(listPath)) {
+    addFinding(findings, 'error', 'src/data/feedback-audio.json', 'feedback audio key list is missing',
+      'BootScene and this gate both read it; regenerate or restore it.', 'audio');
+    return;
+  }
+  const list = JSON.parse(fs.readFileSync(listPath, 'utf8'));
+  const keys = [...(list.keys || []), ...(list.legacyKeys || [])];
+  const sfxDir = path.join(repoRoot, 'assets', 'audio', 'sfx');
+  for (const key of keys) {
+    if (!fs.existsSync(path.join(sfxDir, `${key}.wav`))) {
+      addFinding(findings, 'error', `assets/audio/sfx/${key}.wav`,
+        `SFX "${key}" is referenced by the feedback event table but has no file`,
+        'Run `npm run generate:audio` — a missing SFX plays as silence at runtime, which reads as an unwired event.',
+        'audio');
+    }
+  }
+}
+
+/**
+ * Runtime grade-LUT gate.
+ *
+ * MelakaPostFX samples `lut-<location>-<phase>`; a missing strip degrades the
+ * scene to ungraded rather than crashing, which is exactly the kind of quiet
+ * regression that survives a release. 5 locations x 4 phases = 20 strips, each
+ * 256x16.
+ */
+function validateGradeLuts(findings) {
+  const lutDir = path.join(repoRoot, 'assets', 'scenes', 'luts');
+  const locationsDir = path.join(repoRoot, 'src', 'data', 'locations');
+  if (!fs.existsSync(locationsDir)) return;
+  const ids = fs.readdirSync(locationsDir)
+    .filter((f) => f.endsWith('.location.json'))
+    .map((f) => f.replace('.location.json', ''));
+  for (const id of ids) {
+    for (const phase of ['day', 'dawn', 'dusk', 'night']) {
+      const rel = `assets/scenes/luts/${id}-${phase}.png`;
+      if (!fs.existsSync(path.join(lutDir, `${id}-${phase}.png`))) {
+        addFinding(findings, 'error', rel,
+          `grade LUT for ${id} at ${phase} is missing`,
+          'Run `npm run forge:grade-lut` — MelakaPostFX silently drops the grade term when a LUT is absent.',
+          'scene');
+      }
+    }
+  }
+  for (const file of ['fallback.json']) {
+    if (!fs.existsSync(path.join(lutDir, file))) {
+      addFinding(findings, 'error', `assets/scenes/luts/${file}`,
+        'grade LUT fallback map is missing',
+        'Run `npm run forge:grade-lut`; the Canvas fallback reads its flat MULTIPLY colour from it.',
+        'scene');
+    }
+  }
 }
 
 function renderMarkdownReport(result) {

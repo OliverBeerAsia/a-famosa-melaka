@@ -7,79 +7,115 @@
   "giver": "padre-tomas",
   "triggerTopic": "sanctuary",
   "summary": "A quest exploring the tension between colonial law, religious duty, and human compassion. The player must help Padre Tomás decide whether to shelter a Malay woman accused of theft - or turn her over to Portuguese justice.",
-  "themes": ["faith", "colonialism", "sanctuary", "justice"],
+  "themes": [
+    "faith",
+    "colonialism",
+    "sanctuary",
+    "justice"
+  ],
   "prerequisite": {
     "questComplete": "merchants-seal"
   },
-
   "stages": [
     {
       "id": "start",
       "description": "Padre Tomás seems troubled. Speak with him about what weighs on his mind.",
       "objectives": [
-        { "type": "talk", "target": "padre-tomas", "topic": "sanctuary", "completed": false }
+        {
+          "type": "talk",
+          "target": "padre-tomas",
+          "topic": "sanctuary",
+          "completed": false
+        }
       ],
       "journalEntry": "Padre Tomás appears deeply troubled. Something weighs on his conscience.",
       "npcDialogueOverrides": {
         "padre-tomas": {
           "sanctuary": {
             "text": "*glances around nervously* My child, I... I find myself in a situation that tests my faith. A woman came to me last night. A Malay woman named Siti. She claims sanctuary - the right of the Church to protect those who seek refuge at the altar. But she is accused of theft by a Portuguese merchant. If I shelter her, I defy colonial law. If I turn her out... *trails off* I need counsel. Will you help me understand the truth?",
-            "unlocks": ["siti", "accusation"]
+            "unlocks": [
+              "siti",
+              "accusation"
+            ]
           }
         }
       },
       "nextStage": "investigate"
     },
-
     {
       "id": "investigate",
       "description": "Investigate Siti's situation before advising Padre Tomás.",
       "objectives": [
-        { "type": "talk", "target": "padre-tomas", "topic": "siti", "completed": false },
-        { "type": "talk", "target": "padre-tomas", "topic": "accusation", "completed": false }
+        {
+          "type": "talk",
+          "target": "padre-tomas",
+          "topic": "siti",
+          "completed": false
+        },
+        {
+          "type": "talk",
+          "target": "padre-tomas",
+          "topic": "accusation",
+          "completed": false
+        }
       ],
       "journalEntry": "I should learn more about Siti and the accusation against her before giving advice.",
       "npcDialogueOverrides": {
         "padre-tomas": {
           "siti": {
             "text": "She is young - perhaps twenty years. She worked as a servant in the household of Senhor Alvares, a tin merchant. She speaks some Portuguese, learned from the household. Her eyes... they hold fear, yes, but also a strange dignity. She says she is innocent.",
-            "unlocks": ["alvares"]
+            "unlocks": [
+              "alvares"
+            ]
           },
           "accusation": {
             "text": "Senhor Alvares claims she stole a silver crucifix from his household chapel. A valuable item, and a sacred one - the theft of religious objects is a serious crime. He demands she be handed over for punishment. The penalty for such theft... *shakes head* ...could be severe."
           },
           "alvares": {
             "text": "Alvares is a wealthy man, influential in the colonial council. He is known for his... strictness with servants. There have been whispers. But I should not speak ill without proof.",
-            "requires": ["siti"]
+            "requires": [
+              "siti"
+            ]
           }
         }
       },
       "nextStage": "find-truth"
     },
-
     {
       "id": "find-truth",
       "description": "Investigate the accusations against Siti.",
       "objectives": [
-        { "type": "talk", "target": "aminah", "topic": "siti", "completed": false },
-        { "type": "location", "target": "rua-direita", "completed": false }
+        {
+          "type": "talk",
+          "target": "aminah",
+          "topic": "siti",
+          "completed": false
+        },
+        {
+          "type": "location",
+          "target": "rua-direita",
+          "completed": false
+        }
       ],
       "journalEntry": "Aminah might know something about this woman Siti. I should also visit Rua Direita where Alvares has his business.",
       "npcDialogueOverrides": {
         "aminah": {
           "siti": {
             "text": "*face darkens* Siti? Yes, I know her. She is my cousin's daughter. A good girl - she would not steal. *lowers voice* That Portuguese man Alvares... he is not a good man. The servants in his house, they suffer. Some have... disappeared. Siti, she tried to leave his service. He would not let her go. Then suddenly, she is 'thief'? *spits* I do not believe it.",
-            "unlocks": ["alvares-truth"]
+            "unlocks": [
+              "alvares-truth"
+            ]
           },
           "alvares-truth": {
             "text": "You want the truth? Alvares wanted Siti for... *meaningful look* ...she refused him. He beat her. She ran. Now he accuses her of theft to get her back, to punish her. The crucifix? *laughs bitterly* He probably hid it himself.",
-            "requires": ["siti"]
+            "requires": [
+              "siti"
+            ]
           }
         }
       },
       "nextStage": "confront-choice"
     },
-
     {
       "id": "confront-choice",
       "description": "Decide how to proceed with the information you've gathered.",
@@ -112,34 +148,48 @@
         }
       ]
     },
-
     {
       "id": "sanctuary-path",
       "path": "support-sanctuary",
       "description": "Tell Padre Tomás to maintain sanctuary.",
       "objectives": [
-        { "type": "talk", "target": "padre-tomas", "topic": "maintain-sanctuary", "completed": false }
+        {
+          "type": "talk",
+          "target": "padre-tomas",
+          "topic": "maintain-sanctuary",
+          "completed": false
+        }
       ],
       "journalEntry": "I will advise Padre Tomás to honor the ancient right of sanctuary, regardless of colonial pressure.",
       "npcDialogueOverrides": {
         "padre-tomas": {
           "maintain-sanctuary": {
             "text": "*relief and fear mix in his eyes* You believe I should protect her? Even against Alvares, against the colonial council? *takes deep breath* The Church has sheltered the persecuted since the time of the Apostles. If I deny this woman refuge because her accuser is powerful... what am I? *straightens* Yes. I will maintain sanctuary. Whatever the cost.",
-            "unlocks": ["sanctuary-consequence"]
+            "unlocks": [
+              "sanctuary-consequence"
+            ]
           }
         }
       },
       "nextStage": "sanctuary-aftermath",
       "consequenceText": "Padre Tomás stands firm. Alvares is furious, but the Church's right of sanctuary is ancient and not easily overturned. For now, Siti is safe."
     },
-
     {
       "id": "sanctuary-aftermath",
       "path": "support-sanctuary",
       "description": "Deal with the consequences of maintaining sanctuary.",
       "objectives": [
-        { "type": "wait", "days": 1, "completed": false },
-        { "type": "talk", "target": "padre-tomas", "topic": "sanctuary-consequence", "completed": false }
+        {
+          "type": "wait",
+          "days": 1,
+          "completed": false
+        },
+        {
+          "type": "talk",
+          "target": "padre-tomas",
+          "topic": "sanctuary-consequence",
+          "completed": false
+        }
       ],
       "journalEntry": "Padre Tomás has defied Alvares. There will be consequences.",
       "npcDialogueOverrides": {
@@ -151,44 +201,69 @@
       },
       "nextStage": "complete-sanctuary",
       "consequences": {
-        "reputation": { "portuguese": -10, "malay": 20 },
-        "worldChanges": ["sanctuary-maintained", "alvares-investigated"]
+        "reputation": {
+          "portuguese": -10,
+          "malay": 20
+        },
+        "worldChanges": [
+          "sanctuary-maintained",
+          "alvares-investigated"
+        ]
       }
     },
-
     {
       "id": "justice-path",
       "path": "seek-justice",
       "description": "Try to expose Alvares through official channels.",
       "objectives": [
-        { "type": "talk", "target": "capitao-rodrigues", "topic": "alvares-abuse", "completed": false }
+        {
+          "type": "talk",
+          "target": "capitao-rodrigues",
+          "topic": "alvares-abuse",
+          "completed": false
+        }
       ],
       "journalEntry": "I'll try to bring Alvares' crimes to official attention through the Capitão.",
       "npcDialogueOverrides": {
         "capitao-rodrigues": {
           "alvares-abuse": {
             "text": "*frowns deeply* Alvares? Yes, I know of him. Rich, connected, untouchable - or so he thinks. You say he abuses his servants? Frames them for theft? *considers* These are serious charges. I cannot act on rumor, but... if you can bring me testimony from multiple witnesses, I can open an investigation. The law must apply to all, high and low. That is what separates us from savages.",
-            "unlocks": ["gather-witnesses"]
+            "unlocks": [
+              "gather-witnesses"
+            ]
           }
         }
       },
       "nextStage": "justice-witnesses"
     },
-
     {
       "id": "justice-witnesses",
       "path": "seek-justice",
       "description": "Gather witnesses willing to testify against Alvares.",
       "objectives": [
-        { "type": "talk", "target": "aminah", "topic": "witnesses", "completed": false },
-        { "type": "talk", "target": "rashid", "topic": "alvares-smuggling", "completed": false, "optional": true }
+        {
+          "type": "talk",
+          "target": "aminah",
+          "topic": "witnesses",
+          "completed": false
+        },
+        {
+          "type": "talk",
+          "target": "rashid",
+          "topic": "alvares-smuggling",
+          "completed": false,
+          "optional": true
+        }
       ],
       "journalEntry": "I need witnesses who will speak against Alvares. Aminah may know former servants willing to testify.",
       "npcDialogueOverrides": {
         "aminah": {
           "witnesses": {
             "text": "You want witnesses? *thinks* There is Maria, a Portuguese woman who worked in his kitchen - she saw things. And Ibrahim, a Malay man he accused and then released when he found a new target. They are afraid, but if the Capitão promises protection... maybe they speak.",
-            "unlocks": ["maria", "ibrahim"]
+            "unlocks": [
+              "maria",
+              "ibrahim"
+            ]
           }
         },
         "rashid": {
@@ -199,13 +274,17 @@
       },
       "nextStage": "justice-resolution"
     },
-
     {
       "id": "justice-resolution",
       "path": "seek-justice",
       "description": "Present your findings to Capitão Rodrigues.",
       "objectives": [
-        { "type": "talk", "target": "capitao-rodrigues", "topic": "alvares-evidence", "completed": false }
+        {
+          "type": "talk",
+          "target": "capitao-rodrigues",
+          "topic": "alvares-evidence",
+          "completed": false
+        }
       ],
       "journalEntry": "I have gathered testimony from multiple witnesses. Time to present the case.",
       "npcDialogueOverrides": {
@@ -218,41 +297,65 @@
       "nextStage": "complete-justice",
       "consequenceText": "Alvares is arrested. The colonial council is shocked - a wealthy merchant brought low. Siti is freed, her name cleared. The Capitão's reputation for fairness grows.",
       "consequences": {
-        "reputation": { "portuguese": 15, "malay": 15 },
-        "worldChanges": ["alvares-arrested", "siti-freed"]
+        "reputation": {
+          "portuguese": 15,
+          "malay": 15
+        },
+        "worldChanges": [
+          "alvares-arrested",
+          "siti-freed"
+        ]
       }
     },
-
     {
       "id": "escape-path",
       "path": "help-escape",
       "description": "Arrange for Siti to escape Melaka.",
       "objectives": [
-        { "type": "talk", "target": "rashid", "topic": "passage", "completed": false }
+        {
+          "type": "talk",
+          "target": "rashid",
+          "topic": "passage",
+          "completed": false
+        }
       ],
       "journalEntry": "The safest option may be to get Siti out of Melaka entirely. Rashid's dhow might provide passage.",
       "npcDialogueOverrides": {
         "rashid": {
           "passage": {
             "text": "*becomes serious for once* A woman needs to disappear? *strokes beard* This I can arrange. We sail for Aceh in three days. Aceh is... not friendly to Portuguese. She would be safe there. But she must leave everything behind. Family, home, the life she knew. Is she prepared for this?",
-            "unlocks": ["escape-cost"]
+            "unlocks": [
+              "escape-cost"
+            ]
           },
           "escape-cost": {
             "text": "I ask no payment - Allah commands mercy to those who flee persecution. But she must be at the dock before dawn, three days hence. Can you bring her?",
-            "requires": ["passage"]
+            "requires": [
+              "passage"
+            ]
           }
         }
       },
       "nextStage": "escape-execution"
     },
-
     {
       "id": "escape-execution",
       "path": "help-escape",
       "description": "Help Siti reach Rashid's dhow.",
       "objectives": [
-        { "type": "talk", "target": "padre-tomas", "topic": "escape-plan", "completed": false },
-        { "type": "escort", "target": "siti", "destination": "waterfront", "time": "night", "completed": false }
+        {
+          "type": "talk",
+          "target": "padre-tomas",
+          "topic": "escape-plan",
+          "completed": false
+        },
+        {
+          "type": "escort",
+          "target": "siti",
+          "destination": "waterfront",
+          "time": "night",
+          "completed": false
+        }
       ],
       "journalEntry": "Padre Tomás must release Siti from sanctuary at the right moment. Then I guide her to Rashid's dhow before dawn.",
       "npcDialogueOverrides": {
@@ -265,17 +368,28 @@
       "nextStage": "complete-escape",
       "consequenceText": "Under cover of darkness, Siti slips aboard Rashid's dhow. By sunrise, she is beyond Portuguese reach. Alvares rages, but there is nothing he can do. Padre Tomás prays for her soul - and his own.",
       "consequences": {
-        "reputation": { "portuguese": -5, "malay": 10, "arab": 15 },
-        "worldChanges": ["siti-escaped", "rashid-trusted"]
+        "reputation": {
+          "portuguese": -5,
+          "malay": 10,
+          "arab": 15
+        },
+        "worldChanges": [
+          "siti-escaped",
+          "rashid-trusted"
+        ]
       }
     },
-
     {
       "id": "surrender-path",
       "path": "surrender-siti",
       "description": "Advise Padre Tomás to surrender Siti to authorities.",
       "objectives": [
-        { "type": "talk", "target": "padre-tomas", "topic": "advise-surrender", "completed": false }
+        {
+          "type": "talk",
+          "target": "padre-tomas",
+          "topic": "advise-surrender",
+          "completed": false
+        }
       ],
       "journalEntry": "Perhaps defying colonial authority is too dangerous. I will advise Padre Tomás to surrender Siti.",
       "npcDialogueOverrides": {
@@ -287,24 +401,34 @@
       },
       "nextStage": "surrender-aftermath"
     },
-
     {
       "id": "surrender-aftermath",
       "path": "surrender-siti",
       "description": "Witness the consequences of surrendering Siti.",
       "objectives": [
-        { "type": "wait", "days": 1, "completed": false }
+        {
+          "type": "wait",
+          "days": 1,
+          "completed": false
+        }
       ],
       "journalEntry": "Padre Tomás will surrender Siti to Alvares. I should see what happens.",
       "nextStage": "complete-surrender",
       "consequenceText": "Siti is taken by Alvares' men. She does not cry, does not beg - only looks at you with eyes that will haunt your dreams. Days later, you hear she was publicly flogged for theft. She did not survive. Padre Tomás has not spoken since.",
       "consequences": {
-        "reputation": { "portuguese": 5, "malay": -25 },
-        "worldChanges": ["siti-surrendered", "padre-broken"],
-        "flags": ["siti-died"]
+        "reputation": {
+          "portuguese": 5,
+          "malay": -25
+        },
+        "worldChanges": [
+          "siti-surrendered",
+          "padre-broken"
+        ],
+        "flags": [
+          "siti-died"
+        ]
       }
     },
-
     {
       "id": "complete-sanctuary",
       "path": "support-sanctuary",
@@ -313,12 +437,16 @@
       "isEnding": true,
       "journalEntry": "Padre Tomás maintained sanctuary for Siti. His faith in the Church's sacred duty was stronger than his fear of colonial power. Siti remains protected, and Alvares' crimes have come to light.",
       "reward": {
-        "items": ["rosary-blessed"],
-        "reputation": { "portuguese": -10, "malay": 20 }
+        "items": [
+          "rosary-blessed"
+        ],
+        "reputation": {
+          "portuguese": -10,
+          "malay": 20
+        }
       },
       "endingType": "sanctuary"
     },
-
     {
       "id": "complete-justice",
       "path": "seek-justice",
@@ -327,12 +455,17 @@
       "isEnding": true,
       "journalEntry": "Alvares has been arrested for his crimes. The colonial system, for all its flaws, can still deliver justice when good people push for it. Siti is free, her name cleared.",
       "reward": {
-        "items": ["letter-of-commendation", "coin-pouch"],
-        "reputation": { "portuguese": 15, "malay": 15 }
+        "items": [
+          "letter-of-commendation",
+          "coin-pouch"
+        ],
+        "reputation": {
+          "portuguese": 15,
+          "malay": 15
+        }
       },
       "endingType": "justice"
     },
-
     {
       "id": "complete-escape",
       "path": "help-escape",
@@ -341,12 +474,17 @@
       "isEnding": true,
       "journalEntry": "Siti sails for Aceh, beyond Portuguese reach. She lost her home but kept her freedom. Sometimes escape is the only justice available to the powerless.",
       "reward": {
-        "items": ["arab-amulet"],
-        "reputation": { "portuguese": -5, "malay": 10, "arab": 15 }
+        "items": [
+          "arab-amulet"
+        ],
+        "reputation": {
+          "portuguese": -5,
+          "malay": 10,
+          "arab": 15
+        }
       },
       "endingType": "escape"
     },
-
     {
       "id": "complete-surrender",
       "path": "surrender-siti",
@@ -356,12 +494,14 @@
       "journalEntry": "Siti is dead. Padre Tomás is broken. Alvares continues his cruelties unchecked. Some choices haunt us forever.",
       "reward": {
         "items": [],
-        "reputation": { "portuguese": 5, "malay": -25 }
+        "reputation": {
+          "portuguese": 5,
+          "malay": -25
+        }
       },
       "endingType": "surrender"
     }
   ],
-
   "items": {
     "rosary-blessed": {
       "id": "rosary-blessed",

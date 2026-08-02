@@ -85,6 +85,22 @@ export const ITEM_DEFINITIONS: Record<string, Omit<InventoryItem, 'instanceId'>>
     type: 'trade',
     value: 5,
   },
+  /**
+   * The only new item in the whole Stage 5 spec (dependency D7).
+   *
+   * It exists because two of the fourteen openables are chicken coops, and a
+   * coop that yields a flag instead of an egg is a coop that is pretending. One
+   * cruzado, stackable, and it still wants a 16x16 icon of its own — until then
+   * the inventory panel falls back to the item's initial.
+   */
+  'egg': {
+    id: 'egg',
+    name: 'Egg',
+    description: 'Still warm, and browner than a Portuguese hen would manage. Worth a cruzado to somebody with a pan.',
+    type: 'consumable',
+    value: 1,
+    stackable: true,
+  },
   'letter': {
     id: 'letter',
     name: 'Sealed Letter',

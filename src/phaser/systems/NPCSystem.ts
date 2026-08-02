@@ -17,10 +17,23 @@
 import Phaser from 'phaser';
 import { CHARACTER_SCALE, GAME_WIDTH, GAME_HEIGHT, PLAYER_SPEED } from '../game';
 import { worldDepth, DEPTH_UI_INDICATOR } from '../core/depth';
-import { isHourInScheduleRange } from '../core/timeMath';
 import { BreadcrumbTrail } from '../core/breadcrumbTrail';
 import { directionBetween, type Direction } from '../core/interactionScore';
 import { FollowBehavior } from './behaviors/FollowBehavior';
+import { WalkToBehavior, pathLength } from './behaviors/WalkToBehavior';
+import { findPathVia, type Point } from '../core/pathfind';
+import {
+  resolveBeat,
+  resolveDeparture,
+  resolveSlot,
+  resolveSlotIndex,
+  slotStation,
+  slotVisibility,
+  travelGameMinutes,
+  type ScheduleBeat,
+  type ScheduleSlot,
+} from '../core/schedule';
+import { getLocation } from '../core/LocationData';
 import type { SystemContext } from '../core/SystemContext';
 import {
   INTERACTION_PRIORITY,
@@ -46,13 +59,8 @@ export interface NPCData {
     greeting: string;
     topics: Record<string, { text: string; unlocks?: string[] }>;
   };
-  schedule?: Array<{
-    startHour: number;
-    endHour: number;
-    activity: string;
-    location: string;
-    available: boolean;
-  }>;
+  schedule?: ScheduleSlot[];
+  beats?: ScheduleBeat[];
 }
 
 /** Sprites are anchored above their feet; this is the ground offset. */
@@ -68,6 +76,60 @@ const FOOT_OFFSET = 48;
 const indicatorOffset = () => 20 * CHARACTER_SCALE;
 /** Crumbs pre-laid on spawn so a follower does not snap across the screen. */
 const FOLLOWER_PREFILL = 15;
+
+/**
+ * Walking pace for a scheduled NPC, world px/s.
+ *
+ * Slower than the player (PLAYER_SPEED 200) on purpose: an NPC who crosses the
+ * street at the player's speed reads as chasing something. 90 is the same pace
+ * the night watch keeps and puts Aminah's full-length Rua Direita walk at ~22
+ * seconds, inside the spec's 20-35 s acceptance band.
+ */
+const NPC_WALK_SPEED = 90;
+/** Half the NPC body, world px — used to keep A* off wall-hugging routes. */
+const NPC_HALF_WIDTH = 9;
+/** Sprite origin to feet, world px. The mask is a floor; the origin is not. */
+const NPC_FOOT_OFFSET = 45;
+/** How often the schedule is re-examined, ms. Once a second is plenty. */
+const SCHEDULE_TICK_MS = 500;
+/** How far ahead (game minutes) a walk may be prepared before it departs. */
+const PREP_HORIZON_MINUTES = 45;
+/** Door pause and fade, ms — the "gone indoors" fiction (spec 2.2). */
+const DOOR_PAUSE_MS = 200;
+/**
+ * A shutter is not a door: Lin Mei turns her back and works the lock for four
+ * seconds with an audible key, every day, whether or not the player is on the
+ * theft path. It is telegraph T2, and the player who is planning a burglary has
+ * just watched exactly where the lock is and exactly who has the key.
+ */
+const SHUTTER_PAUSE_MS = 4000;
+const DOOR_FADE_MS = 350;
+/** Cross-fade for an off-camera teleport. */
+const TELEPORT_FADE_MS = 400;
+
+/**
+ * Per-NPC schedule state.
+ *
+ * The slot index is what makes a CHANGE detectable: an NPC who is in slot 3
+ * this frame and slot 4 next frame has somewhere to be, and everything else in
+ * this file hangs off that one transition.
+ */
+interface ScheduleState {
+  /** Slot index the NPC is currently living in; -1 before the first resolve. */
+  slotIndex: number;
+  walker: WalkToBehavior | null;
+  /** What the current walk is FOR. */
+  intent: 'station' | 'exit' | null;
+  /** The slot the current walk is heading into. */
+  targetSlot: ScheduleSlot | null;
+  /** A prepared but not yet departed walk. */
+  pending: { index: number; path: Point[]; leadMinutes: number } | null;
+  /** Business-idle key from the data. Tier-0 renders it as a breath. */
+  idleKey: string | null;
+  breath: Phaser.Tweens.Tween | null;
+  /** The beat currently holding, so a beat is applied once rather than per frame. */
+  beatKind: string | null;
+}
 
 /**
  * The one escort the demo ships. Kept as data rather than branching so the
@@ -88,8 +150,12 @@ export interface NPCSystemDeps {
   colliders(): Phaser.Physics.Arcade.StaticGroup | null;
   /** Current hour, for schedule resolution. */
   currentHour(): number;
+  /** Current minute, for departure timing and beats. */
+  currentMinute?(): number;
   /** Open dialogue with an NPC (the scene owns the dialogue store wiring). */
   onTalk(npcData: NPCData): void;
+  /** Play a door/curtain/shutter cue. Optional — silence is a valid engine. */
+  playEffect?(effect: string): void;
 }
 
 export class NPCSystem {
@@ -108,6 +174,11 @@ export class NPCSystem {
   private trail = new BreadcrumbTrail();
   private followers = new Map<string, FollowBehavior>();
   private followerColliderAdded = false;
+
+  private scheduleState = new Map<string, ScheduleState>();
+  private lastScheduleTick = 0;
+  /** Sprites mid-despawn: excluded from the roster so nothing re-targets them. */
+  private departing = new Set<Phaser.Physics.Arcade.Sprite>();
 
   constructor(scene: Phaser.Scene, ctx: SystemContext, deps: NPCSystemDeps) {
     this.scene = scene;
@@ -135,76 +206,111 @@ export class NPCSystem {
       return;
     }
 
+    Object.values(npcData).forEach((data) => {
+      // The dialogue store's table is merged from quest overrides and can carry
+      // a hole; a hole is not a person.
+      if (!data || !data.id) return;
+      const isFollower = this.isActiveEscort(data.id);
+      if (!isFollower && !this.isAvailableNow(data)) return;
+
+      const spawn = this.spawnPointFor(data, isFollower);
+      const npc = this.spawnNpc(data, spawn, isFollower);
+      // Face the way the live slot says, and start its business idle.
+      const slot = resolveSlot(data.schedule, this.deps.currentHour());
+      if (slot) this.applyStationPose(npc, slot);
+    });
+  }
+
+  /**
+   * Where an NPC stands right now, in world px.
+   *
+   * Precedence: the live schedule slot's `station` (native px, Stage 5) beats
+   * the location file's authored anchor, which beats the NPC's own legacy
+   * `position`. Stations are the reason the cast is in the right PLACE before
+   * any of them can walk — spec ordering step 4.
+   */
+  private spawnPointFor(data: NPCData, isFollower: boolean): Point {
     const player = this.ctx.player();
     const npcOverrides = this.ctx.location()?.npcPositions || {};
 
-    Object.values(npcData).forEach((data) => {
-      const isFollower = this.isActiveEscort(data.id);
+    if (isFollower && data.location !== this.ctx.locationId()) {
+      return { x: (player?.x ?? GAME_WIDTH / 2) - 30, y: player?.y ?? GAME_HEIGHT / 2 };
+    }
 
-      if (!isFollower && data.location !== this.ctx.locationId()) return;
-      if (!isFollower && !this.isAvailableNow(data)) return;
+    const slot = resolveSlot(data.schedule, this.deps.currentHour());
+    const station = slotStation(slot, null);
+    if (station) return this.toWorld(station);
 
-      let x = data.position?.x || GAME_WIDTH / 2;
-      let y = data.position?.y || GAME_HEIGHT / 2;
+    if (npcOverrides[data.id]) return { ...npcOverrides[data.id] };
 
-      if (isFollower && data.location !== this.ctx.locationId()) {
-        // Spawn follower near the player
-        x = (player?.x ?? x) - 30;
-        y = player?.y ?? y;
-      } else if (npcOverrides[data.id]) {
-        x = npcOverrides[data.id].x;
-        y = npcOverrides[data.id].y;
-      }
+    let x = data.position?.x || GAME_WIDTH / 2;
+    let y = data.position?.y || GAME_HEIGHT / 2;
+    // In isometric mode, npcPositions are tile coordinates — convert to world.
+    const worldPos = this.deps.tileToWorld(x, y);
+    if (worldPos) { x = worldPos.x; y = worldPos.y; }
+    return { x, y };
+  }
 
-      // In isometric mode, npcPositions are tile coordinates — convert to world
-      const worldPos = this.deps.tileToWorld(x, y);
-      if (worldPos) {
-        x = worldPos.x;
-        y = worldPos.y;
-      }
+  /** Native plate px -> world px, using the location's single scale factor. */
+  private toWorld(p: Point): Point {
+    const scale = this.ctx.location()?.world.scale ?? 1;
+    return { x: p.x * scale, y: p.y * scale };
+  }
 
-      const sheetKey = `${data.sprite || data.id}-sheet`;
-      const npcTexture = this.scene.textures.exists(sheetKey) ? sheetKey : 'debug-character-missing';
-      if (npcTexture === 'debug-character-missing') {
-        console.warn(
-          `[NPCSystem] ${data.id} has no sprite sheet '${sheetKey}' — falling back to `
-          + 'debug-character-missing. The cast will render as a placeholder.'
-        );
-      }
-      const npc = this.scene.physics.add.sprite(x, y, npcTexture);
+  /** Build the sprite, shadow, indicator and schedule state for one NPC. */
+  private spawnNpc(data: NPCData, at: Point, isFollower: boolean): Phaser.Physics.Arcade.Sprite {
+    const sheetKey = `${data.sprite || data.id}-sheet`;
+    const npcTexture = this.scene.textures.exists(sheetKey) ? sheetKey : 'debug-character-missing';
+    if (npcTexture === 'debug-character-missing') {
+      console.warn(
+        `[NPCSystem] ${data.id} has no sprite sheet '${sheetKey}' — falling back to `
+        + 'debug-character-missing. The cast will render as a placeholder.'
+      );
+    }
+    const npc = this.scene.physics.add.sprite(at.x, at.y, npcTexture);
 
-      // Scale up NPC to match scene backgrounds (same as player)
-      npc.setScale(CHARACTER_SCALE);
-      npc.setImmovable(!isFollower);
-      npc.setDepth(worldDepth(y + FOOT_OFFSET));
+    // Scale up NPC to match scene backgrounds (same as player)
+    npc.setScale(CHARACTER_SCALE);
+    npc.setImmovable(!isFollower);
+    npc.setDepth(worldDepth(at.y + FOOT_OFFSET));
 
-      const shadow = this.scene.add.ellipse(x, y + 40, 50, 18, 0x000000, 0.24);
-      shadow.setDepth(npc.depth - 1);
-      this.shadowMap.set(npc, shadow);
+    const shadow = this.scene.add.ellipse(at.x, at.y + 40, 50, 18, 0x000000, 0.24);
+    shadow.setDepth(npc.depth - 1);
+    this.shadowMap.set(npc, shadow);
 
-      this.dataMap.set(npc, data);
-      this.spriteById.set(data.id, npc);
-      this.facingMap.set(npc, 'down');
-      const prefix = this.resolveAnimationPrefix(data) || '';
-      this.animationPrefixMap.set(npc, prefix);
-      this.sprites.push(npc);
+    this.dataMap.set(npc, data);
+    this.spriteById.set(data.id, npc);
+    this.facingMap.set(npc, 'down');
+    const prefix = this.resolveAnimationPrefix(data) || '';
+    this.animationPrefixMap.set(npc, prefix);
+    this.sprites.push(npc);
 
-      if (prefix && this.scene.anims.exists(`${prefix}-idle-down`)) {
-        npc.play(`${prefix}-idle-down`);
-      }
+    if (prefix && this.scene.anims.exists(`${prefix}-idle-down`)) {
+      npc.play(`${prefix}-idle-down`);
+    }
 
-      // Add interaction indicator (golden dot) - adjusted for scaled NPC
-      const indicator = this.scene.add.circle(x, y - indicatorOffset(), 8, 0xFFD700);
-      indicator.setVisible(false);
-      indicator.setDepth(DEPTH_UI_INDICATOR);
-      (npc as unknown as { indicator: Phaser.GameObjects.Arc }).indicator = indicator;
+    // Add interaction indicator (golden dot) - adjusted for scaled NPC
+    const indicator = this.scene.add.circle(at.x, at.y - indicatorOffset(), 8, 0xFFD700);
+    indicator.setVisible(false);
+    indicator.setDepth(DEPTH_UI_INDICATOR);
+    (npc as unknown as { indicator: Phaser.GameObjects.Arc }).indicator = indicator;
 
-      if (isFollower) {
-        this.followers.set(data.id, new FollowBehavior(this.scene, prefix || data.id));
-      }
+    if (isFollower) {
+      this.followers.set(data.id, new FollowBehavior(this.scene, prefix || data.id));
+    }
 
-      console.log(`Created NPC: ${data.name} at (${x}, ${y})`);
+    this.scheduleState.set(data.id, {
+      slotIndex: resolveSlotIndex(data.schedule, this.deps.currentHour()),
+      walker: null,
+      intent: null,
+      targetSlot: null,
+      pending: null,
+      idleKey: null,
+      breath: null,
+      beatKind: null,
     });
+
+    return npc;
   }
 
   /**
@@ -222,13 +328,24 @@ export class NPCSystem {
     });
   }
 
-  /** Re-evaluate schedules and rebuild the cast. Called on every hour change. */
+  /**
+   * Rebuild the cast from scratch.
+   *
+   * Kept for the cases that genuinely need it (a fresh scene, a debug jump);
+   * the HOUR change no longer goes through here — see `onHourChanged`.
+   */
   recreate() {
     this.create();
     this.followerColliderAdded = false;
   }
 
   private clearSprites() {
+    this.scheduleState.forEach((state) => {
+      state.breath?.remove();
+      state.walker?.cancel();
+    });
+    this.scheduleState.clear();
+    this.departing.clear();
     this.sprites.forEach((npc) => {
       const indicator = (npc as unknown as { indicator?: Phaser.GameObjects.Arc }).indicator;
       if (indicator) indicator.destroy();
@@ -248,18 +365,26 @@ export class NPCSystem {
 
   // -- schedules -----------------------------------------------------------
 
-  /** Is this NPC on stage at this location and hour? */
+  /**
+   * Is this NPC on stage at this location and hour?
+   *
+   * "On stage" is VISIBILITY, not dialogue availability — see
+   * `core/schedule.slotVisibility`. Pak Salleh kneeling at the surau is
+   * `available: false` and is still the most watchable thing in the kampung.
+   */
   isAvailableNow(data: NPCData): boolean {
-    const here = this.ctx.locationId();
-    if (!data.schedule || data.schedule.length === 0) return data.location === here;
+    return this.visibility(data).visible;
+  }
 
-    const slot = data.schedule.find((entry) =>
-      isHourInScheduleRange(this.deps.currentHour(), entry.startHour, entry.endHour)
+  /** Visibility + talkability for the live slot. */
+  private visibility(data: NPCData) {
+    const slot = resolveSlot(data.schedule, this.deps.currentHour());
+    return slotVisibility(
+      slot,
+      this.ctx.locationId(),
+      data.location,
+      (id) => Boolean(getLocation(id)),
     );
-    if (!slot) return data.location === here;
-    if (slot.available === false) return false;
-    if (slot.location && slot.location !== here) return false;
-    return true;
   }
 
   private resolveAnimationPrefix(data: NPCData): string | null {
@@ -369,6 +494,9 @@ export class NPCSystem {
       for (const npc of this.sprites) {
         const npcData = this.dataMap.get(npc);
         if (!npcData) continue;
+        // Visible but not available: they are praying, or locking up, or have
+        // their back to you. You can watch. You cannot interrupt.
+        if (!this.visibility(npcData).talkable) continue;
         const scored = scan.score(npc.x, npc.y, INTERACTION_RADIUS.npc);
         if (!scored) continue;
         out.push({
@@ -386,6 +514,477 @@ export class NPCSystem {
     });
   }
 
+  // -- schedule walking ----------------------------------------------------
+
+  /**
+   * The hour rolled over.
+   *
+   * This USED to be `recreate()` — destroy every sprite, rebuild the ones the
+   * new hour allows — which is why the cast popped on the hour and why nobody
+   * was ever seen going anywhere. Now each NPC is transitioned individually:
+   * someone whose slot changed walks, someone whose slot did not is left
+   * entirely alone.
+   *
+   * The walk itself is usually already under way by the time this fires, since
+   * `arriveBy` is a deadline and the departure logic in `tickSchedules` starts
+   * the walk early enough for the player to see it. This is the backstop for
+   * everyone the player was not there to watch.
+   */
+  onHourChanged() {
+    const npcData = useDialogueStore.getState().allNPCData as unknown as Record<string, NPCData>;
+    if (!npcData) return;
+    const hour = this.deps.currentHour();
+
+    Object.values(npcData).forEach((data) => {
+      if (!data || !data.id) return;
+      if (this.isActiveEscort(data.id)) return;
+
+      const sprite = this.spriteById.get(data.id);
+      const present = this.visibility(data).visible;
+      const slot = resolveSlot(data.schedule, hour);
+      const index = resolveSlotIndex(data.schedule, hour);
+
+      if (!sprite && present) {
+        this.arrive(data, slot);
+        return;
+      }
+      if (!sprite) return;
+
+      const state = this.scheduleState.get(data.id);
+      if (state) state.slotIndex = index;
+
+      if (!present) {
+        // Already walking to the door? Let the walk finish and fade there.
+        if (state?.intent === 'exit') return;
+        this.departNow(sprite, data, slot, state);
+        return;
+      }
+
+      // Present before and after. If they are not standing where the new slot
+      // says, and nothing started the walk early, move them now.
+      const station = slotStation(slot, null);
+      if (!station || !state) return;
+      if (state.intent === 'station') return;
+      const target = this.toWorld(station);
+      if (Phaser.Math.Distance.Between(sprite.x, sprite.y, target.x, target.y) < 12) {
+        if (slot) this.applyStationPose(sprite, slot);
+        return;
+      }
+      this.beginStationWalk(sprite, data, slot!, target, /* urgent */ true);
+    });
+  }
+
+  /**
+   * Per-frame schedule tick, throttled.
+   *
+   * Two jobs: drive whatever walks are in flight, and start the ones whose
+   * `arriveBy` deadline is now close enough that the walk has to begin for the
+   * player to see the transit rather than the aftermath.
+   */
+  private tickSchedules() {
+    const now = this.scene.time.now;
+    const walkedThisFrame = this.driveWalkers();
+    if (now - this.lastScheduleTick < SCHEDULE_TICK_MS) return;
+    this.lastScheduleTick = now;
+
+    const hour = this.deps.currentHour();
+    const minute = this.deps.currentMinute?.() ?? 0;
+
+    for (const sprite of this.sprites) {
+      const data = this.dataMap.get(sprite);
+      if (!data || this.isActiveEscort(data.id)) continue;
+      const state = this.scheduleState.get(data.id);
+      if (!state || state.intent) continue;
+      if (walkedThisFrame.has(data.id)) continue;
+
+      this.applyBeat(sprite, data, hour, minute, state);
+      this.prepareDeparture(sprite, data, state, hour, minute);
+    }
+  }
+
+  /** Step every active walk; returns the ids that moved. */
+  private driveWalkers(): Set<string> {
+    const moved = new Set<string>();
+    for (const sprite of this.sprites) {
+      const data = this.dataMap.get(sprite);
+      if (!data) continue;
+      const state = this.scheduleState.get(data.id);
+      if (!state?.walker || !state.walker.isWalking()) continue;
+
+      moved.add(data.id);
+      const outcome = state.walker.update(sprite);
+      if (outcome === 'walking') continue;
+
+      if (state.intent === 'exit') {
+        this.finishExit(sprite, state);
+      } else {
+        this.finishStationWalk(sprite, state);
+      }
+    }
+    return moved;
+  }
+
+  /**
+   * Work out whether the next slot's walk has to start now.
+   *
+   * The path is computed ONCE when the slot comes over the horizon and cached,
+   * because the lead time is a function of the path's own length — you cannot
+   * know how early to leave until you know how far it is. Then the walk starts
+   * on the frame the remaining game-minutes drop below that lead.
+   */
+  private prepareDeparture(
+    sprite: Phaser.Physics.Arcade.Sprite,
+    data: NPCData,
+    state: ScheduleState,
+    hour: number,
+    minute: number,
+  ) {
+    const horizon = resolveDeparture(data.schedule, hour, minute, PREP_HORIZON_MINUTES);
+    if (!horizon) { state.pending = null; return; }
+
+    const slot = horizon.slot;
+    const goesElsewhere = !slotVisibility(
+      slot, this.ctx.locationId(), data.location, (id) => Boolean(getLocation(id)),
+    ).visible;
+
+    // Where this walk ends: the next station, or the door they leave by.
+    const exitDoor = this.exitDoorFor(slot);
+    const endNative = goesElsewhere
+      ? (exitDoor ? { x: exitDoor.x, y: exitDoor.y } : null)
+      : slotStation(slot, null);
+    if (!endNative) {
+      // Nothing to walk to (a fade-out with no named door): let the hour change
+      // handle it rather than inventing a destination.
+      state.pending = null;
+      return;
+    }
+
+    if (!state.pending || state.pending.index !== horizon.index) {
+      const path = this.routeTo(sprite, this.toWorld(endNative), slot.route);
+      if (!path) { state.pending = null; return; }
+      state.pending = {
+        index: horizon.index,
+        path,
+        leadMinutes: travelGameMinutes(pathLength(path), NPC_WALK_SPEED),
+      };
+    }
+
+    if (horizon.minutesUntilDeadline > state.pending.leadMinutes) return;
+
+    const path = state.pending.path;
+    state.pending = null;
+    if (goesElsewhere) {
+      this.startWalk(sprite, data, state, path, 'exit', slot);
+    } else {
+      this.startWalk(sprite, data, state, path, 'station', slot);
+    }
+  }
+
+  /** Which door a slot leaves this location by, if it names one. */
+  private exitDoorFor(slot: ScheduleSlot | null) {
+    if (!slot) return null;
+    if (slot.exit) return slot.exit;
+    // Diogo's cross-location move: the new slot describes the door he uses to
+    // leave the location he is currently standing in.
+    if (slot.exitFrom && slot.exitFrom.location === this.ctx.locationId()) return slot.exitFrom;
+    return null;
+  }
+
+  /** Route from where a sprite is to a world point, honouring the slot hints. */
+  private routeTo(
+    sprite: Phaser.Physics.Arcade.Sprite,
+    to: Point,
+    hints: Point[] | undefined,
+  ): Point[] | null {
+    const mask = this.ctx.walkMask();
+    if (!mask) return [to];
+    const worldHints = (hints || []).map((h) => this.toWorld(h));
+    const result = findPathVia(mask, { x: sprite.x, y: sprite.y }, worldHints, to, {
+      halfWidth: NPC_HALF_WIDTH,
+      footOffset: NPC_FOOT_OFFSET,
+    });
+    return result?.points ?? null;
+  }
+
+  /** Begin a walk, on camera or teleported depending on who is watching. */
+  private startWalk(
+    sprite: Phaser.Physics.Arcade.Sprite,
+    data: NPCData,
+    state: ScheduleState,
+    path: Point[],
+    intent: 'station' | 'exit',
+    slot: ScheduleSlot,
+  ) {
+    const prefix = this.animationPrefixMap.get(sprite) || data.id;
+    if (!state.walker) {
+      state.walker = new WalkToBehavior(this.scene, prefix, {
+        // The mask is a floor and the sprite origin is not on it, so the rescue
+        // is asked about the FEET and answered back in origin space.
+        nearestWalkable: (x, y) => {
+          const found = this.ctx.walkMask()?.nearestWalkable(
+            x, y + NPC_FOOT_OFFSET, 48, NPC_HALF_WIDTH,
+          );
+          return found ? { x: found.x, y: found.y - NPC_FOOT_OFFSET } : null;
+        },
+      });
+    }
+    state.walker.setAnimPrefix(prefix);
+    state.intent = intent;
+    state.targetSlot = slot;
+    state.breath?.remove();
+    state.breath = null;
+
+    state.walker.start(path, NPC_WALK_SPEED, slot.facing || 'down');
+
+    // The spec's contract: walk on camera, teleport + cross-fade otherwise.
+    // `onCameraWalk: false` is an always-teleport (every cross-location move).
+    const end = path[path.length - 1];
+    const watched = slot.onCameraWalk !== false && this.isWatched(sprite, end);
+    if (!watched) {
+      state.walker.teleportToEnd(sprite);
+      this.crossFade(sprite);
+      if (intent === 'exit') this.finishExit(sprite, state);
+      else this.finishStationWalk(sprite, state);
+    }
+  }
+
+  /**
+   * The hour rolled over and this NPC should be gone.
+   *
+   * If the slot names a door they walk to it and fade there (on camera); with
+   * no door, or with nobody watching, they simply fade out where they stand.
+   */
+  private departNow(
+    sprite: Phaser.Physics.Arcade.Sprite,
+    data: NPCData,
+    slot: ScheduleSlot | null,
+    state: ScheduleState | undefined,
+  ) {
+    if (!state) { this.removeSprite(sprite); return; }
+    const door = this.exitDoorFor(slot);
+    if (!door || !slot) {
+      state.targetSlot = slot;
+      this.finishExit(sprite, state);
+      return;
+    }
+
+    const target = this.toWorld({ x: door.x, y: door.y });
+    if (!this.isWatched(sprite, target)) {
+      state.targetSlot = slot;
+      this.finishExit(sprite, state);
+      return;
+    }
+
+    const path = this.routeTo(sprite, target, slot.route);
+    if (!path) {
+      state.targetSlot = slot;
+      this.finishExit(sprite, state);
+      return;
+    }
+    this.startWalk(sprite, data, state, path, 'exit', slot);
+  }
+
+  /** Force a station walk that is already overdue (the hour has rolled). */
+  private beginStationWalk(
+    sprite: Phaser.Physics.Arcade.Sprite,
+    data: NPCData,
+    slot: ScheduleSlot,
+    target: Point,
+    urgent: boolean,
+  ) {
+    const state = this.scheduleState.get(data.id);
+    if (!state) return;
+    const path = this.routeTo(sprite, target, slot.route);
+    if (!path) {
+      sprite.setPosition(target.x, target.y);
+      this.applyStationPose(sprite, slot);
+      return;
+    }
+    // Overdue walks that nobody can see are simply taken, not animated.
+    const effectiveSlot = urgent && !this.isWatched(sprite, target)
+      ? { ...slot, onCameraWalk: false }
+      : slot;
+    this.startWalk(sprite, data, state, path, 'station', effectiveSlot);
+  }
+
+  /** Is either end of this walk on screen? */
+  private isWatched(sprite: Phaser.Physics.Arcade.Sprite, end: Point): boolean {
+    const view = this.scene.cameras.main?.worldView;
+    if (!view) return false;
+    return view.contains(sprite.x, sprite.y) || view.contains(end.x, end.y);
+  }
+
+  private crossFade(sprite: Phaser.Physics.Arcade.Sprite) {
+    sprite.setAlpha(0);
+    this.scene.tweens.add({ targets: sprite, alpha: 1, duration: TELEPORT_FADE_MS });
+  }
+
+  private finishStationWalk(sprite: Phaser.Physics.Arcade.Sprite, state: ScheduleState) {
+    state.intent = null;
+    if (state.targetSlot) this.applyStationPose(sprite, state.targetSlot);
+    state.targetSlot = null;
+  }
+
+  /**
+   * Arrive at a door and go "indoors".
+   *
+   * No interiors exist, so indoors is: reach the door, play its effect, hold
+   * 200 ms facing it, fade over 350 ms, despawn. The effect vocabulary is what
+   * makes the two quarters of the city sound different — a Malay stilt house
+   * has a cloth doorway, a Portuguese warehouse has a bar and a latch.
+   */
+  private finishExit(sprite: Phaser.Physics.Arcade.Sprite, state: ScheduleState) {
+    const door = this.exitDoorFor(state.targetSlot);
+    state.intent = null;
+    state.targetSlot = null;
+    if (this.departing.has(sprite)) return;
+    this.departing.add(sprite);
+
+    sprite.setVelocity(0, 0);
+    if (door?.effect && door.effect !== 'none') this.deps.playEffect?.(door.effect);
+    // Face the door they are working at, so the lock-up reads as a back turned
+    // rather than a person standing sideways next to a wall.
+    if (door) {
+      const at = this.toWorld({ x: door.x, y: door.y });
+      this.setFacing(sprite, directionBetween(sprite.x, sprite.y, at.x, at.y));
+    }
+
+    const pause = door?.effect === 'shutter' || door?.effect === 'shutter-bar'
+      ? SHUTTER_PAUSE_MS
+      : DOOR_PAUSE_MS;
+    const shadow = this.shadowMap.get(sprite);
+    const indicator = (sprite as unknown as { indicator?: Phaser.GameObjects.Arc }).indicator;
+    this.scene.time.delayedCall(pause, () => {
+      if (!sprite.active) return;
+      this.scene.tweens.add({
+        targets: [sprite, shadow].filter(Boolean) as Phaser.GameObjects.GameObject[],
+        alpha: 0,
+        duration: DOOR_FADE_MS,
+        onComplete: () => {
+          indicator?.destroy();
+          this.removeSprite(sprite);
+        },
+      });
+    });
+  }
+
+  /**
+   * An NPC comes back on stage: fade in at the door they enter by, then walk to
+   * the station. Off camera it is simply a fade-in already at the station.
+   */
+  private arrive(data: NPCData, slot: ScheduleSlot | null) {
+    if (!data || this.spriteById.has(data.id)) return;
+    const station = slotStation(slot, this.nativeAnchorFor(data));
+    if (!station) return;
+    const target = this.toWorld(station);
+
+    const door = slot?.enter;
+    const enterAt = door ? this.toWorld({ x: door.x, y: door.y }) : target;
+    const watched = slot?.onCameraWalk !== false
+      && Boolean(this.scene.cameras.main?.worldView.contains(enterAt.x, enterAt.y));
+
+    const sprite = this.spawnNpc(data, watched ? enterAt : target, false);
+    this.crossFade(sprite);
+    if (slot) this.applyStationPose(sprite, slot);
+    if (door?.effect && door.effect !== 'none' && watched) this.deps.playEffect?.(door.effect);
+
+    if (watched && slot && (enterAt.x !== target.x || enterAt.y !== target.y)) {
+      this.beginStationWalk(sprite, data, slot, target, false);
+    }
+  }
+
+  /** The location file's authored anchor for an NPC, in NATIVE px. */
+  private nativeAnchorFor(data: NPCData): Point | null {
+    const override = this.ctx.location()?.npcPositions?.[data.id];
+    if (!override) return null;
+    const scale = this.ctx.location()?.world.scale ?? 1;
+    return { x: override.x / scale, y: override.y / scale };
+  }
+
+  /**
+   * Stand at a station: face the authored way, run the business idle.
+   *
+   * Tier-0 for the idle vocabulary, per spec §2.3: no new character art, just
+   * the shipped idle animation plus a slow vertical breath. It reads as "doing
+   * something" from three metres, which is the only distance that matters at
+   * this sprite scale, and the idle KEY is carried in the data so the overlay
+   * strips can land in Stage 6 without any schedule moving.
+   */
+  private applyStationPose(sprite: Phaser.Physics.Arcade.Sprite, slot: ScheduleSlot) {
+    const data = this.dataMap.get(sprite);
+    if (!data) return;
+    const state = this.scheduleState.get(data.id);
+    sprite.setVelocity(0, 0);
+    this.setFacing(sprite, (slot.facing as Direction) || 'down');
+    if (!state) return;
+
+    state.idleKey = slot.idle ?? null;
+    state.breath?.remove();
+    state.breath = null;
+    // `idle-breathe` IS the shipped animation; anything else is a business idle
+    // with no art yet, and gets the Tier-0 breath on top.
+    if (!slot.idle || slot.idle === 'idle-breathe') return;
+    state.breath = this.scene.tweens.add({
+      targets: sprite,
+      scaleY: CHARACTER_SCALE * 0.97,
+      duration: 420,
+      yoyo: true,
+      repeat: -1,
+      ease: 'Sine.easeInOut',
+    });
+  }
+
+  /** Apply the beat holding at this clock reading — a facing and an idle. */
+  private applyBeat(
+    sprite: Phaser.Physics.Arcade.Sprite,
+    data: NPCData,
+    hour: number,
+    minute: number,
+    state: ScheduleState,
+  ) {
+    const beat = resolveBeat(data.beats, hour, minute);
+    const kind = beat ? `${beat.at}:${beat.kind}` : null;
+    if (kind === state.beatKind) return;
+    state.beatKind = kind;
+
+    if (!beat) {
+      const slot = resolveSlot(data.schedule, hour);
+      if (slot) this.applyStationPose(sprite, slot);
+      return;
+    }
+
+    if (beat.station) {
+      const target = this.toWorld(beat.station);
+      sprite.setPosition(target.x, target.y);
+    }
+    if (beat.face) {
+      const face = this.toWorld(beat.face);
+      this.setFacing(sprite, directionBetween(sprite.x, sprite.y, face.x, face.y));
+    }
+  }
+
+  /** Tear one sprite out of every roster it is in. */
+  private removeSprite(sprite: Phaser.Physics.Arcade.Sprite) {
+    const data = this.dataMap.get(sprite);
+    const shadow = this.shadowMap.get(sprite);
+    if (shadow) shadow.destroy();
+    if (data) {
+      this.scheduleState.get(data.id)?.breath?.remove();
+      this.scheduleState.delete(data.id);
+      this.spriteById.delete(data.id);
+      this.followers.delete(data.id);
+    }
+    this.dataMap.delete(sprite);
+    this.animationPrefixMap.delete(sprite);
+    this.facingMap.delete(sprite);
+    this.shadowMap.delete(sprite);
+    this.departing.delete(sprite);
+    if (this.activeDialogueNpc === sprite) this.activeDialogueNpc = null;
+    const index = this.sprites.indexOf(sprite);
+    if (index >= 0) this.sprites.splice(index, 1);
+    sprite.destroy();
+  }
+
   // -- per frame -----------------------------------------------------------
 
   /**
@@ -393,6 +992,7 @@ export class NPCSystem {
    * NPC the interaction system is currently offering.
    */
   update(targetedNpcId: string | null) {
+    this.tickSchedules();
     this.sprites.forEach((npc) => {
       const depth = worldDepth(npc.y + FOOT_OFFSET);
       npc.setDepth(depth);

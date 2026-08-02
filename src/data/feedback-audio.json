@@ -1,0 +1,33 @@
+{
+  "$schema": "melaka/feedback-audio@1",
+  "note": "The v0.12 feedback SFX batch (docs/design/game-feel-spec.md §3.3). Single source of truth for BOTH the BootScene load list and the key-existence gate in tools/validate-gameplay-assets.cjs, so a sound that is referenced by the feedback event table but has no file fails the build instead of silently no-op-ing at runtime. Synthesised by tools/generate-audio/sfx.cjs — regenerate with `npm run generate:audio`.",
+  "keys": [
+    "sfx-examine-soft",
+    "sfx-quest-chime",
+    "sfx-journal-quill",
+    "sfx-page-turn",
+    "sfx-denied-thud",
+    "sfx-panel-open",
+    "sfx-panel-close",
+    "sfx-save-seal",
+    "sfx-rest-chime",
+    "sfx-cloth-rustle",
+    "sfx-wood-creak-short",
+    "sfx-grass-brush"
+  ],
+  "legacyKeys": [
+    "sfx-menu-select",
+    "sfx-dialogue-blip",
+    "sfx-item-pickup",
+    "sfx-door-open",
+    "sfx-footstep-stone",
+    "sfx-footstep-wood",
+    "sfx-footstep-dirt",
+    "sfx-coin-clink",
+    "sfx-gate-creak",
+    "sfx-waves-crash",
+    "sfx-crowd-murmur",
+    "sfx-birds-tropical",
+    "sfx-wind-hilltop"
+  ]
+}

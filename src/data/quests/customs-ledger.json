@@ -7,17 +7,32 @@
   "giver": "diogo-almeida",
   "triggerTopic": "ledger",
   "summary": "Diogo Almeida asks you to compare ledgers, manifests, and witness accounts after duty records go missing. The trail runs through A Famosa, Rua Direita, Waterfront, and the edge of the kampung.",
-  "themes": ["customs", "corruption", "trade", "paperwork", "duty"],
+  "themes": [
+    "customs",
+    "corruption",
+    "trade",
+    "paperwork",
+    "duty"
+  ],
   "prerequisite": {
     "questComplete": "merchants-seal"
   },
-  "locations": ["rua-direita", "a-famosa-gate", "waterfront", "kampung"],
+  "locations": [
+    "rua-direita",
+    "a-famosa-gate",
+    "waterfront",
+    "kampung"
+  ],
   "stages": [
     {
       "id": "start",
       "description": "Speak with Diogo Almeida about the missing customs entries.",
       "objectives": [
-        { "type": "location", "target": "rua-direita", "completed": false }
+        {
+          "type": "location",
+          "target": "rua-direita",
+          "completed": false
+        }
       ],
       "journalEntry": "Diogo Almeida, a notary runner on Rua Direita, believes someone is shaving customs records. He wants the books compared before the trail goes cold and the harbor finds its own truth in the margins.",
       "npcDialogueOverrides": {
@@ -29,7 +44,9 @@
           },
           "books": {
             "text": "A ledger is only ink until the city lets it speak. Bring me the voices of the gate, the quay, and the people who move between them.",
-            "requires": ["ledger"]
+            "requires": [
+              "ledger"
+            ]
           }
         }
       },
@@ -39,9 +56,21 @@
       "id": "inspect",
       "description": "Compare the gate, quay, and street records for the missing entries.",
       "objectives": [
-        { "type": "location", "target": "a-famosa-gate", "completed": false },
-        { "type": "location", "target": "waterfront", "completed": false },
-        { "type": "location", "target": "kampung", "completed": false }
+        {
+          "type": "location",
+          "target": "a-famosa-gate",
+          "completed": false
+        },
+        {
+          "type": "location",
+          "target": "waterfront",
+          "completed": false
+        },
+        {
+          "type": "location",
+          "target": "kampung",
+          "completed": false
+        }
       ],
       "journalEntry": "The first signs of tampering should be visible at the gate and the waterfront. Gaspar Mesquita, Lin Mei, and Pak Salleh each carry a different piece of the harbor's paper trail.",
       "npcDialogueOverrides": {
@@ -83,8 +112,15 @@
           "name": "Expose the Books",
           "description": "Take the evidence to Capitão Rodrigues and force the issue into the open.",
           "requirements": {
-            "talkedTo": ["diogo-almeida", "lin-mei"],
-            "worldFlagsAny": ["customs-ledger-clue", "customs-books-opened", "gomes-chen-partnership"]
+            "talkedTo": [
+              "diogo-almeida",
+              "lin-mei"
+            ],
+            "worldFlagsAny": [
+              "customs-ledger-clue",
+              "customs-books-opened",
+              "gomes-chen-partnership"
+            ]
           },
           "nextStage": "ledger-expose-end"
         },
@@ -93,8 +129,15 @@
           "name": "Broker the Balance",
           "description": "Let Gaspar keep his face, but make him answer for the missing numbers.",
           "requirements": {
-            "talkedTo": ["gaspar-mesquita", "chen-wei"],
-            "worldFlagsAny": ["customs-bent", "customs-questioned", "merchant-seal-settled"]
+            "talkedTo": [
+              "gaspar-mesquita",
+              "chen-wei"
+            ],
+            "worldFlagsAny": [
+              "customs-bent",
+              "customs-questioned",
+              "merchant-seal-settled"
+            ]
           },
           "nextStage": "ledger-broker-end"
         },
@@ -103,8 +146,16 @@
           "name": "Bury the Trail",
           "description": "Help the dockside network keep its own records hidden from the gate.",
           "requirements": {
-            "talkedTo": ["pak-salleh", "rashid"],
-            "worldFlagsAny": ["rashid-trusts-player", "customs-hidden", "smuggled-goods-moved", "customs-cargo-moved"]
+            "talkedTo": [
+              "pak-salleh",
+              "rashid"
+            ],
+            "worldFlagsAny": [
+              "rashid-trusts-player",
+              "customs-hidden",
+              "smuggled-goods-moved",
+              "customs-cargo-moved"
+            ]
           },
           "nextStage": "ledger-bury-end"
         },
@@ -112,7 +163,12 @@
           "id": "ledger-trail",
           "name": "Follow the Trail",
           "description": "Trace the cargo movement to the cove and see what the ledger is really hiding.",
-          "requirements": { "talkedTo": ["lin-mei", "pak-salleh"] },
+          "requirements": {
+            "talkedTo": [
+              "lin-mei",
+              "pak-salleh"
+            ]
+          },
           "nextStage": "ledger-trail-end"
         }
       ]
@@ -122,7 +178,12 @@
       "path": "ledger-expose",
       "description": "Turn the customs books over to the authorities.",
       "objectives": [
-        { "type": "talk", "target": "capitao-rodrigues", "topic": "ledger", "completed": false }
+        {
+          "type": "talk",
+          "target": "capitao-rodrigues",
+          "topic": "ledger",
+          "completed": false
+        }
       ],
       "journalEntry": "The gate records do not match the quay records. If Rodrigues sees the difference, Gaspar's influence should crack.",
       "npcDialogueOverrides": {
@@ -135,18 +196,34 @@
       },
       "consequenceText": "Rodrigues takes the ledger seriously. The customs inspector's network is shaken, and the harbor starts to whisper about who has been skimming from the city.",
       "consequences": {
-        "reputation": { "portuguese": 10, "malay": 5, "arab": 0 },
-        "worldChanges": ["gaspar-under-watch", "customs-books-opened", "ledger-exposed", "customs-ledger-clue"],
-        "flags": ["customs-ledger-open", "gaspar-exposed"],
+        "reputation": {
+          "portuguese": 10,
+          "malay": 5,
+          "arab": 0
+        },
+        "worldChanges": [
+          "gaspar-under-watch",
+          "customs-books-opened",
+          "ledger-exposed",
+          "customs-ledger-clue"
+        ],
+        "flags": [
+          "customs-ledger-open",
+          "gaspar-exposed"
+        ],
         "npcReactions": {
           "gaspar-mesquita": "wary",
           "diogo-almeida": "relieved"
         }
       },
       "reward": {
-        "items": ["letter-of-commendation"],
+        "items": [
+          "letter-of-commendation"
+        ],
         "money": 15,
-        "reputation": { "portuguese": 10 }
+        "reputation": {
+          "portuguese": 10
+        }
       },
       "isEnding": true,
       "endingType": "ledger-expose"
@@ -159,18 +236,33 @@
       "journalEntry": "Gaspar wants the numbers to stop moving. Chen Wei wants predictable duty. A quiet compromise may keep the harbor moving, but it leaves the corruption intact.",
       "consequenceText": "Gaspar allows the books to 'settle' after a discreet exchange. The gate stays open, the merchants keep moving, and the city learns that some truths are only ever half-said.",
       "consequences": {
-        "reputation": { "portuguese": 5, "chinese": 10, "arab": 0 },
-        "worldChanges": ["customs-bent", "gaspar-satisfied", "ledger-brokered", "customs-questioned"],
-        "flags": ["customs-brokered"],
+        "reputation": {
+          "portuguese": 5,
+          "arab": 0,
+          "chinese-merchants": 10
+        },
+        "worldChanges": [
+          "customs-bent",
+          "gaspar-satisfied",
+          "ledger-brokered",
+          "customs-questioned"
+        ],
+        "flags": [
+          "customs-brokered"
+        ],
         "npcReactions": {
           "gaspar-mesquita": "amused",
           "chen-wei": "cautious"
         }
       },
       "reward": {
-        "items": ["letter-of-credit"],
+        "items": [
+          "letter-of-credit"
+        ],
         "money": 20,
-        "reputation": { "chinese": 10 }
+        "reputation": {
+          "chinese-merchants": 10
+        }
       },
       "isEnding": true,
       "endingType": "ledger-broker"
@@ -183,18 +275,33 @@
       "journalEntry": "Pak Salleh says some numbers are safer unspoken. If the harbor keeps its own counsel, the gate cannot use the books to squeeze the quay.",
       "consequenceText": "The ledger pages disappear into the dockside current. The harbor workers breathe easier, but the Customs Office loses its clean view of the trade it claims to protect.",
       "consequences": {
-        "reputation": { "malay": 10, "arab": 5, "portuguese": -5 },
-        "worldChanges": ["ledger-hidden", "dockside-protected", "quay-quiet", "customs-hidden"],
-        "flags": ["dockside-cover"],
+        "reputation": {
+          "malay": 10,
+          "arab": 5,
+          "portuguese": -5
+        },
+        "worldChanges": [
+          "ledger-hidden",
+          "dockside-protected",
+          "quay-quiet",
+          "customs-hidden"
+        ],
+        "flags": [
+          "dockside-cover"
+        ],
         "npcReactions": {
           "pak-salleh": "trusting",
           "gaspar-mesquita": "suspicious"
         }
       },
       "reward": {
-        "items": ["coin-pouch"],
+        "items": [
+          "coin-pouch"
+        ],
         "money": 10,
-        "reputation": { "malay": 10 }
+        "reputation": {
+          "malay": 10
+        }
       },
       "isEnding": true,
       "endingType": "ledger-bury"
@@ -204,23 +311,43 @@
       "path": "ledger-trail",
       "description": "Follow the cargo trail to the cove and see where the books point.",
       "objectives": [
-        { "type": "location", "target": "kampung", "completed": false }
+        {
+          "type": "location",
+          "target": "kampung",
+          "completed": false
+        }
       ],
       "journalEntry": "The missing entries line up with a trail toward the cove and the kampung edge. This is beginning to look less like duty skimming and more like organized movement.",
       "consequenceText": "The trail confirms that the customs books and the shipping rumors are part of the same pattern. The next step is not another ledger. It is a cove, a watcher, and people who know the tides.",
       "consequences": {
-        "reputation": { "malay": 5, "arab": 5, "chinese": 5 },
-        "worldChanges": ["pirate-cove-clue", "ledger-crosstalk", "customs-trail-known", "customs-ledger-clue"],
-        "flags": ["pirates-follow-up-ready"],
+        "reputation": {
+          "malay": 5,
+          "arab": 5,
+          "chinese-merchants": 5
+        },
+        "worldChanges": [
+          "pirate-cove-clue",
+          "ledger-crosstalk",
+          "customs-trail-known",
+          "customs-ledger-clue"
+        ],
+        "flags": [
+          "pirates-follow-up-ready"
+        ],
         "npcReactions": {
           "lin-mei": "helpful",
           "pak-salleh": "careful"
         }
       },
       "reward": {
-        "items": ["cargo-manifest"],
+        "items": [
+          "cargo-manifest"
+        ],
         "money": 10,
-        "reputation": { "chinese": 5, "malay": 5 }
+        "reputation": {
+          "malay": 5,
+          "chinese-merchants": 5
+        }
       },
       "isEnding": true,
       "endingType": "ledger-trail"

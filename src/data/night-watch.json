@@ -1,0 +1,443 @@
+{
+  "_meta": {
+    "purpose": "Stage 5 night-watch patrol, senses and consequence chain for the waterfront counting-house break-in. Companion prose in docs/design/living-world-spec.md section 4 and the verified source draft in docs/design/data-drafts/theft-waterfront-night.draft.json.",
+    "coordinateSpace": "NATIVE 640x360 waterfront px, identical to <id>.location.json. Feet are at (x, y+15). NightWatchSystem multiplies by the location world.scale exactly once.",
+    "anchorNote": "Authored against the FALLBACK counting-house anchor (570,262). Everything shifts by (+26,+34) if the primary counting-house module lands in the waterfront plate layout (dependency D1).",
+    "waypointWidthNote": "Every waypoint is walkable for a body 3 native px wide at feet level (y+15), not merely as a POINT. Six of the eighteen originally cleared the point test but not the body test — W3, W6, W8, W13, W16 and W18, all of them slivers against the customs shed or a godown wall — which made the guard.s own route unreachable and deadlocked him at W18 having walked seventeen-eighteenths of a perfect loop. Each was nudged 1-2px; the patrol shape is unchanged."
+  },
+  "locationId": "waterfront",
+  "anchors": {
+    "COUNTING_HOUSE_DOOR": {
+      "fallback": {
+        "x": 570,
+        "y": 262
+      },
+      "primary": {
+        "x": 596,
+        "y": 296
+      }
+    },
+    "COUNTING_HOUSE_WINDOW_LIGHT": {
+      "x": 578,
+      "y": 214,
+      "radius": 30,
+      "type": "window",
+      "nightOnly": true,
+      "hours": [
+        18,
+        19
+      ]
+    },
+    "PLAYER_ENTRY": {
+      "fromRuaDireita": {
+        "x": 34,
+        "y": 325
+      }
+    }
+  },
+  "nightWatch": {
+    "activeHours": [
+      22,
+      4
+    ],
+    "sprite": "crowd-portuguese-guard",
+    "carriesLantern": true,
+    "lanternLight": {
+      "radius": 40,
+      "type": "lantern",
+      "followsGuard": true
+    },
+    "speed": 90,
+    "patrol": [
+      {
+        "id": "W1",
+        "x": 600,
+        "y": 272,
+        "dwell": 6,
+        "face": "down",
+        "lit": false
+      },
+      {
+        "id": "W2",
+        "x": 556,
+        "y": 262,
+        "dwell": 0,
+        "lit": false
+      },
+      {
+        "id": "W3",
+        "x": 524,
+        "y": 266,
+        "dwell": 0,
+        "lit": false,
+        "_nudged": "was (523,267); moved 1,-1 native px off the mask edge so a body-width guard can stand here, not just a point"
+      },
+      {
+        "id": "W4",
+        "x": 470,
+        "y": 286,
+        "dwell": 0,
+        "lit": false
+      },
+      {
+        "id": "W5",
+        "x": 432,
+        "y": 300,
+        "dwell": 0,
+        "lit": false
+      },
+      {
+        "id": "W6",
+        "x": 365,
+        "y": 289,
+        "dwell": 0,
+        "lit": false,
+        "_nudged": "was (366,288); moved -1,1 native px off the mask edge so a body-width guard can stand here, not just a point"
+      },
+      {
+        "id": "W7",
+        "x": 326,
+        "y": 270,
+        "dwell": 0,
+        "lit": false
+      },
+      {
+        "id": "W8",
+        "x": 295,
+        "y": 273,
+        "dwell": 0,
+        "lit": false,
+        "_nudged": "was (296,272); moved -1,1 native px off the mask edge so a body-width guard can stand here, not just a point"
+      },
+      {
+        "id": "W9",
+        "x": 240,
+        "y": 300,
+        "dwell": 5,
+        "face": "right",
+        "lit": "L4"
+      },
+      {
+        "id": "W10",
+        "x": 240,
+        "y": 246,
+        "dwell": 0,
+        "lit": "L4"
+      },
+      {
+        "id": "W11",
+        "x": 262,
+        "y": 232,
+        "dwell": 0,
+        "lit": false
+      },
+      {
+        "id": "W12",
+        "x": 300,
+        "y": 222,
+        "dwell": 0,
+        "lit": "L3"
+      },
+      {
+        "id": "W13",
+        "x": 358,
+        "y": 212,
+        "dwell": 0,
+        "lit": "L3+L7",
+        "_nudged": "was (359,213); moved -1,-1 native px off the mask edge so a body-width guard can stand here, not just a point"
+      },
+      {
+        "id": "W14",
+        "x": 420,
+        "y": 214,
+        "dwell": 0,
+        "lit": "L7"
+      },
+      {
+        "id": "W15",
+        "x": 490,
+        "y": 216,
+        "dwell": 0,
+        "lit": false
+      },
+      {
+        "id": "W16",
+        "x": 556,
+        "y": 227,
+        "dwell": 0,
+        "lit": "L6",
+        "_nudged": "was (556,228); moved 0,-1 native px off the mask edge so a body-width guard can stand here, not just a point"
+      },
+      {
+        "id": "W17",
+        "x": 610,
+        "y": 224,
+        "dwell": 4,
+        "face": "down",
+        "lit": "L2"
+      },
+      {
+        "id": "W18",
+        "x": 601,
+        "y": 237,
+        "dwell": 0,
+        "lit": false,
+        "_nudged": "was (600,238); moved 1,-1 native px off the mask edge so a body-width guard can stand here, not just a point"
+      }
+    ],
+    "timing": {
+      "loopSeconds": 43.7,
+      "arrivalsFromLoopStart": {
+        "W1": 0,
+        "W2": 7.9,
+        "W3": 9,
+        "W4": 10.9,
+        "W5": 12.2,
+        "W6": 14.5,
+        "W7": 16,
+        "W8": 17,
+        "W9": 19.1,
+        "W10": 25.9,
+        "W11": 26.8,
+        "W12": 28.1,
+        "W13": 30.1,
+        "W14": 32.1,
+        "W15": 34.4,
+        "W16": 36.7,
+        "W17": 38.5,
+        "W18": 43.1
+      },
+      "doorUnwatchedWindow": {
+        "fromSeconds": 9.6,
+        "toSeconds": 37.4,
+        "durationSeconds": 27.8
+      }
+    },
+    "senses": {
+      "visionRangeNative": 64,
+      "visionArcDegrees": 90,
+      "peripheralRangeNative": 20,
+      "lightModifiers": [
+        {
+          "case": "player feet inside any nightOnly light pool",
+          "visionRange": 1.6,
+          "peripheral": 1
+        },
+        {
+          "case": "player feet inside the guard's own lantern pool (r40)",
+          "visionRange": 2,
+          "peripheral": 2
+        },
+        {
+          "case": "player feet in shadow (no pool)",
+          "visionRange": 0.55,
+          "peripheral": 1
+        },
+        {
+          "case": "player in shadow AND stationary for >1.0s",
+          "visionRange": 0.7,
+          "peripheral": 0.7
+        },
+        {
+          "case": "player behind a walk-behind occluder (waterfront overlays fg-0 palm-cluster 577,270 / fg-1 godown 165,283)",
+          "visionRange": 0
+        }
+      ],
+      "noise": [
+        {
+          "action": "walk on `wood` surface (the pier, x32-160 y184-248)",
+          "alertRadiusNative": 34
+        },
+        {
+          "action": "walk on `stone` or `dirt`",
+          "alertRadiusNative": 0
+        },
+        {
+          "action": "run (any surface)",
+          "alertRadiusNative": 48
+        },
+        {
+          "action": "open an openable",
+          "alertRadiusNative": 40,
+          "oneShot": true
+        },
+        {
+          "action": "fail a lock attempt",
+          "alertRadiusNative": 56,
+          "oneShot": true
+        }
+      ],
+      "states": {
+        "unaware": {},
+        "suspicious": {
+          "enterWhen": "player detected for >0.35s cumulative, or any noise event inside alertRadius",
+          "behaviour": "stops, turns toward the last-known point, raises the lantern (pool r40 -> r56 for 2s), walks to the point, sweeps 3s, returns to the nearest patrol waypoint and resumes",
+          "durationSeconds": 6,
+          "decayToUnawareSeconds": 12
+        },
+        "alerted": {
+          "enterWhen": "player detected for >1.2s cumulative while suspicious, OR player detected within 24 native px in any state",
+          "behaviour": "shouts once, closes on the player at 140 world px/s. If he touches the player -> caught. If the player leaves the waterfront or reaches the transition trigger before he closes -> escape."
+        }
+      }
+    },
+    "raisedStakes": {
+      "trigger": {
+        "worldFlagsAny": [
+          "theft-attempt-1-failed"
+        ]
+      },
+      "changes": [
+        "SECOND WATCHMAN on the upper quay only, running W10->W18 in REVERSE, phase-offset half a loop. The W15 dark gap is now covered and the doorUnwatchedWindow collapses from 27.8s to ~7s.",
+        "The counting-house shutter is BARRED. Opening it now requires the `key-warehouse` item, which already exists in the world at a-famosa-gate.location.json items[1] (184,307). Without it the door interaction returns 'The shutter is barred from the inside since the last time.' and costs 2s of standing still.",
+        "The east lantern-post-96 (646,257) is relit every night regardless of dousing, and a doused lamp now raises `night-watch-alerted` immediately instead of on the guard's next pass."
+      ]
+    }
+  },
+  "dousableLights": [
+    {
+      "lightIndex": 1,
+      "light": {
+        "x": 150,
+        "y": 198
+      },
+      "prop": "lantern-post-94",
+      "propXY": {
+        "x": 150,
+        "y": 240
+      },
+      "approach": {
+        "x": 150,
+        "y": 240
+      }
+    },
+    {
+      "lightIndex": 2,
+      "light": {
+        "x": 646,
+        "y": 215
+      },
+      "prop": "lantern-post-96",
+      "propXY": {
+        "x": 646,
+        "y": 257
+      },
+      "approach": {
+        "x": 632,
+        "y": 268
+      }
+    },
+    {
+      "lightIndex": 3,
+      "light": {
+        "x": 326,
+        "y": 228
+      },
+      "prop": "lantern-post-95",
+      "propXY": {
+        "x": 326,
+        "y": 270
+      },
+      "approach": {
+        "x": 326,
+        "y": 282
+      }
+    },
+    {
+      "lightIndex": 5,
+      "light": {
+        "x": 128,
+        "y": 313
+      },
+      "prop": "lantern-post-97",
+      "propXY": {
+        "x": 128,
+        "y": 353
+      },
+      "approach": {
+        "x": 119,
+        "y": 344
+      }
+    }
+  ],
+  "consequenceChain": {
+    "onSuccess": {
+      "addFlags": [
+        "counting-house-entered"
+      ],
+      "addReputation": {
+        "chinese-merchants": -30
+      }
+    },
+    "onCaught": {
+      "sequence": [
+        "Guard shout SFX, 300ms hold, fade to black over 600ms. No combat, no death screen.",
+        "Fade in at a-famosa-gate spawns.player (320,264) at 06:00 the following day, facing up toward the gate.",
+        "Capitão Rodrigues is at his 06:00 station (278,286), 42px away, facing the player. He speaks first, unprompted (see dialogueHooks.new capitao-rodrigues.night-complaint).",
+        "Journal entry written."
+      ],
+      "flags": {
+        "set": [
+          "caught-at-counting-house",
+          "theft-attempt-1-failed",
+          "night-watch-doubled"
+        ],
+        "clear": [
+          "night-watch-alerted"
+        ],
+        "setOnSecondCatch": [
+          "theft-attempt-2-failed",
+          "player-known-thief",
+          "theft-path-closed"
+        ]
+      },
+      "reputation": {
+        "chinese-merchants": -10,
+        "portuguese": -6
+      },
+      "confiscation": [
+        {
+          "what": "cruzados",
+          "amount": "min(playerMoney, 40)",
+          "as": "fine, receipted"
+        },
+        {
+          "what": "trading-seal",
+          "condition": "if held",
+          "as": "returned to Chen Wei",
+          "sets": [
+            "seal-returned-to-chen"
+          ]
+        },
+        {
+          "what": "key-warehouse",
+          "condition": "if held",
+          "as": "confiscated"
+        }
+      ],
+      "questState": {
+        "onFirstCatch": "merchants-seal returns to stage `choose-path`. The `theft` path stays available with requirements gaining `worldFlagsNone: [\"theft-path-closed\"]`. Journal: the attempt is recorded as a fact, not erased.",
+        "onSecondCatch": "`theft-path-closed` set. The theft path disappears from choose-path. payment, diplomatic and investigate-truth all remain completable — this is the fail-forward: the player has spent two nights and 40 cruzados and lost nothing that closes the quest."
+      },
+      "absolution": {
+        "topic": "padre-tomas.confession-theft",
+        "availability": {
+          "worldFlagsAny": [
+            "caught-at-counting-house"
+          ]
+        },
+        "cost": {
+          "money": 20
+        },
+        "effect": {
+          "reputation": {
+            "chinese-merchants": 5
+          },
+          "flags": [
+            "confessed-theft"
+          ]
+        }
+      }
+    }
+  }
+}

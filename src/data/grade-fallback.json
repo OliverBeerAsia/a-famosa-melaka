@@ -1,0 +1,88 @@
+{
+  "$schema": "melaka-forge/grade-lut-fallback@1",
+  "generatedBy": "tools/forge/grade-lut.cjs — regenerate with `npm run forge:grade-lut`, do not hand-edit",
+  "note": "Each LUT's own mapping of mid-grey #808080. The Canvas fallback draws ONE MULTIPLY rect in `multiply` at alpha 0.35 — the honest limit of a renderer with no shader. `multiply` is the mapping normalised to its own peak channel (hue only); `rawMidGrey` is the unnormalised mapping, kept so the normalisation stays auditable. See the SPEC DEVIATION note in grade-lut.cjs.",
+  "fallbackAlpha": 0.35,
+  "luts": {
+    "a-famosa-gate-day": {
+      "multiply": "#FFFEFD",
+      "rawMidGrey": "#828181"
+    },
+    "a-famosa-gate-dawn": {
+      "multiply": "#FAFBFF",
+      "rawMidGrey": "#7E7E80"
+    },
+    "a-famosa-gate-dusk": {
+      "multiply": "#FFF8F4",
+      "rawMidGrey": "#807C7A"
+    },
+    "a-famosa-gate-night": {
+      "multiply": "#FAFBFF",
+      "rawMidGrey": "#7A7A7C"
+    },
+    "rua-direita-day": {
+      "multiply": "#FFFFFD",
+      "rawMidGrey": "#828280"
+    },
+    "rua-direita-dawn": {
+      "multiply": "#FBFDFF",
+      "rawMidGrey": "#7E7F80"
+    },
+    "rua-direita-dusk": {
+      "multiply": "#FFF7F2",
+      "rawMidGrey": "#807C7A"
+    },
+    "rua-direita-night": {
+      "multiply": "#FCFCFF",
+      "rawMidGrey": "#7A7B7C"
+    },
+    "st-pauls-church-day": {
+      "multiply": "#FEFEFF",
+      "rawMidGrey": "#818181"
+    },
+    "st-pauls-church-dawn": {
+      "multiply": "#F8FAFF",
+      "rawMidGrey": "#7D7E81"
+    },
+    "st-pauls-church-dusk": {
+      "multiply": "#FFF8F6",
+      "rawMidGrey": "#807C7B"
+    },
+    "st-pauls-church-night": {
+      "multiply": "#F8F9FF",
+      "rawMidGrey": "#797A7D"
+    },
+    "waterfront-day": {
+      "multiply": "#FDFEFF",
+      "rawMidGrey": "#818182"
+    },
+    "waterfront-dawn": {
+      "multiply": "#F6F9FF",
+      "rawMidGrey": "#7D7E81"
+    },
+    "waterfront-dusk": {
+      "multiply": "#FFFAF8",
+      "rawMidGrey": "#7F7C7B"
+    },
+    "waterfront-night": {
+      "multiply": "#F6F9FF",
+      "rawMidGrey": "#797A7D"
+    },
+    "kampung-day": {
+      "multiply": "#FDFFFD",
+      "rawMidGrey": "#818281"
+    },
+    "kampung-dawn": {
+      "multiply": "#F8FCFF",
+      "rawMidGrey": "#7D7F80"
+    },
+    "kampung-dusk": {
+      "multiply": "#FFFAF6",
+      "rawMidGrey": "#7F7C7A"
+    },
+    "kampung-night": {
+      "multiply": "#F9FCFF",
+      "rawMidGrey": "#797B7C"
+    }
+  }
+}

@@ -1,0 +1,449 @@
+{
+  "_meta": {
+    "purpose": "Openables: the minimal Ultima VII container verb. An openable is NOT a new prop — it is a flag on a prop that is already painted, plus contents, plus two lines of prose.",
+    "coordinateSpace": "NATIVE plate px, keyed by location id. `anchor` is the painted prop position; `approach` is a walkable ORIGIN point (feet at y+15).",
+    "whyNotInLocationFiles": "Same reason as residents.json: the location files are compositor output and hand additions do not survive a plate regeneration.",
+    "source": "docs/design/data-drafts/openables.draft.json"
+  },
+  "waterfront": [
+    {
+      "id": "counting-house-drawer",
+      "prop": "customs-house",
+      "anchor": {
+        "x": 570,
+        "y": 241
+      },
+      "approach": {
+        "x": 556,
+        "y": 262
+      },
+      "label": "Force the ledger drawer",
+      "lock": {
+        "needs": null,
+        "flagsAny": [
+          "counting-house-entered"
+        ],
+        "flagsNone": []
+      },
+      "contents": [
+        {
+          "itemId": "trading-seal",
+          "count": 1
+        }
+      ],
+      "onOpen": {
+        "flags": [
+          "seal-stolen",
+          "player-is-thief"
+        ],
+        "reputation": {
+          "chinese-merchants": -30
+        },
+        "notification": "The seal is cold in your hand."
+      },
+      "emptyText": "The drawer runs on beeswax and does not squeak, which you noticed at the time and have thought about since.",
+      "witnessed": false,
+      "reopenable": false
+    },
+    {
+      "id": "bonded-chest",
+      "prop": "bonded-chest",
+      "anchor": {
+        "x": 478,
+        "y": 297
+      },
+      "approach": {
+        "x": 478,
+        "y": 297
+      },
+      "label": "Open the bonded chest",
+      "lock": {
+        "needs": "key-warehouse",
+        "flagsAny": [],
+        "flagsNone": []
+      },
+      "contents": [
+        {
+          "money": 30
+        },
+        {
+          "itemId": "letter-of-credit",
+          "count": 1
+        }
+      ],
+      "onOpen": {
+        "flags": [
+          "bonded-chest-opened"
+        ],
+        "notification": "Duty paid on paper, and thirty cruzados that were not on the paper."
+      },
+      "emptyText": "Sound wood, sound iron, and a smell of pepper that will outlast the chest.",
+      "witnessed": true,
+      "reopenable": false
+    },
+    {
+      "id": "tin-godown-door",
+      "prop": "godown-tin",
+      "anchor": {
+        "x": 506,
+        "y": 276
+      },
+      "approach": {
+        "x": 501,
+        "y": 295
+      },
+      "label": "Try the barred door",
+      "lock": {
+        "needs": "key-warehouse",
+        "flagsAny": [
+          "dockside-cover",
+          "quest-complete:customs-ledger"
+        ],
+        "flagsNone": []
+      },
+      "contents": [
+        {
+          "money": 15
+        },
+        {
+          "flag": "saw-the-tin-shortfall"
+        }
+      ],
+      "onOpen": {
+        "notification": "Sixty bahar on the manifest. You count fifty-four stacks and stop counting."
+      },
+      "emptyText": "The bar goes back across easily. It is a new bar and it has not yet learned to stick.",
+      "witnessed": true,
+      "reopenable": true
+    },
+    {
+      "id": "quay-water-cask",
+      "prop": "barrel-open-68",
+      "anchor": {
+        "x": 627,
+        "y": 267
+      },
+      "approach": {
+        "x": 616,
+        "y": 272
+      },
+      "label": "Look in the open cask",
+      "lock": null,
+      "contents": [
+        {
+          "money": 2
+        }
+      ],
+      "onOpen": {
+        "notification": "Two cruzados in the sediment. Somebody was hiding them or somebody was drunk."
+      },
+      "emptyText": "Rainwater, a drowned gecko, and the reflection of a man who checks casks.",
+      "witnessed": false,
+      "reopenable": false
+    },
+    {
+      "id": "stencilled-crate",
+      "prop": "crate-63",
+      "anchor": {
+        "x": 448,
+        "y": 238
+      },
+      "approach": {
+        "x": 448,
+        "y": 250
+      },
+      "label": "Prise open the crate",
+      "lock": null,
+      "contents": [
+        {
+          "itemId": "spice-sample",
+          "count": 1
+        }
+      ],
+      "onOpen": {
+        "notification": "Nutmeg, still in its mace. Somebody will notice the lid."
+      },
+      "emptyText": "The lid sits crooked now. It will sit crooked until it reaches Goa.",
+      "witnessed": true,
+      "reopenable": false
+    }
+  ],
+  "rua-direita": [
+    {
+      "id": "gomes-warehouse-strongbox",
+      "prop": "crate-37",
+      "anchor": {
+        "x": 266,
+        "y": 183
+      },
+      "approach": {
+        "x": 240,
+        "y": 156
+      },
+      "label": "Open the warehouse strongbox",
+      "lock": {
+        "needs": null,
+        "flagsAny": [
+          "quest-active:merchants-seal"
+        ],
+        "flagsNone": []
+      },
+      "contents": [
+        {
+          "money": 12
+        },
+        {
+          "itemId": "cargo-manifest",
+          "count": 1
+        },
+        {
+          "flag": "saw-gomes-books"
+        }
+      ],
+      "onOpen": {
+        "flags": [
+          "saw-gomes-books"
+        ],
+        "notification": "Twelve cruzados, a manifest, and three voyages entered where he told you there was one."
+      },
+      "emptyText": "He does not lock it. That is either trust or the certainty that nobody would dare, and after this week you are no longer sure which.",
+      "witnessed": true,
+      "reopenable": false
+    },
+    {
+      "id": "alvares-tally-crates",
+      "prop": "crate-stack-62",
+      "anchor": {
+        "x": 224,
+        "y": 304
+      },
+      "approach": {
+        "x": 224,
+        "y": 304
+      },
+      "label": "Open the tally crates",
+      "lock": {
+        "needs": null,
+        "flagsAny": [
+          "alvares-tally-contract"
+        ],
+        "flagsNone": []
+      },
+      "contents": [
+        {
+          "money": 0
+        },
+        {
+          "flag": "tin-tally-checked"
+        }
+      ],
+      "onOpen": {
+        "notification": "Ingot, mark, weight. Ingot, mark, weight. Forty cruzados is beginning to look like a wage rather than a gift."
+      },
+      "emptyText": "Roped again, exactly as you found them. He will check the knots.",
+      "witnessed": true,
+      "reopenable": true
+    },
+    {
+      "id": "runners-handcart",
+      "prop": "handcart-22",
+      "anchor": {
+        "x": 24,
+        "y": 282
+      },
+      "approach": {
+        "x": 36,
+        "y": 288
+      },
+      "label": "Search the handcart",
+      "lock": null,
+      "contents": [
+        {
+          "itemId": "cargo-manifest",
+          "count": 1
+        }
+      ],
+      "onOpen": {
+        "notification": "A copy of a copy, in a fine upright secretary hand — and the fee column leaning."
+      },
+      "emptyText": "Straw, a broken seal-wafer, and the smell of somebody else's morning.",
+      "witnessed": false,
+      "reopenable": false
+    },
+    {
+      "id": "street-chicken-coop",
+      "prop": "chicken-coop-57",
+      "anchor": {
+        "x": 13,
+        "y": 295
+      },
+      "approach": {
+        "x": 26,
+        "y": 300
+      },
+      "label": "Open the coop",
+      "lock": null,
+      "contents": [
+        {
+          "itemId": "egg",
+          "count": 2
+        }
+      ],
+      "onOpen": {
+        "notification": "Two eggs, and one hen now loose on Rua Direita.",
+        "flags": [
+          "loosed-a-chicken"
+        ]
+      },
+      "emptyText": "The hen has not forgiven you and neither, apparently, has the street.",
+      "witnessed": true,
+      "reopenable": true
+    }
+  ],
+  "a-famosa-gate": [
+    {
+      "id": "powder-store",
+      "prop": "powder",
+      "anchor": {
+        "x": 45,
+        "y": 255
+      },
+      "approach": {
+        "x": 45,
+        "y": 268
+      },
+      "label": "Open the powder barrels",
+      "lock": {
+        "needs": null,
+        "flagsAny": [],
+        "flagsNone": [
+          "magazine-tampered"
+        ]
+      },
+      "contents": [
+        {
+          "flag": "magazine-tampered"
+        }
+      ],
+      "onOpen": {
+        "flags": [
+          "magazine-tampered"
+        ],
+        "reputation": {
+          "portuguese": -20
+        },
+        "notification": "Serpentine powder, badly stored. A sentry is already walking toward you."
+      },
+      "emptyText": "Somebody has put a new seal on the head since you last looked at it. You are fairly sure that is about you.",
+      "witnessed": true,
+      "reopenable": false
+    },
+    {
+      "id": "gate-stall-box",
+      "prop": "gate-stall",
+      "anchor": {
+        "x": 112,
+        "y": 316
+      },
+      "approach": {
+        "x": 112,
+        "y": 328
+      },
+      "label": "Open the stall box",
+      "lock": null,
+      "contents": [
+        {
+          "money": 5
+        }
+      ],
+      "onOpen": {
+        "notification": "Five cruzados in small coin, under a folded cloth."
+      },
+      "emptyText": "String, a comb, a tin cup, and the day's takings gone somewhere sensible.",
+      "witnessed": true,
+      "reopenable": false
+    }
+  ],
+  "st-pauls-church": [
+    {
+      "id": "churchyard-well-bucket",
+      "prop": "churchyard-well",
+      "anchor": {
+        "x": 282,
+        "y": 299
+      },
+      "approach": {
+        "x": 282,
+        "y": 310
+      },
+      "label": "Haul up the bucket",
+      "lock": null,
+      "contents": [
+        {
+          "itemId": "rosary",
+          "count": 1
+        }
+      ],
+      "onOpen": {
+        "notification": "Somebody's rosary, down there long enough to have gone green."
+      },
+      "emptyText": "Cold, and further down than the hill suggests. The rope is longer than the church is tall.",
+      "witnessed": false,
+      "reopenable": true
+    }
+  ],
+  "kampung": [
+    {
+      "id": "healers-mat-roll",
+      "prop": "mats",
+      "anchor": {
+        "x": 451,
+        "y": 241
+      },
+      "approach": {
+        "x": 451,
+        "y": 254
+      },
+      "label": "Unroll the mats",
+      "lock": null,
+      "contents": [
+        {
+          "itemId": "medicinal-herbs",
+          "count": 1
+        }
+      ],
+      "onOpen": {
+        "notification": "Tongkat ali, kacip fatimah, misai kucing — bundled, labelled in a hand you cannot read."
+      },
+      "emptyText": "Rolled and tied the way she ties them, which is not the way you tied them.",
+      "witnessed": true,
+      "reopenable": true
+    },
+    {
+      "id": "kampung-coop",
+      "prop": "chicken-coop-40",
+      "anchor": {
+        "x": 118,
+        "y": 263
+      },
+      "approach": {
+        "x": 118,
+        "y": 276
+      },
+      "label": "Open the coop",
+      "lock": null,
+      "contents": [
+        {
+          "itemId": "egg",
+          "count": 3
+        }
+      ],
+      "onOpen": {
+        "notification": "Three eggs, still warm. In the kampung this is not theft unless you take all of them."
+      },
+      "emptyText": "Empty this morning, and the hens have an opinion about who is responsible.",
+      "witnessed": true,
+      "reopenable": true
+    }
+  ]
+}

@@ -1,7 +1,7 @@
 {
   "id": "kampung",
   "name": "Kampung Quarter",
-  "coordVersion": 6,
+  "coordVersion": 7,
   "world": {
     "scale": 3,
     "nativeWidth": 640,

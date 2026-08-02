@@ -11,6 +11,7 @@ import { useQuestStore, Quest, JournalEntry, TrackedObjectiveRef, ReputationFact
 import { useDialogueStore } from './dialogueStore';
 import { getLocationName } from '../data/locationNames';
 import { getLocation } from '../phaser/core/LocationData';
+import { emitGameEvent } from '../phaser/eventBridge';
 
 // Save data version for migration support
 const SAVE_VERSION = 4;
@@ -377,6 +378,9 @@ export const useSaveStore = create<SaveState>((set, get) => ({
       });
 
       console.log(`Game saved to slot ${slotIndex}`);
+      // A wax seal pressed home. Fires only on SUCCESS — a save that failed
+      // must not sound like one that worked.
+      emitGameEvent('game:save');
       return true;
     } catch (error) {
       console.error('Failed to save game:', error);
@@ -463,6 +467,7 @@ export const useSaveStore = create<SaveState>((set, get) => ({
       await get().initializeSlots();
 
       console.log(`Game loaded from slot ${slotIndex}`);
+      emitGameEvent('game:load', slotIndex);
       return true;
     } catch (error) {
       console.error('Failed to load game:', error);

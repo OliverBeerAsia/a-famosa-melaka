@@ -2,27 +2,50 @@
  * AtmosphereSystem — everything between the plate and the characters that is
  * weather, air or lens.
  *
- * Four families, all driven by the same two inputs (phase of day, quality
- * profile) and nothing else:
+ * TWO FAMILIES NOW, NOT FOUR
+ * --------------------------
+ *  - **particles**: dust motes, heat haze, fireflies, dawn mist, fire embers.
+ *    World-space, so they belong to the place. These are particles, not screen
+ *    grades, and they stay.
+ *  - **the lens**: ONE `MelakaPostFX` pipeline on the main camera, carrying
+ *    grade + haze + vignette/AO + grain + feedback flash. Where the renderer
+ *    is Canvas (Phaser.AUTO does pick it: blocklisted GPUs, some VMs,
+ *    `--disable-gpu`) or `?fx=off` is set, it degrades to exactly two static
+ *    objects and no per-frame work.
  *
- *  - **particles**: dust motes, heat haze, fireflies, dawn mist, water sparkle,
- *    fire embers. World-space, so they belong to the place.
- *  - **fog**: drifting screen-space bands, alpha scaled per phase.
- *  - **contact/ambient occlusion**: the edge darkening and the authored AO
- *    zones and canopy shadows that give the painted plate depth.
- *  - **cinematic**: the colour-grade multiply/screen pair, film grain and sun
- *    shafts. These are the "lens", so the grade pair and grain are screen-space
- *    while the shafts are anchored to the plate's own sun.
+ * WHAT THIS REPLACED (game-feel spec §1.7)
+ * ----------------------------------------
+ * 14-20 blended Game Objects and ~9 perpetual tweens per frame: four edge-AO
+ * rects, two authored `visual.aoZones` rects, 2-3 `visual.canopyShadows`
+ * ellipses, 0-3 tweened sun-shaft ellipses, 1-3 tweened fog ellipses, a SCREEN
+ * grade rect, a MULTIPLY grade rect and a 128 px film-grain TileSprite built
+ * from 2 300 `Phaser.Math.Between` calls at boot. Three of those were provably
+ * inert on every shipping location; the grain was 1-screen-pixel noise over a
+ * 3-screen-pixel image, i.e. a fourth pixel density on screen.
  *
- * The one rule that keeps this system honest: where the PLATE already carries
- * a baked time-of-day grade, the runtime grade goes to zero
- * (`ctx.hasBakedTimeVariant()`). Grading a night plate again is the
- * double-grade bug, and it is why nights used to turn into crushed blue mud.
+ * Also gone: `createWaterAnimations()`, whose ADD particles were tinted
+ * `0x5DADE2` — a colour that is not in the 50-colour canon and cannot be, since
+ * canon water tops out at `water-4 #78BCB0`. Water motion is now the
+ * pre-rendered palette cycle in `WaterCycleSystem`.
+ *
+ * The one rule that keeps this system honest is unchanged: where the PLATE
+ * already carries a baked time-of-day grade, the runtime grade does not add
+ * one. The LUT it does apply is near-identity by construction — worst canon
+ * drift under 8/255, gated by `tools/forge/grade-lut.cjs`.
  */
 
 import Phaser from 'phaser';
 import { GAME_WIDTH, GAME_HEIGHT } from '../game';
 import { getLocationVisual } from '../core/LocationData';
+import gradeFallback from '../../data/grade-fallback.json';
+import { MelakaPostFX, MELAKA_POSTFX_KEY, ensureMelakaPostFX } from '../pipelines/MelakaPostFX';
+import {
+  VIGNETTE_EDGE_RATIO,
+  VIGNETTE_POWER,
+  grainSeedFor,
+  resolvePostFX,
+} from '../core/postfxParams';
+import { WaterCycleSystem } from './WaterCycleSystem';
 import type { SystemContext } from '../core/SystemContext';
 import type { TimeOfDay } from '../core/timeMath';
 
@@ -34,12 +57,9 @@ const DUST_CONFIG: Record<TimeOfDay, { frequency: number; alpha: number; tint: n
   night: { frequency: 300, alpha: 0.08, tint: 0x8888AA },
 };
 
-const TIME_COLOR_GRADE = {
-  dawn: { multiply: 0x7A5A47, multiplyAlpha: 0.1, screen: 0xF4D7A1, screenAlpha: 0.075 },
-  day: { multiply: 0x6A5A45, multiplyAlpha: 0.04, screen: 0xF2E2C5, screenAlpha: 0.035 },
-  dusk: { multiply: 0x6C4632, multiplyAlpha: 0.14, screen: 0xE8B16C, screenAlpha: 0.08 },
-  night: { multiply: 0x1C2D52, multiplyAlpha: 0.22, screen: 0x6F8CB8, screenAlpha: 0.045 },
-} as const;
+/** Depth of the two Canvas-fallback objects. Below the UI band (1001). */
+const FALLBACK_GRADE_DEPTH = 998;
+const FALLBACK_VIGNETTE_DEPTH = 999;
 
 /** How much the fog bank thickens or thins with the hour. */
 export function fogTimeMultiplier(phase: TimeOfDay): number {
@@ -52,41 +72,62 @@ export function fogTimeMultiplier(phase: TimeOfDay): number {
   }
 }
 
+/** LUT texture key for a (location, phase) pair. See BootScene.loadGradeLuts. */
+export function gradeLutKey(locationId: string, phase: TimeOfDay): string {
+  return `lut-${locationId}-${phase}`;
+}
+
+/** `?fx=off` forces the Canvas fallback, for the A/B parity screenshots. */
+export function postFXDisabledByFlag(search?: string): boolean {
+  const q = search ?? (typeof window !== 'undefined' ? window.location.search : '');
+  return /(^|[?&])fx=off(&|$)/.test(q);
+}
+
+const FALLBACK_LUTS = (gradeFallback as {
+  fallbackAlpha: number;
+  luts: Record<string, { multiply: string; rawMidGrey: string }>;
+}).luts;
+const FALLBACK_ALPHA = (gradeFallback as { fallbackAlpha: number }).fallbackAlpha;
+
 export class AtmosphereSystem {
   private readonly scene: Phaser.Scene;
   private readonly ctx: SystemContext;
 
-  // particles
+  // particles (world-space; these are not screen grades and they stay)
   private dustEmitter: Phaser.GameObjects.Particles.ParticleEmitter | null = null;
   private heatHazeEmitter: Phaser.GameObjects.Particles.ParticleEmitter | null = null;
-  private waterEmitter: Phaser.GameObjects.Particles.ParticleEmitter | null = null;
   private fireEmitters: Phaser.GameObjects.Particles.ParticleEmitter[] = [];
   private fireflyEmitter: Phaser.GameObjects.Particles.ParticleEmitter | null = null;
   private mistEmitter: Phaser.GameObjects.Particles.ParticleEmitter | null = null;
+  /** Pre-rendered water palette cycling (waterfront + kampung only). */
+  private water: WaterCycleSystem | null = null;
 
-  // screen/world FX layers
-  private fogLayers: Phaser.GameObjects.Ellipse[] = [];
-  private aoOverlays: Phaser.GameObjects.Rectangle[] = [];
-  private canopyShadows: Phaser.GameObjects.Ellipse[] = [];
-  private colorGradeMultiplyOverlay: Phaser.GameObjects.Rectangle | null = null;
-  private colorGradeScreenOverlay: Phaser.GameObjects.Rectangle | null = null;
-  private filmGrainOverlay: Phaser.GameObjects.TileSprite | null = null;
-  private sunShafts: Phaser.GameObjects.Ellipse[] = [];
+  // the lens
+  private pipeline: MelakaPostFX | null = null;
+  private usingPipeline = false;
+  private fallbackVignette: Phaser.GameObjects.Graphics | null = null;
+  private fallbackGrade: Phaser.GameObjects.Rectangle | null = null;
+  private flashTween: Phaser.Tweens.Tween | null = null;
+  /** Held flash level (dialogue/pause dim), which pulses tween on top of. */
+  private baseFlash = 0;
 
   constructor(scene: Phaser.Scene, ctx: SystemContext) {
     this.scene = scene;
     this.ctx = ctx;
   }
 
-  /** Build every layer, in the order the scene has always built them. */
+  /** Build the particle layers, then attach the lens. */
   create() {
     this.createParticles();
-    this.createWaterAnimations();
     this.createFireAnimations();
-    this.createAOOverlays();
-    this.createFogLayers();
-    this.createCanopyShadows();
-    this.createCinematicLayers();
+    this.water = new WaterCycleSystem(this.scene, this.ctx);
+    this.water.create();
+    this.createLens();
+  }
+
+  /** The water cycle's live state, for the DEV acceptance hook. */
+  debugWater() {
+    return this.water?.debugState() ?? null;
   }
 
   // -- particles -----------------------------------------------------------
@@ -159,34 +200,6 @@ export class AtmosphereSystem {
     graphics.fillCircle(16, 16, 24);
     graphics.generateTexture('mist', 48, 48);
     graphics.destroy();
-  }
-
-  private createWaterAnimations() {
-    if (this.ctx.locationId() !== 'waterfront') return;
-    const worldBounds = this.ctx.worldBounds();
-
-    this.waterEmitter = this.scene.add.particles(0, 0, 'particle', {
-      x: { min: 0, max: worldBounds.width },
-      y: { min: worldBounds.height * 0.55, max: worldBounds.height },
-      quantity: 1,
-      frequency: 200,
-      lifespan: { min: 2000, max: 4000 },
-      scale: { start: 0.1, end: 0.2 },
-      alpha: { start: 0, end: 0.3 },
-      tint: 0x5DADE2,
-      blendMode: 'ADD',
-      emitting: true,
-    });
-    this.waterEmitter.setDepth(-5);
-
-    this.scene.tweens.add({
-      targets: this.waterEmitter,
-      particleSpeedX: { from: -2, to: 2 },
-      duration: 3000,
-      yoyo: true,
-      repeat: -1,
-      ease: 'Sine.easeInOut',
-    });
   }
 
   private createFireAnimations() {
@@ -308,276 +321,254 @@ export class AtmosphereSystem {
     }
   }
 
-  // -- occlusion -----------------------------------------------------------
+  // -- the lens ------------------------------------------------------------
 
-  private createAOOverlays() {
-    const preset = getLocationVisual(this.ctx.locationId());
-    this.aoOverlays.forEach((overlay) => overlay.destroy());
-    this.aoOverlays = [];
-    if (!preset) return;
-
-    // Global edge darkening to reinforce painted-scene depth.
-    const edgeAlpha = this.ctx.visualProfile().aoAlpha;
-    const top = this.scene.add.rectangle(GAME_WIDTH / 2, 32, GAME_WIDTH, 64, 0x000000, edgeAlpha);
-    const bottom = this.scene.add.rectangle(GAME_WIDTH / 2, GAME_HEIGHT - 32, GAME_WIDTH, 64, 0x000000, edgeAlpha * 0.9);
-    const left = this.scene.add.rectangle(32, GAME_HEIGHT / 2, 64, GAME_HEIGHT, 0x000000, edgeAlpha * 0.75);
-    const right = this.scene.add.rectangle(GAME_WIDTH - 32, GAME_HEIGHT / 2, 64, GAME_HEIGHT, 0x000000, edgeAlpha * 0.75);
-
-    [top, bottom, left, right].forEach((overlay) => {
-      overlay.setDepth(940);
-      overlay.setBlendMode(Phaser.BlendModes.MULTIPLY);
-      overlay.setScrollFactor(0);
-      this.aoOverlays.push(overlay);
-    });
-
-    preset.aoZones.forEach((zone) => {
-      const rect = this.scene.add.rectangle(
-        zone.x + zone.width / 2,
-        zone.y + zone.height / 2,
-        zone.width,
-        zone.height,
-        0x000000,
-        zone.alpha * this.ctx.visualProfile().aoAlpha
-      );
-      rect.setDepth(941);
-      rect.setBlendMode(Phaser.BlendModes.MULTIPLY);
-      // Authored in plate coordinates, so it belongs to the WORLD; on a
-      // viewport-sized plate this is identical to the old scrollFactor(0).
-      rect.setScrollFactor(1);
-      this.aoOverlays.push(rect);
-    });
+  /** True when the shader path is live (for the dev overlay / acceptance hook). */
+  hasPipeline(): boolean {
+    return this.usingPipeline;
   }
 
-  private createCanopyShadows() {
-    const preset = getLocationVisual(this.ctx.locationId());
-    this.canopyShadows.forEach((shadow) => shadow.destroy());
-    this.canopyShadows = [];
-    if (!preset) return;
-
-    preset.canopyShadows.forEach((zone) => {
-      const shadow = this.scene.add.ellipse(
-        zone.x + zone.width / 2,
-        zone.y + zone.height / 2,
-        zone.width,
-        zone.height,
-        0x000000,
-        zone.alpha * this.ctx.visualProfile().canopyShadowAlpha
-      );
-      shadow.setDepth(942);
-      shadow.setBlendMode(Phaser.BlendModes.MULTIPLY);
-      shadow.setScrollFactor(1);   // canopy sits over a place, not over the view
-      this.canopyShadows.push(shadow);
-    });
+  /** What the lens is actually doing right now. DEV acceptance hook. */
+  debugLens() {
+    const numbers = this.lensNumbers();
+    return {
+      postFX: this.usingPipeline,
+      lut: this.usingPipeline
+        ? gradeLutKey(this.ctx.locationId(), this.ctx.timeOfDay())
+        : null,
+      vignette: numbers.vigStrength,
+      grain: numbers.grainAmt,
+      haze: numbers.hazeAmt * fogTimeMultiplier(this.ctx.timeOfDay()),
+    };
   }
 
-  // -- fog -----------------------------------------------------------------
+  private createLens() {
+    const webgl = this.scene.game.renderer.type === Phaser.WEBGL;
+    const wanted = webgl
+      && !postFXDisabledByFlag()
+      && ensureMelakaPostFX(this.scene.game);
 
-  private createFogLayers() {
+    // Every camera-manager access in this system is optional-chained. It is
+    // live during `create()`, but the whole class of bug this guards against
+    // cost a day once already (a throw in `destroy()` aborted scene teardown
+    // and `scene.restart()` never completed, so every exit silently did
+    // nothing) — and there is no version of "attach the grade" that is worth
+    // taking the scene down for.
+    const camera = this.scene.cameras?.main;
+    if (wanted && camera) {
+      camera.setPostPipeline(MELAKA_POSTFX_KEY);
+      const found = camera.getPostPipeline(MELAKA_POSTFX_KEY);
+      const pipeline = (Array.isArray(found) ? found[0] : found) as unknown as MelakaPostFX | undefined;
+      if (pipeline instanceof MelakaPostFX) {
+        this.pipeline = pipeline;
+        this.usingPipeline = true;
+        this.applyLensParams();
+        return;
+      }
+      // Registration failed (shader compile error on an odd driver). Fall
+      // through rather than shipping an ungraded, unvignetted frame.
+      camera.resetPostPipeline();
+      console.warn('[AtmosphereSystem] MelakaPostFX unavailable — using the Canvas fallback');
+    }
+
+    this.createCanvasFallbackFX();
+  }
+
+  /**
+   * The Canvas fallback: exactly two objects, no per-frame work.
+   *
+   * 1. a vignette `Graphics` at corner alpha `vigStrength`, edge alpha
+   *    `vigStrength x 0.42` — the same two numbers the shader's falloff hits;
+   * 2. one MULTIPLY `Rectangle` in the LUT's own flat approximation.
+   *
+   * Haze and grain are OFF here. Flash is not: feedback is game information,
+   * so it degrades to an alpha/colour tween on the fallback rect rather than
+   * being lost.
+   */
+  private createCanvasFallbackFX() {
+    this.destroyLens();
+    const { vigStrength } = this.lensNumbers();
+
+    const grade = this.scene.add.rectangle(
+      GAME_WIDTH / 2, GAME_HEIGHT / 2, GAME_WIDTH, GAME_HEIGHT,
+      this.fallbackGradeColour(), FALLBACK_ALPHA,
+    );
+    grade.setScrollFactor(0);
+    grade.setDepth(FALLBACK_GRADE_DEPTH);
+    grade.setBlendMode(Phaser.BlendModes.MULTIPLY);
+    this.fallbackGrade = grade;
+
+    const vignette = this.scene.add.graphics();
+    vignette.setScrollFactor(0);
+    vignette.setDepth(FALLBACK_VIGNETTE_DEPTH);
+    this.paintFallbackVignette(vignette, vigStrength);
+    this.fallbackVignette = vignette;
+  }
+
+  /**
+   * Four edge gradients. They sum at the corners, which is exactly the
+   * behaviour the shader's radial falloff reproduces: edge midpoints at
+   * `strength x 0.42`, corners at `strength`.
+   */
+  private paintFallbackVignette(g: Phaser.GameObjects.Graphics, strength: number) {
+    g.clear();
+    const edge = strength * VIGNETTE_EDGE_RATIO;
+    const bandX = Math.round(GAME_WIDTH * 0.34);
+    const bandY = Math.round(GAME_HEIGHT * 0.34);
+    const black = 0x000000;
+
+    // top / bottom
+    g.fillGradientStyle(black, black, black, black, edge, edge, 0, 0);
+    g.fillRect(0, 0, GAME_WIDTH, bandY);
+    g.fillGradientStyle(black, black, black, black, 0, 0, edge, edge);
+    g.fillRect(0, GAME_HEIGHT - bandY, GAME_WIDTH, bandY);
+    // left / right
+    g.fillGradientStyle(black, black, black, black, edge, 0, edge, 0);
+    g.fillRect(0, 0, bandX, GAME_HEIGHT);
+    g.fillGradientStyle(black, black, black, black, 0, edge, 0, edge);
+    g.fillRect(GAME_WIDTH - bandX, 0, bandX, GAME_HEIGHT);
+  }
+
+  private fallbackGradeColour(): number {
+    const key = `${this.ctx.locationId()}-${this.ctx.timeOfDay()}`;
+    const hex = FALLBACK_LUTS[key]?.multiply ?? '#FFFFFF';
+    return parseInt(hex.replace('#', ''), 16);
+  }
+
+  /** The resolved per-location / per-profile / per-phase numbers. */
+  private lensNumbers() {
+    return resolvePostFX(
+      this.ctx.locationId(),
+      this.ctx.quality(),
+      this.ctx.timeOfDay() === 'night',
+    );
+  }
+
+  /** Push location, phase and quality into whichever lens is live. */
+  private applyLensParams() {
     const preset = getLocationVisual(this.ctx.locationId());
-    this.fogLayers.forEach((layer) => layer.destroy());
-    this.fogLayers = [];
-    if (!preset) return;
+    const numbers = this.lensNumbers();
 
-    const baseY = GAME_HEIGHT * 0.6;
-    const profileFogLayers = this.ctx.visualProfile().fogLayers;
-    for (let i = 0; i < profileFogLayers; i += 1) {
-      const width = GAME_WIDTH * (0.8 + i * 0.2);
-      const height = 120 + i * 40;
-      const x = Phaser.Math.Between(120, GAME_WIDTH - 120);
-      const y = baseY + i * 30;
-      const fog = this.scene.add.ellipse(
-        x, y, width, height, preset.fogTint, this.ctx.visualProfile().fogBaseAlpha
-      );
-      fog.setDepth(905 + i);
-      fog.setScrollFactor(0);
-      fog.setBlendMode(Phaser.BlendModes.SCREEN);
-      this.fogLayers.push(fog);
-
-      const drift = (30 + i * 18) * preset.fogSpeed;
-      this.scene.tweens.add({
-        targets: fog,
-        x: x + drift,
-        duration: 9000 + i * 2200,
-        ease: 'Sine.easeInOut',
-        yoyo: true,
-        repeat: -1,
+    if (this.pipeline) {
+      this.pipeline.configure({
+        lutKey: gradeLutKey(this.ctx.locationId(), this.ctx.timeOfDay()),
+        vigStrength: numbers.vigStrength,
+        vigPower: VIGNETTE_POWER,
+        grainAmt: numbers.grainAmt,
+        hazeColour: preset?.fogTint ?? 0xB8B4CB,
+        // The fog bank still thickens and thins with the hour; it is one
+        // uniform now instead of three tweened ellipses.
+        hazeAmt: numbers.hazeAmt * fogTimeMultiplier(this.ctx.timeOfDay()),
+        hazeY: numbers.hazeY,
+        hazeSpeed: preset?.fogSpeed ?? 0.4,
       });
+      return;
     }
 
-    this.updateFogForTime();
-  }
-
-  updateFogForTime() {
-    const multiplier = fogTimeMultiplier(this.ctx.timeOfDay());
-    const baseAlpha = this.ctx.visualProfile().fogBaseAlpha * multiplier;
-    const visible = multiplier > 0.2;
-    const blendMode = this.ctx.timeOfDay() === 'night'
-      ? Phaser.BlendModes.MULTIPLY
-      : Phaser.BlendModes.SCREEN;
-
-    this.fogLayers.forEach((layer, index) => {
-      const alpha = Math.max(0, baseAlpha - index * 0.015);
-      layer.setVisible(visible && alpha > 0.01);
-      layer.setAlpha(alpha);
-      layer.setBlendMode(blendMode);
-    });
-  }
-
-  // -- cinematic -----------------------------------------------------------
-
-  private createFilmGrainTexture() {
-    const textureKey = 'film-grain';
-    if (this.scene.textures.exists(textureKey)) return;
-
-    const size = 128;
-    const graphics = this.scene.add.graphics({ x: 0, y: 0 });
-    graphics.clear();
-    graphics.fillStyle(0xffffff, 1);
-    for (let i = 0; i < 2300; i += 1) {
-      graphics.fillRect(
-        Phaser.Math.Between(0, size - 1),
-        Phaser.Math.Between(0, size - 1),
-        1,
-        1
-      );
+    if (this.fallbackGrade) {
+      this.fallbackGrade.setFillStyle(this.fallbackGradeColour(), FALLBACK_ALPHA);
     }
-    graphics.generateTexture(textureKey, size, size);
-    graphics.destroy();
+    if (this.fallbackVignette) {
+      this.paintFallbackVignette(this.fallbackVignette, numbers.vigStrength);
+    }
   }
 
-  private createSunShafts() {
-    const preset = getLocationVisual(this.ctx.locationId());
-    this.sunShafts.forEach((shaft) => shaft.destroy());
-    this.sunShafts = [];
-    const profile = this.ctx.visualProfile();
-    if (!preset || profile.sunShaftCount <= 0) return;
+  // -- feedback flash ------------------------------------------------------
 
-    for (let i = 0; i < profile.sunShaftCount; i += 1) {
-      const x = preset.sunAnchor.x + i * 24;
-      const y = preset.sunAnchor.y + 140 + i * 20;
-      const width = 70 + i * 22;
-      const height = 390 + i * 90;
-      const shaft = this.scene.add.ellipse(x, y, width, height, preset.hazeTint, profile.sunShaftAlpha);
-      shaft.setDepth(903 + i);
-      shaft.setBlendMode(Phaser.BlendModes.SCREEN);
-      shaft.setScrollFactor(1);    // anchored to the plate's sun, not the view
-      shaft.setAngle(Phaser.Math.Between(-9, 9));
-      this.sunShafts.push(shaft);
+  /**
+   * A one-shot feedback flash (game-feel spec §3).
+   *
+   * `amount` > 0 mixes toward `colour`; `amount` < 0 darkens (the dialogue and
+   * pause dims). Never quality-scaled — this is information, not decoration.
+   * On Canvas it degrades to an alpha step on the fallback rect so feedback is
+   * never simply lost.
+   */
+  flash(amount: number, durationMs: number, colour: number = 0xFFF4D4) {
+    this.flashTween?.remove();
+    this.flashTween = null;
 
-      this.scene.tweens.add({
-        targets: shaft,
-        alpha: {
-          from: profile.sunShaftAlpha * 0.7,
-          to: profile.sunShaftAlpha * 1.1,
+    if (this.pipeline) {
+      this.pipeline.setFlash(amount, colour);
+      const counter = { v: amount };
+      this.flashTween = this.scene.tweens.add({
+        targets: counter,
+        v: this.baseFlash,
+        duration: durationMs,
+        ease: 'Sine.easeOut',
+        onUpdate: () => this.pipeline?.setFlash(counter.v, colour),
+        onComplete: () => {
+          this.pipeline?.setFlash(this.baseFlash, colour);
+          this.flashTween = null;
         },
-        duration: 2600 + i * 400,
-        yoyo: true,
-        repeat: -1,
-        ease: 'Sine.easeInOut',
       });
+      return;
     }
+
+    const rect = this.fallbackGrade;
+    if (!rect) return;
+    const restoreColour = this.fallbackGradeColour();
+    rect.setFillStyle(amount > 0 ? colour : 0x000000, FALLBACK_ALPHA + Math.abs(amount) * 1.6);
+    this.flashTween = this.scene.tweens.add({
+      targets: rect,
+      alpha: 1,
+      duration: Math.min(durationMs, 120),
+      onComplete: () => {
+        rect.setFillStyle(restoreColour, FALLBACK_ALPHA);
+        rect.setAlpha(1);
+        this.flashTween = null;
+      },
+    });
   }
 
-  private createCinematicLayers() {
-    const preset = getLocationVisual(this.ctx.locationId());
-    if (!preset) return;
-
-    this.createFilmGrainTexture();
-
-    if (this.colorGradeMultiplyOverlay) {
-      this.colorGradeMultiplyOverlay.destroy();
-      this.colorGradeMultiplyOverlay = null;
+  /**
+   * A HELD dim, released by calling with 0. Used by dialogue (−0.06) and pause
+   * (−0.10), where the world stays down for as long as the panel is up.
+   */
+  setHeldFlash(amount: number, durationMs: number = 200, colour: number = 0xFFF4D4) {
+    this.baseFlash = amount;
+    if (!this.pipeline) {
+      if (this.fallbackGrade) {
+        this.fallbackGrade.setFillStyle(
+          amount < 0 ? 0x000000 : this.fallbackGradeColour(),
+          FALLBACK_ALPHA + Math.abs(amount) * 1.6,
+        );
+      }
+      return;
     }
-    if (this.colorGradeScreenOverlay) {
-      this.colorGradeScreenOverlay.destroy();
-      this.colorGradeScreenOverlay = null;
-    }
-    if (this.filmGrainOverlay) {
-      this.filmGrainOverlay.destroy();
-      this.filmGrainOverlay = null;
-    }
-
-    this.colorGradeScreenOverlay = this.scene.add.rectangle(
-      GAME_WIDTH / 2, GAME_HEIGHT / 2, GAME_WIDTH, GAME_HEIGHT, preset.hazeTint, 0
-    );
-    this.colorGradeScreenOverlay.setScrollFactor(0);
-    this.colorGradeScreenOverlay.setDepth(944);
-    this.colorGradeScreenOverlay.setBlendMode(Phaser.BlendModes.SCREEN);
-
-    this.colorGradeMultiplyOverlay = this.scene.add.rectangle(
-      GAME_WIDTH / 2, GAME_HEIGHT / 2, GAME_WIDTH, GAME_HEIGHT, 0x2B2014, 0
-    );
-    this.colorGradeMultiplyOverlay.setScrollFactor(0);
-    this.colorGradeMultiplyOverlay.setDepth(945);
-    this.colorGradeMultiplyOverlay.setBlendMode(Phaser.BlendModes.MULTIPLY);
-
-    this.filmGrainOverlay = this.scene.add.tileSprite(
-      GAME_WIDTH / 2, GAME_HEIGHT / 2, GAME_WIDTH, GAME_HEIGHT, 'film-grain'
-    );
-    this.filmGrainOverlay.setScrollFactor(0);
-    this.filmGrainOverlay.setDepth(946);
-    this.filmGrainOverlay.setBlendMode(Phaser.BlendModes.OVERLAY);
-    this.filmGrainOverlay.setTint(0xC2A989);
-
-    this.createSunShafts();
-    this.updateCinematicForTime();
-  }
-
-  updateCinematicForTime() {
-    const preset = getLocationVisual(this.ctx.locationId());
-    if (!preset) return;
-
-    const phase = this.ctx.timeOfDay();
-    const profile = this.ctx.visualProfile();
-    const grade = TIME_COLOR_GRADE[phase];
-    // Baked time-of-day plates already contain this grade — don't apply it twice.
-    const strength = this.ctx.hasBakedTimeVariant() ? 0 : profile.colorGradeStrength;
-
-    if (this.colorGradeMultiplyOverlay) {
-      this.colorGradeMultiplyOverlay.setFillStyle(grade.multiply, grade.multiplyAlpha * strength);
-    }
-    if (this.colorGradeScreenOverlay) {
-      this.colorGradeScreenOverlay.setFillStyle(
-        phase === 'night' ? grade.screen : preset.hazeTint,
-        grade.screenAlpha * strength
-      );
-    }
-
-    if (this.filmGrainOverlay) {
-      const nightBoost = phase === 'night' ? 1.35 : 1;
-      this.filmGrainOverlay.setAlpha(profile.grainAlpha * nightBoost);
-    }
-
-    const showShafts = phase === 'dawn' || phase === 'day' || phase === 'dusk';
-    const timeScale = phase === 'day' ? 0.65 : phase === 'dawn' ? 1.05 : 0.85;
-    this.sunShafts.forEach((shaft) => {
-      shaft.setVisible(showShafts);
-      shaft.setAlpha(profile.sunShaftAlpha * timeScale);
-      shaft.setFillStyle(phase === 'dusk' ? 0xE8B16C : preset.hazeTint, profile.sunShaftAlpha * timeScale);
+    this.flashTween?.remove();
+    const counter = { v: this.pipeline.getFlash() };
+    this.flashTween = this.scene.tweens.add({
+      targets: counter,
+      v: amount,
+      duration: durationMs,
+      ease: 'Sine.easeInOut',
+      onUpdate: () => this.pipeline?.setFlash(counter.v, colour),
+      onComplete: () => { this.flashTween = null; },
     });
   }
 
   // -- frame / phase / quality --------------------------------------------
 
-  /** Per-frame motion. Keep screen-space grain fixed; only the shafts drift. */
+  /**
+   * Per-frame: advance the shader clock and the 8 Hz grain seed. That is the
+   * entire per-frame cost of the lens — there are no tweens left to drive.
+   */
   update() {
-    this.sunShafts.forEach((shaft, index) => {
-      const wobble = Math.sin((this.scene.time.now / 1400) + index * 0.6) * 2.2;
-      shaft.setAngle(wobble);
-    });
+    if (!this.pipeline) return;
+    const now = this.scene.time.now;
+    this.pipeline.tick(now, grainSeedFor(now));
   }
 
   /** The phase of day changed. */
   setTimeOfDay() {
     this.updateParticlesForTime();
-    this.updateFogForTime();
-    this.updateCinematicForTime();
+    // Swap the water strips to the new hour's frames, keeping the frame index
+    // so the harbour does not reset mid-crossfade.
+    this.water?.setTimeOfDay();
+    this.applyLensParams();
   }
 
-  /**
-   * The quality tier changed: rebuild every layer whose geometry depends on it.
-   * Ordering matches the pre-decomposition `applyVisualProfile`.
-   */
+  /** The quality tier changed. Only the lens numbers and the emitters move. */
   applyQuality() {
     const profile = this.ctx.visualProfile();
     if (this.heatHazeEmitter) {
@@ -589,14 +580,18 @@ export class AtmosphereSystem {
       }
     }
 
-    this.createAOOverlays();
-    this.createCanopyShadows();
-    this.createFogLayers();
-    this.createCinematicLayers();
-
+    this.applyLensParams();
+    this.water?.applyQuality();
     this.updateParticlesForTime();
-    this.updateFogForTime();
-    this.updateCinematicForTime();
+  }
+
+  private destroyLens() {
+    this.flashTween?.remove();
+    this.flashTween = null;
+    this.fallbackVignette?.destroy();
+    this.fallbackVignette = null;
+    this.fallbackGrade?.destroy();
+    this.fallbackGrade = null;
   }
 
   destroy() {
@@ -608,25 +603,30 @@ export class AtmosphereSystem {
     this.fireflyEmitter = null;
     this.mistEmitter?.destroy();
     this.mistEmitter = null;
-    this.waterEmitter?.destroy();
-    this.waterEmitter = null;
     this.fireEmitters.forEach((emitter) => emitter.destroy());
     this.fireEmitters = [];
+    this.water?.destroy();
+    this.water = null;
 
-    this.fogLayers.forEach((layer) => layer.destroy());
-    this.fogLayers = [];
-    this.aoOverlays.forEach((overlay) => overlay.destroy());
-    this.aoOverlays = [];
-    this.canopyShadows.forEach((shadow) => shadow.destroy());
-    this.canopyShadows = [];
-    this.sunShafts.forEach((shaft) => shaft.destroy());
-    this.sunShafts = [];
-
-    this.colorGradeMultiplyOverlay?.destroy();
-    this.colorGradeMultiplyOverlay = null;
-    this.colorGradeScreenOverlay?.destroy();
-    this.colorGradeScreenOverlay = null;
-    this.filmGrainOverlay?.destroy();
-    this.filmGrainOverlay = null;
+    if (this.usingPipeline) {
+      // The pipeline instance belongs to the camera, which survives a scene
+      // restart — hand it back rather than destroying a shared object.
+      //
+      // THE GUARD IS LOAD-BEARING. `destroy()` runs on SHUTDOWN as well as on
+      // a location change, and on shutdown the camera manager may already be
+      // gone: `cameras.main` is undefined and this line throws. A throw in
+      // teardown leaves the scene half-shut-down and `scene.restart()` never
+      // completes — which is exactly how this bug presented, as "walking
+      // through an exit silently does nothing".
+      this.pipeline?.setFlash(0);
+      try {
+        this.scene.cameras?.main?.resetPostPipeline();
+      } catch (error) {
+        console.warn('[AtmosphereSystem] post-pipeline detach skipped:', error);
+      }
+      this.pipeline = null;
+      this.usingPipeline = false;
+    }
+    this.destroyLens();
   }
 }

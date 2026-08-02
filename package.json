@@ -15,8 +15,8 @@
     "package:win": "npm run build && electron-builder --win",
     "package:linux": "npm run build && electron-builder --linux",
     "package:all": "npm run build && electron-builder --mac --win --linux",
-    "pretest": "node tools/validate-gameplay-assets.cjs && node tools/validate-location-data.cjs && node tools/forge/validate-canon.cjs && node tools/validate-style.cjs",
-    "prebuild": "node tools/validate-gameplay-assets.cjs && node tools/validate-location-data.cjs && node tools/forge/validate-canon.cjs --fast",
+    "pretest": "node tools/validate-gameplay-assets.cjs && node tools/validate-location-data.cjs && node tools/forge/validate-canon.cjs && node tools/validate-style.cjs && node tools/forge/grade-lut.cjs --check",
+    "prebuild": "node tools/validate-gameplay-assets.cjs && node tools/validate-location-data.cjs && node tools/forge/validate-canon.cjs --fast && node tools/forge/grade-lut.cjs --check",
     "test": "vitest run",
     "test:watch": "vitest",
     "validate:art": "node tools/validate-gameplay-assets.cjs",
@@ -36,6 +36,9 @@
     "forge:lore-objects": "node tools/forge/lore-objects.cjs --sheet",
     "forge:contact-shadows": "node tools/forge/contact-shadows.cjs --sheet",
     "validate:canon": "node tools/forge/validate-canon.cjs",
+    "forge:grade-lut": "node tools/forge/grade-lut.cjs",
+    "forge:flame-pools": "node tools/forge/flame-pools.cjs",
+    "validate:grade-lut": "node tools/forge/grade-lut.cjs --check",
     "generate:audio": "node tools/generate-audio/generate-all.cjs --analyze",
     "verify:audio": "node tools/generate-audio/verify-browser.cjs",
     "scenes:rederive": "node tools/rederive-scenes.cjs",
@@ -51,7 +54,9 @@
     "wave:status": "node tools/wave-status.cjs",
     "grade:wave": "node tools/grade-wave-assets.cjs",
     "audit:art": "npm run validate:art -- --report docs/art-bible/art-audit-structural.md && npm run validate:style -- --report docs/art-bible/art-audit-style.md",
-    "validate:locations": "node tools/validate-location-data.cjs"
+    "validate:locations": "node tools/validate-location-data.cjs",
+    "forge:cycle": "node tools/forge/compose-plate.cjs src/data/plate-layouts/waterfront.json --cycle && node tools/forge/compose-plate.cjs src/data/plate-layouts/kampung.json --cycle",
+    "forge:fauna-sheets": "node tools/forge/fauna-sheets.cjs"
   },
   "keywords": [
     "phaser",

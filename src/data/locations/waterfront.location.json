@@ -1,13 +1,13 @@
 {
   "id": "waterfront",
   "name": "The Waterfront",
-  "coordVersion": 6,
+  "coordVersion": 7,
   "world": {
     "scale": 3,
     "nativeWidth": 640,
     "nativeHeight": 360
   },
-  "layoutHash": "3403a767e681",
+  "layoutHash": "fd687a853649",
   "generatedBy": "tools/forge/compose-plate.cjs",
   "sun": {
     "azimuthDeg": 315,
@@ -504,6 +504,12 @@
         "x": 608,
         "y": 296,
         "width": 16,
+        "height": 8
+      },
+      {
+        "x": 0,
+        "y": 304,
+        "width": 24,
         "height": 8
       },
       {

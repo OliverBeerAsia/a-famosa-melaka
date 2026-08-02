@@ -22,9 +22,18 @@ import { TimeSystem } from '../systems/TimeSystem';
 import { AudioSystem } from '../systems/AudioSystem';
 import { AtmosphereSystem } from '../systems/AtmosphereSystem';
 import { LightingSystem } from '../systems/LightingSystem';
+import { FlickerSystem } from '../systems/FlickerSystem';
+import { SurfaceResponseSystem } from '../systems/SurfaceResponseSystem';
+import { FeedbackSystem } from '../systems/FeedbackSystem';
+import { FaunaSystem } from '../systems/FaunaSystem';
+import { WALK_FOOT_OFFSET } from '../systems/PlayerSystem';
 import { BackdropSystem } from '../systems/BackdropSystem';
 import { NPCSystem, type NPCData } from '../systems/NPCSystem';
+import { ResidentSystem } from '../systems/ResidentSystem';
+import { OpenableSystem } from '../systems/OpenableSystem';
+import { NightWatchSystem } from '../systems/NightWatchSystem';
 import { WorldObjectSystem } from '../systems/WorldObjectSystem';
+import { activeSwayableProps } from '../systems/EnvironmentObjectSystem';
 import { TransitionSystem, type TransitionConfig } from '../systems/TransitionSystem';
 import { QuestTriggerSystem } from '../systems/QuestTriggerSystem';
 import { PlayerSystem } from '../systems/PlayerSystem';
@@ -60,12 +69,30 @@ export class GameScene extends Phaser.Scene {
 
   private atmosphere!: AtmosphereSystem;
   private lighting!: LightingSystem;
+  /** Additive flicker deltas over the plate's baked light pools. */
+  private flicker!: FlickerSystem;
+  /** Dust, cloth sway and the pier creak. */
+  private surfaceResponse!: SurfaceResponseSystem;
+  /** The feedback event table: SFX, bursts, flash and the shake policy. */
+  private feedback!: FeedbackSystem;
+  /** Ambient fauna — scripted indifference at the ground plane. */
+  private fauna!: FaunaSystem;
+  /** Where the last interaction target stood, for the pickup sparkle. */
+  private lastTargetPoint: { x: number; y: number } | null = null;
+  /** The NPC currently in dialogue, for the coin burst and hands sparkle. */
+  private dialogueNpcPoint: { x: number; y: number } | null = null;
   private cameraSystem: CameraSystem | null = null;
   private backdrop!: BackdropSystem;
   private worldObjects!: WorldObjectSystem;
   private transitions!: TransitionSystem;
   private questTriggers!: QuestTriggerSystem;
   private crowdSystem: CrowdSystem | null = null;
+  /** The persistent unnamed inhabitants — the tier between cast and crowd. */
+  private residents!: ResidentSystem;
+  /** The Ultima VII container verb. */
+  private openables!: OpenableSystem;
+  /** The counting-house break-in: patrol, detection, consequences. */
+  private nightWatch!: NightWatchSystem;
   private weatherSystem: WeatherSystem | null = null;
   private interaction!: InteractionSystem;
   private uiBridge!: UIBridgeSystem;
@@ -203,7 +230,17 @@ export class GameScene extends Phaser.Scene {
         ? this.isoRenderer.tileToWorld(x, y)
         : null),
       colliders: () => this.sceneColliders,
-      footstep: (surface) => this.audio.footstep(surface),
+      // One tick, two consumers: the sound, and the ground responding to it.
+      // `audio.footstep` owns the throttle and reports whether a step actually
+      // sounded, so the dust puff can never drift out of step with the sound.
+      footstep: (surface) => {
+        if (!this.audio.footstep(surface)) return;
+        const body = this.player?.body as Phaser.Physics.Arcade.Body | null;
+        const speed = body
+          ? Math.hypot(body.velocity.x, body.velocity.y)
+          : 0;
+        this.surfaceResponse?.onPlayerFootstep(this.player.x, this.player.y, speed);
+      },
       input: () => ({
         left: this.cursors.left.isDown || this.keys.a.isDown,
         right: this.cursors.right.isDown || this.keys.d.isDown,
@@ -223,7 +260,9 @@ export class GameScene extends Phaser.Scene {
         : null),
       colliders: () => this.sceneColliders,
       currentHour: () => this.currentHour,
+      currentMinute: () => this.currentMinute,
       onTalk: (npcData) => this.startDialogue(npcData),
+      playEffect: (effect) => this.playDoorEffect(effect),
     });
     this.npcSystem.create();
     this.npcSystem.primeTrail();
@@ -237,8 +276,18 @@ export class GameScene extends Phaser.Scene {
 
     // Traversal and quest interaction hotspots
     this.transitions = new TransitionSystem(this, this.ctx, {
-      notify: (text) => this.showNotification(text),
-      onDeparting: (target) => this.audio.playTransitionSound(getLocation(target)?.audio),
+      // TransitionSystem only calls `notify` for a REFUSED exit, so this is
+      // exactly the physical-denial case in the feedback table: a blocked
+      // route may thud and nudge the camera. A conversational refusal goes
+      // through `showNotification` elsewhere and does neither.
+      notify: (text) => {
+        emitGameEvent('feedback:denied', text, true);
+        this.showNotification(text);
+      },
+      onDeparting: (target) => {
+        emitGameEvent('world:transition:start', this.currentMap, target);
+        this.audio.playTransitionSound(getLocation(target)?.audio);
+      },
     });
     this.transitions.create();
 
@@ -247,6 +296,31 @@ export class GameScene extends Phaser.Scene {
       worldScale: () => this.location?.world.scale ?? 1,
     });
     this.questTriggers.create();
+
+    // The living-world tier: residents who are always here, containers that
+    // open, and (on the waterfront after dark) the watchman.
+    this.residents = new ResidentSystem(this, this.ctx, {
+      currentHour: () => this.currentHour,
+      currentDay: () => useGameStore.getState().time.day,
+    });
+    this.residents.create();
+
+    this.openables = new OpenableSystem(this, this.ctx, {
+      notify: (text) => this.showNotification(text),
+      witnesses: () => this.witnessPositions(),
+      playSfx: (key, scale) => this.audio.playSfx(key, scale),
+    });
+    this.openables.create();
+
+    this.nightWatch = new NightWatchSystem(this, this.ctx, {
+      notify: (text) => this.showNotification(text),
+      playSfx: (key, scale) => this.audio.playSfx(key, scale),
+      travelTo: (locationId, spawnAt) => this.transitions.switchLocation(locationId, spawnAt),
+      advanceHours: (hours) => this.advanceTime(hours, false),
+      currentHour: () => this.currentHour,
+      setCutscene: (active) => { this.isResting = active; },
+    });
+    this.nightWatch.create();
 
     // Interaction targeting. Each family of interactables registers itself as
     // a provider; the system scores and ranks them with the pure logic in
@@ -261,6 +335,11 @@ export class GameScene extends Phaser.Scene {
     this.worldObjects.registerInteractions(this.interaction);
     this.transitions.registerInteractions(this.interaction);
     this.questTriggers.registerInteractions(this.interaction);
+    this.openables.registerInteractions(this.interaction);
+    this.nightWatch.registerInteractions(this.interaction);
+    // Residents last: they are offered at scenery priority and must never
+    // outrank a named NPC, a pickup or an exit.
+    this.residents.registerInteractions(this.interaction);
 
     // Initialize atmosphere systems
     this.crowdSystem = new CrowdSystem(this, this.quality.getResolved());
@@ -277,6 +356,36 @@ export class GameScene extends Phaser.Scene {
 
     // Set up camera
     this.setupCamera();
+
+    // The juice layer. Order matters only in that the flicker cap is chosen by
+    // distance to the camera centre, so the camera has to exist first.
+    this.flicker = new FlickerSystem(this, this.ctx);
+    this.flicker.create();
+
+    this.surfaceResponse = new SurfaceResponseSystem(this, this.ctx, {
+      playSfx: (key, scale, detune) => this.audio.playSfx(key, scale, detune),
+      // NPCs and crowd members raise dust at a quarter of the player's rate —
+      // this is what makes the CITY kick up dust and not just the player.
+      movers: () => this.collectMovers(),
+      swayables: () => activeSwayableProps(),
+      footOffset: () => WALK_FOOT_OFFSET,
+    });
+    this.surfaceResponse.create();
+
+    // Fauna share the crowd's ceiling, so they need to see how many crowd
+    // members are already alive.
+    this.fauna = new FaunaSystem(this, this.ctx, () => this.crowdCount());
+    this.fauna.create();
+
+    this.feedback = new FeedbackSystem(this, this.ctx, {
+      playSfx: (key, scale) => this.audio.playSfx(key, scale),
+      flash: (amount, duration, colour) => this.atmosphere.flash(amount, duration, colour),
+      setHeldFlash: (amount, duration) => this.atmosphere.setHeldFlash(amount, duration),
+      shake: (intensity, duration) => this.cameraSystem?.shake(intensity, duration),
+      lastInteractionPoint: () => this.lastTargetPoint,
+      dialoguePoint: () => this.dialogueNpcPoint,
+    });
+    this.feedback.create();
 
     // Set up input
     this.setupInput();
@@ -304,6 +413,10 @@ export class GameScene extends Phaser.Scene {
       setResting: (resting) => {
         this.isResting = resting;
         useGameStore.getState().setResting(resting);
+        // Showing the hours PASS is worth more than a number changing, so the
+        // React layer gets both ends of the rest as separate events.
+        if (resting) emitGameEvent('player:rest:start', 0);
+        else emitGameEvent('player:rest:complete', this.currentHour, this.timeOfDay);
       },
     });
     this.uiBridge.create();
@@ -323,6 +436,9 @@ export class GameScene extends Phaser.Scene {
 
     // Show location name
     this.transitions.showLocationName();
+    // The scene is built and on screen: the asymmetric arrival beat (fade out
+    // fast, fade in slow) hangs off this.
+    emitGameEvent('world:transition:complete', this.currentMap);
 
     // DEV-only acceptance hook (see core/devHooks for what it is for).
     if (import.meta.env.DEV) this.installDebugHooks();
@@ -489,8 +605,15 @@ export class GameScene extends Phaser.Scene {
     this.storeUnsubscribers = [];
     this.transitions?.destroy();
     this.questTriggers?.destroy();
+    this.residents?.destroy();
+    this.openables?.destroy();
+    this.nightWatch?.destroy();
     this.npcSystem?.destroy();
     this.lighting?.destroy();
+    this.flicker?.destroy();
+    this.fauna?.destroy();
+    this.surfaceResponse?.destroy();
+    this.feedback?.destroy();
     this.atmosphere?.destroy();
     this.quality?.destroy();
     this.playerSystem?.destroy();
@@ -508,6 +631,8 @@ export class GameScene extends Phaser.Scene {
   private applyVisualQuality(resolved: ResolvedVisualQuality) {
     useGameStore.getState().setResolvedVisualQuality(resolved);
     this.lighting?.applyQuality();
+    this.flicker?.applyQuality();
+    this.fauna?.applyQuality();
     this.atmosphere?.applyQuality();
     this.lighting?.applyCharacterLighting(true);
   }
@@ -531,6 +656,23 @@ export class GameScene extends Phaser.Scene {
       travel: (target, spawnPoint) => this.transitions.switchLocation(target, spawnPoint),
       interact: () => this.interaction.tryInteract(),
       advanceTime: (hours) => this.advanceTime(hours),
+      clock: () => ({
+        hour: this.currentHour,
+        minute: this.currentMinute,
+        day: useGameStore.getState().time.day,
+      }),
+      nightWatch: () => {
+        const at = this.nightWatch?.position() ?? null;
+        return {
+          onDuty: this.nightWatch?.isOnDuty() ?? false,
+          state: this.nightWatch?.getState() ?? 'none',
+          alertLevel: this.nightWatch?.getAlertLevel() ?? 0,
+          x: at?.x ?? null,
+          y: at?.y ?? null,
+          dousedLights: this.nightWatch?.dousedLights() ?? [],
+        };
+      },
+      residents: () => this.residents?.list() ?? [],
       npcs: () => this.npcs.map((npc) => ({
         id: this.npcSystem.getData(npc)?.id ?? null,
         x: npc.x,
@@ -540,19 +682,124 @@ export class GameScene extends Phaser.Scene {
         const t = this.interaction.getActiveTarget();
         return t ? { type: t.type, id: t.id, label: t.label } : null;
       },
+      setQuality: (mode, dynamic) => {
+        if (dynamic !== undefined) this.quality.setDynamic(dynamic);
+        this.quality.setMode(mode);
+      },
+      juice: () => {
+        const propPhases: Record<string, number[]> = {};
+        activeSwayableProps().forEach((prop) => {
+          const anims = (prop.sprite as Phaser.GameObjects.Sprite).anims;
+          if (!anims?.currentFrame) return;
+          (propPhases[prop.type] ||= []).push(anims.currentFrame.index);
+        });
+        const flickerPhases: Record<string, number[]> = {};
+        this.flicker?.debugPhases().forEach((f) => {
+          (flickerPhases[f.type] ||= []).push(f.step);
+        });
+        return {
+          ...this.atmosphere.debugLens(),
+          propPhases,
+          flickerPhases,
+          surfacePool: {
+            live: this.surfaceResponse?.liveCount() ?? 0,
+            capacity: this.surfaceResponse?.poolSize() ?? 0,
+          },
+          water: this.atmosphere.debugWater(),
+          fauna: this.fauna?.debugFauna() ?? [],
+          crowd: this.crowdCount(),
+        };
+      },
       counts: () => ({
         npcs: this.npcs.length,
         items: this.worldObjects.itemCount(),
         lore: this.worldObjects.loreCount(),
         scenery: this.worldObjects.hotspotCount(),
         overlays: this.backdrop.overlayCount(),
-        crowd: (this.crowdSystem as unknown as { crowdMembers?: unknown[] })?.crowdMembers?.length ?? null,
+        crowd: this.crowdSystem?.getCrowdCount() ?? null,
+        crowdOnScreen: this.crowdSystem?.getOnScreenCount(this.cameras.main) ?? null,
+        residents: this.residents?.count() ?? 0,
+        residentsOnScreen: this.residents?.onScreenCount(this.cameras.main) ?? 0,
+        openables: this.openables?.count() ?? 0,
       }),
     });
   }
 
   private showNotification(text: string) {
     showNotification(this, text);
+  }
+
+  /**
+   * Everyone who could see the player open something.
+   *
+   * The openables system owns none of these populations, so it asks: named
+   * NPCs, ambient residents and, for the crowd, the fact that a transient is on
+   * the same screen at all. Deliberately generous — being seen should be the
+   * default in a busy street at noon.
+   */
+  private witnessPositions(): Array<{ x: number; y: number }> {
+    const out: Array<{ x: number; y: number }> = this.npcs.map((npc) => ({ x: npc.x, y: npc.y }));
+    this.residents?.list().forEach((resident) => out.push({ x: resident.x, y: resident.y }));
+    return out;
+  }
+
+  /**
+   * The door vocabulary (spec 2.2), mapped onto the shipped SFX bank.
+   *
+   * The distinction between `curtain` and `door-creak` is not decoration: a
+   * Malay stilt house has a cloth doorway and a Portuguese warehouse has a bar
+   * and a latch, and the player hears the difference between the two quarters
+   * before noticing they have heard anything. Until the bank carries real
+   * shutter/plank/curtain cues, the mapping approximates with volume — see the
+   * bridge/asset wishlist in the Stage 5 report.
+   */
+  private playDoorEffect(effect: string) {
+    switch (effect) {
+      case 'door-creak': this.audio.playSfx('sfx-door-open', 1); break;
+      case 'door-iron': this.audio.playSfx('sfx-gate-creak', 0.9); break;
+      case 'church-door': this.audio.playSfx('sfx-gate-creak', 0.65); break;
+      case 'shutter': this.audio.playSfx('sfx-door-open', 0.7); break;
+      case 'shutter-bar':
+        this.audio.playSfx('sfx-door-open', 0.7);
+        this.time.delayedCall(220, () => this.audio.playSfx('sfx-gate-creak', 0.85));
+        break;
+      case 'plank-creak': this.audio.playSfx('sfx-door-open', 0.45); break;
+      // A cloth doorway has no latch. Silence is the correct cue.
+      case 'curtain':
+      case 'none':
+      default:
+        break;
+    }
+  }
+
+  /**
+   * Every non-player character that can raise dust: the scheduled cast plus
+   * the crowd. Read through the same private-field probe the DEV acceptance
+   * hook already uses, so `CrowdSystem` needs no new public surface.
+   */
+  /** Live crowd members, read through the same probe the dev hook uses. */
+  private crowdCount(): number {
+    const crowd = (this.crowdSystem as unknown as { crowdMembers?: unknown[] })?.crowdMembers;
+    return Array.isArray(crowd) ? crowd.length : 0;
+  }
+
+  private moverBuffer: Array<{ x: number; y: number }> = [];
+  private collectMovers(): Array<{ x: number; y: number }> {
+    // Reused array: this is called once per frame and must not allocate.
+    this.moverBuffer.length = 0;
+    const npcs = this.npcs;
+    for (let i = 0; i < npcs.length; i++) this.moverBuffer.push(npcs[i]);
+    const crowd = (this.crowdSystem as unknown as {
+      crowdMembers?: Array<{ sprite?: { x: number; y: number } } & { x?: number; y?: number }>;
+    })?.crowdMembers;
+    if (Array.isArray(crowd)) {
+      for (let i = 0; i < crowd.length; i++) {
+        const m = crowd[i];
+        const point = m?.sprite ?? (typeof m?.x === 'number' ? m as { x: number; y: number } : null);
+        if (point) this.moverBuffer.push(point as { x: number; y: number });
+      }
+    }
+    return this.moverBuffer;
   }
 
   /**
@@ -570,6 +817,8 @@ export class GameScene extends Phaser.Scene {
     return new TimeSystem({ hour, minute, day, phase: 'day' }, {
       onPhaseChanged: (phase, previous, animate) => {
         this.lighting.setTimeOfDay(animate);
+        this.flicker?.setTimeOfDay();
+        this.fauna?.setTimeOfDay();
         this.atmosphere.setTimeOfDay();
         this.backdrop.setTimeOfDay();
         this.syncLocationAudio();
@@ -601,7 +850,12 @@ export class GameScene extends Phaser.Scene {
         // Refresh NPC scheduled layouts. Freshly-spawned sprites carry no
         // tint, and this runs at every schedule change — including the one the
         // clock fires AFTER a phase change — so the re-light is forced.
-        this.npcSystem.recreate();
+        // Per-NPC slot transition, NOT a destroy-and-rebuild: an NPC whose
+        // slot did not change is left entirely alone, and one whose slot did
+        // is usually already walking (see NPCSystem.prepareDeparture).
+        this.npcSystem.onHourChanged();
+        this.residents?.refresh();
+        this.nightWatch?.onHourChanged();
         this.lighting.applyCharacterLighting(true);
       },
     });
@@ -636,6 +890,8 @@ export class GameScene extends Phaser.Scene {
     const npc = this.npcSystem.beginDialogue(npcData.id);
     if (npc) {
       this.playerSystem.setFacing(directionBetween(this.player.x, this.player.y, npc.x, npc.y));
+      // Where the coin burst and the hands sparkle happen.
+      this.dialogueNpcPoint = { x: npc.x, y: npc.y };
     }
 
     this.interaction.clear();
@@ -656,11 +912,17 @@ export class GameScene extends Phaser.Scene {
     this.quality.update(this.game.loop.delta);
 
     this.atmosphere.update();
+    this.flicker.update();
     this.lighting.updateCharacterShadows();
 
     // Update atmosphere systems
     this.crowdSystem?.update(time, delta);
     this.weatherSystem?.update(time, delta);
+    // Dust decays and cloth eases back whether or not a panel is open, so
+    // this runs BEFORE the UI early-out — a puff frozen mid-air behind an
+    // inventory panel is the sort of detail that reads as a broken frame.
+    this.surfaceResponse.update(delta);
+    this.fauna.update(time, delta);
 
     // Tick the world clock (1 game minute every 2.5 real seconds)
     if (!this.isAnyUIOpen()) {
@@ -684,12 +946,17 @@ export class GameScene extends Phaser.Scene {
 
     this.interaction.update();
     const target = this.interaction.getActiveTarget();
+    // Remember where the target stood: `item:pickup` fires AFTER the sprite is
+    // gone, and the sparkle has to happen where the item was.
+    if (target) this.lastTargetPoint = { x: target.x, y: target.y };
 
     // Y-depth sorting (both legacy-backdrop and isometric modes) so moving
     // characters occlude/are occluded by props at the correct y. The player's
     // own depth is set by PlayerSystem as it moves.
     // Depth-sort the cast, run followers, and light the targeted NPC.
     this.npcSystem.update(target?.type === 'npc' ? target.id : null);
+    this.residents.update();
+    this.nightWatch.update(time, delta);
     this.worldObjects.update(time, delta, target?.type === 'item' ? target.id : null);
     this.transitions.update(target?.type === 'transition' ? target.id : null);
     this.questTriggers.update(target?.type === 'quest' ? target.id : null);

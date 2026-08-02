@@ -9,6 +9,7 @@ import { create } from 'zustand';
 import { useGameStore } from './gameStore';
 import { useInventoryStore } from './inventoryStore';
 import { useDialogueStore, TopicData } from './dialogueStore';
+import { emitGameEvent } from '../phaser/eventBridge';
 
 export type ReputationFaction =
   | 'garrison'
@@ -304,6 +305,19 @@ export interface QuestState {
   recordWait: (days?: number) => void;
   setTrackedObjective: (questId: string, objectiveId: string) => boolean;
   clearTrackedObjective: () => void;
+
+  /**
+   * Set (or clear) world flags from outside a quest consequence.
+   *
+   * Stage 5's world verbs — opening a container, dousing a lantern, being taken
+   * off the quay by the watch — are things that HAPPEN rather than quest stages
+   * that advance, but they write to the same flag table the dialogue and quest
+   * requirements already read (and which the save file already persists). This
+   * is the door for them; the quest machinery still owns `applyConsequences`.
+   */
+  setWorldFlags: (flags: string[], value?: boolean) => void;
+  /** Apply a reputation delta from a world event. Faction aliases apply. */
+  applyReputationDelta: (delta: Record<string, number>) => void;
 
   hydrateQuests: (
     quests: Quest[],
@@ -835,6 +849,14 @@ export const useQuestStore = create<QuestState>((set, get) => {
 
       if (!didAdvance || !nextStage) return;
 
+      // The fix for "3 000 words of quest prose, invisible". The journal is
+      // usually CLOSED when a stage turns over, so the advance has to be
+      // audible: a quill scratch is the whole notification.
+      const advancedIndex = get().activeQuests
+        .find((q) => q.id === questId)?.stages
+        .findIndex((stage) => stage.id === nextStage!.id) ?? 0;
+      emitGameEvent('quest:advance', questId, advancedIndex);
+
       if (nextStage.journalEntry) {
         get().addJournalEntry(nextStage.journalEntry, 'quest');
       }
@@ -963,6 +985,9 @@ export const useQuestStore = create<QuestState>((set, get) => {
       });
 
       const resolutionText = resolution ? ` (${resolution})` : '';
+      // The one earned "moment" in the feedback table: chime + church bell +
+      // a 0.10 screen flash. Nothing else in the game is allowed to do this.
+      emitGameEvent('quest:complete', questId, resolution ?? '');
       get().addJournalEntry(`Quest Completed: ${quest.name}${resolutionText}`, 'quest');
       syncDialogueOverrides();
       syncTrackedObjective();
@@ -982,6 +1007,9 @@ export const useQuestStore = create<QuestState>((set, get) => {
       };
 
       set((state) => ({ journal: [...state.journal, entry] }));
+      // Distinct from `quest:advance`: discoveries and rumours get the quieter
+      // quill and a dot on the tab, not a stage-turn.
+      emitGameEvent('journal:updated', entry.id, category);
     },
 
     recordTalk: (npcId, topic) => {
@@ -1040,6 +1068,19 @@ export const useQuestStore = create<QuestState>((set, get) => {
 
     recordStealth: (target) => {
       markMatchingObjectives((objective) => objective.type === 'stealth' && (!objective.target || objective.target === target));
+    },
+
+    setWorldFlags: (flags, value = true) => {
+      if (!flags.length) return;
+      set((state) => {
+        const worldFlags = { ...state.worldFlags };
+        flags.forEach((flag) => { worldFlags[flag] = value; });
+        return { worldFlags };
+      });
+    },
+
+    applyReputationDelta: (delta) => {
+      applyReputationChange(delta);
     },
 
     recordEscort: (target, destination) => {

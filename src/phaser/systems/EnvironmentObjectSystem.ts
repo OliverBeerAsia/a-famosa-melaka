@@ -15,6 +15,7 @@ import type { ResolvedVisualQuality } from '../visualProfile';
 import environmentData from '../../data/environment-objects.json';
 import { emitGameEvent } from '../eventBridge';
 import { worldDepth, DEPTH_FX_SEAGULL } from '../core/depth';
+import { goldenFraction, hash2, phaseFor } from '../core/phase';
 import { getLocationAnimatedProps, getLocationProps } from '../core/LocationData';
 
 interface ObjectDef {
@@ -57,6 +58,43 @@ function labelFromSprite(sprite: string): string {
 interface AnimatedPlacement {
   sprite: Phaser.GameObjects.Sprite;
   type: string;
+  /** Resting animation rate, restored after a pass-by sway. */
+  baseTimeScale: number;
+  /** Resting vertical scale, the amplitude channel on the tween fallback. */
+  baseScaleY: number;
+}
+
+/**
+ * Base loop lengths for the phase spreader (game-feel spec §2.4). Each
+ * instance gets `offset = period * frac(i * GOLDEN)` and its own period
+ * jittered +/-12 % from a position hash, so same-type props never flap in
+ * lockstep and never re-converge.
+ */
+const ANIM_PERIOD_MS: Record<string, number> = {
+  'awning-flutter': 1100,
+  'palm-sway': 2200,
+  smoke: 1700,
+  seagull: 900,
+  torch: 900,
+  flag: 1200,
+};
+
+/**
+ * The single active instance, so `SurfaceResponseSystem` can retime awnings on
+ * a pass-by without `WorldObjectSystem` (which owns this system) having to
+ * grow a pass-through getter for it. One GameScene is alive at a time, and the
+ * reference is cleared in `destroy()`.
+ */
+let activeEnvironment: EnvironmentObjectSystem | null = null;
+
+/** Props the surface-response layer may retime. Empty before the scene builds. */
+export function activeSwayableProps(): Array<{
+  sprite: Phaser.GameObjects.Sprite | Phaser.GameObjects.Image;
+  type: string;
+  baseTimeScale: number;
+  baseScaleY: number;
+}> {
+  return activeEnvironment?.swayableProps() ?? [];
 }
 
 
@@ -80,6 +118,7 @@ export class EnvironmentObjectSystem {
    */
   initialize(locationId: string): void {
     this.currentLocation = locationId;
+    activeEnvironment = this;
 
     // Low quality: skip all decorative objects for performance
     if (this.quality === 'low') return;
@@ -208,58 +247,137 @@ export class EnvironmentObjectSystem {
     // Only place animated objects on balanced/high quality
     const maxAnimated = this.quality === 'high' ? animDefs.length : Math.min(animDefs.length, 4);
 
+    // Instance index is counted PER TYPE, so the golden-ratio spread is
+    // computed inside each family: six awnings spread across the awning loop
+    // rather than across a mixed list where they would clump.
+    const perType = new Map<string, number>();
+    const nextIndex = (type: string): number => {
+      const i = perType.get(type) ?? 0;
+      perType.set(type, i + 1);
+      return i;
+    };
+
     for (let i = 0; i < maxAnimated; i++) {
       const def = animDefs[i];
+      const index = nextIndex(def.type);
 
       switch (def.type) {
         case 'torch':
-          this.createTorchEffect(def.x, def.y);
+          this.createTorchEffect(def.x, def.y, index);
           break;
         case 'smoke':
-          this.attachParticles(def.x, def.y, 'smoke');
+          this.attachParticles(def.x, def.y, 'smoke', index);
           break;
         case 'seagull':
-          this.createSeagullLoop(def.x, def.y);
+          this.createSeagullLoop(def.x, def.y, index);
           break;
         case 'flag':
-          this.createFlagWave(def.x, def.y);
+          this.createFlagWave(def.x, def.y, index);
           break;
         case 'palm-sway':
-          this.createPalmSway(def.x, def.y);
+          this.createPalmSway(def.x, def.y, index);
           break;
         case 'awning-flutter':
-          this.createAwningFlutter(def.x, def.y);
+          this.createAwningFlutter(def.x, def.y, index);
           break;
       }
     }
   }
 
   /**
+   * Start a sprite animation OUT OF PHASE with its siblings.
+   *
+   * This is the fix for the defect the v0.12 pass exists to kill: every
+   * `sprite.play(key)` in this file used to start on frame 0 with no delay, so
+   * Rua Direita's six awnings flapped in lockstep and its three palms swayed as
+   * one object — benchmark item 9 failing 100 %.
+   *
+   *  - the START FRAME comes from the golden-ratio offset, so instance i opens
+   *    on a different frame of the loop;
+   *  - `timeScale` carries the +/-12 % position-seeded period jitter, so they
+   *    also drift apart instead of re-converging after one cycle.
+   *
+   * Both are pure functions of (index, x, y): the scene looks identical on
+   * every run, which is what makes the benchmark-9 gate testable at all.
+   */
+  private playPhased(
+    sprite: Phaser.GameObjects.Sprite,
+    animKey: string,
+    type: string,
+    index: number,
+    x: number,
+    y: number,
+  ): number {
+    const base = ANIM_PERIOD_MS[type] ?? 1200;
+    const timing = phaseFor(index, base, x, y);
+    const frac = goldenFraction(index);
+
+    // The phase offset goes in through `play({ startFrame })`, which is the
+    // ONE place Phaser applies it without fighting itself.
+    //
+    // Two approaches were measured and rejected first, both of which LOOK
+    // right and silently do nothing:
+    //   - `anims.setCurrentFrame(...)` after `play()`: `play()` has already
+    //     armed the frame clock, so the swap is cosmetic and the instances
+    //     re-converge inside one cycle (71-88 % lockstep for two palms);
+    //   - `anims.setProgress(0.618)`: it resolves the frame with an EXACT
+    //     match on the frame's own `progress` value, so any figure that is not
+    //     already a frame boundary matches nothing and the call no-ops.
+    const anim = this.scene.anims.get(animKey);
+    const frameCount = anim?.frames.length ?? 1;
+    const startFrame = frameCount > 1 ? Math.floor(frac * frameCount) % frameCount : 0;
+    sprite.play({ key: animKey, startFrame });
+
+    // The period jitter rides on `timeScale`, so instances that start apart
+    // also drift apart instead of re-syncing on a shared tick grid.
+    const timeScale = base / timing.periodMs;
+    sprite.anims.timeScale = timeScale;
+    return timeScale;
+  }
+
+  /** Awnings and other cloth the surface-response layer may retime. */
+  swayableProps(): Array<{
+    sprite: Phaser.GameObjects.Sprite | Phaser.GameObjects.Image;
+    type: string;
+    baseTimeScale: number;
+    baseScaleY: number;
+  }> {
+    return this.animatedPlacements;
+  }
+
+  /**
    * Create a flickering torch glow effect.
    */
-  private createTorchEffect(x: number, y: number): void {
+  private createTorchEffect(x: number, y: number, index: number): void {
     if (this.scene.anims.exists('torch-flicker') && this.scene.textures.exists('torch-flame')) {
       const flame = this.scene.add.sprite(x, y, 'torch-flame');
       flame.setOrigin(0.5, 1);
       flame.setScale(3);
       flame.setDepth(worldDepth(y));
-      flame.play('torch-flicker');
+      const timeScale = this.playPhased(flame, 'torch-flicker', 'torch', index, x, y);
       this.animatedPlacements.push({
         sprite: flame,
         type: 'torch',
+        baseTimeScale: timeScale,
+        baseScaleY: flame.scaleY,
       });
     }
 
+    // The torch PROP keeps its own sprite animation; the light pool's flicker
+    // belongs to the light (see FlickerSystem), which is why this glow is a
+    // small halo on the flame and not a lighting rig.
     const glow = this.scene.add.ellipse(x, y, 40, 40, 0xFFAA20, 0.15);
     glow.setDepth(worldDepth(y) - 1);
     glow.setBlendMode(Phaser.BlendModes.ADD);
 
+    const timing = phaseFor(index, ANIM_PERIOD_MS.torch, x, y);
     const tween = this.scene.tweens.add({
       targets: glow,
       alpha: { from: 0.1, to: 0.25 },
       scaleX: { from: 0.9, to: 1.1 },
       scaleY: { from: 0.9, to: 1.1 },
-      duration: 300 + Math.random() * 200,
+      duration: timing.periodMs / 2,
+      delay: timing.offsetMs,
       yoyo: true,
       repeat: -1,
       ease: 'Sine.easeInOut',
@@ -269,27 +387,35 @@ export class EnvironmentObjectSystem {
     this.animatedPlacements.push({
       sprite: glow as unknown as Phaser.GameObjects.Sprite,
       type: 'torch',
+      baseTimeScale: 1,
+      baseScaleY: 1,
     });
   }
 
   /**
    * Create a looping seagull path.
    */
-  private createSeagullLoop(x: number, y: number): void {
+  private createSeagullLoop(x: number, y: number, index: number): void {
     const bird = this.scene.textures.exists('seagull')
       ? this.scene.add.sprite(x, y, 'seagull')
       : this.scene.add.ellipse(x, y, 6, 3, 0xFFFFFF, 0.8);
     bird.setDepth(DEPTH_FX_SEAGULL); // Sky layer — FX band, below the UI band (>= 1001)
 
+    let birdTimeScale = 1;
     if (bird instanceof Phaser.GameObjects.Sprite && this.scene.anims.exists('seagull-fly')) {
-      bird.play('seagull-fly');
+      birdTimeScale = this.playPhased(bird, 'seagull-fly', 'seagull', index, x, y);
       bird.setScale(2.5);
     }
 
-    const rx = 120 + Math.random() * 80;
-    const ry = 30 + Math.random() * 20;
-    const duration = 8000 + Math.random() * 4000;
-    const startAngle = Math.random() * Math.PI * 2;
+    // Deterministic per-instance variation, replacing four `Math.random()`
+    // calls: the same gull always flies the same orbit, so a capture is
+    // reproducible frame for frame.
+    const h1 = hash2(x, y);
+    const h2 = hash2(y, x);
+    const rx = 120 + h1 * 80;
+    const ry = 30 + h2 * 20;
+    const duration = 8000 + hash2(x + 7, y + 13) * 4000;
+    const startAngle = goldenFraction(index) * Math.PI * 2;
 
     const tween = this.scene.tweens.addCounter({
       from: 0,
@@ -307,6 +433,8 @@ export class EnvironmentObjectSystem {
     this.animatedPlacements.push({
       sprite: bird as unknown as Phaser.GameObjects.Sprite,
       type: 'seagull',
+      baseTimeScale: birdTimeScale,
+      baseScaleY: bird.scaleY,
     });
   }
 
@@ -318,16 +446,18 @@ export class EnvironmentObjectSystem {
    * 1080-tall scrolling world any prop below y=800 lands INSIDE the FX band and
    * draws over the fog and the colour grade (a-famosa's palm at y=909 did).
    */
-  private createFlagWave(x: number, y: number): void {
+  private createFlagWave(x: number, y: number, index: number): void {
     if (this.scene.textures.exists('flag-wave') && this.scene.anims.exists('flag-flutter')) {
       const flag = this.scene.add.sprite(x, y, 'flag-wave');
       flag.setOrigin(0.5, 1);
       flag.setScale(3);
       flag.setDepth(worldDepth(y - 10));
-      flag.play('flag-flutter');
+      const timeScale = this.playPhased(flag, 'flag-flutter', 'flag', index, x, y);
       this.animatedPlacements.push({
         sprite: flag,
         type: 'flag',
+        baseTimeScale: timeScale,
+        baseScaleY: flag.scaleY,
       });
       return;
     }
@@ -335,11 +465,13 @@ export class EnvironmentObjectSystem {
     const flag = this.scene.add.rectangle(x, y, 24, 16, 0xCC2020, 0.9);
     flag.setDepth(worldDepth(y - 10));
 
+    const timing = phaseFor(index, ANIM_PERIOD_MS.flag, x, y);
     const tween = this.scene.tweens.add({
       targets: flag,
       scaleX: { from: 0.85, to: 1.15 },
       angle: { from: -3, to: 3 },
-      duration: 600 + Math.random() * 200,
+      duration: timing.periodMs / 2,
+      delay: timing.offsetMs,
       yoyo: true,
       repeat: -1,
       ease: 'Sine.easeInOut',
@@ -349,23 +481,27 @@ export class EnvironmentObjectSystem {
     this.animatedPlacements.push({
       sprite: flag as unknown as Phaser.GameObjects.Sprite,
       type: 'flag',
+      baseTimeScale: 1,
+      baseScaleY: flag.scaleY,
     });
   }
 
   /**
    * Create a palm tree sway effect.
    */
-  private createPalmSway(x: number, y: number): void {
+  private createPalmSway(x: number, y: number, index: number): void {
     if (this.scene.textures.exists('palm-frond') && this.scene.anims.exists('palm-sway')) {
       const palm = this.scene.add.sprite(x, y, 'palm-frond');
       palm.setOrigin(0.5, 1);
       palm.setScale(3);
       palm.setDepth(worldDepth(y));
-      palm.play('palm-sway');
+      const timeScale = this.playPhased(palm, 'palm-sway', 'palm-sway', index, x, y);
 
       this.animatedPlacements.push({
         sprite: palm,
         type: 'palm-sway',
+        baseTimeScale: timeScale,
+        baseScaleY: palm.scaleY,
       });
       return;
     }
@@ -377,10 +513,12 @@ export class EnvironmentObjectSystem {
     palm.setScale(3);
     palm.setDepth(worldDepth(y));
 
+    const timing = phaseFor(index, ANIM_PERIOD_MS['palm-sway'], x, y);
     const tween = this.scene.tweens.add({
       targets: palm,
       angle: { from: -2, to: 2 },
-      duration: 2000 + Math.random() * 1000,
+      duration: timing.periodMs,
+      delay: timing.offsetMs,
       yoyo: true,
       repeat: -1,
       ease: 'Sine.easeInOut',
@@ -390,23 +528,29 @@ export class EnvironmentObjectSystem {
     this.animatedPlacements.push({
       sprite: palm as unknown as Phaser.GameObjects.Sprite,
       type: 'palm-sway',
+      baseTimeScale: 1,
+      baseScaleY: palm.scaleY,
     });
   }
 
   /**
    * Create awning flutter effect.
    */
-  private createAwningFlutter(x: number, y: number): void {
+  private createAwningFlutter(x: number, y: number, index: number): void {
     if (this.scene.textures.exists('awning-flutter') && this.scene.anims.exists('awning-flutter-anim')) {
       const awning = this.scene.add.sprite(x, y, 'awning-flutter');
       awning.setOrigin(0.5, 0);
       awning.setScale(3);
       awning.setDepth(worldDepth(y - 20));
-      awning.play('awning-flutter-anim');
+      const timeScale = this.playPhased(
+        awning, 'awning-flutter-anim', 'awning-flutter', index, x, y,
+      );
 
       this.animatedPlacements.push({
         sprite: awning,
         type: 'awning-flutter',
+        baseTimeScale: timeScale,
+        baseScaleY: awning.scaleY,
       });
       return;
     }
@@ -418,10 +562,12 @@ export class EnvironmentObjectSystem {
     awning.setScale(3);
     awning.setDepth(worldDepth(y - 20));
 
+    const timing = phaseFor(index, ANIM_PERIOD_MS['awning-flutter'], x, y);
     const tween = this.scene.tweens.add({
       targets: awning,
       scaleY: { from: 2.9, to: 3.1 },
-      duration: 800 + Math.random() * 400,
+      duration: timing.periodMs,
+      delay: timing.offsetMs,
       yoyo: true,
       repeat: -1,
       ease: 'Sine.easeInOut',
@@ -431,13 +577,15 @@ export class EnvironmentObjectSystem {
     this.animatedPlacements.push({
       sprite: awning as unknown as Phaser.GameObjects.Sprite,
       type: 'awning-flutter',
+      baseTimeScale: 1,
+      baseScaleY: awning.scaleY,
     });
   }
 
   /**
    * Attach particle emitter for smoke, steam, or dust effects.
    */
-  private attachParticles(x: number, y: number, type: 'smoke' | 'steam' | 'dust'): void {
+  private attachParticles(x: number, y: number, type: 'smoke' | 'steam' | 'dust', index: number = 0): void {
     // Create a 2x2 white pixel texture for particles if not already created
     const texKey = '__env_particle';
     if (!this.scene.textures.exists(texKey)) {
@@ -497,6 +645,17 @@ export class EnvironmentObjectSystem {
 
     const emitter = this.scene.add.particles(0, 0, texKey, config);
     emitter.setDepth(worldDepth(y + 10));
+    // Three cooking fires that all puff on the same beat read as one machine.
+    // Stagger the first emission by the golden-ratio offset and let each
+    // column keep its own jittered interval.
+    if (type === 'smoke') {
+      const timing = phaseFor(index, ANIM_PERIOD_MS.smoke, x, y);
+      emitter.setFrequency(Math.round(timing.periodMs / 3.4));
+      emitter.stop();
+      this.scene.time.delayedCall(timing.offsetMs, () => {
+        if (emitter.active) emitter.start();
+      });
+    }
     this.particleEmitters.push(emitter);
   }
 
@@ -510,6 +669,9 @@ export class EnvironmentObjectSystem {
     // dead event name — nothing subscribed to it — and it was emitted through a
     // CommonJS require() that throws in this ESM/Vite module.)
     emitGameEvent('message:show', obj.label, obj.examineText);
+    // ...and the feedback channel, so examining a prop is audible. Separate
+    // from `item:examine`, which is a PICKABLE item.
+    emitGameEvent('prop:examine', obj.label, obj.examineText);
   }
 
   /**
@@ -570,6 +732,7 @@ export class EnvironmentObjectSystem {
    * Clean up all objects and emitters.
    */
   destroy(): void {
+    if (activeEnvironment === this) activeEnvironment = null;
     for (const obj of this.placedObjects) {
       obj.image.destroy();
     }

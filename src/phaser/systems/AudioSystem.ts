@@ -212,14 +212,22 @@ export class AudioSystem {
 
   // -- one-shots -----------------------------------------------------------
 
-  playSfx(soundKey: string, volumeScale: number = 1) {
+  /**
+   * `detune` is in CENTS and exists for the surface responses: a pier board
+   * that creaks at exactly the same pitch every fourth step stops being a
+   * creak and becomes a rhythm instrument. It is deterministic at the call
+   * site (a position hash), never random here.
+   */
+  playSfx(soundKey: string, volumeScale: number = 1, detune: number = 0) {
     if (!this.scene.cache.audio.exists(soundKey)) return;
 
     const sfxVolume = useGameStore.getState().sfxVolume;
     const clampedVolume = Math.max(0, Math.min(1, sfxVolume * volumeScale));
     if (clampedVolume <= 0) return;
 
-    this.scene.sound.play(soundKey, { volume: clampedVolume });
+    this.scene.sound.play(soundKey, detune
+      ? { volume: clampedVolume, detune }
+      : { volume: clampedVolume });
   }
 
   /**
@@ -228,11 +236,18 @@ export class AudioSystem {
    * what the player is actually standing on); omitting it falls back to the
    * location's declared surface.
    */
-  footstep(surface?: FootstepSurface | null) {
-    if (this.scene.time.now < this.nextFootstepAt) return;
+  /**
+   * Returns true only on the ticks where a step ACTUALLY sounded. The surface
+   * responses (dust, pier creak) hang off that return value, so a footstep
+   * and the puff it raises can never disagree about how often a step happened
+   * — the throttle lives in exactly one place.
+   */
+  footstep(surface?: FootstepSurface | null): boolean {
+    if (this.scene.time.now < this.nextFootstepAt) return false;
     const resolved = surface || this.defaultFootstepSurface();
     this.playSfx(`sfx-footstep-${resolved}`, 0.24);
     this.nextFootstepAt = this.scene.time.now + FOOTSTEP_INTERVAL_MS;
+    return true;
   }
 
   /** Fire the location's arrival sting, if it declares one. */

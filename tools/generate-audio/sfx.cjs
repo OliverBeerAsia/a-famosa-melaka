@@ -343,6 +343,224 @@ function windHilltop() {
   return { key: 'sfx-wind-hilltop', seed: 'melaka:sfx-wind-hilltop:v1', dur, channels: [finish(out, dur)], sr: SR };
 }
 
+// ---------------------------------------------------------------------------
+// v0.12 feedback batch (docs/design/game-feel-spec.md §3.3)
+//
+// Twelve sounds for the feedback event table. All mono 44.1 kHz, deterministic
+// seed `melaka:<key>:v1`, peak-normalised, <= 700 ms unless the table says
+// otherwise. The brief for every one of them is the same: these fire many
+// times an hour, so they must sit UNDER the mix, never on top of it. A pickup
+// chime you notice twice is charming; one you notice two hundred times is a
+// bug. That is why almost everything here is short, dark and un-melodic —
+// `sfx-quest-chime` is the only one allowed to be a musical event, because it
+// is the only one that marks a rare moment.
+// ---------------------------------------------------------------------------
+
+/** sfx-examine-soft — a fingertip on an object. Sits *under* dialogue blips. */
+function examineSoft() {
+  const rand = A.rng('melaka:sfx-examine-soft:v1');
+  const dur = 0.18;
+  const out = A.buffer(Math.round(dur * SR));
+  // One plucked note with almost no ring: a touch, not a note.
+  A.addInto(out, I.pluck(392, 0.05, {
+    sr: SR, rand, amp: 0.5, damping: 0.85, brightness: 0.3, release: 0.12, body: 1,
+  }), 0);
+  A.addInto(out, noiseBurst(0.03, rand, { f: 1600, q: 1.1, decay: 0.008 }), 0, 0.22);
+  A.filter(out, 'lowpass', SR, 3000, 0.8);
+  A.filter(out, 'highpass', SR, 180, 0.7);
+  return { key: 'sfx-examine-soft', seed: 'melaka:sfx-examine-soft:v1', dur, channels: [finish(out, dur, { peak: 0.58, fadeOut: 0.02 })], sr: SR };
+}
+
+/**
+ * sfx-quest-chime — Portuguese, not fantasy-RPG. Two bell notes a fifth apart,
+ * kin to `music-church`, with the hum/prime/tierce partial set doing the work.
+ */
+function questChime() {
+  const rand = A.rng('melaka:sfx-quest-chime:v1');
+  const dur = 0.9;
+  const out = A.buffer(Math.round(dur * SR));
+  A.addInto(out, I.churchBell(523, { sr: SR, amp: 0.5, decay: 1.6, rand }), 0);
+  A.addInto(out, I.churchBell(784, { sr: SR, amp: 0.34, decay: 1.4, rand }), Math.round(0.13 * SR));
+  A.reverb(out, SR, { size: 1.3, mix: 0.24, damp: 0.3 });
+  A.filter(out, 'highpass', SR, 220, 0.7);
+  return { key: 'sfx-quest-chime', seed: 'melaka:sfx-quest-chime:v1', dur, channels: [finish(out, dur, { fadeOut: 0.1 })], sr: SR };
+}
+
+/** sfx-journal-quill — quill on paper. No melody, no pitch centre. */
+function journalQuill() {
+  const rand = A.rng('melaka:sfx-journal-quill:v1');
+  const dur = 0.32;
+  const out = A.buffer(Math.round(dur * SR));
+  // Two short scrapes: the nib down, then the stroke.
+  A.addInto(out, I.shaker(0.05, { sr: SR, amp: 0.3, decay: 0.03, tone: 5200, rand }), 0);
+  const sLen = Math.round(0.2 * SR);
+  const scrape = A.whiteNoise(sLen, rand);
+  const bq = new A.Biquad('bandpass', SR, 2600, 3.2);
+  for (let i = 0; i < sLen; i++) {
+    const t = i / sLen;
+    if (i % 32 === 0) bq.set('bandpass', SR, 2200 + 1900 * t, 3.2);
+    // A stroke is not steady: modulate so it reads as drag, not hiss.
+    scrape[i] = bq.process(scrape[i]) * Math.sin(Math.PI * t) ** 0.8
+      * (0.6 + 0.4 * Math.abs(Math.sin(2 * Math.PI * 19 * t)));
+  }
+  A.addInto(out, scrape, Math.round(0.05 * SR), 0.9);
+  A.filter(out, 'highpass', SR, 900, 0.7);
+  return { key: 'sfx-journal-quill', seed: 'melaka:sfx-journal-quill:v1', dur, channels: [finish(out, dur, { peak: 0.62 })], sr: SR };
+}
+
+/** sfx-page-turn — two filtered noise bursts 90 ms apart, pitch falling. */
+function pageTurn() {
+  const rand = A.rng('melaka:sfx-page-turn:v1');
+  const dur = 0.28;
+  const out = A.buffer(Math.round(dur * SR));
+  A.addInto(out, noiseBurst(0.11, rand, { f: 2400, q: 0.7, decay: 0.035 }), 0, 0.85);
+  A.addInto(out, noiseBurst(0.13, rand, { f: 1500, q: 0.6, decay: 0.045 }), Math.round(0.09 * SR), 0.7);
+  A.filter(out, 'highpass', SR, 600, 0.7);
+  A.filter(out, 'lowpass', SR, 7000, 0.8);
+  return { key: 'sfx-page-turn', seed: 'melaka:sfx-page-turn:v1', dur, channels: [finish(out, dur, { peak: 0.6 })], sr: SR };
+}
+
+/**
+ * sfx-denied-thud — flat, unmusical, unmistakably "no".
+ * A rebana `dum` at low level with the ring filtered out: the absence of pitch
+ * is the message. Anything with a tail reads as a musical answer.
+ */
+function deniedThud() {
+  const rand = A.rng('melaka:sfx-denied-thud:v1');
+  const dur = 0.24;
+  const n = Math.round(dur * SR);
+  const out = A.buffer(n);
+  for (let i = 0; i < n; i++) {
+    const t = i / SR;
+    // Pitch drops hard: 128 Hz -> ~60 Hz in 40 ms.
+    const f = 60 + 68 * Math.exp(-t / 0.04);
+    out[i] = Math.sin(2 * Math.PI * f * t) * Math.exp(-t / 0.055);
+  }
+  A.addInto(out, noiseBurst(0.04, rand, { f: 420, q: 0.8, decay: 0.012 }), 0, 0.4);
+  A.filter(out, 'lowpass', SR, 900, 0.9);
+  A.filter(out, 'highpass', SR, 45, 0.7);
+  return { key: 'sfx-denied-thud', seed: 'melaka:sfx-denied-thud:v1', dur, channels: [finish(out, dur, { peak: 0.72 })], sr: SR };
+}
+
+/** Shared voice for the panel pair, so open and close are audibly one object. */
+function panelStrike(key, freq, { amp, decay, damp, dur }) {
+  const rand = A.rng(`melaka:${key}:v1`);
+  const out = A.buffer(Math.round(dur * SR));
+  A.addInto(out, I.metallophone(freq, 0.05, {
+    sr: SR, amp, decay, tail: 0.35, damp, ombak: 1.6,
+  }), 0);
+  // Soft mallet: a little wood under the metal.
+  A.addInto(out, noiseBurst(0.02, rand, { f: freq * 2.4, q: 1.6, decay: 0.005 }), 0, 0.18);
+  A.filter(out, 'highpass', SR, 300, 0.7);
+  A.reverb(out, SR, { size: 0.5, mix: 0.14 });
+  return { key, seed: `melaka:${key}:v1`, dur, channels: [finish(out, dur, { peak: 0.66 })], sr: SR };
+}
+
+/** sfx-panel-open — a brass fitting: saron strike, soft mallet, fast decay. */
+const panelOpen = () => panelStrike('sfx-panel-open', 587, { amp: 0.42, decay: 0.5, damp: 1.2, dur: 0.3 });
+/** sfx-panel-close — the same voice, damped, one step lower. The PAIR. */
+const panelClose = () => panelStrike('sfx-panel-close', 523, { amp: 0.36, decay: 0.32, damp: 1.9, dur: 0.26 });
+
+/** sfx-save-seal — a seal pressed into wax: the press, then the wax creak. */
+function saveSeal() {
+  const rand = A.rng('melaka:sfx-save-seal:v1');
+  const dur = 0.42;
+  const out = A.buffer(Math.round(dur * SR));
+  A.addInto(out, I.drumLow(0, { sr: SR, amp: 0.5, freq: 96, decay: 0.07, rand }), 0);
+  // wax giving way: a short filtered-noise sweep, downward
+  const wLen = Math.round(0.22 * SR);
+  const wax = A.whiteNoise(wLen, rand);
+  const bq = new A.Biquad('bandpass', SR, 1800, 5);
+  for (let i = 0; i < wLen; i++) {
+    const t = i / wLen;
+    if (i % 32 === 0) bq.set('bandpass', SR, 1900 - 1250 * t, 5);
+    wax[i] = bq.process(wax[i]) * Math.pow(1 - t, 1.4) * (0.5 + 0.5 * Math.sin(2 * Math.PI * 11 * t));
+  }
+  A.addInto(out, wax, Math.round(0.04 * SR), 0.85);
+  A.filter(out, 'lowpass', SR, 5200, 0.8);
+  A.filter(out, 'highpass', SR, 50, 0.7);
+  return { key: 'sfx-save-seal', seed: 'melaka:sfx-save-seal:v1', dur, channels: [finish(out, dur, { peak: 0.7 })], sr: SR };
+}
+
+/** sfx-rest-chime — night settling. A suling two-note fall, heavy reverb. */
+function restChime() {
+  const rand = A.rng('melaka:sfx-rest-chime:v1');
+  const dur = 1.1;
+  const out = A.buffer(Math.round(dur * SR));
+  A.addInto(out, I.flute(523, 0.34, { sr: SR, amp: 0.34, breath: 0.07, rand }), 0);
+  A.addInto(out, I.flute(392, 0.42, { sr: SR, amp: 0.3, breath: 0.06, rand }), Math.round(0.34 * SR));
+  A.reverb(out, SR, { size: 1.8, mix: 0.34, damp: 0.4 });
+  A.filter(out, 'highpass', SR, 180, 0.7);
+  return { key: 'sfx-rest-chime', seed: 'melaka:sfx-rest-chime:v1', dur, channels: [finish(out, dur, { peak: 0.66, fadeOut: 0.15 })], sr: SR };
+}
+
+/** sfx-cloth-rustle — an awning stirring as you pass. Two grains, no pitch. */
+function clothRustle() {
+  const rand = A.rng('melaka:sfx-cloth-rustle:v1');
+  const dur = 0.3;
+  const out = A.buffer(Math.round(dur * SR));
+  for (let k = 0; k < 2; k++) {
+    const gLen = Math.round(0.14 * SR);
+    const g = A.brownNoise(gLen, rand);
+    const bq = new A.Biquad('bandpass', SR, 900, 1.4);
+    for (let i = 0; i < gLen; i++) {
+      const t = i / gLen;
+      if (i % 32 === 0) bq.set('bandpass', SR, 700 + 1400 * Math.sin(Math.PI * t), 1.4);
+      g[i] = bq.process(g[i]) * Math.sin(Math.PI * t) ** 1.2;
+    }
+    A.addInto(out, g, Math.round(k * 0.11 * SR), k === 0 ? 3.2 : 2.1);
+  }
+  A.filter(out, 'highpass', SR, 320, 0.7);
+  A.filter(out, 'lowpass', SR, 6000, 0.8);
+  return { key: 'sfx-cloth-rustle', seed: 'melaka:sfx-cloth-rustle:v1', dur, channels: [finish(out, dur, { peak: 0.5 })], sr: SR };
+}
+
+/**
+ * sfx-wood-creak-short — a pier board underfoot.
+ * A bowed voice at very low amplitude gives the stick-slip its pitch centre;
+ * the inharmonic partials keep it from sounding like an instrument.
+ */
+function woodCreakShort() {
+  const rand = A.rng('melaka:sfx-wood-creak-short:v1');
+  const dur = 0.35;
+  const out = A.buffer(Math.round(dur * SR));
+  A.addInto(out, I.bowed(196, 0.16, {
+    sr: SR, amp: 0.14, attack: 0.03, release: 0.12, bright: 0.25, vibDepth: 0.02, rand,
+  }), 0);
+  // inharmonic groan partials
+  const n = Math.round(0.26 * SR);
+  const groan = A.buffer(n);
+  for (const [ratio, a] of [[1.0, 1], [2.37, 0.4], [3.61, 0.22], [5.9, 0.1]]) {
+    const f = 196 * ratio;
+    for (let i = 0; i < n; i++) {
+      const t = i / SR;
+      groan[i] += Math.sin(2 * Math.PI * f * t * (1 - 0.05 * t)) * Math.exp(-t / 0.09) * a;
+    }
+  }
+  A.addInto(out, groan, 0, 0.3);
+  A.addInto(out, noiseBurst(0.05, rand, { f: 1400, q: 1.8, decay: 0.014 }), 0, 0.25);
+  A.filter(out, 'lowpass', SR, 3800, 0.8);
+  A.filter(out, 'highpass', SR, 90, 0.7);
+  return { key: 'sfx-wood-creak-short', seed: 'melaka:sfx-wood-creak-short:v1', dur, channels: [finish(out, dur, { peak: 0.6 })], sr: SR };
+}
+
+/** sfx-grass-brush — three highpassed noise grains: blades parting. */
+function grassBrush() {
+  const rand = A.rng('melaka:sfx-grass-brush:v1');
+  const dur = 0.26;
+  const out = A.buffer(Math.round(dur * SR));
+  for (let k = 0; k < 3; k++) {
+    A.addInto(
+      out,
+      noiseBurst(0.08, rand, { f: rand.range(2600, 4800), q: 0.6, decay: 0.018 }),
+      Math.round(rand.range(0, 0.11) * SR),
+      rand.range(0.5, 1),
+    );
+  }
+  A.filter(out, 'highpass', SR, 1200, 0.7);
+  return { key: 'sfx-grass-brush', seed: 'melaka:sfx-grass-brush:v1', dur, channels: [finish(out, dur, { peak: 0.52 })], sr: SR };
+}
+
 const SFX = {
   'sfx-menu-select': menuSelect,
   'sfx-dialogue-blip': dialogueBlip,
@@ -358,6 +576,19 @@ const SFX = {
   'sfx-crowd-murmur': crowdMurmur,
   'sfx-birds-tropical': birdsTropical,
   'sfx-wind-hilltop': windHilltop,
+  // v0.12 feedback batch (12)
+  'sfx-examine-soft': examineSoft,
+  'sfx-quest-chime': questChime,
+  'sfx-journal-quill': journalQuill,
+  'sfx-page-turn': pageTurn,
+  'sfx-denied-thud': deniedThud,
+  'sfx-panel-open': panelOpen,
+  'sfx-panel-close': panelClose,
+  'sfx-save-seal': saveSeal,
+  'sfx-rest-chime': restChime,
+  'sfx-cloth-rustle': clothRustle,
+  'sfx-wood-creak-short': woodCreakShort,
+  'sfx-grass-brush': grassBrush,
 };
 
 module.exports = { SFX, SR };

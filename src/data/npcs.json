@@ -7,28 +7,168 @@
     "description": "A wealthy Portuguese trader who deals in exotic spices. He's lost his trading seal and is desperate to recover it.",
     "culture": "portuguese",
     "location": "rua-direita",
-    "position": { "x": 200, "y": 180 },
+    "position": {
+      "x": 200,
+      "y": 180
+    },
     "schedule": [
       {
-        "startHour": 8,
-        "endHour": 18,
-        "activity": "Working at market stall",
+        "startHour": 7,
+        "endHour": 9,
+        "activity": "Receiving the morning consignment at the warehouse",
         "location": "rua-direita",
-        "available": true
+        "available": true,
+        "station": {
+          "x": 216,
+          "y": 196
+        },
+        "facing": "right",
+        "idle": "tally",
+        "enter": {
+          "door": "warehouse",
+          "x": 174,
+          "y": 140,
+          "effect": "door-creak"
+        },
+        "route": [
+          {
+            "x": 190,
+            "y": 160
+          },
+          {
+            "x": 206,
+            "y": 182
+          }
+        ],
+        "arriveBy": 7,
+        "onCameraWalk": true
+      },
+      {
+        "startHour": 9,
+        "endHour": 12,
+        "activity": "Working the street desk outside the warehouse",
+        "location": "rua-direita",
+        "available": true,
+        "station": {
+          "x": 216,
+          "y": 219
+        },
+        "facing": "down",
+        "idle": "tally",
+        "route": [
+          {
+            "x": 214,
+            "y": 206
+          }
+        ],
+        "arriveBy": 9,
+        "onCameraWalk": true
+      },
+      {
+        "startHour": 12,
+        "endHour": 13,
+        "activity": "Midday meal at the tavern",
+        "location": "rua-direita",
+        "available": false,
+        "exit": {
+          "door": "tavern",
+          "x": 404,
+          "y": 163,
+          "effect": "door-creak"
+        },
+        "route": [
+          {
+            "x": 280,
+            "y": 212
+          },
+          {
+            "x": 360,
+            "y": 196
+          }
+        ],
+        "arriveBy": 12,
+        "onCameraWalk": true
+      },
+      {
+        "startHour": 13,
+        "endHour": 18,
+        "activity": "Working the street desk outside the warehouse",
+        "location": "rua-direita",
+        "available": true,
+        "station": {
+          "x": 216,
+          "y": 219
+        },
+        "facing": "down",
+        "idle": "tally",
+        "enter": {
+          "door": "tavern",
+          "x": 404,
+          "y": 163,
+          "effect": "door-creak"
+        },
+        "route": [
+          {
+            "x": 340,
+            "y": 190
+          },
+          {
+            "x": 262,
+            "y": 204
+          }
+        ],
+        "arriveBy": 13,
+        "onCameraWalk": true
       },
       {
         "startHour": 18,
-        "endHour": 22,
-        "activity": "Evening meal at tavern",
+        "endHour": 21,
+        "activity": "Evening meal and accounts at the tavern",
         "location": "rua-direita",
-        "available": true
+        "available": true,
+        "station": {
+          "x": 409,
+          "y": 186
+        },
+        "facing": "up",
+        "idle": "read",
+        "route": [
+          {
+            "x": 280,
+            "y": 212
+          },
+          {
+            "x": 372,
+            "y": 196
+          }
+        ],
+        "arriveBy": 18,
+        "onCameraWalk": true
       },
       {
-        "startHour": 22,
-        "endHour": 8,
+        "startHour": 21,
+        "endHour": 7,
         "activity": "At home",
         "location": "home",
-        "available": false
+        "available": false,
+        "exit": {
+          "door": "alley-door",
+          "x": 266,
+          "y": 133,
+          "effect": "door-creak"
+        },
+        "route": [
+          {
+            "x": 337,
+            "y": 179
+          },
+          {
+            "x": 286,
+            "y": 152
+          }
+        ],
+        "arriveBy": 21,
+        "onCameraWalk": true
       }
     ],
     "dialogue": {
@@ -38,38 +178,65 @@
       "greetingVariants": [
         {
           "text": "*the seal is on the desk between his hands and he has not put it away* You will forgive me if I do not ask how. A man who asks a question of that kind has decided in advance what he wants to hear, and I find I have not decided. It is back. I am grateful. We will speak of other things.",
-          "when": { "worldFlagsAny": ["seal-stolen", "player-is-thief"] }
+          "when": {
+            "worldFlagsAny": [
+              "seal-stolen",
+              "player-is-thief"
+            ]
+          }
         },
         {
           "text": "Three parts to two, witnessed and signed, and my name on the smaller share. *almost laughs* My father would have burned the articles. My father also died owing money to men he never named. Sit down, friend. I owe you a great deal more than the wax.",
-          "when": { "worldFlagsAny": ["gomes-chen-partnership"] }
+          "when": {
+            "worldFlagsAny": [
+              "gomes-chen-partnership"
+            ]
+          }
         },
         {
           "text": "The account is closed and every manifest in that chest is lawful again. *turns the seal over once* Five hundred cruzados. I have stopped saying the number aloud. I intend to stop hearing it eventually.",
-          "when": { "worldFlagsAny": ["merchant-seal-settled"] }
+          "when": {
+            "worldFlagsAny": [
+              "merchant-seal-settled"
+            ]
+          }
         },
         {
           "text": "The silk is still under seal at the gate and the junk has gone without it. Chen Wei will not say so, but that cargo was the whole of his patience. Whatever we do now, we do it with a man who has just lost a season.",
-          "when": { "worldFlagsAny": ["silk-consignment-shipped"] }
+          "when": {
+            "worldFlagsAny": [
+              "silk-consignment-shipped"
+            ]
+          }
         }
       ],
       "topics": {
         "seal": {
           "text": "My trading seal vanished after I met Chen Wei. Without it I cannot authorize cargo, and every shipman in Rua Direita knows it.",
-          "unlocks": ["investigate", "chen-wei", "debt"],
+          "unlocks": [
+            "investigate",
+            "chen-wei",
+            "debt"
+          ],
           "questTrigger": true
         },
         "investigate": {
           "text": "Ask Aminah on the market edge. Rashid at the docks hears everything. Chen Wei knows the debt, but not the whole story.",
-          "requires": ["seal"]
+          "requires": [
+            "seal"
+          ]
         },
         "chen-wei": {
           "text": "Chen Wei of the counting house. I owe him money from a failed spice voyage. He keeps the seal as leverage.",
-          "requires": ["seal"]
+          "requires": [
+            "seal"
+          ]
         },
         "debt": {
           "text": "Five hundred cruzados. Too much to ignore, too little to lose the seal over. That is the trap.",
-          "requires": ["chen-wei"]
+          "requires": [
+            "chen-wei"
+          ]
         },
         "spices": {
           "text": "Cloves, nutmeg, cinnamon - these are the cargoes that move empires. One good hold can pay for a season."
@@ -106,27 +273,46 @@
         },
         "rest": {
           "text": "If you need a safe place to sleep, my warehouse has a clean cot. You are welcome to rest here until dawn, noon, or night. When would you like to awaken?",
-          "unlocks": ["rest-dawn", "rest-noon", "rest-night"]
+          "unlocks": [
+            "rest-dawn",
+            "rest-noon",
+            "rest-night"
+          ]
         },
         "rest-dawn": {
           "text": "Sleep well, friend. I will have the warehouse boy wake you when the sun rises over the gate.",
-          "requires": ["rest"]
+          "requires": [
+            "rest"
+          ]
         },
         "rest-noon": {
           "text": "Sleep well, friend. Rest until the high sun shines down on the market stalls.",
-          "requires": ["rest"]
+          "requires": [
+            "rest"
+          ]
         },
         "rest-night": {
           "text": "Sleep well, friend. Wake when the cool sea breeze sets in after dark.",
-          "requires": ["rest"]
+          "requires": [
+            "rest"
+          ]
         },
         "after-the-debt": {
           "text": "Do you know the part I cannot put down? Not the money. The three days I spent certain that Chen Wei had contrived the whole thing to ruin me. I built the man a character out of nothing but my own shame and then I believed in it. *shakes his head slowly* Cloves I can value at a glance. Myself I appear to value very badly.",
-          "availability": { "completedQuests": ["merchants-seal"] }
+          "availability": {
+            "completedQuests": [
+              "merchants-seal"
+            ]
+          }
         },
         "next-voyage": {
           "text": "Two hulls for Banda in the spring, and this time the accounting is shared and the risk is written down before anyone sails. If I come back rich, I come back half as rich as I would have. *shrugs* Half of a thing that exists is a great deal more than all of a thing that sank.",
-          "availability": { "worldFlagsAny": ["gomes-chen-partnership", "merchant-seal-settled"] }
+          "availability": {
+            "worldFlagsAny": [
+              "gomes-chen-partnership",
+              "merchant-seal-settled"
+            ]
+          }
         }
       },
       "farewell": "Find the seal. Until then, I sleep badly.",
@@ -135,12 +321,48 @@
     "questGiver": true,
     "questId": "merchants-seal",
     "personality": {
-      "traits": ["worried", "proud", "generous", "homesick"],
+      "traits": [
+        "worried",
+        "proud",
+        "generous",
+        "homesick"
+      ],
       "accent": "Portuguese",
       "gesturesFrequent": true
-    }
+    },
+    "beats": [
+      {
+        "at": "12:00",
+        "kind": "angelus",
+        "duration": 3,
+        "idle": "pray-standing",
+        "face": {
+          "x": 484,
+          "y": 126
+        }
+      },
+      {
+        "at": "18:00",
+        "kind": "angelus",
+        "duration": 3,
+        "idle": "pray-standing",
+        "face": {
+          "x": 484,
+          "y": 126
+        }
+      },
+      {
+        "at": "10:30",
+        "kind": "social",
+        "duration": 8,
+        "idle": "talk-gesture",
+        "face": {
+          "x": 104,
+          "y": 236
+        }
+      }
+    ]
   },
-
   "capitao-rodrigues": {
     "id": "capitao-rodrigues",
     "name": "Capitão Rodrigues",
@@ -149,35 +371,218 @@
     "description": "The stern captain of A Famosa's garrison. A veteran of many campaigns, he takes his duty to protect Portuguese Melaka with absolute seriousness.",
     "culture": "portuguese",
     "location": "a-famosa-gate",
-    "position": { "x": 200, "y": 200 },
+    "position": {
+      "x": 200,
+      "y": 200
+    },
     "schedule": [
       {
         "startHour": 6,
-        "endHour": 14,
-        "activity": "Morning watch at fortress gate",
+        "endHour": 9,
+        "activity": "Morning watch on the gate line",
         "location": "a-famosa-gate",
-        "available": true
+        "available": true,
+        "station": {
+          "x": 278,
+          "y": 286
+        },
+        "facing": "down",
+        "idle": "sword-check",
+        "enter": {
+          "door": "barracks",
+          "x": 72,
+          "y": 300,
+          "effect": "door-iron"
+        },
+        "route": [
+          {
+            "x": 140,
+            "y": 292
+          },
+          {
+            "x": 221,
+            "y": 290
+          }
+        ],
+        "arriveBy": 6,
+        "onCameraWalk": true
+      },
+      {
+        "startHour": 9,
+        "endHour": 11,
+        "activity": "Inspecting the arms rack",
+        "location": "a-famosa-gate",
+        "available": true,
+        "station": {
+          "x": 160,
+          "y": 244
+        },
+        "facing": "up",
+        "idle": "sword-check",
+        "route": [
+          {
+            "x": 240,
+            "y": 268
+          },
+          {
+            "x": 190,
+            "y": 252
+          }
+        ],
+        "arriveBy": 9,
+        "onCameraWalk": true
+      },
+      {
+        "startHour": 11,
+        "endHour": 12,
+        "activity": "Checking the west gun",
+        "location": "a-famosa-gate",
+        "available": true,
+        "station": {
+          "x": 86,
+          "y": 252
+        },
+        "facing": "left",
+        "idle": "sword-check",
+        "route": [
+          {
+            "x": 124,
+            "y": 248
+          }
+        ],
+        "arriveBy": 11,
+        "onCameraWalk": true
+      },
+      {
+        "startHour": 12,
+        "endHour": 14,
+        "activity": "Out of the sun at the sentry box",
+        "location": "a-famosa-gate",
+        "available": true,
+        "station": {
+          "x": 218,
+          "y": 230
+        },
+        "facing": "down",
+        "idle": "idle-breathe",
+        "route": [
+          {
+            "x": 150,
+            "y": 244
+          },
+          {
+            "x": 196,
+            "y": 234
+          }
+        ],
+        "arriveBy": 12,
+        "onCameraWalk": true
       },
       {
         "startHour": 14,
         "endHour": 16,
-        "activity": "Inspecting garrison",
-        "location": "a-famosa-gate",
-        "available": false
+        "activity": "Inspecting the garrison",
+        "location": "barracks",
+        "available": false,
+        "exit": {
+          "door": "west-postern",
+          "x": 37,
+          "y": 243,
+          "effect": "door-iron"
+        },
+        "route": [
+          {
+            "x": 150,
+            "y": 238
+          },
+          {
+            "x": 80,
+            "y": 240
+          }
+        ],
+        "arriveBy": 14,
+        "onCameraWalk": true
       },
       {
         "startHour": 16,
-        "endHour": 22,
-        "activity": "Evening watch at fortress gate",
+        "endHour": 21,
+        "activity": "Evening watch on the gate line",
         "location": "a-famosa-gate",
-        "available": true
+        "available": true,
+        "station": {
+          "x": 300,
+          "y": 270
+        },
+        "facing": "down",
+        "idle": "sword-check",
+        "enter": {
+          "door": "west-postern",
+          "x": 37,
+          "y": 243,
+          "effect": "door-iron"
+        },
+        "route": [
+          {
+            "x": 118,
+            "y": 250
+          },
+          {
+            "x": 230,
+            "y": 264
+          }
+        ],
+        "arriveBy": 16,
+        "onCameraWalk": true
+      },
+      {
+        "startHour": 21,
+        "endHour": 22,
+        "activity": "Closing the gate for the night",
+        "location": "a-famosa-gate",
+        "available": true,
+        "station": {
+          "x": 314,
+          "y": 260
+        },
+        "facing": "up",
+        "idle": "warm-hands",
+        "route": [
+          {
+            "x": 320,
+            "y": 282
+          },
+          {
+            "x": 318,
+            "y": 266
+          }
+        ],
+        "arriveBy": 21,
+        "onCameraWalk": true
       },
       {
         "startHour": 22,
         "endHour": 6,
         "activity": "Resting in barracks",
         "location": "barracks",
-        "available": false
+        "available": false,
+        "exit": {
+          "door": "barracks",
+          "x": 72,
+          "y": 300,
+          "effect": "door-iron"
+        },
+        "route": [
+          {
+            "x": 220,
+            "y": 292
+          },
+          {
+            "x": 124,
+            "y": 295
+          }
+        ],
+        "arriveBy": 22,
+        "onCameraWalk": true
       }
     ],
     "dialogue": {
@@ -186,15 +591,29 @@
       "greetingVariants": [
         {
           "text": "*does not take his hand from the pommel* A counting house was entered at night and a strongbox opened. No complaint has been laid, which tells me the merchant would rather keep the matter than have justice from us. Understand that I have noticed that. State your business.",
-          "when": { "worldFlagsAny": ["seal-stolen", "player-is-thief"] }
+          "when": {
+            "worldFlagsAny": [
+              "seal-stolen",
+              "player-is-thief"
+            ]
+          }
         },
         {
           "text": "Mesquita is on the next ship to Goa with an escort and a sealed report, and half the fidalgos in this fortress will not meet my eye over it. *evenly* Good. Let them be uncomfortable. You brought me paper when you could have brought me gossip, and I have not forgotten which you chose.",
-          "when": { "worldFlagsAny": ["inspector-removed"] }
+          "when": {
+            "worldFlagsAny": [
+              "inspector-removed"
+            ]
+          }
         },
         {
           "text": "The merchants have settled their business without a blade drawn or a petition filed. That is what order looks like when it is working, and nobody ever notices it. State your business.",
-          "when": { "worldFlagsAny": ["merchant-seal-settled", "gomes-chen-partnership"] }
+          "when": {
+            "worldFlagsAny": [
+              "merchant-seal-settled",
+              "gomes-chen-partnership"
+            ]
+          }
         }
       ],
       "topics": {
@@ -242,23 +661,75 @@
         },
         "after-the-inspector": {
           "text": "The new man weighs everything twice and takes nothing and the queue at the gate is twice as long. Merchants complain to me daily. *almost satisfied* Let them. A slow gate that is honest is a fortress. A quick gate that is bought is a door somebody else owns.",
-          "availability": { "worldFlagsAny": ["inspector-removed"] }
+          "availability": {
+            "worldFlagsAny": [
+              "inspector-removed"
+            ]
+          }
         },
         "after-the-seal": {
           "text": "You settled a merchants' quarrel without a garrison, a magistrate, or a corpse. *considers you* I have spent forty years being told the sword holds this city. It holds the walls. It has never once held the street. I am obliged to admit that, and I would take it as a courtesy if you did not repeat it.",
-          "availability": { "completedQuests": ["merchants-seal"] }
+          "availability": {
+            "completedQuests": [
+              "merchants-seal"
+            ]
+          }
+        },
+        "night-complaint": {
+          "text": "*does not sit, does not offer you a seat* My watchman took you off the quay at two in the morning and no merchant has laid a complaint, which means I am holding a man nobody will accuse. So I have fined you for being where you were and I have written it down, and the writing is the part that matters. *taps the ledger once* Understand me. I do not much care about a strongbox. I care that a garrison which cannot say who was on its quay at two in the morning is a garrison that finds out about the next thing far too late. Go and be somewhere else.",
+          "availability": {
+            "worldFlagsAny": [
+              "caught-at-counting-house"
+            ]
+          }
         }
       },
       "farewell": "Stay vigilant. The night has ears in Melaka.",
       "farewellDay": "Move along. And stay out of trouble."
     },
     "personality": {
-      "traits": ["stern", "honorable", "paranoid", "lonely"],
+      "traits": [
+        "stern",
+        "honorable",
+        "paranoid",
+        "lonely"
+      ],
       "accent": "Portuguese military",
       "gesturesFrequent": false
-    }
+    },
+    "beats": [
+      {
+        "at": "06:00",
+        "kind": "gate-open",
+        "duration": 4,
+        "idle": "sword-check",
+        "face": {
+          "x": 320,
+          "y": 214
+        }
+      },
+      {
+        "at": "12:00",
+        "kind": "angelus",
+        "duration": 2,
+        "idle": "pray-standing",
+        "face": {
+          "x": 320,
+          "y": 160
+        }
+      },
+      {
+        "at": "21:00",
+        "kind": "gate-close",
+        "duration": 6,
+        "idle": "sword-check",
+        "face": {
+          "x": 320,
+          "y": 214
+        }
+      }
+    ]
   },
-
   "padre-tomas": {
     "id": "padre-tomas",
     "name": "Padre Tomás",
@@ -267,49 +738,175 @@
     "description": "A kind but zealous Jesuit missionary who ministers to Portuguese settlers and tirelessly seeks to convert the local populations to Christianity.",
     "culture": "portuguese",
     "location": "st-pauls-church",
-    "position": { "x": 200, "y": 180 },
+    "position": {
+      "x": 200,
+      "y": 180
+    },
     "schedule": [
       {
         "startHour": 5,
         "endHour": 7,
         "activity": "Morning prayers and Mass",
         "location": "st-pauls-church",
-        "available": false
+        "available": false,
+        "exit": {
+          "door": "church",
+          "x": 404,
+          "y": 236,
+          "effect": "church-door"
+        },
+        "arriveBy": 5,
+        "onCameraWalk": true
       },
       {
         "startHour": 7,
         "endHour": 12,
-        "activity": "Receiving visitors",
+        "activity": "Receiving visitors at the porch",
         "location": "st-pauls-church",
-        "available": true
+        "available": true,
+        "station": {
+          "x": 440,
+          "y": 250
+        },
+        "facing": "down",
+        "idle": "read",
+        "enter": {
+          "door": "church",
+          "x": 404,
+          "y": 236,
+          "effect": "church-door"
+        },
+        "route": [
+          {
+            "x": 420,
+            "y": 244
+          }
+        ],
+        "arriveBy": 7,
+        "onCameraWalk": true
       },
       {
         "startHour": 12,
         "endHour": 14,
         "activity": "Midday rest and contemplation",
         "location": "st-pauls-church",
-        "available": false
+        "available": false,
+        "exit": {
+          "door": "church",
+          "x": 404,
+          "y": 236,
+          "effect": "church-door"
+        },
+        "route": [
+          {
+            "x": 422,
+            "y": 242
+          }
+        ],
+        "arriveBy": 12,
+        "onCameraWalk": true
       },
       {
         "startHour": 14,
-        "endHour": 18,
-        "activity": "Teaching and conversions",
+        "endHour": 16,
+        "activity": "Teaching at the sailors' cross",
         "location": "st-pauls-church",
-        "available": true
+        "available": true,
+        "station": {
+          "x": 128,
+          "y": 254
+        },
+        "facing": "down",
+        "idle": "talk-gesture",
+        "enter": {
+          "door": "church",
+          "x": 404,
+          "y": 236,
+          "effect": "church-door"
+        },
+        "route": [
+          {
+            "x": 340,
+            "y": 260
+          },
+          {
+            "x": 230,
+            "y": 262
+          },
+          {
+            "x": 160,
+            "y": 256
+          }
+        ],
+        "arriveBy": 14,
+        "onCameraWalk": true
+      },
+      {
+        "startHour": 16,
+        "endHour": 18,
+        "activity": "Visiting the new grave",
+        "location": "st-pauls-church",
+        "available": true,
+        "station": {
+          "x": 160,
+          "y": 308
+        },
+        "facing": "up",
+        "idle": "pray-standing",
+        "route": [
+          {
+            "x": 140,
+            "y": 282
+          }
+        ],
+        "arriveBy": 16,
+        "onCameraWalk": true
       },
       {
         "startHour": 18,
         "endHour": 20,
-        "activity": "Evening prayers",
+        "activity": "Vespers at the padrão",
         "location": "st-pauls-church",
-        "available": true
+        "available": true,
+        "station": {
+          "x": 380,
+          "y": 244
+        },
+        "facing": "down",
+        "idle": "pray-standing",
+        "route": [
+          {
+            "x": 250,
+            "y": 290
+          },
+          {
+            "x": 330,
+            "y": 262
+          }
+        ],
+        "arriveBy": 18,
+        "onCameraWalk": true
       },
       {
         "startHour": 20,
         "endHour": 5,
         "activity": "Night vigil and rest",
         "location": "st-pauls-church",
-        "available": false
+        "available": false,
+        "exit": {
+          "door": "church",
+          "x": 404,
+          "y": 236,
+          "effect": "church-door"
+        },
+        "route": [
+          {
+            "x": 396,
+            "y": 240
+          }
+        ],
+        "arriveBy": 20,
+        "onCameraWalk": true
       }
     ],
     "dialogue": {
@@ -318,15 +915,28 @@
       "greetingVariants": [
         {
           "text": "*rises, takes both your hands warmly* A Portuguese and a Chinese bound in articles of partnership, witnessed and signed. Do you see what has happened here? Senhor Chen has performed an act of Christian charity while believing himself a follower of the sages. God works through such men constantly, and it is our happy labour to one day tell them whose hand it was.",
-          "when": { "worldFlagsAny": ["gomes-chen-partnership"] }
+          "when": {
+            "worldFlagsAny": [
+              "gomes-chen-partnership"
+            ]
+          }
         },
         {
           "text": "*sets down the breviary and looks at you for a long moment* Something was taken in the night, and the man it was taken from has not cried out. I ask you nothing. I only say - as I would to any soul who came up this hill - that the door of that confessional is open, and that a burden set down early is a smaller burden than one carried into the dry season.",
-          "when": { "worldFlagsAny": ["seal-stolen", "player-is-thief"] }
+          "when": {
+            "worldFlagsAny": [
+              "seal-stolen",
+              "player-is-thief"
+            ]
+          }
         },
         {
           "text": "Senhor Gomes came to Mass with his seal on a cord about his neck like a reliquary. *smiles* I did not correct him. God is generous with the forms our gratitude takes, even the vain ones.",
-          "when": { "worldFlagsAny": ["merchant-seal-settled"] }
+          "when": {
+            "worldFlagsAny": [
+              "merchant-seal-settled"
+            ]
+          }
         }
       ],
       "topics": {
@@ -347,11 +957,15 @@
         },
         "church": {
           "text": "A captain named Coelho promised Our Lady a chapel if she brought him out of a storm in the China sea, and in 1521 he paid. The Fathers were given the deeds in Saint Francis Xavier's own hand and have been enlarging her ever since. *gestures down the slope* The Sultan's istana stood below us, by the water, not here. What is under these stones is only the hill.",
-          "unlocks": ["bishop"]
+          "unlocks": [
+            "bishop"
+          ]
         },
         "bishop": {
           "text": "His Lordship's cathedral is down there in the town, and I am up here, and we both understand the arrangement perfectly. *carefully* The Sé has the parishes, the registers, the marriages and the burials, and Melaka has been a diocese in its own right since '58 - we are not a mission station any longer, whatever Goa likes to imply. The Society has this hill and the school. *a small pause* There is a Dominican father down there who holds that we have made too many allowances to these people - that we teach them Christ in their own words until the words are all that is left. He is not a stupid man. That is what makes him difficult.",
-          "requires": ["church"]
+          "requires": [
+            "church"
+          ]
         },
         "captain": {
           "text": "Capitão Rodrigues is a devout man in his way - he attends Mass, confesses regularly. But he sees only enemies where I see souls to be saved. The sword and the cross must work together, yet he trusts only the sword."
@@ -379,39 +993,98 @@
         },
         "rest": {
           "text": "Ah, you seek physical and spiritual rest? You are welcome to sit in the pews and rest in this sanctuary until dawn, noon, or night. When would you like to awaken?",
-          "unlocks": ["rest-dawn", "rest-noon", "rest-night"]
+          "unlocks": [
+            "rest-dawn",
+            "rest-noon",
+            "rest-night"
+          ]
         },
         "rest-dawn": {
           "text": "Very well. Rest in sanctuary until the dawn light touches the spire. Go with God.",
-          "requires": ["rest"]
+          "requires": [
+            "rest"
+          ]
         },
         "rest-noon": {
           "text": "Very well. Rest in sanctuary until the midday sun is high. Go with God.",
-          "requires": ["rest"]
+          "requires": [
+            "rest"
+          ]
         },
         "rest-night": {
           "text": "Very well. Rest in sanctuary until the darkness falls over the straits. Go with God.",
-          "requires": ["rest"]
+          "requires": [
+            "rest"
+          ]
         },
         "after-the-seal": {
           "text": "I confess a small vanity: I have told the story twice from the pulpit. A dispute between a Christian and a heathen, settled without violence, on this hill, in this year. *warmly* It is proof of what I have always maintained - that these peoples are entirely capable of right conduct, and want only the light to make it habitual. Some of my brothers in Goa doubt this. I shall write to them about you.",
-          "availability": { "completedQuests": ["merchants-seal"] }
+          "availability": {
+            "completedQuests": [
+              "merchants-seal"
+            ]
+          }
         },
         "mercy": {
           "text": "Senhor Chen forgave a debt he was owed, which is scripture in practice whatever he calls it. *thoughtfully* And yet - and I say this to you and not to him - a good act performed outside the faith is a lamp lit in a sealed room. It gives light. It saves no one. This is not cruelty, my child. It is simply the arithmetic of salvation, and I did not set the terms.",
-          "availability": { "worldFlagsAny": ["gomes-chen-partnership"] }
+          "availability": {
+            "worldFlagsAny": [
+              "gomes-chen-partnership"
+            ]
+          }
+        },
+        "confession-theft": {
+          "text": "*draws the curtain across without being asked* You do not need to tell me what you did; the fortress has told half the city and told it badly. I want to know the other thing. *quietly* Were you frightened, or were you angry? Because a frightened man has done something stupid and may be counselled, and an angry man has done something he meant, and must be met differently. ... Thank you. That is an honest answer and it cost you more than the alms did. Go and be seen at Mass on Sunday, in the front third, where people will look at you. Penance is not suffering, my child. Penance is being visible again.",
+          "availability": {
+            "worldFlagsAny": [
+              "caught-at-counting-house"
+            ]
+          },
+          "takesMoney": 20,
+          "journalEntry": "Padre Tomás heard my confession for the counting house and asked only whether I had been frightened or angry. He set the penance as being seen — front third, Sunday Mass, where the people I embarrassed myself in front of would have to look at me. Twenty cruzados in alms. He seemed to think the money was the least of it."
         }
       },
       "farewell": "Go with God, my child. May His light guide your path.",
       "farewellNight": "Peace be upon you. The night is God's time for reflection."
     },
     "personality": {
-      "traits": ["kind", "zealous", "conflicted", "patient"],
+      "traits": [
+        "kind",
+        "zealous",
+        "conflicted",
+        "patient"
+      ],
       "accent": "Portuguese ecclesiastical",
       "gesturesFrequent": false
-    }
+    },
+    "beats": [
+      {
+        "at": "06:00",
+        "kind": "angelus-bell",
+        "duration": 2
+      },
+      {
+        "at": "12:00",
+        "kind": "angelus-bell",
+        "duration": 2
+      },
+      {
+        "at": "18:00",
+        "kind": "angelus-bell",
+        "duration": 2
+      },
+      {
+        "at": "09:30",
+        "kind": "social",
+        "duration": 6,
+        "idle": "talk-gesture",
+        "face": {
+          "x": 218,
+          "y": 277
+        }
+      }
+    ]
   },
-
   "aminah": {
     "id": "aminah",
     "name": "Aminah",
@@ -420,29 +1093,146 @@
     "description": "A sharp-eyed Malay woman who sells produce in the market. She knows every rumor, every secret, every lie that passes through Rua Direita.",
     "culture": "malay",
     "location": "rua-direita",
-    "position": { "x": 160, "y": 160 },
+    "position": {
+      "x": 160,
+      "y": 160
+    },
     "portrait": "aminah",
     "schedule": [
       {
         "startHour": 5,
         "endHour": 6,
-        "activity": "Setting up market stall",
+        "activity": "Setting up the market stall",
         "location": "rua-direita",
-        "available": false
+        "available": false,
+        "station": {
+          "x": 110,
+          "y": 248
+        },
+        "facing": "up",
+        "idle": "haul",
+        "enter": {
+          "door": "west-lane",
+          "x": 8,
+          "y": 250,
+          "effect": "none"
+        },
+        "route": [
+          {
+            "x": 60,
+            "y": 258
+          },
+          {
+            "x": 96,
+            "y": 252
+          }
+        ],
+        "arriveBy": 5,
+        "onCameraWalk": true
       },
       {
         "startHour": 6,
         "endHour": 19,
-        "activity": "Selling at market",
+        "activity": "Selling at the market stall",
         "location": "rua-direita",
-        "available": true
+        "available": true,
+        "station": {
+          "x": 104,
+          "y": 236
+        },
+        "facing": "down",
+        "idle": "fan",
+        "arriveBy": 6,
+        "onCameraWalk": true
       },
       {
         "startHour": 19,
-        "endHour": 5,
-        "activity": "At home in kampung",
+        "endHour": 20,
+        "activity": "Walking home to the kampung",
+        "location": "rua-direita",
+        "available": true,
+        "station": {
+          "x": 612,
+          "y": 248
+        },
+        "facing": "right",
+        "idle": "haul",
+        "route": [
+          {
+            "x": 144,
+            "y": 278
+          },
+          {
+            "x": 240,
+            "y": 262
+          },
+          {
+            "x": 320,
+            "y": 252
+          },
+          {
+            "x": 440,
+            "y": 248
+          },
+          {
+            "x": 540,
+            "y": 250
+          }
+        ],
+        "arriveBy": 19,
+        "onCameraWalk": true,
+        "exit": {
+          "door": "east-lane",
+          "x": 612,
+          "y": 248,
+          "effect": "none"
+        }
+      },
+      {
+        "startHour": 20,
+        "endHour": 22,
+        "activity": "Evening meal at home in the kampung",
         "location": "kampung",
-        "available": false
+        "available": true,
+        "station": {
+          "x": 250,
+          "y": 272
+        },
+        "facing": "down",
+        "idle": "stir-pot",
+        "enter": {
+          "door": "north-path",
+          "x": 320,
+          "y": 150,
+          "effect": "none"
+        },
+        "route": [
+          {
+            "x": 310,
+            "y": 200
+          },
+          {
+            "x": 286,
+            "y": 244
+          }
+        ],
+        "arriveBy": 20,
+        "onCameraWalk": false
+      },
+      {
+        "startHour": 22,
+        "endHour": 5,
+        "activity": "Asleep at home",
+        "location": "home",
+        "available": false,
+        "exit": {
+          "door": "kampung-house",
+          "x": 232,
+          "y": 264,
+          "effect": "curtain"
+        },
+        "arriveBy": 22,
+        "onCameraWalk": true
       }
     ],
     "dialogue": {
@@ -451,15 +1241,28 @@
       "greetingVariants": [
         {
           "text": "*keeps her hands on the fruit and her eyes on you* The counting house was opened at night and something was taken out of it. I sell to Chinese houses. I sell to Portuguese houses. A woman who wants to keep selling to both does not become known for her friends.",
-          "when": { "worldFlagsAny": ["seal-stolen", "player-is-thief"] }
+          "when": {
+            "worldFlagsAny": [
+              "seal-stolen",
+              "player-is-thief"
+            ]
+          }
         },
         {
           "text": "The whole street is telling it wrong already. By this morning Gomes had confessed on his knees and Chen Wei had wept - neither happened, I asked. But they signed, and that is rarer than weeping. Sit. Eat something.",
-          "when": { "worldFlagsAny": ["gomes-chen-partnership"] }
+          "when": {
+            "worldFlagsAny": [
+              "gomes-chen-partnership"
+            ]
+          }
         },
         {
           "text": "Gomes stamped four manifests before breakfast, just to hear the wax crack. Men are like that. Give them back their name and they must use it in front of everybody.",
-          "when": { "worldFlagsAny": ["merchant-seal-settled"] }
+          "when": {
+            "worldFlagsAny": [
+              "merchant-seal-settled"
+            ]
+          }
         }
       ],
       "topics": {
@@ -510,30 +1313,82 @@
         },
         "pepper-tip": {
           "text": "You are counting coins in your head. I can hear it from here. *jerks her chin at the river* There is a boat down from Kedah with one bahar of pepper that took rain three days out. Wet pepper frightens the big houses - they think of mould, of a whole shed spoiled, and they will not touch it at any price. It is not spoiled. It is damp. Two days on mats in this sun and it is pepper again. The boatman wants to be rid of it before he must feed his crew another night.",
-          "unlocks": ["pepper-lot"]
+          "unlocks": [
+            "pepper-lot"
+          ]
         },
         "pepper-lot": {
           "text": "Twenty cruzados and it is yours, and I will send my eldest to carry it up and turn it on the mats for you - no, do not argue, he is going that way and he is bored. *takes the coin, bites nothing, counts once* Now listen, because this is the part people get wrong. Do not carry it to the market. Carry it to a counting house at the end of the month, when their manifest is short and a clerk must explain a shortfall to a harbour master. They are not buying pepper then. They are buying a quiet afternoon. That is always worth more.",
-          "requires": ["pepper-tip"],
+          "requires": [
+            "pepper-tip"
+          ],
           "takesMoney": 20,
           "givesItem": "pepper-pouch",
           "journalEntry": "Bought a bahar of rain-damp Kedah pepper from Aminah for 20 cruzados - the big houses will not touch damp pepper, but two days on the mats and it is pepper again. Her advice: sell it to a counting house whose month-end manifest runs short, not to the market. They pay for the quiet afternoon, not the weight."
         },
         "after-the-seal": {
           "text": "You did a thing in this street and the street decided what it meant without asking you. That is how it works here. *shrugs* Mine sells fruit. Yours, now - people will bring you their troubles because you carried someone else's and did not drop it. Charge them something. Even a little. Free help is never believed.",
-          "availability": { "completedQuests": ["merchants-seal"] }
+          "availability": {
+            "completedQuests": [
+              "merchants-seal"
+            ]
+          }
         }
       },
       "farewell": "Come back with coin or news. Both spend well here.",
       "farewellEvening": "Take the lit route home. Rua Direita is less kind after dark."
     },
     "personality": {
-      "traits": ["sharp", "warm", "survivor", "proud"],
+      "traits": [
+        "sharp",
+        "warm",
+        "survivor",
+        "proud"
+      ],
       "accent": "Malay with Portuguese words",
       "gesturesFrequent": true
-    }
+    },
+    "beats": [
+      {
+        "at": "10:30",
+        "kind": "social",
+        "duration": 8,
+        "idle": "talk-gesture",
+        "face": {
+          "x": 216,
+          "y": 219
+        }
+      },
+      {
+        "at": "13:15",
+        "kind": "zuhr",
+        "duration": 10,
+        "idle": "pray-kneel",
+        "station": {
+          "x": 96,
+          "y": 252
+        },
+        "face": {
+          "x": -100,
+          "y": 240
+        }
+      },
+      {
+        "at": "18:45",
+        "kind": "maghrib",
+        "duration": 6,
+        "idle": "pray-kneel",
+        "station": {
+          "x": 110,
+          "y": 248
+        },
+        "face": {
+          "x": -100,
+          "y": 240
+        }
+      }
+    ]
   },
-
   "chen-wei": {
     "id": "chen-wei",
     "name": "Chen Wei",
@@ -542,7 +1397,10 @@
     "description": "A dignified Chinese merchant who represents the interests of Melaka's powerful Chinese trading community. His family has been in Melaka for three generations.",
     "culture": "chinese",
     "location": "waterfront",
-    "position": { "x": 180, "y": 190 },
+    "position": {
+      "x": 180,
+      "y": 190
+    },
     "portrait": "chen-wei",
     "schedule": [
       {
@@ -550,35 +1408,136 @@
         "endHour": 8,
         "activity": "Morning tea and accounts",
         "location": "waterfront",
-        "available": false
+        "available": false,
+        "station": {
+          "x": 585,
+          "y": 263
+        },
+        "facing": "down",
+        "idle": "read",
+        "enter": {
+          "door": "counting-house",
+          "x": 570,
+          "y": 262,
+          "effect": "shutter"
+        },
+        "arriveBy": 7,
+        "onCameraWalk": true
       },
       {
         "startHour": 8,
         "endHour": 12,
         "activity": "Morning business at the counting house",
         "location": "waterfront",
-        "available": true
+        "available": true,
+        "station": {
+          "x": 547,
+          "y": 251
+        },
+        "facing": "down",
+        "idle": "read",
+        "route": [
+          {
+            "x": 567,
+            "y": 261
+          }
+        ],
+        "arriveBy": 8,
+        "onCameraWalk": true
       },
       {
         "startHour": 12,
         "endHour": 14,
         "activity": "Midday meal and rest",
         "location": "waterfront",
-        "available": false
+        "available": false,
+        "exit": {
+          "door": "counting-house",
+          "x": 570,
+          "y": 262,
+          "effect": "shutter"
+        },
+        "arriveBy": 12,
+        "onCameraWalk": true
       },
       {
         "startHour": 14,
         "endHour": 18,
-        "activity": "Afternoon business at the counting house",
+        "activity": "Meeting traders on the quay",
         "location": "waterfront",
-        "available": true
+        "available": true,
+        "station": {
+          "x": 480,
+          "y": 196
+        },
+        "facing": "down",
+        "idle": "talk-gesture",
+        "enter": {
+          "door": "counting-house",
+          "x": 570,
+          "y": 262,
+          "effect": "shutter"
+        },
+        "route": [
+          {
+            "x": 556,
+            "y": 228
+          },
+          {
+            "x": 512,
+            "y": 210
+          }
+        ],
+        "arriveBy": 14,
+        "onCameraWalk": true
       },
       {
         "startHour": 18,
+        "endHour": 19,
+        "activity": "Locking up the counting house",
+        "location": "waterfront",
+        "available": true,
+        "station": {
+          "x": 570,
+          "y": 262
+        },
+        "facing": "up",
+        "idle": "read",
+        "route": [
+          {
+            "x": 520,
+            "y": 214
+          },
+          {
+            "x": 554,
+            "y": 230
+          },
+          {
+            "x": 540,
+            "y": 254
+          },
+          {
+            "x": 556,
+            "y": 262
+          }
+        ],
+        "arriveBy": 18,
+        "onCameraWalk": true
+      },
+      {
+        "startHour": 19,
         "endHour": 7,
         "activity": "Private affairs and family",
         "location": "elsewhere",
-        "available": false
+        "available": false,
+        "exit": {
+          "door": "counting-house",
+          "x": 570,
+          "y": 262,
+          "effect": "shutter-bar"
+        },
+        "arriveBy": 19,
+        "onCameraWalk": true
       }
     ],
     "dialogue": {
@@ -587,23 +1546,44 @@
       "greetingVariants": [
         {
           "text": "The seal left this house through a window instead of a door. I have not called the guard. I have simply written your name where I keep the names of people I do not trade with.",
-          "when": { "worldFlagsAny": ["seal-stolen", "player-is-thief"] }
+          "when": {
+            "worldFlagsAny": [
+              "seal-stolen",
+              "player-is-thief"
+            ]
+          }
         },
         {
           "text": "Gomes came at dawn to sign the partnership articles, and his hand shook so badly the notary made him write the date twice. Sit. There is tea, and you have earned the better cup.",
-          "when": { "worldFlagsAny": ["gomes-chen-partnership"] }
+          "when": {
+            "worldFlagsAny": [
+              "gomes-chen-partnership"
+            ]
+          }
         },
         {
           "text": "The silk cleared, the inspector did not, and my ledger closed even. You will find I remember arithmetic of that kind for a long time.",
-          "when": { "worldFlagsAny": ["inspector-removed"] }
+          "when": {
+            "worldFlagsAny": [
+              "inspector-removed"
+            ]
+          }
         },
         {
           "text": "The account is closed and the seal is back on Gomes's desk. Closed accounts are the only kind I enjoy discussing.",
-          "when": { "worldFlagsAny": ["merchant-seal-settled"] }
+          "when": {
+            "worldFlagsAny": [
+              "merchant-seal-settled"
+            ]
+          }
         },
         {
           "text": "The junk sailed without my silk. Forty bolts sit in a bonded shed until the wind comes round to the south-west, which is to say until next year. Do not speak to me of the customs house today.",
-          "when": { "worldFlagsAny": ["silk-consignment-shipped"] }
+          "when": {
+            "worldFlagsAny": [
+              "silk-consignment-shipped"
+            ]
+          }
         }
       ],
       "topics": {
@@ -613,15 +1593,21 @@
         },
         "debt": {
           "text": "His spice voyage failed. The monsoon took the ship; the debt remains. Melaka does not forgive weather or delay.",
-          "requires": ["seal"]
+          "requires": [
+            "seal"
+          ]
         },
         "guild": {
           "text": "The Chinese merchant families have kept accounts in Melaka since before the fortress mattered. Ledgers remember what rulers try to forget.",
-          "unlocks": ["kapitan"]
+          "unlocks": [
+            "kapitan"
+          ]
         },
         "kapitan": {
           "text": "There is a Kapitan over the Chinese of this city. The fortress appointed him eight years ago and pays him nothing, which is how you know they think the arrangement is favourable to them. He settles our disputes, he answers for our conduct, and when a Chinese is accused, it is his door the guard knocks on, not the Ouvidor's. *sets the brush down* You imagine my house is old here. It is not. For fifty years after the conquest almost no junk came down from Fujian at all - the Emperor forbade the sea, and men who sailed anyway were pirates in his eyes and smugglers in everyone else's. Thirteen years ago he permitted it again. Fifty licences a year, out of one port in Zhangzhou. *precisely* Everything you see in this room is thirteen years old and could be taken away by an edict I will not hear about for six months. That is why I am careful. Not temperament. Exposure.",
-          "requires": ["guild"]
+          "requires": [
+            "guild"
+          ]
         },
         "zheng-he": {
           "text": "Admiral Zheng He came here with great fleets from the Ming court. My family remembers those voyages well."
@@ -640,35 +1626,60 @@
         },
         "alternative": {
           "text": "If you cannot pay, there is another path. Forty bolts of my silk sit bonded at the gate while Mesquita invents a fee I will not pay. Convince the Capitão to intervene before she must sail.",
-          "requires": ["seal"],
-          "unlocks": ["side-deal", "silk-consignment"],
-          "availability": { "dayBefore": 4 }
+          "requires": [
+            "seal"
+          ],
+          "unlocks": [
+            "side-deal",
+            "silk-consignment"
+          ],
+          "availability": {
+            "dayBefore": 4
+          }
         },
         "side-deal": {
           "text": "Bring me proof the customs officer will back off, and I will release the seal. Honor for honor. Bring it before the junk clears for Macau on the fourth day, or the trade is worthless to us both.",
-          "requires": ["alternative"],
+          "requires": [
+            "alternative"
+          ],
           "questPath": "diplomatic",
-          "availability": { "dayBefore": 4 }
+          "availability": {
+            "dayBefore": 4
+          }
         },
         "silk-consignment": {
           "text": "Forty bolts of patterned Nanking weave, bonded at the gate under a customs seal, booked onto the junk that clears for Macau on the fourth day. Whether the bolts move or rot, my creditors there are paid on the same date. That is the whole of my impatience, and I would rather you understood it than admired it.",
-          "requires": ["alternative"],
-          "unlocks": ["silk-sample-errand"],
+          "requires": [
+            "alternative"
+          ],
+          "unlocks": [
+            "silk-sample-errand"
+          ],
           "journalEntry": "Chen Wei's silk is not merely stock - it is forty bolts of patterned Nanking weave bonded at the customs gate, booked onto a junk that clears for Macau on the fourth day. His creditors there are paid on that date whether the cargo sails or not. His impatience over the seal is arithmetic, not malice."
         },
         "silk-sample-errand": {
           "text": "Since you are short of coin and long on legs: one bolt out of the forty, wrapped, chopped, marked with the lot number. Carry it up Rua Direita to Rudra Mudaliar. He has bought Nanking weave from this house for twenty years and he buys by the hand, not the eye. If the bolt satisfies him he will advance against the whole lot, and the advance is yours to bring back to me against Gomes's account. I lose nothing either way. That is why I can afford to be generous.",
-          "requires": ["silk-consignment"],
+          "requires": [
+            "silk-consignment"
+          ],
           "givesItem": "chinese-silk",
           "journalEntry": "Chen Wei gave me a sample bolt out of the consigned forty - chopped and marked with the lot number - to carry to Rudra Mudaliar on Rua Direita. If the Tamil merchant advances against the lot, the coin is mine to bring back against Gomes's debt."
         },
         "seal-advance": {
           "text": "*sets down the brush* You have brought me two hundred and fifty cruzados of coin you did not have on the day we met, and you brought it without theft, insult, or a Portuguese soldier at your shoulder. So. I will write the remainder as an advance from this house, and you will sign the undertaking beneath it. Understand what that means: the debt does not shrink. It moves. Gomes stops owing me five hundred cruzados and you begin owing me two hundred and fifty. I have simply exchanged a debtor who weeps for one who works. Do not ask for mercy where a contract will do.",
-          "requires": ["silk-sample-errand"],
+          "requires": [
+            "silk-sample-errand"
+          ],
           "availability": {
             "money": 200,
-            "reputation": { "chinese-merchants": 6 },
-            "worldFlagsNone": ["player-is-thief", "seal-stolen"]
+            "reputation": {
+              "chinese-merchants": 6
+            },
+            "worldFlagsNone": [
+              "player-is-thief",
+              "seal-stolen",
+              "caught-at-counting-house"
+            ]
           },
           "givesMoney": 250,
           "journalEntry": "Chen Wei advanced 250 cruzados from the counting house against my signed undertaking. He was precise about what he had done: the debt has not been forgiven, only moved off Gomes and onto me. I can settle the five hundred now - with his own money, and his own name written beneath mine."
@@ -690,15 +1701,49 @@
         },
         "settled-account": {
           "text": "The entry is struck through and initialled, and Gomes has his wax back. I will tell you what I did not tell him: I never wanted the seal. A seal cannot be sold, only refused, and refusing a man his name is a slow, ugly instrument. I held it because five hundred cruzados held nothing else.",
-          "availability": { "completedQuests": ["merchants-seal"] }
+          "availability": {
+            "completedQuests": [
+              "merchants-seal"
+            ]
+          }
         },
         "after-the-partnership": {
           "text": "We share the risk at three parts to two, and the articles are witnessed by a notary neither of us chose. He will find the discipline hard. A man who has been forgiven once tends to believe he has been forgiven in principle. I will disabuse him gently, in writing, twice a season.",
-          "availability": { "worldFlagsAny": ["gomes-chen-partnership"] }
+          "availability": {
+            "worldFlagsAny": [
+              "gomes-chen-partnership"
+            ]
+          }
         },
         "after-the-inspector": {
           "text": "Mesquita's replacement weighs everything twice and takes nothing, which is its own kind of expensive. Still. I would rather be delayed by an honest fool than released by a thief. Tell the Capitão that, if he ever asks whether it was worth the trouble.",
-          "availability": { "worldFlagsAny": ["inspector-removed"] }
+          "availability": {
+            "worldFlagsAny": [
+              "inspector-removed"
+            ]
+          }
+        },
+        "broken-shutter": {
+          "text": "*continues writing for rather longer than is comfortable* A shutter on the east face was worked at, and the man who worked at it was taken by the fortress watch rather than by mine, which spares us both a conversation. I have had a bar put on it. *sets the brush down* I will say one thing and then we will discuss the account. You came to this house openly once and I wrote that down too, in the same book. Both entries are still there. Neither cancels the other, and I would not insult you by pretending otherwise.",
+          "availability": {
+            "worldFlagsAny": [
+              "theft-attempt-1-failed"
+            ]
+          }
+        },
+        "restitution": {
+          "text": "You want to know whether the account is closed to you. It is not. A debt is a number and a number does not take offence. *precisely* What has changed is the terms. I will still take five hundred cruzados from your hand and I will still put the seal in it. I will no longer write you an advance, because an advance is a bet on a man's habits and I have now watched one of yours. Do not ask for mercy where a contract will do.",
+          "requires": [
+            "broken-shutter"
+          ],
+          "availability": {
+            "worldFlagsAny": [
+              "theft-attempt-1-failed"
+            ],
+            "worldFlagsNone": [
+              "player-known-thief"
+            ]
+          }
         }
       },
       "farewell": "I have other accounts to close.",
@@ -707,12 +1752,38 @@
     "hasItem": "trading-seal",
     "requiresPayment": 500,
     "personality": {
-      "traits": ["patient", "calculating", "proud", "pragmatic"],
+      "traits": [
+        "patient",
+        "calculating",
+        "proud",
+        "pragmatic"
+      ],
       "accent": "Chinese with formal Portuguese phrasing",
       "gesturesFrequent": false
-    }
+    },
+    "beats": [
+      {
+        "at": "08:15",
+        "kind": "social",
+        "duration": 6,
+        "idle": "talk-gesture",
+        "face": {
+          "x": 428,
+          "y": 277
+        }
+      },
+      {
+        "at": "16:00",
+        "kind": "trade",
+        "duration": 10,
+        "idle": "talk-gesture",
+        "face": {
+          "x": 131,
+          "y": 229
+        }
+      }
+    ]
   },
-
   "rashid": {
     "id": "rashid",
     "name": "Rashid",
@@ -721,28 +1792,102 @@
     "description": "A respected Nakhoda (merchant captain) from Oman who commands the ocean-going dhow Al-Rashida. He has navigated the trade winds from Aden to Canton.",
     "culture": "arab",
     "location": "waterfront",
-    "position": { "x": 240, "y": 220 },
+    "position": {
+      "x": 240,
+      "y": 220
+    },
     "schedule": [
+      {
+        "startHour": 4,
+        "endHour": 10,
+        "activity": "Aboard the dhow",
+        "location": "ship",
+        "available": false,
+        "exit": {
+          "door": "gangway",
+          "x": 176,
+          "y": 236,
+          "effect": "plank-creak"
+        },
+        "arriveBy": 4,
+        "onCameraWalk": true
+      },
       {
         "startHour": 10,
         "endHour": 15,
-        "activity": "Working on dhow",
+        "activity": "Mending nets on the quay",
         "location": "waterfront",
-        "available": true
+        "available": true,
+        "station": {
+          "x": 246,
+          "y": 246
+        },
+        "facing": "down",
+        "idle": "mend-net",
+        "enter": {
+          "door": "gangway",
+          "x": 176,
+          "y": 236,
+          "effect": "plank-creak"
+        },
+        "route": [
+          {
+            "x": 211,
+            "y": 239
+          }
+        ],
+        "arriveBy": 10,
+        "onCameraWalk": true
       },
       {
         "startHour": 15,
         "endHour": 22,
-        "activity": "Coffee and storytelling at the docks",
+        "activity": "Coffee and storytelling at the brazier",
         "location": "waterfront",
-        "available": true
+        "available": true,
+        "station": {
+          "x": 237,
+          "y": 311
+        },
+        "facing": "up",
+        "idle": "talk-gesture",
+        "route": [
+          {
+            "x": 240,
+            "y": 272
+          },
+          {
+            "x": 238,
+            "y": 296
+          }
+        ],
+        "arriveBy": 15,
+        "onCameraWalk": true
       },
       {
         "startHour": 22,
-        "endHour": 10,
-        "activity": "Sleeping on dhow",
+        "endHour": 4,
+        "activity": "Sleeping on the dhow",
         "location": "ship",
-        "available": false
+        "available": false,
+        "exit": {
+          "door": "gangway",
+          "x": 176,
+          "y": 236,
+          "effect": "plank-creak"
+        },
+        "route": [
+          {
+            "x": 221,
+            "y": 278
+          },
+          {
+            "x": 196,
+            "y": 250
+          }
+        ],
+        "arriveBy": 22,
+        "onCameraWalk": true
       }
     ],
     "dialogue": {
@@ -751,36 +1896,57 @@
       "greetingVariants": [
         {
           "text": "*does not rise, does not smile* The counting house was opened at night. I have carried cargo out of this harbour for nineteen years on nothing but my name, friend. Sit further along the boards, and we will talk of the weather.",
-          "when": { "worldFlagsAny": ["seal-stolen", "player-is-thief"] }
+          "when": {
+            "worldFlagsAny": [
+              "seal-stolen",
+              "player-is-thief"
+            ]
+          }
         },
         {
           "text": "A Portuguese and a Chinese signing articles together, and neither of them robbed. *spreads hands* I have told it four times today and it improves each time. Sit. You will hear the fifth.",
-          "when": { "worldFlagsAny": ["gomes-chen-partnership"] }
+          "when": {
+            "worldFlagsAny": [
+              "gomes-chen-partnership"
+            ]
+          }
         },
         {
           "text": "Gomes has his wax back and the harbour has stopped enjoying his misery, which is a pity, it was free entertainment. Come, sit. You have earned coffee.",
-          "when": { "worldFlagsAny": ["merchant-seal-settled"] }
+          "when": {
+            "worldFlagsAny": [
+              "merchant-seal-settled"
+            ]
+          }
         }
       ],
       "topics": {
         "seal": {
           "text": "The Portuguese merchant and his seal. *slaps knee once* I saw him arguing with Chen Wei last week - voices up, fingers pointed, something about money and honour. Always money and honour with merchants. I thought they would come to blows, and I was disappointed.",
-          "unlocks": ["witness"]
+          "unlocks": [
+            "witness"
+          ]
         },
         "witness": {
           "text": "I was mending nets when they argued. Gomes red in the face - 'You cannot do this!' - and Chen Wei cold as a well, 'Business is business.' Then Gomes went off up the quay walking too fast for the heat. Next day I hear the seal is missing. *winks* Coincidence, of course.",
-          "requires": ["seal"]
+          "requires": [
+            "seal"
+          ]
         },
         "stories": {
           "text": "Off the coast of Sumatra we fought a pirate junk. Twenty men against fifty! I swear on my mother's grave - we prevailed through cunning, prayer, and a very convenient fog. God guards the faithful and the quick-minded, and that day He was generous with both."
         },
         "travels": {
           "text": "I have seen wonders, my friend. The pearl divers of Bahrain who hold their breath like djinn! The shipyards of Gujarat. The silk markets of Canton, the temples of Ceylon. But Melaka - Melaka is special.",
-          "unlocks": ["why-special"]
+          "unlocks": [
+            "why-special"
+          ]
         },
         "why-special": {
           "text": "Because here, everyone comes. Chinese, Gujarati, Tamil, Portuguese, Malay, Siamese, Japanese, and men from the western ports besides. Where else do you hear ten languages before breakfast! This is the centre of the world, and it does not even know it!",
-          "requires": ["travels"]
+          "requires": [
+            "travels"
+          ]
         },
         "dhow": {
           "text": "My dhow, Al-Rashida - 'The Guided One' - has carried me across the Indian Ocean more times than I can count. Built in Oman, she knows the monsoon winds like a wife knows her husband's moods."
@@ -820,19 +1986,90 @@
         },
         "after-the-seal": {
           "text": "The whole quay watched you carry that business from one end of the harbour to the other, and the quay does not forget who finished a thing. *taps the boards beside him* When you need a hull going west - Aden, Hormuz, anywhere the wind will take her - you come to me first and we will not discuss the price at length.",
-          "availability": { "completedQuests": ["merchants-seal"] }
+          "availability": {
+            "completedQuests": [
+              "merchants-seal"
+            ]
+          }
+        },
+        "night-watch": {
+          "text": "*laughs, then does not* The watch. Yes. He is a boy from Braga who has been in this heat for nine months and hates every plank of this quay, and he walks it exactly as he was told to walk it because he has decided that doing it correctly is the only thing here that belongs to him. *turns the cup* I tell you this so you will not think of him as a lock. He is not a lock. He is somebody's son standing in the dark for eight hours, and whatever you are turning over in your head, you will have to get past him, not around what he is.",
+          "availability": {
+            "worldFlagsAny": [
+              "rashid-trusts-player",
+              "dockside-cover"
+            ]
+          }
         }
       },
       "farewell": "Ma'a salama! May fair winds find you, friend. Come back with more questions - or better, with time to hear the answers.",
       "farewellNight": "Sleep well. Dream of shorelines you have not seen yet. It costs nothing, and it is most of what a sailor owns."
     },
     "personality": {
-      "traits": ["jovial", "boastful", "shrewd", "loyal"],
+      "traits": [
+        "jovial",
+        "boastful",
+        "shrewd",
+        "loyal"
+      ],
       "accent": "Arabic with Malay and Portuguese loanwords",
       "gesturesFrequent": true
-    }
+    },
+    "beats": [
+      {
+        "at": "12:30",
+        "kind": "zuhr",
+        "duration": 10,
+        "idle": "pray-kneel",
+        "station": {
+          "x": 246,
+          "y": 246
+        },
+        "face": {
+          "x": -100,
+          "y": 230
+        }
+      },
+      {
+        "at": "16:00",
+        "kind": "asr",
+        "duration": 8,
+        "idle": "pray-kneel",
+        "station": {
+          "x": 237,
+          "y": 311
+        },
+        "face": {
+          "x": -100,
+          "y": 300
+        }
+      },
+      {
+        "at": "18:45",
+        "kind": "maghrib",
+        "duration": 6,
+        "idle": "pray-kneel",
+        "station": {
+          "x": 237,
+          "y": 311
+        },
+        "face": {
+          "x": -100,
+          "y": 300
+        }
+      },
+      {
+        "at": "19:30",
+        "kind": "social",
+        "duration": 20,
+        "idle": "talk-gesture",
+        "face": {
+          "x": 262,
+          "y": 336
+        }
+      }
+    ]
   },
-
   "siti": {
     "id": "siti",
     "name": "Siti",
@@ -841,15 +2078,122 @@
     "description": "A young Malay woman who has fled to the church on the hill seeking sanctuary. She is scared but dignified, and her story holds the key to exposing a powerful man's cruelty.",
     "culture": "malay",
     "location": "st-pauls-church",
-    "position": { "x": 160, "y": 180 },
+    "position": {
+      "x": 160,
+      "y": 180
+    },
     "portrait": "siti",
     "schedule": [
       {
-        "startHour": 0,
-        "endHour": 24,
-        "activity": "Sheltering in church sanctuary",
+        "startHour": 6,
+        "endHour": 9,
+        "activity": "Drawing water at the churchyard well",
         "location": "st-pauls-church",
-        "available": true
+        "available": true,
+        "station": {
+          "x": 282,
+          "y": 310
+        },
+        "facing": "up",
+        "idle": "draw-water",
+        "arriveBy": 6,
+        "onCameraWalk": true
+      },
+      {
+        "startHour": 9,
+        "endHour": 13,
+        "activity": "Sitting apart at the sailors' cross",
+        "location": "st-pauls-church",
+        "available": true,
+        "station": {
+          "x": 128,
+          "y": 254
+        },
+        "facing": "down",
+        "idle": "idle-breathe",
+        "route": [
+          {
+            "x": 220,
+            "y": 288
+          },
+          {
+            "x": 160,
+            "y": 268
+          }
+        ],
+        "arriveBy": 9,
+        "onCameraWalk": true
+      },
+      {
+        "startHour": 13,
+        "endHour": 17,
+        "activity": "In the shade of the west graves",
+        "location": "st-pauls-church",
+        "available": true,
+        "station": {
+          "x": 48,
+          "y": 236
+        },
+        "facing": "down",
+        "idle": "idle-breathe",
+        "route": [
+          {
+            "x": 92,
+            "y": 244
+          }
+        ],
+        "arriveBy": 13,
+        "onCameraWalk": true
+      },
+      {
+        "startHour": 17,
+        "endHour": 20,
+        "activity": "Helping at the porch",
+        "location": "st-pauls-church",
+        "available": true,
+        "station": {
+          "x": 430,
+          "y": 248
+        },
+        "facing": "left",
+        "idle": "sweep",
+        "route": [
+          {
+            "x": 180,
+            "y": 262
+          },
+          {
+            "x": 300,
+            "y": 276
+          },
+          {
+            "x": 396,
+            "y": 256
+          }
+        ],
+        "arriveBy": 17,
+        "onCameraWalk": true
+      },
+      {
+        "startHour": 20,
+        "endHour": 6,
+        "activity": "Sheltering just inside the porch",
+        "location": "st-pauls-church",
+        "available": true,
+        "station": {
+          "x": 404,
+          "y": 236
+        },
+        "facing": "down",
+        "idle": "idle-breathe",
+        "route": [
+          {
+            "x": 418,
+            "y": 244
+          }
+        ],
+        "arriveBy": 20,
+        "onCameraWalk": true
       }
     ],
     "dialogue": {
@@ -876,12 +2220,56 @@
       "farewellTrusted": "Thank you for listening. It means more than you know. Go safely."
     },
     "personality": {
-      "traits": ["scared", "dignified", "truthful", "hopeful"],
+      "traits": [
+        "scared",
+        "dignified",
+        "truthful",
+        "hopeful"
+      ],
       "accent": "Malay, soft-spoken",
       "gesturesFrequent": false
-    }
+    },
+    "beats": [
+      {
+        "at": "09:30",
+        "kind": "social",
+        "duration": 6,
+        "idle": "talk-gesture",
+        "face": {
+          "x": 440,
+          "y": 250
+        }
+      },
+      {
+        "at": "18:00",
+        "kind": "angelus",
+        "duration": 3,
+        "idle": "idle-breathe",
+        "face": {
+          "x": 384,
+          "y": 200
+        }
+      }
+    ],
+    "scheduleConditional": [
+      {
+        "when": {
+          "worldFlagsAny": [
+            "alvares-searching",
+            "alvares-men-on-the-hill"
+          ]
+        },
+        "override": {
+          "station": {
+            "x": 48,
+            "y": 236
+          },
+          "idle": "idle-breathe",
+          "facing": "down"
+        }
+      }
+    ]
   },
-
   "alvares": {
     "id": "alvares",
     "name": "Senhor Alvares",
@@ -890,29 +2278,153 @@
     "description": "A wealthy and arrogant Portuguese tin merchant who exploits local miners. His respectable facade hides a cruel nature.",
     "culture": "portuguese",
     "location": "rua-direita",
-    "position": { "x": 200, "y": 200 },
+    "position": {
+      "x": 200,
+      "y": 200
+    },
     "portrait": "alvares",
     "schedule": [
       {
         "startHour": 8,
-        "endHour": 18,
-        "activity": "Conducting business at market",
+        "endHour": 12,
+        "activity": "Weighing tin at the bonded shed",
         "location": "rua-direita",
-        "available": true
+        "available": true,
+        "station": {
+          "x": 440,
+          "y": 221
+        },
+        "facing": "down",
+        "idle": "weigh",
+        "enter": {
+          "door": "alley-door",
+          "x": 266,
+          "y": 133,
+          "effect": "door-creak"
+        },
+        "route": [
+          {
+            "x": 320,
+            "y": 166
+          },
+          {
+            "x": 400,
+            "y": 200
+          }
+        ],
+        "arriveBy": 8,
+        "onCameraWalk": true
+      },
+      {
+        "startHour": 12,
+        "endHour": 13,
+        "activity": "Checking the near crate stacks",
+        "location": "rua-direita",
+        "available": true,
+        "station": {
+          "x": 224,
+          "y": 304
+        },
+        "facing": "left",
+        "idle": "tally",
+        "route": [
+          {
+            "x": 380,
+            "y": 252
+          },
+          {
+            "x": 300,
+            "y": 288
+          }
+        ],
+        "arriveBy": 12,
+        "onCameraWalk": true
+      },
+      {
+        "startHour": 13,
+        "endHour": 15,
+        "activity": "Dining at the tavern",
+        "location": "rua-direita",
+        "available": false,
+        "exit": {
+          "door": "tavern",
+          "x": 404,
+          "y": 163,
+          "effect": "door-creak"
+        },
+        "route": [
+          {
+            "x": 320,
+            "y": 262
+          },
+          {
+            "x": 389,
+            "y": 200
+          }
+        ],
+        "arriveBy": 13,
+        "onCameraWalk": true
+      },
+      {
+        "startHour": 15,
+        "endHour": 18,
+        "activity": "Weighing tin at the bonded shed",
+        "location": "rua-direita",
+        "available": true,
+        "station": {
+          "x": 440,
+          "y": 221
+        },
+        "facing": "down",
+        "idle": "weigh",
+        "enter": {
+          "door": "tavern",
+          "x": 404,
+          "y": 163,
+          "effect": "door-creak"
+        },
+        "arriveBy": 15,
+        "onCameraWalk": true
       },
       {
         "startHour": 18,
         "endHour": 22,
-        "activity": "Dining at tavern",
+        "activity": "Dining at the tavern",
         "location": "rua-direita",
-        "available": true
+        "available": true,
+        "station": {
+          "x": 400,
+          "y": 186
+        },
+        "facing": "left",
+        "idle": "read",
+        "arriveBy": 18,
+        "onCameraWalk": true
       },
       {
         "startHour": 22,
         "endHour": 8,
-        "activity": "At residence",
+        "activity": "At his residence",
         "location": "home",
-        "available": false
+        "available": false,
+        "exit": {
+          "door": "alley-door",
+          "x": 266,
+          "y": 133,
+          "effect": "door-creak"
+        },
+        "route": [
+          {
+            "x": 338,
+            "y": 170
+          },
+          {
+            "x": 290,
+            "y": 148
+          }
+        ],
+        "arriveBy": 22,
+        "onCameraWalk": true
       }
     ],
     "dialogue": {
@@ -939,29 +2451,60 @@
         },
         "warehouse-work": {
           "text": "You want work. Everyone standing in my doorway wants work. *does not look up* Sixty bahar of Perak tin comes off the lighters this week and every ingot must be weighed, marked, entered and witnessed before it goes under bond. My last tally-man could not hold a column straight past noon. If you can, say so plainly and stop wasting the light.",
-          "unlocks": ["tally-contract"]
+          "unlocks": [
+            "tally-contract"
+          ]
         },
         "tally-contract": {
           "text": "Forty cruzados, the whole contract, paid at the signing because I do not haggle twice. In return: every ingot weighed against the book, every sheet initialled, and if shed and book disagree at the end the difference comes out of your forty before it comes out of mine. *counts the coin out in stacks of ten, squares them, pushes them across* There. You will hear it said in the street that I am hard with the men who work for me. I pay the day I promise, to the coin, and no man who has taken my money has gone hungry for taking it. Those who complain mistake discipline for injustice.",
-          "requires": ["warehouse-work"],
+          "requires": [
+            "warehouse-work"
+          ],
           "givesMoney": 40,
           "journalEntry": "Alvares paid 40 cruzados at the signing for a tally contract - sixty bahar of Perak tin weighed, marked and witnessed into the bonded shed, with any shortfall coming out of my fee first. He was exact about the money and exact about the terms. He was also, in his way, proud of both."
         },
         "servant-girl": {
           "text": "A girl of mine ran to the priests on the hill and they took her in like a stray cat. *finally looks up* She will say I was cruel. They always say cruelty. What she means is that I required of her precisely what I required of everyone, and she found she had no aptitude for being required of. *returns to the manifest* She is entered in my household book at eleven cruzados. I do not raise my voice about eleven cruzados. But the book is the book, and the priests may keep her exactly as long as it amuses them to argue with a book.",
-          "availability": { "talkedTo": ["siti"] }
+          "availability": {
+            "talkedTo": [
+              "siti"
+            ]
+          }
         }
       },
       "farewell": "Move along. Tin does not smelt itself.",
       "farewellBusiness": "Return when you can speak in numbers, not feelings."
     },
     "personality": {
-      "traits": ["arrogant", "shrewd", "cruel", "ambitious"],
+      "traits": [
+        "arrogant",
+        "shrewd",
+        "cruel",
+        "ambitious"
+      ],
       "accent": "Portuguese, clipped and dismissive",
       "gesturesFrequent": false
-    }
+    },
+    "beats": [
+      {
+        "at": "12:00",
+        "kind": "angelus",
+        "duration": 3,
+        "idle": "weigh",
+        "face": null
+      },
+      {
+        "at": "17:00",
+        "kind": "labour",
+        "duration": 15,
+        "idle": "tally",
+        "station": {
+          "x": 390,
+          "y": 252
+        }
+      }
+    ]
   },
-
   "mak-enang": {
     "id": "mak-enang",
     "name": "Mak Enang",
@@ -970,22 +2513,149 @@
     "description": "An elderly Malay healer who tends to the kampung's sick with traditional herbal remedies. She is wise, sharp-tongued, and deeply respected by the community.",
     "culture": "malay",
     "location": "kampung",
-    "position": { "x": 600, "y": 320 },
+    "position": {
+      "x": 600,
+      "y": 320
+    },
     "portrait": "mak-enang",
     "schedule": [
       {
         "startHour": 6,
-        "endHour": 20,
-        "activity": "Tending herbs and treating patients",
+        "endHour": 9,
+        "activity": "Turning the drying herbs",
         "location": "kampung",
-        "available": true
+        "available": true,
+        "station": {
+          "x": 138,
+          "y": 220
+        },
+        "facing": "up",
+        "idle": "haul",
+        "enter": {
+          "door": "mak-enang-house",
+          "x": 88,
+          "y": 196,
+          "effect": "curtain"
+        },
+        "route": [
+          {
+            "x": 112,
+            "y": 210
+          }
+        ],
+        "arriveBy": 6,
+        "onCameraWalk": true
+      },
+      {
+        "startHour": 9,
+        "endHour": 13,
+        "activity": "Treating patients under the rain tree",
+        "location": "kampung",
+        "available": true,
+        "station": {
+          "x": 294,
+          "y": 234
+        },
+        "facing": "down",
+        "idle": "grind",
+        "route": [
+          {
+            "x": 190,
+            "y": 236
+          },
+          {
+            "x": 249,
+            "y": 237
+          }
+        ],
+        "arriveBy": 9,
+        "onCameraWalk": true
+      },
+      {
+        "startHour": 13,
+        "endHour": 15,
+        "activity": "Out of the heat under the rain tree",
+        "location": "kampung",
+        "available": true,
+        "station": {
+          "x": 294,
+          "y": 234
+        },
+        "facing": "down",
+        "idle": "fan",
+        "arriveBy": 13,
+        "onCameraWalk": true
+      },
+      {
+        "startHour": 15,
+        "endHour": 18,
+        "activity": "Mixing remedies at the pots",
+        "location": "kampung",
+        "available": true,
+        "station": {
+          "x": 106,
+          "y": 230
+        },
+        "facing": "down",
+        "idle": "grind",
+        "route": [
+          {
+            "x": 220,
+            "y": 240
+          },
+          {
+            "x": 150,
+            "y": 232
+          }
+        ],
+        "arriveBy": 15,
+        "onCameraWalk": true
+      },
+      {
+        "startHour": 18,
+        "endHour": 20,
+        "activity": "Tending the evening cooking fire",
+        "location": "kampung",
+        "available": true,
+        "station": {
+          "x": 186,
+          "y": 258
+        },
+        "facing": "down",
+        "idle": "stir-pot",
+        "route": [
+          {
+            "x": 150,
+            "y": 244
+          }
+        ],
+        "arriveBy": 18,
+        "onCameraWalk": true
       },
       {
         "startHour": 20,
         "endHour": 6,
         "activity": "Resting at home",
         "location": "home",
-        "available": false
+        "available": false,
+        "exit": {
+          "door": "mak-enang-house",
+          "x": 88,
+          "y": 196,
+          "effect": "curtain"
+        },
+        "route": [
+          {
+            "x": 140,
+            "y": 230
+          },
+          {
+            "x": 103,
+            "y": 207
+          }
+        ],
+        "arriveBy": 20,
+        "onCameraWalk": true
       }
     ],
     "dialogue": {
@@ -994,11 +2664,15 @@
       "topics": {
         "herbs": {
           "text": "The Portuguese call our remedies superstition, until their own doctors fail. Then they come quietly at night for my tea. *chuckles* I charge them double.",
-          "unlocks": ["healing"]
+          "unlocks": [
+            "healing"
+          ]
         },
         "healing": {
           "text": "Every plant in the jungle has a purpose. Tongkat ali for strength, kacip fatimah for women's troubles, misai kucing for the kidneys. My grandmother taught me, and hers before. This knowledge is older than any fortress.",
-          "requires": ["herbs"]
+          "requires": [
+            "herbs"
+          ]
         },
         "kampung": {
           "text": "The kampung survives because we share what we have. Rice, fish, medicine, stories. No fortress wall protects us — we protect each other. The Portuguese do not understand this. They think walls make safety."
@@ -1008,11 +2682,15 @@
         },
         "melaka": {
           "text": "I remember when the old Sultan's flag still flew. I was a girl then. The Portuguese came with their cannons and their God. We bent like bamboo in the wind — we did not break. Bamboo outlasts the storm.",
-          "unlocks": ["conquest"]
+          "unlocks": [
+            "conquest"
+          ]
         },
         "conquest": {
           "text": "*does not stop grinding* They tell it in the fortress that we opened the gates. I was small when it happened and my grandmother was a woman grown, and she was here. There were no gates opened. They came over the bridge twice, and the second time they stayed, and it took them the better part of a month and a great many of their own dead. *sets the pestle down* But it is a better story their way. Their way, they won because we were faithless, and if we were faithless then losing was our own doing and nobody up there need think about it again. Every conqueror tells that story, child. Ask a Javanese about the Malays sometime. We tell it too.",
-          "requires": ["melaka"]
+          "requires": [
+            "melaka"
+          ]
         },
         "portuguese": {
           "text": "Some are kind, some are cruel — like any people. The priest on the hill, he has a good heart even if his God confuses him. But the merchants? They see us as tools, not people. Tools wear out and are thrown away."
@@ -1022,12 +2700,42 @@
       "farewellEvening": "The jungle spirits walk at night. Stay on the path, child."
     },
     "personality": {
-      "traits": ["wise", "sharp-tongued", "nurturing", "resilient"],
+      "traits": [
+        "wise",
+        "sharp-tongued",
+        "nurturing",
+        "resilient"
+      ],
       "accent": "Malay, elderly and deliberate",
       "gesturesFrequent": false
-    }
+    },
+    "beats": [
+      {
+        "at": "18:45",
+        "kind": "maghrib",
+        "duration": 6,
+        "idle": "pray-kneel",
+        "station": {
+          "x": 106,
+          "y": 230
+        },
+        "face": {
+          "x": -100,
+          "y": 220
+        }
+      },
+      {
+        "at": "11:00",
+        "kind": "social",
+        "duration": 10,
+        "idle": "talk-gesture",
+        "face": {
+          "x": 348,
+          "y": 268
+        }
+      }
+    ]
   },
-
   "gaspar-mesquita": {
     "id": "gaspar-mesquita",
     "name": "Gaspar Mesquita",
@@ -1036,35 +2744,100 @@
     "description": "A polished Portuguese customs inspector at A Famosa who speaks of order, paperwork, and balance while skimming Melaka's duties whenever he can.",
     "culture": "portuguese",
     "location": "a-famosa-gate",
-    "position": { "x": 220, "y": 180 },
+    "position": {
+      "x": 220,
+      "y": 180
+    },
     "schedule": [
       {
         "startHour": 6,
         "endHour": 12,
         "activity": "Inspecting cargo at the gate",
         "location": "a-famosa-gate",
-        "available": true
+        "available": true,
+        "station": {
+          "x": 458,
+          "y": 253
+        },
+        "facing": "left",
+        "idle": "tally",
+        "enter": {
+          "door": "customs-house",
+          "x": 548,
+          "y": 296,
+          "effect": "door-creak"
+        },
+        "route": [
+          {
+            "x": 500,
+            "y": 272
+          }
+        ],
+        "arriveBy": 6,
+        "onCameraWalk": true
       },
       {
         "startHour": 12,
         "endHour": 15,
-        "activity": "Reviewing papers in the customs room",
+        "activity": "Reviewing papers at the pelourinho table",
         "location": "a-famosa-gate",
-        "available": true
+        "available": true,
+        "station": {
+          "x": 400,
+          "y": 276
+        },
+        "facing": "down",
+        "idle": "read",
+        "route": [
+          {
+            "x": 430,
+            "y": 264
+          }
+        ],
+        "arriveBy": 12,
+        "onCameraWalk": true
       },
       {
         "startHour": 15,
         "endHour": 21,
-        "activity": "Counting fees and favors",
+        "activity": "Counting fees at the gate",
         "location": "a-famosa-gate",
-        "available": true
+        "available": true,
+        "station": {
+          "x": 470,
+          "y": 262
+        },
+        "facing": "left",
+        "idle": "weigh",
+        "route": [
+          {
+            "x": 440,
+            "y": 268
+          }
+        ],
+        "arriveBy": 15,
+        "onCameraWalk": true
       },
       {
         "startHour": 21,
         "endHour": 6,
         "activity": "Locked away with the records",
         "location": "office",
-        "available": false
+        "available": false,
+        "exit": {
+          "door": "customs-house",
+          "x": 548,
+          "y": 296,
+          "effect": "door-iron"
+        },
+        "route": [
+          {
+            "x": 510,
+            "y": 278
+          }
+        ],
+        "arriveBy": 21,
+        "onCameraWalk": true
       }
     ],
     "dialogue": {
@@ -1073,7 +2846,11 @@
         {
           "text": "The whole city suddenly cares about arithmetic. Curious, considering how few of you cared when the books were balanced by my hand.",
           "when": {
-            "worldFlagsAny": ["customs-books-opened", "gaspar-under-watch", "gaspar-exposed"]
+            "worldFlagsAny": [
+              "customs-books-opened",
+              "gaspar-under-watch",
+              "gaspar-exposed"
+            ]
           }
         }
       ],
@@ -1083,45 +2860,86 @@
         },
         "customs": {
           "text": "Customs is not theft. It is the discipline that keeps Melaka profitable for the Crown and predictable for merchants who know how to behave.",
-          "unlocks": ["fees", "service-gate"]
+          "unlocks": [
+            "fees",
+            "service-gate"
+          ]
         },
         "fees": {
           "text": "Every cargo begs to be treated as exceptional. Fees exist to remind merchants that the gate decides what counts as urgent, lawful, or costly.",
-          "requires": ["customs"]
+          "requires": [
+            "customs"
+          ]
         },
         "service-gate": {
           "text": "The service gate is for bonded carts, sealed papers, and people with enough standing to be trusted out of sight of the main queue.",
-          "requires": ["customs"]
+          "requires": [
+            "customs"
+          ]
         },
         "melaka": {
           "text": "Melaka is a city of cargo disguised as prayer, diplomacy, and rumor. If you want the truth of it, read the ledgers rather than the sermons."
         },
         "silk-detention": {
           "text": "The Chinese silk. Yes. Forty bolts, bonded, detained pending clarification of the declared value - the manifest says one figure and the quality says another, and until that is reconciled the bolts stay under seal. *adjusts a page a quarter-inch* I am aware a junk clears for Macau on the fourth day. I did not schedule the junk. If Senhor Chen finds the timing inconvenient he might reflect that the inconvenience is entirely within his own power to resolve, and has been since Monday.",
-          "requires": ["customs"],
-          "availability": { "dayBefore": 4 }
+          "requires": [
+            "customs"
+          ],
+          "availability": {
+            "dayBefore": 4
+          }
         },
         "gratuities": {
           "text": "*sets the pen down with great care* Let us use the correct word, since you have chosen the wrong one. There is no bribe at this gate. There are gratuities, which are voluntary; there are expediting fees, which are recorded; and there are donations to fortress maintenance, for which a receipt is issued - I issue them myself, in my own hand, which no thief would do. Every one of those is written somewhere. *thinly* A man who intended theft would be considerably less generous with paper.",
-          "requires": ["fees"]
+          "requires": [
+            "fees"
+          ]
         },
         "himself": {
           "text": "I came out on the Goa carrack the year of the great fever with a clerk's warrant and forty cruzados. Eleven years. Two men senior to me are dead, one is in Cochin, and the fourth is a fidalgo's son who signs what I place before him. *precisely* I have never once been reprimanded. Whatever else is said of me in the street - and I know what is said, the street is not subtle - not one page of mine has ever failed an audit."
         },
         "self-protection": {
           "text": "If a complaint reaches the Capitão, he will find every duty entered, every exemption countersigned, and every receipt in the hand of the man who paid it. That is not innocence. That is method, which is a great deal more durable. Innocent men are ruined weekly in this city. Methodical ones are promoted.",
-          "requires": ["ledger"]
+          "requires": [
+            "ledger"
+          ]
         }
       },
       "farewell": "Come back with paper, proof, or payment. Idle curiosity wastes my hour."
     },
     "personality": {
-      "traits": ["self-satisfied", "careful", "bureaucratic", "evasively polite"],
+      "traits": [
+        "self-satisfied",
+        "careful",
+        "bureaucratic",
+        "evasively polite"
+      ],
       "accent": "Portuguese legal",
       "gesturesFrequent": false
-    }
+    },
+    "beats": [
+      {
+        "at": "12:00",
+        "kind": "angelus",
+        "duration": 1,
+        "idle": "pray-standing",
+        "face": {
+          "x": 320,
+          "y": 160
+        }
+      },
+      {
+        "at": "11:00",
+        "kind": "social",
+        "duration": 20,
+        "idle": "read",
+        "face": {
+          "x": 500,
+          "y": 268
+        }
+      }
+    ]
   },
-
   "diogo-almeida": {
     "id": "diogo-almeida",
     "name": "Diogo Almeida",
@@ -1130,35 +2948,177 @@
     "description": "A nimble Rua Direita notary runner who carries petitions, copies, and whispers between merchants, customs clerks, and the fortress gate.",
     "culture": "portuguese",
     "location": "rua-direita",
-    "position": { "x": 260, "y": 200 },
+    "position": {
+      "x": 260,
+      "y": 200
+    },
     "schedule": [
       {
         "startHour": 7,
-        "endHour": 11,
-        "activity": "Running papers on Rua Direita",
+        "endHour": 9,
+        "activity": "Running papers at the west end of Rua Direita",
         "location": "rua-direita",
-        "available": true
+        "available": true,
+        "station": {
+          "x": 8,
+          "y": 284
+        },
+        "facing": "right",
+        "idle": "read",
+        "arriveBy": 7,
+        "onCameraWalk": true
+      },
+      {
+        "startHour": 9,
+        "endHour": 10,
+        "activity": "Delivering a sealed copy to the warehouse",
+        "location": "rua-direita",
+        "available": true,
+        "station": {
+          "x": 200,
+          "y": 190
+        },
+        "facing": "up",
+        "idle": "read",
+        "route": [
+          {
+            "x": 64,
+            "y": 272
+          },
+          {
+            "x": 145,
+            "y": 258
+          },
+          {
+            "x": 180,
+            "y": 214
+          }
+        ],
+        "arriveBy": 9,
+        "onCameraWalk": true
+      },
+      {
+        "startHour": 10,
+        "endHour": 11,
+        "activity": "Carrying petitions to the tavern arcade",
+        "location": "rua-direita",
+        "available": true,
+        "station": {
+          "x": 400,
+          "y": 186
+        },
+        "facing": "right",
+        "idle": "read",
+        "route": [
+          {
+            "x": 260,
+            "y": 204
+          },
+          {
+            "x": 340,
+            "y": 194
+          }
+        ],
+        "arriveBy": 10,
+        "onCameraWalk": true
       },
       {
         "startHour": 11,
         "endHour": 14,
-        "activity": "Copying manifests near the customs alcove",
-        "location": "rua-direita",
-        "available": true
+        "activity": "Copying manifests at the customs gate",
+        "location": "a-famosa-gate",
+        "available": true,
+        "station": {
+          "x": 500,
+          "y": 268
+        },
+        "facing": "left",
+        "idle": "tally",
+        "exitFrom": {
+          "location": "rua-direita",
+          "door": "west-lane",
+          "x": 8,
+          "y": 250,
+          "effect": "none"
+        },
+        "enter": {
+          "door": "east-lane",
+          "x": 600,
+          "y": 305,
+          "effect": "none"
+        },
+        "route": [
+          {
+            "x": 560,
+            "y": 288
+          },
+          {
+            "x": 519,
+            "y": 275
+          }
+        ],
+        "arriveBy": 11,
+        "onCameraWalk": false
       },
       {
         "startHour": 14,
         "endHour": 19,
-        "activity": "Returning sealed copies to clients",
+        "activity": "Returning sealed copies along Rua Direita",
         "location": "rua-direita",
-        "available": true
+        "available": true,
+        "station": {
+          "x": 300,
+          "y": 252
+        },
+        "facing": "down",
+        "idle": "read",
+        "enter": {
+          "door": "west-lane",
+          "x": 8,
+          "y": 250,
+          "effect": "none"
+        },
+        "route": [
+          {
+            "x": 80,
+            "y": 262
+          },
+          {
+            "x": 180,
+            "y": 256
+          },
+          {
+            "x": 250,
+            "y": 254
+          }
+        ],
+        "arriveBy": 14,
+        "onCameraWalk": false
       },
       {
         "startHour": 19,
         "endHour": 7,
         "activity": "Sorting notes at home",
         "location": "home",
-        "available": false
+        "available": false,
+        "exit": {
+          "door": "alley-door",
+          "x": 266,
+          "y": 133,
+          "effect": "door-creak"
+        },
+        "route": [
+          {
+            "x": 286,
+            "y": 210
+          },
+          {
+            "x": 272,
+            "y": 160
+          }
+        ],
+        "arriveBy": 19,
+        "onCameraWalk": true
       }
     ],
     "dialogue": {
@@ -1168,34 +3128,51 @@
       "topics": {
         "ledger": {
           "text": "The gate books and quay tallies no longer agree. That is not carelessness. That is profit wearing official handwriting.",
-          "unlocks": ["books", "gaspar", "petitions"]
+          "unlocks": [
+            "books",
+            "gaspar",
+            "petitions"
+          ]
         },
         "books": {
           "text": "I copy manifests for men who assume a runner sees nothing. The trick is not seeing more. The trick is remembering it later.",
-          "requires": ["ledger"]
+          "requires": [
+            "ledger"
+          ]
         },
         "gaspar": {
           "text": "Gaspar Mesquita smiles like a clerk and thinks like a customs trap. If his figures drift, they drift in a direction that profits him.",
-          "requires": ["ledger"]
+          "requires": [
+            "ledger"
+          ]
         },
         "petitions": {
           "text": "Rua Direita lives on petitions, copies, waivers, and discreet corrections. Every merchant swears his cargo deserves an exception.",
-          "requires": ["ledger"]
+          "requires": [
+            "ledger"
+          ]
         },
         "waterfront": {
           "text": "The waterfront keeps the real tempo of the city. If the gate lies, the quay usually remembers."
         },
         "ambition": {
           "text": "Notary. Licensed, with a seal of my own and a table under a roof. *quickly* It is not impossible - Sousa began as a runner and he sits in the Casa now. Four more years of copying, then the examination, then a petition to the Ouvidor, and a man must be found to speak for me. That is the difficulty. The copying I can do. Being spoken for is the part you cannot practise.",
-          "unlocks": ["risk", "handwriting"]
+          "unlocks": [
+            "risk",
+            "handwriting"
+          ]
         },
         "risk": {
           "text": "*glances past you down the arcade, then back* Understand my position. I am not a merchant with a house behind him. I am a runner with a satchel. If the wrong page is traced to my hand I do not lose a case - I lose the trade, and there is no second trade for a man of my name. So yes, I copy what I am given and I remember what I copy, and I have told you rather more than is prudent already. *steadier* But I am still telling you. Take that for what it is worth.",
-          "requires": ["ambition"]
+          "requires": [
+            "ambition"
+          ]
         },
         "handwriting": {
           "text": "You learn hands the way a fisherman learns boats. Senhor Mesquita writes a fine upright secretary hand, very even - except in the fee column, where the letters lean. Always the fee column, always the same lean, as though the pen were being hurried past something. *shrugs* It proves nothing. I have simply noticed it eleven times, and eleven is no longer a coincidence, it is a habit.",
-          "requires": ["ambition"]
+          "requires": [
+            "ambition"
+          ]
         },
         "melaka": {
           "text": "I was born on this street. My mother still lets rooms above the cooper's. Men come off the carracks talking of Lisbon as though this were a waiting room they must endure before their real lives resume - and they are gone in three years, or dead in two. *evenly* I am not waiting for anything. This is the city. I intend to be somebody in it."
@@ -1206,12 +3183,38 @@
     "questGiver": true,
     "questId": "customs-ledger",
     "personality": {
-      "traits": ["quick", "observant", "wry", "cautious"],
+      "traits": [
+        "quick",
+        "observant",
+        "wry",
+        "cautious"
+      ],
       "accent": "Portuguese clerical",
       "gesturesFrequent": true
-    }
+    },
+    "beats": [
+      {
+        "at": "11:00",
+        "kind": "social",
+        "duration": 20,
+        "idle": "tally",
+        "face": {
+          "x": 458,
+          "y": 253
+        }
+      },
+      {
+        "at": "16:30",
+        "kind": "social",
+        "duration": 8,
+        "idle": "talk-gesture",
+        "face": {
+          "x": 104,
+          "y": 236
+        }
+      }
+    ]
   },
-
   "lin-mei": {
     "id": "lin-mei",
     "name": "Lin Mei",
@@ -1220,35 +3223,157 @@
     "description": "A precise Chinese clerk at the waterfront who tallies manifests, receipts, and delays with calm patience and an eye for inconsistencies.",
     "culture": "chinese",
     "location": "waterfront",
-    "position": { "x": 230, "y": 170 },
+    "position": {
+      "x": 230,
+      "y": 170
+    },
     "schedule": [
       {
         "startHour": 7,
         "endHour": 12,
-        "activity": "Tallying cargo manifests",
+        "activity": "Tallying manifests at the dock board",
         "location": "waterfront",
-        "available": true
+        "available": true,
+        "station": {
+          "x": 274,
+          "y": 250
+        },
+        "facing": "up",
+        "idle": "abacus",
+        "enter": {
+          "door": "counting-house",
+          "x": 570,
+          "y": 262,
+          "effect": "shutter"
+        },
+        "route": [
+          {
+            "x": 470,
+            "y": 272
+          },
+          {
+            "x": 354,
+            "y": 282
+          },
+          {
+            "x": 300,
+            "y": 256
+          }
+        ],
+        "arriveBy": 7,
+        "onCameraWalk": true
       },
       {
         "startHour": 12,
         "endHour": 14,
         "activity": "Tea and account review",
         "location": "waterfront",
-        "available": false
+        "available": false,
+        "exit": {
+          "door": "counting-house",
+          "x": 570,
+          "y": 262,
+          "effect": "shutter"
+        },
+        "route": [
+          {
+            "x": 354,
+            "y": 282
+          },
+          {
+            "x": 488,
+            "y": 266
+          }
+        ],
+        "arriveBy": 12,
+        "onCameraWalk": true
       },
       {
         "startHour": 14,
-        "endHour": 18,
-        "activity": "Recording dockside deliveries",
+        "endHour": 16,
+        "activity": "Recording deliveries at the pepper godown",
         "location": "waterfront",
-        "available": true
+        "available": true,
+        "station": {
+          "x": 364,
+          "y": 287
+        },
+        "facing": "up",
+        "idle": "tally",
+        "enter": {
+          "door": "counting-house",
+          "x": 570,
+          "y": 262,
+          "effect": "shutter"
+        },
+        "route": [
+          {
+            "x": 484,
+            "y": 286
+          },
+          {
+            "x": 420,
+            "y": 292
+          }
+        ],
+        "arriveBy": 14,
+        "onCameraWalk": true
+      },
+      {
+        "startHour": 16,
+        "endHour": 18,
+        "activity": "Recording deliveries at the tin godown",
+        "location": "waterfront",
+        "available": true,
+        "station": {
+          "x": 501,
+          "y": 295
+        },
+        "facing": "up",
+        "idle": "tally",
+        "route": [
+          {
+            "x": 432,
+            "y": 300
+          },
+          {
+            "x": 470,
+            "y": 296
+          }
+        ],
+        "arriveBy": 16,
+        "onCameraWalk": true
       },
       {
         "startHour": 18,
         "endHour": 7,
         "activity": "Family supper and ledger work",
         "location": "elsewhere",
-        "available": false
+        "available": false,
+        "station": {
+          "x": 560,
+          "y": 262
+        },
+        "facing": "up",
+        "idle": "tally",
+        "exit": {
+          "door": "counting-house",
+          "x": 570,
+          "y": 262,
+          "effect": "shutter"
+        },
+        "route": [
+          {
+            "x": 531,
+            "y": 271
+          },
+          {
+            "x": 552,
+            "y": 268
+          }
+        ],
+        "arriveBy": 18,
+        "onCameraWalk": true
       }
     ],
     "dialogue": {
@@ -1257,59 +3382,122 @@
         {
           "text": "So. The partnership is real after all. Gomes and Chen Wei are both speaking more carefully these days, which I approve of.",
           "when": {
-            "worldFlagsAny": ["gomes-chen-partnership", "merchant-seal-settled"]
+            "worldFlagsAny": [
+              "gomes-chen-partnership",
+              "merchant-seal-settled"
+            ]
+          }
+        },
+        {
+          "text": "*does not look up, does not stop* I locked that door at six as I lock it every day at six, and I have been asked four times this week whether I am certain. I am certain. I am certain because it is the two hundred and eleventh time this year and I have written each one down. *now she looks up* If you have figures for me, give them to me. If you have anything else, give it to Master Chen.",
+          "when": {
+            "worldFlagsAny": [
+              "seal-stolen",
+              "player-is-thief",
+              "theft-attempt-1-failed"
+            ]
           }
         }
       ],
       "topics": {
         "manifest": {
           "text": "Cargo is honest when it appears the same in every ledger. Here, it prefers to be counted twice and explained three times.",
-          "unlocks": ["chen-wei", "customs", "quay"]
+          "unlocks": [
+            "chen-wei",
+            "customs",
+            "quay"
+          ]
         },
         "chen-wei": {
           "text": "Master Chen trusts balance, not promises. That is why his books survive arguments that would ruin other houses.",
-          "requires": ["manifest"]
+          "requires": [
+            "manifest"
+          ]
         },
         "customs": {
           "text": "The gate likes to believe it controls trade. Usually it controls delay. Merchants still do the harder work of moving the city.",
-          "requires": ["manifest"]
+          "requires": [
+            "manifest"
+          ]
         },
         "quay": {
           "text": "At the quay, errors have hands, faces, and witnesses. In the office, errors become policy.",
-          "requires": ["manifest"]
+          "requires": [
+            "manifest"
+          ]
         },
         "rumors": {
           "text": "Pirate rumors, customs rumors, shortage rumors. The waterfront sells all three before breakfast."
         },
         "short-tally": {
           "text": "*weighs it, notes the weight, does not comment on the damp* One bahar. Fifty-five cruzados. *counts it out* Before you decide you bargain well: you do not. The Banten manifest is one bahar short and has been since Tuesday, and the difference between paying you over the price and explaining a shortfall to the harbour master is roughly fifty-five cruzados. I am not buying pepper. I am buying an afternoon in which nobody asks me a question I have already answered twice. Whoever told you to bring it here at month's end knows this house better than the men who work in it.",
-          "availability": { "itemsAll": ["pepper-pouch"] },
+          "availability": {
+            "itemsAll": [
+              "pepper-pouch"
+            ]
+          },
           "takesItem": "pepper-pouch",
           "givesMoney": 55,
           "journalEntry": "Lin Mei paid 55 cruzados for the bahar of damp pepper without once mentioning the damp. The Banten manifest was short by exactly that weight; she was buying an afternoon free of questions, not pepper. Aminah's read of the counting house was precise."
         },
         "silk-clock": {
           "text": "Forty bolts, bonded at the gate, booked onto the junk that clears for Macau on the fourth day. The junk does not wait; the wind does not negotiate; Macau expects payment on the date whether the cargo moves or not. So there is a clock in this room, and Master Chen listens to it while men talk to him about honour.",
-          "requires": ["manifest"]
+          "requires": [
+            "manifest"
+          ]
         },
         "figures": {
           "text": "My grandfather taught me on an abacus with one bead worn smooth. He said a number never lies but is very easily made to keep quiet - leave a column out, round a weight down, enter a date one day early. So I read for silences now, not errors. An error is a man being tired. A silence is a man being careful.",
-          "unlocks": ["herself"]
+          "unlocks": [
+            "herself"
+          ]
         },
         "herself": {
           "text": "Whether I mind sitting in a back room with a brush while ships come and go? *does not look up* I have never been on a ship and I have counted the cargo of four hundred of them. I know what Pegu sends in a dry year and what Banten sends in a wet one. I know which captains lose weight between the quay and the shed and by how much. Master Chen goes out to meet the traders. He is very good at it. He is good at it because he already knows the answer before he asks, and he knows the answer because I wrote it down.",
-          "requires": ["figures"]
+          "requires": [
+            "figures"
+          ]
         }
       },
       "farewell": "Bring me figures that disagree. Those are the only ones worth my time."
     },
     "personality": {
-      "traits": ["precise", "patient", "discerning", "dry"],
+      "traits": [
+        "precise",
+        "patient",
+        "discerning",
+        "dry"
+      ],
       "accent": "Chinese with formal Melaka trade phrasing",
       "gesturesFrequent": false
-    }
+    },
+    "beats": [
+      {
+        "at": "08:15",
+        "kind": "social",
+        "duration": 6,
+        "idle": "abacus",
+        "face": {
+          "x": 547,
+          "y": 251
+        }
+      },
+      {
+        "at": "18:00",
+        "kind": "lock-up",
+        "duration": 4,
+        "idle": "lock-up",
+        "station": {
+          "x": 560,
+          "y": 262
+        },
+        "face": {
+          "x": 570,
+          "y": 250
+        }
+      }
+    ]
   },
-
   "pak-salleh": {
     "id": "pak-salleh",
     "name": "Pak Salleh",
@@ -1318,35 +3506,164 @@
     "description": "A Malay fisherman who also hauls crates along the river edge and knows which boats are honest, which are not, and which ones prefer night.",
     "culture": "malay",
     "location": "kampung",
-    "position": { "x": 540, "y": 360 },
+    "position": {
+      "x": 540,
+      "y": 360
+    },
     "schedule": [
       {
         "startHour": 4,
         "endHour": 9,
         "activity": "Netting fish at the waterline",
         "location": "kampung",
-        "available": true
+        "available": true,
+        "station": {
+          "x": 189,
+          "y": 316
+        },
+        "facing": "down",
+        "idle": "cast-net",
+        "enter": {
+          "door": "house-river",
+          "x": 54,
+          "y": 286,
+          "effect": "curtain"
+        },
+        "route": [
+          {
+            "x": 106,
+            "y": 316
+          },
+          {
+            "x": 146,
+            "y": 316
+          }
+        ],
+        "arriveBy": 4,
+        "onCameraWalk": true
       },
       {
         "startHour": 9,
-        "endHour": 15,
-        "activity": "Hauling crates between the landing and village",
+        "endHour": 13,
+        "activity": "Hauling crates from the landing",
         "location": "kampung",
-        "available": true
+        "available": true,
+        "station": {
+          "x": 268,
+          "y": 328
+        },
+        "facing": "up",
+        "idle": "haul",
+        "route": [
+          {
+            "x": 216,
+            "y": 316
+          }
+        ],
+        "arriveBy": 9,
+        "onCameraWalk": true
+      },
+      {
+        "startHour": 13,
+        "endHour": 14,
+        "activity": "Zuhr at the surau",
+        "location": "kampung",
+        "available": false,
+        "station": {
+          "x": 479,
+          "y": 233
+        },
+        "facing": "up",
+        "idle": "pray-kneel",
+        "route": [
+          {
+            "x": 394,
+            "y": 268
+          },
+          {
+            "x": 440,
+            "y": 246
+          }
+        ],
+        "arriveBy": 13,
+        "onCameraWalk": true
+      },
+      {
+        "startHour": 14,
+        "endHour": 15,
+        "activity": "Hauling crates from the landing",
+        "location": "kampung",
+        "available": true,
+        "station": {
+          "x": 268,
+          "y": 328
+        },
+        "facing": "up",
+        "idle": "haul",
+        "enter": {
+          "door": "surau",
+          "x": 479,
+          "y": 233,
+          "effect": "none"
+        },
+        "route": [
+          {
+            "x": 420,
+            "y": 262
+          },
+          {
+            "x": 330,
+            "y": 300
+          }
+        ],
+        "arriveBy": 14,
+        "onCameraWalk": true
       },
       {
         "startHour": 15,
         "endHour": 19,
-        "activity": "Mending boats and talking with neighbors",
+        "activity": "Mending the boat on the bank",
         "location": "kampung",
-        "available": true
+        "available": true,
+        "station": {
+          "x": 190,
+          "y": 316
+        },
+        "facing": "down",
+        "idle": "caulk",
+        "route": [
+          {
+            "x": 240,
+            "y": 326
+          }
+        ],
+        "arriveBy": 15,
+        "onCameraWalk": true
       },
       {
         "startHour": 19,
         "endHour": 4,
         "activity": "Sleeping by the river",
         "location": "home",
-        "available": false
+        "available": false,
+        "exit": {
+          "door": "house-river",
+          "x": 54,
+          "y": 286,
+          "effect": "curtain"
+        },
+        "route": [
+          {
+            "x": 146,
+            "y": 316
+          },
+          {
+            "x": 80,
+            "y": 300
+          }
+        ],
+        "arriveBy": 19,
+        "onCameraWalk": true
       }
     ],
     "dialogue": {
@@ -1355,53 +3672,113 @@
         {
           "text": "The docks say your name with less suspicion than before. That matters more here than any guard's opinion.",
           "when": {
-            "worldFlagsAny": ["dockside-cover", "dockside-favor", "rashid-trusts-player"]
+            "worldFlagsAny": [
+              "dockside-cover",
+              "dockside-favor",
+              "rashid-trusts-player"
+            ]
           }
         }
       ],
       "topics": {
         "cove": {
           "text": "A hidden cove is only suspicious if you believe every boat owes its whole life to the gate. Sometimes men hide because the gate is hungry.",
-          "unlocks": ["boats", "customs", "kampung"]
+          "unlocks": [
+            "boats",
+            "customs",
+            "kampung"
+          ]
         },
         "boats": {
           "text": "You learn a boat by how it sits in the water. Honest craft ride one way. Smugglers another. Officials pretend not to notice until they want their share.",
-          "requires": ["cove"]
+          "requires": [
+            "cove"
+          ]
         },
         "customs": {
           "text": "Customs says it protects Melaka. Maybe. Mostly it protects the men who collect before anyone else can touch the cargo.",
-          "requires": ["cove"]
+          "requires": [
+            "cove"
+          ]
         },
         "kampung": {
           "text": "The kampung survives because we know which troubles to speak aloud and which ones to leave to the tide.",
-          "requires": ["cove"]
+          "requires": [
+            "cove"
+          ]
         },
         "rashid": {
           "text": "Rashid talks too much, but he knows medicine, debt, and seawinds all travel faster than permission."
         },
         "tides": {
           "text": "Two tides a day, and neither of them cares who holds the fortress. *keeps mending* Slack water an hour before the turn - that is when the nets go out, that is when the lighters come up, that is when a boat that does not want company crosses the bar. The Portuguese post their guard by the church bell. The bell rings at the same hour all year. The water does not. You could build a whole life in the gap between those two facts, and some men here have.",
-          "unlocks": ["river-talk", "fish"]
+          "unlocks": [
+            "river-talk",
+            "fish",
+            "the-gap"
+          ]
         },
         "river-talk": {
           "text": "Everything that happens in this town comes down the river eventually, and most of it comes down at dawn when only fishermen are awake to see it. A lighter riding low that should be riding high. A man washing his hands a long time at the landing. A customs boat that goes out empty and comes back sitting deeper. *shrugs* I do not go looking for these things. I am standing in the water at that hour anyway, and the water shows me.",
-          "requires": ["tides"]
+          "requires": [
+            "tides"
+          ]
         },
         "fish": {
           "text": "Ikan kembung, selar, tenggiri when the season turns. Enough for the house, enough for the neighbours, sometimes enough for the market. *finally looks up* You ask it as though a man must choose - fisherman or porter. In the kampung a man is whatever the month requires. I carry crates because crates come. I fish because the fish come. Nobody here has one name for what he does all year.",
-          "requires": ["tides"]
+          "requires": [
+            "tides"
+          ]
         },
         "sons": {
           "text": "Two. The elder pulls the same nets I pull and will do it after me, and there is nothing sad in that whatever the priests suggest. The younger went to the harbour to load Portuguese cargo for Portuguese wages. *pause* He has money now. He also has a cough he did not have last year, and he no longer eats with us. I do not scold him. He will come back to the water or he will not, and the water is patient about it. I am trying to be."
+        },
+        "the-gap": {
+          "text": "*sets the net down, which he does not often do* You want to know when. All right. The watch goes on at the second bell after dark and he walks it the same way every night, east end to the fires and back along the top. A man could count it. I have counted it, standing in water to my knees, because there is nothing else to look at. *picks the net back up* I am not telling you to do anything. I am telling you what the water shows me, the same as I would tell you where the bar is. What you do at the bar is your business and your boat.",
+          "requires": [
+            "tides"
+          ],
+          "journalEntry": "Pak Salleh laid out the night watch without once saying what he thought I meant to do with it: on at the second bell after dark, east end to the fires and back along the upper quay, the same way every night. He was careful to call it something the river had shown him rather than something he had told me."
         }
       },
       "farewell": "Walk with your eyes open. The river keeps what careless people drop."
     },
     "personality": {
-      "traits": ["practical", "guarded", "warm", "worldly"],
+      "traits": [
+        "practical",
+        "guarded",
+        "warm",
+        "worldly"
+      ],
       "accent": "Malay waterfront",
       "gesturesFrequent": false
-    }
+    },
+    "beats": [
+      {
+        "at": "18:45",
+        "kind": "maghrib",
+        "duration": 8,
+        "idle": "pray-kneel",
+        "station": {
+          "x": 190,
+          "y": 316
+        },
+        "face": {
+          "x": -100,
+          "y": 300
+        }
+      },
+      {
+        "at": "05:30",
+        "kind": "labour",
+        "duration": 20,
+        "idle": "cast-net",
+        "station": {
+          "x": 146,
+          "y": 316
+        }
+      }
+    ]
   },
   "rudra-mudaliar": {
     "id": "rudra-mudaliar",
@@ -1414,24 +3791,96 @@
     "schedule": [
       {
         "startHour": 8,
-        "endHour": 18,
+        "endHour": 13,
+        "activity": "Trading cotton at the cloth stall",
         "location": "rua-direita",
-        "activity": "Trading cotton textiles at the street market stall",
-        "available": true
+        "available": true,
+        "station": {
+          "x": 54,
+          "y": 266
+        },
+        "facing": "down",
+        "idle": "measure-cloth",
+        "enter": {
+          "door": "west-lane",
+          "x": 8,
+          "y": 250,
+          "effect": "none"
+        },
+        "route": [
+          {
+            "x": 34,
+            "y": 258
+          }
+        ],
+        "arriveBy": 8,
+        "onCameraWalk": true
+      },
+      {
+        "startHour": 13,
+        "endHour": 15,
+        "activity": "Resting in the stall shade",
+        "location": "rua-direita",
+        "available": true,
+        "station": {
+          "x": 64,
+          "y": 272
+        },
+        "facing": "down",
+        "idle": "fan",
+        "arriveBy": 13,
+        "onCameraWalk": true
+      },
+      {
+        "startHour": 15,
+        "endHour": 18,
+        "activity": "Trading cotton at the cloth stall",
+        "location": "rua-direita",
+        "available": true,
+        "station": {
+          "x": 54,
+          "y": 266
+        },
+        "facing": "down",
+        "idle": "measure-cloth",
+        "arriveBy": 15,
+        "onCameraWalk": true
       },
       {
         "startHour": 18,
         "endHour": 22,
+        "activity": "Reading transaction books under the market lantern",
         "location": "rua-direita",
-        "activity": "Reading transaction books under market lantern",
-        "available": true
+        "available": true,
+        "station": {
+          "x": 64,
+          "y": 278
+        },
+        "facing": "down",
+        "idle": "read",
+        "arriveBy": 18,
+        "onCameraWalk": true
       },
       {
         "startHour": 22,
         "endHour": 8,
-        "location": "home",
         "activity": "Resting at home",
-        "available": false
+        "location": "home",
+        "available": false,
+        "exit": {
+          "door": "west-lane",
+          "x": 8,
+          "y": 250,
+          "effect": "none"
+        },
+        "route": [
+          {
+            "x": 40,
+            "y": 262
+          }
+        ],
+        "arriveBy": 22,
+        "onCameraWalk": true
       }
     ],
     "defaultText": "Welcome, traveler. Looking for fine Pulicat weave or Masulipatam painted chintz? The currencies of these straits are woven, not just minted.",
@@ -1440,11 +3889,15 @@
       "topics": {
         "about": {
           "text": "My family has traded in these straits since the days of the Sultanate. The rulers change, but the need for Coromandel cloth does not.",
-          "unlocks": ["nina-chatu"]
+          "unlocks": [
+            "nina-chatu"
+          ]
         },
         "nina-chatu": {
           "text": "You want to know how a merchant survives a conquest. *sets down the cloth* There was a Kling of this city named Nina Chatu, a very great man, greater than I shall ever be. When the Portuguese came he judged which way the thing would fall, and he judged correctly, and he gave them boats and grain and his own credit, and Albuquerque made him bendahara over the whole trade of Melaka. *evenly* Within four years they had accused him, ruined him, and taken everything. He died owing money to men he had made rich. So. When you ask me why I do not befriend the fortress - I am not brave, and I am not principled. I have simply read the ledger.",
-          "requires": ["about"]
+          "requires": [
+            "about"
+          ]
         },
         "trade": {
           "text": "Fine cottons from Pulicat, painted Chintz from Masulipatam. These are the currencies that buy spices in the eastern islands. Spices move west, but cotton moves east."
@@ -1463,7 +3916,11 @@
         },
         "silk-lot": {
           "text": "*unwraps the bolt, rubs the weave between thumb and forefinger, then holds it slack across the back of his hand to watch it fall* Nanking. Not the coarse Huzhou they sell to men who buy with their eyes. Chen Wei's chop, lot of forty, bonded at the gate. *sets it down* One hundred and eighty cruzados, advanced against the lot, and I will take delivery when the customs seal comes off - whichever season that proves to be. It is less than the bolts are worth and more than the risk is worth, which is how you know it is a fair price. Count it here at my table, not in the street.",
-          "availability": { "itemsAll": ["chinese-silk"] },
+          "availability": {
+            "itemsAll": [
+              "chinese-silk"
+            ]
+          },
           "takesItem": "chinese-silk",
           "givesMoney": 180,
           "journalEntry": "Rudra Mudaliar advanced 180 cruzados against Chen Wei's bonded silk lot on the strength of the sample. He took delivery of nothing - only the right to the forty bolts whenever customs releases them. The coin is mine to carry against Gomes's debt."
@@ -1475,9 +3932,40 @@
       "farewell": "May your credit remain clear."
     },
     "personality": {
-      "traits": ["sharp", "calculating", "polite", "dignified"],
+      "traits": [
+        "sharp",
+        "calculating",
+        "polite",
+        "dignified"
+      ],
       "accent": "Tamil merchant",
       "gesturesFrequent": true
-    }
+    },
+    "beats": [
+      {
+        "at": "18:30",
+        "kind": "deepam",
+        "duration": 4,
+        "idle": "pray-standing",
+        "station": {
+          "x": 64,
+          "y": 278
+        },
+        "face": {
+          "x": 64,
+          "y": 265
+        }
+      },
+      {
+        "at": "16:30",
+        "kind": "social",
+        "duration": 8,
+        "idle": "talk-gesture",
+        "face": {
+          "x": 300,
+          "y": 252
+        }
+      }
+    ]
   }
 }

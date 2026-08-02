@@ -1,0 +1,106 @@
+{
+  "$schema": "melaka/fauna@1",
+  "note": "Ambient fauna roster (docs/design/game-feel-spec.md §4), v0.12 tier 1: archetypes A/B/E only. Lives HERE and not in <id>.location.json deliberately — the location files are the living-world wave's active surface, and a roster of decorative animals has no business colliding with spawn and quest data. Coordinates are NATIVE plate px like every other authored coordinate; src/phaser/systems/FaunaSystem multiplies by world.scale exactly once. Every anchor below was sampled from the shipped walk mask at the surface its entry names, so none of them start inside geometry.",
+  "clips": {
+    "fauna-chicken": { "frameWidth": 12, "frameHeight": 12, "idle": [0, 3], "walk": [4, 7], "rest": [0, 1] },
+    "fauna-dove": { "frameWidth": 10, "frameHeight": 8, "idle": [0, 1], "walk": [2, 5], "rest": [0, 1] },
+    "fauna-cat": { "frameWidth": 14, "frameHeight": 10, "idle": [4, 5], "walk": [0, 3], "rest": [6, 7] },
+    "fauna-cat-grey": { "frameWidth": 14, "frameHeight": 10, "idle": [4, 5], "walk": [0, 3], "rest": [6, 7] },
+    "fauna-dog-pariah": { "frameWidth": 20, "frameHeight": 14, "idle": [4, 5], "walk": [0, 3], "rest": [6, 8] }
+  },
+  "locations": {
+    "kampung": [
+      {
+        "id": "ayam-kampung",
+        "sheet": "fauna-chicken",
+        "archetype": "peck-wander",
+        "count": 4,
+        "anchors": [[262, 150], [332, 210], [152, 250], [478, 272]],
+        "radius": 40,
+        "speed": 13,
+        "hours": [6, 19],
+        "note": "Village chickens. They roost at dusk, so they are simply absent 19:00-06:00 rather than standing asleep in the open."
+      },
+      {
+        "id": "village-dog",
+        "sheet": "fauna-dog-pariah",
+        "archetype": "sleep-lie",
+        "count": 1,
+        "anchors": [[136, 312]],
+        "radius": 24,
+        "speed": 10,
+        "hours": [0, 24],
+        "note": "Lies near a house on the dirt. Gets up, walks a few paces, lies down again."
+      }
+    ],
+    "rua-direita": [
+      {
+        "id": "rock-dove",
+        "sheet": "fauna-dove",
+        "archetype": "perch-hop",
+        "count": 4,
+        "anchors": [[476, 124], [104, 202], [304, 276], [570, 246]],
+        "radius": 18,
+        "speed": 14,
+        "hours": [6, 19],
+        "note": "Ground stone. Hops between neighbouring anchors; archetype C (the flight arc) is v0.13."
+      },
+      {
+        "id": "street-cat",
+        "sheet": "fauna-cat",
+        "archetype": "perch-hop",
+        "count": 1,
+        "anchors": [[26, 172]],
+        "radius": 20,
+        "speed": 12,
+        "hours": [17, 6],
+        "note": "Out from late afternoon through the small hours — a street cat keeps different times from the street."
+      },
+      {
+        "id": "street-cat-grey",
+        "sheet": "fauna-cat-grey",
+        "archetype": "perch-hop",
+        "count": 1,
+        "anchors": [[598, 320]],
+        "radius": 20,
+        "speed": 12,
+        "hours": [17, 6]
+      },
+      {
+        "id": "pariah-dog",
+        "sheet": "fauna-dog-pariah",
+        "archetype": "sleep-lie",
+        "count": 2,
+        "anchors": [[124, 294], [476, 124]],
+        "radius": 26,
+        "speed": 11,
+        "hours": [0, 24],
+        "note": "Off the main crowd paths, on the stone."
+      }
+    ],
+    "a-famosa-gate": [
+      {
+        "id": "pigeon",
+        "sheet": "fauna-dove",
+        "archetype": "perch-hop",
+        "count": 3,
+        "anchors": [[298, 190], [408, 220], [42, 274]],
+        "radius": 16,
+        "speed": 14,
+        "hours": [6, 19],
+        "note": "Fort-wall ground anchors."
+      },
+      {
+        "id": "soldiers-dog",
+        "sheet": "fauna-dog-pariah",
+        "archetype": "sleep-lie",
+        "count": 1,
+        "anchors": [[98, 240]],
+        "radius": 22,
+        "speed": 11,
+        "hours": [6, 20],
+        "note": "Near the guardhouse, on the dirt."
+      }
+    ]
+  }
+}

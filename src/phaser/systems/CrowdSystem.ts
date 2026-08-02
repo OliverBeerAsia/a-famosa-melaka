@@ -14,7 +14,7 @@
 
 import Phaser from 'phaser';
 import { CHARACTER_SCALE, GAME_WIDTH, GAME_HEIGHT } from '../game';
-import type { ResolvedVisualQuality } from '../visualProfile';
+import { VISUAL_PROFILES, type ResolvedVisualQuality } from '../visualProfile';
 import { getLocation, getLocationCrowd } from '../core/LocationData';
 import { worldDepth } from '../core/depth';
 
@@ -27,10 +27,13 @@ interface CrowdTypeConfig {
 }
 
 interface PathConfig {
+  id?: string;
   start: { x: number; y: number };
   end: { x: number; y: number };
   /** Full route. Straight paths are just their two ends. */
   points?: Array<{ x: number; y: number }>;
+  /** Authored pace for this route in NATIVE px/s. See `pathSpeedFactor`. */
+  speed?: number;
 }
 
 interface LocationCrowdConfig {
@@ -133,26 +136,61 @@ const CROWD_TYPES: Record<string, CrowdTypeConfig> = {
 };
 
 
-/** Time-of-day density multipliers (4-value system matching GameScene). */
+/**
+ * Time-of-day density multipliers (4-value system matching GameScene).
+ *
+ * Dusk is the busiest hour of a tropical trading port, not a 40% reduction:
+ * the heat has broken, the lighters are up, the market is clearing stock and
+ * the Angelus has just rung. Night goes DOWN, not up, because the ambient
+ * residents now provide the night floor and they are a far better night
+ * population than randomly-routed transients — they are where they should be,
+ * doing something, with a bark.
+ */
 const TIME_DENSITY: Record<TimeOfDay, number> = {
-  dawn: 0.3,
+  dawn: 0.45,
   day: 1.0,
-  dusk: 0.6,
-  night: 0.2,
+  dusk: 0.8,
+  night: 0.15,
 };
 
-/** Maximum crowd size caps per visual quality tier. */
-function getMaxCrowdCap(quality: ResolvedVisualQuality): number {
-  switch (quality) {
-    case 'low':
-      return 5;
-    case 'balanced':
-      return 10;
-    case 'high':
-      return 15;
-    default:
-      return 10;
-  }
+/**
+ * Maximum crowd size for a quality tier.
+ *
+ * This used to be a private 5/10/15 table, which was wrong twice over. It put
+ * `balanced` BELOW four of the five locations' authored `maxCrowd`, so it
+ * silently clamped any data-side pacing fix — the measured 0.3-1.1 crowd
+ * members on screen against a benchmark asking for 2-5 could not be moved by
+ * editing the location files at all. And it was a SECOND ceiling: the fauna
+ * layer budgets itself against `visualProfile.maxCrowdSize`, so with the two
+ * numbers disagreeing the street ran 22 people against a fauna-visible cap of
+ * 15 and the animals stopped spawning entirely.
+ *
+ * There is now one ceiling. The crowd takes it minus the fauna budget, so a
+ * full street still leaves the birds and the cats somewhere to be.
+ */
+export function getMaxCrowdCap(quality: ResolvedVisualQuality): number {
+  const profile = VISUAL_PROFILES[quality] ?? VISUAL_PROFILES.balanced;
+  return Math.max(1, profile.maxCrowdSize - profile.faunaBudget);
+}
+
+/**
+ * Reference pace for the per-path `speed` field, in native px/s.
+ *
+ * Every location file authors a `speed` on every crowd path and the engine has
+ * never read one of them — the field silently lied to the author. It is not a
+ * world-space speed (the values are 8-22, a tenth of the type speeds), so it is
+ * honoured as a per-path MULTIPLIER against the mean authored value: the crane
+ * gang shuffles, the street strides, and the aggregate route duration the crowd
+ * density was tuned against is unchanged.
+ */
+const PATH_SPEED_REFERENCE = 14.5;
+const PATH_SPEED_MIN = 0.65;
+const PATH_SPEED_MAX = 1.4;
+
+/** Per-path pace multiplier. 1.0 for a path that authors no speed. */
+export function pathSpeedFactor(speed: number | undefined): number {
+  if (typeof speed !== 'number' || !Number.isFinite(speed) || speed <= 0) return 1;
+  return Math.min(PATH_SPEED_MAX, Math.max(PATH_SPEED_MIN, speed / PATH_SPEED_REFERENCE));
 }
 
 export class CrowdSystem {
@@ -300,9 +338,9 @@ export class CrowdSystem {
     );
     shadow.setDepth(worldDepth(sprite.y) - 1);
 
-    // Speed variation
+    // Speed variation, then the route's own authored pace.
     const speedVariation = Phaser.Math.FloatBetween(0.8, 1.2);
-    const actualSpeed = typeConfig.speed * speedVariation;
+    const actualSpeed = typeConfig.speed * speedVariation * pathSpeedFactor(path.speed);
 
     // A route is a polyline (the Forge compositor routes crowd paths over
     // walkable ground, so they bend around the well and the stalls); a
@@ -442,9 +480,25 @@ export class CrowdSystem {
     }
   }
 
-  /** Get the current crowd count. */
+  /** Get the current crowd count across the whole plate. */
   getCrowdCount(): number {
     return this.crowdMembers.length;
+  }
+
+  /**
+   * How many crowd members are actually inside the camera's view.
+   *
+   * The benchmark counts PER SCREEN, not per plate, and since the world grew
+   * 4x at v0.11.0 the two numbers differ by roughly a factor of four — which is
+   * the whole reason "A Famosa reads sparse" was mistaken for a perception
+   * problem. Acceptance measurement needs the on-screen figure.
+   */
+  getOnScreenCount(camera: Phaser.Cameras.Scene2D.Camera | undefined): number {
+    const view = camera?.worldView;
+    if (!view) return 0;
+    return this.crowdMembers.reduce((count, member) => (
+      view.contains(member.sprite.x, member.sprite.y) ? count + 1 : count
+    ), 0);
   }
 
   /** Per-frame update (reserved for future crowd AI). */

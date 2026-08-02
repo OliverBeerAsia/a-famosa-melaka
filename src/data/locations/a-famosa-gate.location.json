@@ -1,13 +1,13 @@
 {
   "id": "a-famosa-gate",
   "name": "A Famosa Fortress Gate",
-  "coordVersion": 6,
+  "coordVersion": 7,
   "world": {
     "scale": 3,
     "nativeWidth": 640,
     "nativeHeight": 360
   },
-  "layoutHash": "ed5666facad0",
+  "layoutHash": "eaa13ec5d812",
   "generatedBy": "tools/forge/compose-plate.cjs",
   "sun": {
     "azimuthDeg": 315,

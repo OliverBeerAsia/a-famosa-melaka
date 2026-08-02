@@ -7,26 +7,52 @@
   "giver": "fernao-gomes",
   "triggerTopic": "seal",
   "summary": "A Portuguese merchant's trading seal has been held by a Chinese waterfront counting house as collateral for a debt. The player must navigate port politics, mercantile obligations, and moral ambiguity to resolve the situation.",
-  "themes": ["colonialism", "debt", "honor", "cultural-clash"],
-
+  "themes": [
+    "colonialism",
+    "debt",
+    "honor",
+    "cultural-clash"
+  ],
   "stages": [
     {
       "id": "start",
       "description": "Speak with Fernão Gomes about his missing seal.",
       "objectives": [
-        { "type": "talk", "target": "fernao-gomes", "topic": "seal", "completed": false }
+        {
+          "type": "talk",
+          "target": "fernao-gomes",
+          "topic": "seal",
+          "completed": false
+        }
       ],
       "journalEntry": "Fernão Gomes, a Portuguese spice merchant, has lost his trading seal. Without it, he cannot authorize official shipments. He seems distressed and suspects foul play.",
       "nextStage": "investigate"
     },
-
     {
       "id": "investigate",
       "description": "Investigate the theft by questioning locals.",
       "objectives": [
-        { "type": "talk", "target": "aminah", "topic": "seal", "completed": false, "optional": false },
-        { "type": "talk", "target": "rashid", "topic": "seal", "completed": false, "optional": true },
-        { "type": "talk", "target": "capitao-rodrigues", "topic": "seal", "completed": false, "optional": true }
+        {
+          "type": "talk",
+          "target": "aminah",
+          "topic": "seal",
+          "completed": false,
+          "optional": false
+        },
+        {
+          "type": "talk",
+          "target": "rashid",
+          "topic": "seal",
+          "completed": false,
+          "optional": true
+        },
+        {
+          "type": "talk",
+          "target": "capitao-rodrigues",
+          "topic": "seal",
+          "completed": false,
+          "optional": true
+        }
       ],
       "journalEntry": "Aminah at the market may have seen something. Rashid at the docks, Capitão Rodrigues, and Diogo Almeida may each know a different piece of Melaka's paper trail.",
       "hints": [
@@ -37,24 +63,33 @@
       ],
       "nextStage": "confront"
     },
-
     {
       "id": "confront",
       "description": "Confront Chen Wei at the waterfront counting house.",
       "objectives": [
-        { "type": "talk", "target": "chen-wei", "topic": "seal", "completed": false }
+        {
+          "type": "talk",
+          "target": "chen-wei",
+          "topic": "seal",
+          "completed": false
+        }
       ],
       "journalEntry": "All signs point to Chen Wei at the waterfront counting house. I should speak with him directly.",
       "nextStage": "choose-path",
       "unlocksPaths": true,
       "consequenceText": "Chen Wei did not deny holding the seal, did not raise his voice, and did not offer tea until the account had been stated in full. Coming to him openly appears to have been worth something in that house.",
       "consequences": {
-        "reputation": { "chinese-merchants": 6 },
-        "worldChanges": ["chen-wei-audience"],
-        "flags": ["chen-wei-audience"]
+        "reputation": {
+          "chinese-merchants": 6
+        },
+        "worldChanges": [
+          "chen-wei-audience"
+        ],
+        "flags": [
+          "chen-wei-audience"
+        ]
       }
     },
-
     {
       "id": "choose-path",
       "description": "Decide how to recover the seal.",
@@ -89,10 +124,14 @@
           "name": "Diplomatic Solution",
           "description": "Help Chen Wei with his customs dispute in exchange for the seal. Only while the silk is still in Melaka.",
           "requirements": {
-            "talkedTo": ["chen-wei"],
+            "talkedTo": [
+              "chen-wei"
+            ],
             "topic": "alternative",
             "dayBefore": 4,
-            "worldFlagsNone": ["silk-consignment-shipped"]
+            "worldFlagsNone": [
+              "silk-consignment-shipped"
+            ]
           },
           "nextStage": "diplomatic-start"
         },
@@ -100,70 +139,108 @@
           "id": "investigate-truth",
           "name": "Investigate the Truth",
           "description": "Look deeper into the debt situation. Is Gomes telling the whole truth?",
-          "requirements": { "talkedTo": ["rashid", "aminah"] },
+          "requirements": {
+            "talkedTo": [
+              "rashid",
+              "aminah"
+            ]
+          },
           "nextStage": "truth-investigation"
         },
         {
           "id": "theft",
           "name": "Steal the Seal",
           "description": "Attempt to steal the seal from Chen Wei's counting house.",
-          "requirements": { "time": "night" },
+          "requirements": {
+            "time": "night",
+            "worldFlagsNone": [
+              "theft-path-closed"
+            ]
+          },
           "nextStage": "theft-attempt",
           "risky": true
         }
       ]
     },
- 
     {
       "id": "payment",
       "path": "payment",
       "description": "Pay 500 cruzados to Chen Wei for the seal.",
       "objectives": [
-        { "type": "pay", "target": "chen-wei", "amount": 500, "completed": false }
+        {
+          "type": "pay",
+          "target": "chen-wei",
+          "amount": 500,
+          "completed": false
+        }
       ],
       "journalEntry": "I need 500 cruzados for Chen Wei. Straightforward, and I do not have it. The money trail as I understand it: 40 from Alvares for the tin-tally contract, paid at the signing; 20 to Aminah for a bahar of rain-damp Kedah pepper, which a counting house short on its month-end manifest will take at 55; 180 advanced by Rudra Mudaliar against Chen Wei's bonded silk lot, on the strength of a sample Chen Wei will cut himself; and the remainder written as an advance by the counting house against my own undertaking - which Chen Wei will only do once I have carried most of the sum there under my own power.",
       "nextStage": "seal-recovered",
       "consequenceText": "Chen Wei accepts payment with a slight bow. 'Business concluded. The Portuguese understand commerce when pressed.' He produces the seal from a locked drawer.",
       "consequences": {
-        "reputation": { "chinese": 5, "portuguese": 0 },
-        "worldChanges": ["merchant-seal-settled"],
-        "flags": ["merchant-seal-settled"],
+        "reputation": {
+          "portuguese": 0,
+          "chinese-merchants": 5
+        },
+        "worldChanges": [
+          "merchant-seal-settled"
+        ],
+        "flags": [
+          "merchant-seal-settled"
+        ],
         "npcReactions": {
           "chen-wei": "respectful",
           "fernao-gomes": "grateful"
         }
       }
     },
-
     {
       "id": "diplomatic-start",
       "path": "diplomatic",
       "description": "Convince Capitão Rodrigues to help with Chen Wei's customs dispute.",
       "objectives": [
-        { "type": "talk", "target": "chen-wei", "topic": "alternative", "completed": false },
-        { "type": "talk", "target": "chen-wei", "topic": "side-deal", "completed": false }
+        {
+          "type": "talk",
+          "target": "chen-wei",
+          "topic": "alternative",
+          "completed": false
+        },
+        {
+          "type": "talk",
+          "target": "chen-wei",
+          "topic": "side-deal",
+          "completed": false
+        }
       ],
       "journalEntry": "Chen Wei has offered an alternative: if I can convince Capitão Rodrigues to release his silk shipment from customs without the officer's fee, he will return the seal. Diogo Almeida may know which ledger entries were altered and by whom.",
       "nextStage": "diplomatic-captain"
     },
-
     {
       "id": "diplomatic-captain",
       "path": "diplomatic",
       "description": "Speak with Capitão Rodrigues about Chen Wei's customs problem.",
       "objectives": [
-        { "type": "talk", "target": "capitao-rodrigues", "topic": "customs", "completed": false }
+        {
+          "type": "talk",
+          "target": "capitao-rodrigues",
+          "topic": "customs",
+          "completed": false
+        }
       ],
       "journalEntry": "I need to approach Capitão Rodrigues carefully. He may be willing to intervene if presented properly - perhaps as a matter of procedure rather than a favor to Chinese merchants. Diogo's copy may give me a cleaner accusation.",
       "npcDialogueOverrides": {
         "capitao-rodrigues": {
           "customs": {
             "text": "*frowns* The customs inspector demanding bribes? This I had not heard. Corruption weakens the garrison more than any enemy. Show me proof of this, and I will... address it.",
-            "unlocks": ["proof-request"]
+            "unlocks": [
+              "proof-request"
+            ]
           },
           "proof-request": {
             "text": "Bring me the inspector's written demand. Or find a witness who will testify. I cannot act on rumor alone - but if this is true, the inspector will answer for it.",
-            "requires": ["customs"]
+            "requires": [
+              "customs"
+            ]
           }
         },
         "diogo-almeida": {
@@ -176,14 +253,23 @@
       },
       "nextStage": "diplomatic-evidence"
     },
-
     {
       "id": "diplomatic-evidence",
       "path": "diplomatic",
       "description": "Gather evidence of the customs inspector's corruption.",
       "objectives": [
-        { "type": "talk", "target": "rashid", "topic": "inspector", "completed": false },
-        { "type": "obtain", "item": "bribe-note", "completed": false, "optional": true }
+        {
+          "type": "talk",
+          "target": "rashid",
+          "topic": "inspector",
+          "completed": false
+        },
+        {
+          "type": "obtain",
+          "item": "bribe-note",
+          "completed": false,
+          "optional": true
+        }
       ],
       "journalEntry": "Capitão Rodrigues needs evidence. Rashid may know something about the corrupt customs officer - sailors see everything at the docks. Gaspar Mesquita's own mouth may be the best proof if I can get him talking.",
       "npcDialogueOverrides": {
@@ -203,34 +289,51 @@
       },
       "nextStage": "diplomatic-resolution"
     },
-
     {
       "id": "diplomatic-resolution",
       "path": "diplomatic",
       "description": "Return to Capitão Rodrigues with evidence.",
       "objectives": [
-        { "type": "give", "target": "capitao-rodrigues", "item": "bribe-note", "completed": false }
+        {
+          "type": "give",
+          "target": "capitao-rodrigues",
+          "item": "bribe-note",
+          "completed": false
+        }
       ],
       "journalEntry": "I have Rashid's 'receipt' for a fee. This should be enough evidence for the Capitão to act.",
       "nextStage": "diplomatic-success",
       "consequenceText": "Rodrigues examines the note, his face darkening. 'This is... damning. The inspector will be dealt with. I will personally ensure Chen Wei's shipment is released properly.' He pauses. 'You have done Portugal a service today. Corruption is a rot that destroys from within.'",
       "consequences": {
-        "reputation": { "portuguese": 15, "chinese": 10 },
-        "worldChanges": ["inspector-removed", "customs-books-opened", "customs-ledger-clue"],
-        "flags": ["customs-questioned"],
+        "reputation": {
+          "portuguese": 15,
+          "chinese-merchants": 10
+        },
+        "worldChanges": [
+          "inspector-removed",
+          "customs-books-opened",
+          "customs-ledger-clue"
+        ],
+        "flags": [
+          "customs-questioned"
+        ],
         "npcReactions": {
           "capitao-rodrigues": "respectful",
           "chen-wei": "impressed"
         }
       }
     },
-
     {
       "id": "diplomatic-success",
       "path": "diplomatic",
       "description": "Return to Chen Wei to claim the seal.",
       "objectives": [
-        { "type": "talk", "target": "chen-wei", "topic": "deal-complete", "completed": false }
+        {
+          "type": "talk",
+          "target": "chen-wei",
+          "topic": "deal-complete",
+          "completed": false
+        }
       ],
       "journalEntry": "The Capitão has promised to release Chen Wei's silk. Time to collect the seal.",
       "npcDialogueOverrides": {
@@ -243,14 +346,24 @@
       },
       "nextStage": "seal-recovered"
     },
-
     {
       "id": "truth-investigation",
       "path": "investigate-truth",
       "description": "Investigate Gomes' debt more thoroughly.",
       "objectives": [
-        { "type": "talk", "target": "rashid", "topic": "gomes-debt", "completed": false },
-        { "type": "talk", "target": "padre-tomas", "topic": "gomes-confession", "completed": false, "optional": true }
+        {
+          "type": "talk",
+          "target": "rashid",
+          "topic": "gomes-debt",
+          "completed": false
+        },
+        {
+          "type": "talk",
+          "target": "padre-tomas",
+          "topic": "gomes-confession",
+          "completed": false,
+          "optional": true
+        }
       ],
       "journalEntry": "Something doesn't add up. Rashid witnessed the argument, and Padre Tomás hears confessions. Perhaps the full truth is more complicated than Gomes admitted.",
       "npcDialogueOverrides": {
@@ -267,36 +380,48 @@
       },
       "nextStage": "truth-confrontation"
     },
-
     {
       "id": "truth-confrontation",
       "path": "investigate-truth",
       "description": "Confront Gomes with what you've learned.",
       "objectives": [
-        { "type": "talk", "target": "fernao-gomes", "topic": "three-voyages", "completed": false }
+        {
+          "type": "talk",
+          "target": "fernao-gomes",
+          "topic": "three-voyages",
+          "completed": false
+        }
       ],
       "journalEntry": "Gomes borrowed for THREE voyages, not one. He reinvested his profits instead of repaying Chen Wei. The debt is legitimate. I should confront him with this.",
       "npcDialogueOverrides": {
         "fernao-gomes": {
           "three-voyages": {
             "text": "*face pales* How did you... *long silence* Yes. It is true. Three voyages. I was greedy. The first two were so profitable, I thought... I thought my luck would hold. *sits heavily* Chen Wei's demand is just. I told myself he was extorting me because it was easier than admitting my own fault. What would you have me do?",
-            "unlocks": ["truth-choices"]
+            "unlocks": [
+              "truth-choices"
+            ]
           },
           "truth-choices": {
             "text": "I cannot pay - I have nothing. But perhaps... perhaps I could offer Chen Wei a partnership in my next venture? Share the risk, share the profit? It is the only honorable path forward. Would you... would you propose this to him?",
-            "requires": ["three-voyages"]
+            "requires": [
+              "three-voyages"
+            ]
           }
         }
       },
       "nextStage": "truth-resolution"
     },
-
     {
       "id": "truth-resolution",
       "path": "investigate-truth",
       "description": "Propose a partnership arrangement to Chen Wei.",
       "objectives": [
-        { "type": "talk", "target": "chen-wei", "topic": "partnership-proposal", "completed": false }
+        {
+          "type": "talk",
+          "target": "chen-wei",
+          "topic": "partnership-proposal",
+          "completed": false
+        }
       ],
       "journalEntry": "Gomes has admitted his fault and proposes a partnership with Chen Wei for future ventures. An honorable resolution that acknowledges the truth.",
       "npcDialogueOverrides": {
@@ -310,29 +435,46 @@
       "nextStage": "seal-recovered",
       "consequenceText": "Chen Wei and Fernão Gomes have formed an unlikely partnership. The debt is forgiven in exchange for shared ventures. Both men seem... relieved. Perhaps even hopeful.",
       "consequences": {
-        "reputation": { "portuguese": 5, "chinese": 15 },
-        "worldChanges": ["gomes-chen-partnership", "merchant-seal-settled", "customs-ledger-clue"],
-        "flags": ["customs-trail-open", "merchant-seal-settled"],
+        "reputation": {
+          "portuguese": 5,
+          "chinese-merchants": 15
+        },
+        "worldChanges": [
+          "gomes-chen-partnership",
+          "merchant-seal-settled",
+          "customs-ledger-clue"
+        ],
+        "flags": [
+          "customs-trail-open",
+          "merchant-seal-settled"
+        ],
         "npcReactions": {
           "chen-wei": "friendly",
           "fernao-gomes": "humbled-grateful"
         }
       }
     },
-
     {
       "id": "theft-attempt",
       "path": "theft",
       "description": "Attempt to steal the seal from Chen Wei's counting house at night.",
       "objectives": [
-        { "type": "location", "target": "waterfront", "time": "night", "completed": false },
-        { "type": "stealth", "target": "counting-house", "completed": false }
+        {
+          "type": "location",
+          "target": "waterfront",
+          "time": "night",
+          "completed": false
+        },
+        {
+          "type": "stealth",
+          "target": "counting-house",
+          "completed": false
+        }
       ],
       "journalEntry": "A risky plan: sneak into Chen Wei's counting house at night and take the seal. This would make me a thief, and if caught, the consequences could be severe. But it would recover the seal without payment or negotiation.",
       "nextStage": "theft-choice",
       "warning": "This path may have serious consequences. Chen Wei's counting house has influence throughout the city."
     },
-
     {
       "id": "theft-choice",
       "path": "theft",
@@ -353,35 +495,50 @@
         }
       ]
     },
-
     {
       "id": "theft-success",
       "path": "theft",
       "description": "Search the counting house for the seal.",
       "objectives": [
-        { "type": "search", "target": "counting-house-drawer", "completed": false }
+        {
+          "type": "search",
+          "target": "counting-house-drawer",
+          "completed": false
+        }
       ],
       "journalEntry": "I found the seal in a locked drawer. The deed is done - I am now a thief, whatever the justification.",
       "givesItem": "trading-seal",
       "nextStage": "theft-aftermath",
       "consequenceText": "The seal is cold in your hand. You slip back into the night, but a weight settles in your chest. Chen Wei's debt was legitimate. You have stolen from a man who was owed.",
       "consequences": {
-        "reputation": { "chinese": -30 },
-        "worldChanges": ["seal-stolen", "chen-wei-hostile", "customs-skittish"],
-        "flags": ["player-is-thief"],
+        "reputation": {
+          "chinese-merchants": -30
+        },
+        "worldChanges": [
+          "seal-stolen",
+          "chen-wei-hostile",
+          "customs-skittish"
+        ],
+        "flags": [
+          "player-is-thief"
+        ],
         "npcReactions": {
           "chen-wei": "hostile",
           "aminah": "wary"
         }
       }
     },
-
     {
       "id": "theft-aftermath",
       "path": "theft",
       "description": "Return the stolen seal to Gomes.",
       "objectives": [
-        { "type": "give", "target": "fernao-gomes", "item": "trading-seal", "completed": false }
+        {
+          "type": "give",
+          "target": "fernao-gomes",
+          "item": "trading-seal",
+          "completed": false
+        }
       ],
       "journalEntry": "I have the seal. Gomes will be pleased. But I took it by theft, not negotiation. And Chen Wei will know.",
       "npcDialogueOverrides": {
@@ -394,7 +551,6 @@
       },
       "nextStage": "theft-complete"
     },
-
     {
       "id": "theft-complete",
       "path": "theft",
@@ -403,22 +559,30 @@
       "journalEntry": "I returned the seal to Gomes by stealing it from Chen Wei. The merchant knows - his circle has eyes everywhere. I should be careful in the Chinese quarter from now on. Was it worth it?",
       "isEnding": true,
       "reward": {
-        "items": ["coin-pouch"],
-        "reputation": { "portuguese": 5, "chinese": -30 }
+        "items": [
+          "coin-pouch"
+        ],
+        "reputation": {
+          "portuguese": 5,
+          "chinese-merchants": -30
+        }
       },
       "endingType": "theft"
     },
-
     {
       "id": "seal-recovered",
       "description": "Return the seal to Fernão Gomes.",
       "objectives": [
-        { "type": "give", "target": "fernao-gomes", "item": "trading-seal", "completed": false }
+        {
+          "type": "give",
+          "target": "fernao-gomes",
+          "item": "trading-seal",
+          "completed": false
+        }
       ],
       "journalEntry": "I have the seal. Time to return it to Fernão Gomes.",
       "nextStage": "complete"
     },
-
     {
       "id": "complete",
       "description": "Quest complete!",
@@ -428,20 +592,46 @@
       "endingVariants": {
         "payment": {
           "text": "Gomes is grateful, though the solution was simply a matter of money. The underlying tensions between Portuguese and Chinese merchants remain.",
-          "reward": { "items": ["coin-pouch", "coin-pouch"], "reputation": { "portuguese": 5 } }
+          "reward": {
+            "items": [
+              "coin-pouch",
+              "coin-pouch"
+            ],
+            "reputation": {
+              "portuguese": 5
+            }
+          }
         },
         "diplomatic": {
           "text": "By exposing corruption and facilitating fair dealing, I've improved relations between Portuguese authorities and Chinese merchants. Gomes has his seal, Chen Wei has his silk, and an unjust inspector has been removed.",
-          "reward": { "items": ["coin-pouch", "coin-pouch", "spice-sample"], "reputation": { "portuguese": 15, "chinese": 15 } }
+          "reward": {
+            "items": [
+              "coin-pouch",
+              "coin-pouch",
+              "spice-sample"
+            ],
+            "reputation": {
+              "portuguese": 15,
+              "chinese-merchants": 15
+            }
+          }
         },
         "investigate-truth": {
           "text": "The truth proved more complex than it first appeared. Gomes admitted his fault, Chen Wei showed mercy, and an unlikely partnership was born. Perhaps understanding between cultures is possible after all.",
-          "reward": { "items": ["coin-pouch", "letter-of-credit"], "reputation": { "portuguese": 5, "chinese": 20 } }
+          "reward": {
+            "items": [
+              "coin-pouch",
+              "letter-of-credit"
+            ],
+            "reputation": {
+              "portuguese": 5,
+              "chinese-merchants": 20
+            }
+          }
         }
       }
     }
   ],
-
   "items": {
     "trading-seal": {
       "id": "trading-seal",
@@ -463,7 +653,6 @@
       "value": 100
     }
   },
-
   "dialogueOverrides": {
     "quest-active": {
       "fernao-gomes": {

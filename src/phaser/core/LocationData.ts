@@ -18,6 +18,9 @@ import ruaDireita from '../../data/locations/rua-direita.location.json';
 import stPaulsChurch from '../../data/locations/st-pauls-church.location.json';
 import waterfront from '../../data/locations/waterfront.location.json';
 import kampung from '../../data/locations/kampung.location.json';
+import residentsData from '../../data/residents.json';
+import openablesData from '../../data/openables.json';
+import crowdPacingData from '../../data/crowd-pacing.json';
 
 // ---------------------------------------------------------------------------
 // Types (world space — i.e. already multiplied by world.scale)
@@ -56,7 +59,20 @@ export interface LocationProp {
 }
 
 export interface AnimatedProp { type: AnimatedPropType; x: number; y: number }
-export interface LocationLight { type: LightType; x: number; y: number }
+export interface LocationLight {
+  type: LightType;
+  x: number;
+  y: number;
+  /**
+   * Pool radius in NATIVE px, exactly as authored. NOT scaled: the flicker
+   * delta sprites are picked by native radius class (34/42/50/58) and then
+   * drawn at the world scale like every other sprite, so scaling here would
+   * apply the factor twice.
+   */
+  radius: number;
+  /** Lit only at dusk and night (a window has nobody behind it by day). */
+  nightOnly: boolean;
+}
 
 /**
  * A crowd route. `points` is the authored polyline (>= 2 points, world space);
@@ -128,6 +144,69 @@ export interface LocationItem {
 
 export interface LocationLoreObject { id: string; x: number; y: number }
 
+/**
+ * A persistent unnamed inhabitant: the third tier between the 14 named NPCs and
+ * the CrowdSystem's transients.
+ *
+ * A fishwife who has stood at the same stall for thirty years is not
+ * through-traffic. Residents are created once on location enter and torn down
+ * on exit, are never routed away, and have barks instead of a dialogue tree.
+ */
+export interface LocationResident {
+  id: string;
+  role: string;
+  /** A crowd sheet already registered in BootScene. No new art. */
+  sprite: string;
+  station: Point;
+  route: Point[];
+  idle: string;
+  /** [startHour, endHour), wrapping. Outside its hours a resident is absent. */
+  hours: [number, number];
+  nightIdle?: string;
+  barks: string[];
+  nightBarks?: string[];
+  reactiveBarks?: Array<{
+    when: { worldFlagsAny?: string[]; worldFlagsAll?: string[]; worldFlagsNone?: string[] };
+    barks: string[];
+  }>;
+}
+
+/** What a container holds. Exactly one field is set per entry. */
+export interface OpenableContent {
+  itemId?: string;
+  count?: number;
+  money?: number;
+  flag?: string;
+}
+
+/**
+ * An Ultima VII container verb hung on a prop that is ALREADY PAINTED.
+ * An openable is never a new sprite — it is a flag, some contents, and two
+ * lines of prose.
+ */
+export interface LocationOpenable {
+  id: string;
+  /** plateProps.key or loreObjects.id it hangs on. */
+  prop: string;
+  anchor: Point;
+  /** Where the player must stand. Verified walkable at feet level. */
+  approach: Point;
+  label: string;
+  lock: { needs?: string | null; flagsAny?: string[]; flagsNone?: string[] } | null;
+  contents: OpenableContent[];
+  onOpen?: {
+    flags?: string[];
+    reputation?: Record<string, number>;
+    notification?: string;
+  };
+  /** The line the player reads most often. It is never "It is empty." */
+  emptyText: string;
+  /** Opening this in daylight near a witness sets `petty-theft-witnessed`. */
+  witnessed: boolean;
+  /** A place to look (a well, a coop) rather than a one-shot container. */
+  reopenable: boolean;
+}
+
 export interface LocationPlate {
   background: string;
   variants: Record<string, string>;
@@ -176,6 +255,8 @@ export interface LocationRuntime {
   crowd: LocationCrowd;
   items: LocationItem[];
   loreObjects: LocationLoreObject[];
+  residents: LocationResident[];
+  openables: LocationOpenable[];
 }
 
 // ---------------------------------------------------------------------------
@@ -189,6 +270,16 @@ const RAW_LOCATIONS: Record<string, any> = {
   'waterfront': waterfront,
   'kampung': kampung,
 };
+
+interface CrowdPacingEntry {
+  maxCrowd?: number;
+  density?: number;
+  addCrowdTypes?: string[];
+}
+
+/** Authored crowd pacing for a location, if the file names one. */
+const crowdPacing = (id: string): CrowdPacingEntry | undefined =>
+  (crowdPacingData as Record<string, CrowdPacingEntry>)[id];
 
 const scalePoint = (p: any, s: number): Point => ({ x: p.x * s, y: p.y * s });
 const scaleRect = (r: any, s: number): Rect => ({
@@ -257,7 +348,13 @@ function build(id: string, raw: any): LocationRuntime {
       depthY: o.depthY * s,
     })),
     animatedProps: raw.animatedProps.map((p: any) => ({ type: p.type, x: p.x * s, y: p.y * s })),
-    lights: raw.lights.map((l: any) => ({ type: l.type, x: l.x * s, y: l.y * s })),
+    lights: raw.lights.map((l: any) => ({
+      type: l.type,
+      x: l.x * s,
+      y: l.y * s,
+      radius: l.radius ?? 42,
+      nightOnly: Boolean(l.nightOnly),
+    })),
     fires: raw.fires.map((f: any) => scalePoint(f, s)),
     audio: raw.audio,
     visual: {
@@ -270,9 +367,17 @@ function build(id: string, raw: any): LocationRuntime {
       canopyShadows: (raw.visual.canopyShadows || []).map((z: any) => scaleZone(z, s)),
     },
     crowd: {
-      maxCrowd: raw.crowd.maxCrowd,
-      density: raw.crowd.density,
-      crowdTypes: raw.crowd.crowdTypes || [],
+      // Pacing is AUTHORED and lives in crowd-pacing.json; the compositor
+      // regenerates `crowd.maxCrowd` from the plate layout and has already
+      // reset these numbers twice, so the authored file wins.
+      maxCrowd: crowdPacing(id)?.maxCrowd ?? raw.crowd.maxCrowd,
+      density: crowdPacing(id)?.density ?? raw.crowd.density,
+      crowdTypes: [
+        ...(raw.crowd.crowdTypes || []),
+        ...((crowdPacing(id)?.addCrowdTypes || []).filter(
+          (t: string) => !(raw.crowd.crowdTypes || []).includes(t)
+        )),
+      ],
       paths: raw.crowd.paths.map((p: any) => {
         // Two authoring forms collapse to one runtime shape: a polyline whose
         // ends are also exposed as start/end.
@@ -290,6 +395,21 @@ function build(id: string, raw: any): LocationRuntime {
     },
     items: raw.items.map((i: any) => ({ ...i, x: i.x * s, y: i.y * s })),
     loreObjects: raw.loreObjects.map((o: any) => ({ id: o.id, x: o.x * s, y: o.y * s })),
+    // Residents and openables are AUTHORED, not composited, so they live in
+    // their own files rather than in the location file — which the plate
+    // compositor regenerates wholesale, and which therefore silently drops any
+    // hand-written addition. (It did exactly that once already.) A location
+    // file may still carry them inline, and that wins if present.
+    residents: (raw.residents || (residentsData as any)[id] || []).map((r: any) => ({
+      ...r,
+      station: scalePoint(r.station, s),
+      route: (r.route || []).map((p: any) => scalePoint(p, s)),
+    })),
+    openables: (raw.openables || (openablesData as any)[id] || []).map((o: any) => ({
+      ...o,
+      anchor: scalePoint(o.anchor, s),
+      approach: scalePoint(o.approach, s),
+    })),
   };
 }
 
@@ -328,6 +448,8 @@ export const getLocationAnimatedProps = (id: string) => getLocation(id)?.animate
 export const getLocationItems = (id: string) => getLocation(id)?.items ?? [];
 export const getLocationLoreObjects = (id: string) => getLocation(id)?.loreObjects ?? [];
 export const getLocationTransitions = (id: string) => getLocation(id)?.transitions ?? [];
+export const getLocationResidents = (id: string) => getLocation(id)?.residents ?? [];
+export const getLocationOpenables = (id: string) => getLocation(id)?.openables ?? [];
 
 /** True when at least one location actually runs the isometric tilemap path. */
 export function anyLocationUsesIsometric(): boolean {

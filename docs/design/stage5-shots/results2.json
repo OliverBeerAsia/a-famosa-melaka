@@ -1,0 +1,374 @@
+{
+  "out": {
+    "A8": {
+      "clock": {
+        "hour": 13,
+        "minute": 6,
+        "day": 1
+      },
+      "npcs": [
+        "mak-enang@294,234",
+        "pak-salleh@417,258"
+      ],
+      "watch": {
+        "onDuty": false,
+        "state": "unaware",
+        "alertLevel": 1,
+        "x": null,
+        "y": null,
+        "dousedLights": []
+      },
+      "target": {
+        "type": "scenery",
+        "id": "resident:kampung-child-runner",
+        "label": "Pass the time with the child running the common"
+      }
+    },
+    "A8b": {
+      "clock": {
+        "hour": 13,
+        "minute": 10,
+        "day": 1
+      },
+      "npcs": [
+        "mak-enang@294,234",
+        "pak-salleh@481,235"
+      ],
+      "watch": {
+        "onDuty": false,
+        "state": "unaware",
+        "alertLevel": 1,
+        "x": null,
+        "y": null,
+        "dousedLights": []
+      },
+      "target": null
+    },
+    "A10pre": {
+      "clock": {
+        "hour": 17,
+        "minute": 14,
+        "day": 1
+      },
+      "npcs": [
+        "rashid@238,310",
+        "chen-wei@480,196",
+        "lin-mei@501,295"
+      ],
+      "watch": {
+        "onDuty": false,
+        "state": "unaware",
+        "alertLevel": 1,
+        "x": null,
+        "y": null,
+        "dousedLights": []
+      },
+      "target": null
+    },
+    "A10": {
+      "clock": {
+        "hour": 18,
+        "minute": 22,
+        "day": 1
+      },
+      "npcs": [
+        "rashid@238,310",
+        "chen-wei@569,263"
+      ],
+      "watch": {
+        "onDuty": false,
+        "state": "unaware",
+        "alertLevel": 1,
+        "x": null,
+        "y": null,
+        "dousedLights": []
+      },
+      "target": null
+    },
+    "A10post": {
+      "clock": {
+        "hour": 19,
+        "minute": 24,
+        "day": 1
+      },
+      "npcs": [
+        "rashid@238,310"
+      ],
+      "watch": {
+        "onDuty": false,
+        "state": "unaware",
+        "alertLevel": 1,
+        "x": null,
+        "y": null,
+        "dousedLights": []
+      },
+      "target": null
+    },
+    "A3": [
+      {
+        "t": 1.5,
+        "x": 600,
+        "y": 272,
+        "state": "unaware"
+      },
+      {
+        "t": 3,
+        "x": 600,
+        "y": 272,
+        "state": "unaware"
+      },
+      {
+        "t": 4.5,
+        "x": 600,
+        "y": 272,
+        "state": "unaware"
+      },
+      {
+        "t": 6.2,
+        "x": 595,
+        "y": 271,
+        "state": "unaware"
+      },
+      {
+        "t": 7.7,
+        "x": 553,
+        "y": 263,
+        "state": "unaware"
+      },
+      {
+        "t": 9.3,
+        "x": 511,
+        "y": 261,
+        "state": "unaware"
+      },
+      {
+        "t": 10.8,
+        "x": 471,
+        "y": 273,
+        "state": "unaware"
+      },
+      {
+        "t": 12.3,
+        "x": 469,
+        "y": 277,
+        "state": "unaware"
+      },
+      {
+        "t": 13.8,
+        "x": 470,
+        "y": 277,
+        "state": "unaware"
+      },
+      {
+        "t": 15.3,
+        "x": 470,
+        "y": 277,
+        "state": "unaware"
+      },
+      {
+        "t": 16.9,
+        "x": 433,
+        "y": 300,
+        "state": "unaware"
+      },
+      {
+        "t": 18.4,
+        "x": 389,
+        "y": 302,
+        "state": "unaware"
+      },
+      {
+        "t": 19.9,
+        "x": 351,
+        "y": 282,
+        "state": "unaware"
+      },
+      {
+        "t": 21.4,
+        "x": 311,
+        "y": 275,
+        "state": "unaware"
+      },
+      {
+        "t": 22.9,
+        "x": 273,
+        "y": 285,
+        "state": "unaware"
+      },
+      {
+        "t": 24.6,
+        "x": 241,
+        "y": 300,
+        "state": "unaware"
+      },
+      {
+        "t": 26.1,
+        "x": 241,
+        "y": 300,
+        "state": "unaware"
+      },
+      {
+        "t": 27.6,
+        "x": 241,
+        "y": 300,
+        "state": "unaware"
+      },
+      {
+        "t": 29.1,
+        "x": 241,
+        "y": 300,
+        "state": "unaware"
+      },
+      {
+        "t": 30.8,
+        "x": 277,
+        "y": 229,
+        "state": "unaware"
+      },
+      {
+        "t": 32.3,
+        "x": 313,
+        "y": 214,
+        "state": "unaware"
+      },
+      {
+        "t": 33.8,
+        "x": 359,
+        "y": 214,
+        "state": "unaware"
+      },
+      {
+        "t": 35.3,
+        "x": 400,
+        "y": 212,
+        "state": "unaware"
+      },
+      {
+        "t": 36.8,
+        "x": 443,
+        "y": 215,
+        "state": "unaware"
+      },
+      {
+        "t": 38.3,
+        "x": 489,
+        "y": 216,
+        "state": "unaware"
+      },
+      {
+        "t": 39.8,
+        "x": 530,
+        "y": 228,
+        "state": "unaware"
+      },
+      {
+        "t": 41.3,
+        "x": 572,
+        "y": 223,
+        "state": "unaware"
+      },
+      {
+        "t": 42.9,
+        "x": 610,
+        "y": 224,
+        "state": "unaware"
+      },
+      {
+        "t": 44.4,
+        "x": 610,
+        "y": 224,
+        "state": "unaware"
+      },
+      {
+        "t": 46,
+        "x": 610,
+        "y": 224,
+        "state": "unaware"
+      },
+      {
+        "t": 47.5,
+        "x": 615,
+        "y": 251,
+        "state": "unaware"
+      },
+      {
+        "t": 49.1,
+        "x": 601,
+        "y": 272,
+        "state": "unaware"
+      },
+      {
+        "t": 50.6,
+        "x": 601,
+        "y": 272,
+        "state": "unaware"
+      },
+      {
+        "t": 52.1,
+        "x": 601,
+        "y": 272,
+        "state": "unaware"
+      },
+      {
+        "t": 53.6,
+        "x": 601,
+        "y": 272,
+        "state": "unaware"
+      },
+      {
+        "t": 55.1,
+        "x": 580,
+        "y": 267,
+        "state": "unaware"
+      },
+      {
+        "t": 56.6,
+        "x": 536,
+        "y": 266,
+        "state": "unaware"
+      },
+      {
+        "t": 58.1,
+        "x": 497,
+        "y": 261,
+        "state": "unaware"
+      },
+      {
+        "t": 59.7,
+        "x": 469,
+        "y": 277,
+        "state": "unaware"
+      },
+      {
+        "t": 61.2,
+        "x": 469,
+        "y": 277,
+        "state": "unaware"
+      }
+    ],
+    "A4a-shadow-frozen": {
+      "closest": 1000000000,
+      "seenAt": null,
+      "states": [
+        "unaware"
+      ]
+    },
+    "A4b-brazier-pool": {
+      "closest": 1000000000,
+      "seenAt": null,
+      "states": [
+        "unaware"
+      ]
+    },
+    "douseTarget": {
+      "type": "item",
+      "id": "openable:quay-water-cask",
+      "label": "Look in the open cask"
+    },
+    "doused": [],
+    "chestTarget": null
+  },
+  "errors": [
+    "PAGEERROR Cannot read properties of null (reading 'y')"
+  ]
+}

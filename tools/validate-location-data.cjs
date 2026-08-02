@@ -63,6 +63,21 @@ const historical = readJSON(path.join(ROOT, 'src', 'data', 'historical-objects.j
 const loreIds = new Set(Object.keys(historical));
 const manifest = readJSON(path.join(ROOT, 'src', 'data', 'runtime-asset-manifest.json'));
 
+/**
+ * Residents and openables are AUTHORED data keyed by location, deliberately NOT
+ * inside the location files — those are plate-compositor output and a
+ * regeneration silently drops anything hand-written into them. (It did exactly
+ * that once.) A location file may still carry them inline, and that wins.
+ */
+const residentsFile = path.join(ROOT, 'src', 'data', 'residents.json');
+const openablesFile = path.join(ROOT, 'src', 'data', 'openables.json');
+const residentsData = fs.existsSync(residentsFile) ? readJSON(residentsFile) : {};
+const openablesData = fs.existsSync(openablesFile) ? readJSON(openablesFile) : {};
+
+/** Authored crowd pacing, applied over the compositor's own crowd block. */
+const crowdPacingFile = path.join(ROOT, 'src', 'data', 'crowd-pacing.json');
+const crowdPacing = fs.existsSync(crowdPacingFile) ? readJSON(crowdPacingFile) : {};
+
 const staticObjectIds = new Set(manifest.objects.static || []);
 const OBJECTS_DIR = path.join(ROOT, 'assets', 'sprites', 'objects');
 const objectFiles = new Set(
@@ -99,6 +114,33 @@ const itemIds = new Set(
 // walk into frame. Anything further out is rotten data.
 const CROWD_OFFSCREEN_MARGIN = 24;
 
+/**
+ * Stage 5: the crowd sheets ambient residents are allowed to borrow.
+ *
+ * Residents cost NO new art by construction — every one of them uses a sheet
+ * BootScene already registers — so a resident naming a sprite outside this set
+ * is a resident that will silently render as a fallback.
+ */
+const CROWD_SPRITE_KEYS = new Set(
+  (manifest.crowd?.sprites || []).map((s) => `crowd-${s}`)
+);
+
+/**
+ * The canonical reputation factions (dependency D6).
+ *
+ * `chinese` and `chinese-merchants` were both in use and only one of them was
+ * being read. The store still carries the legacy aliases so old saves survive,
+ * but nothing authored from here on may use them.
+ */
+const REPUTATION_FACTIONS = new Set([
+  'garrison', 'church', 'portuguese-merchants',
+  'chinese-merchants', 'kampung-community', 'dockside-network',
+]);
+/** Aliases the store maps but which must not appear in newly authored data. */
+const REPUTATION_ALIASES = new Set(['portuguese', 'malay', 'arab']);
+/** The one alias D6 forbids outright, since it has a 1:1 canonical name. */
+const REPUTATION_BANNED = new Set(['chinese']);
+
 // A lantern hung on the last house before the frame edge, or a lit window on a
 // building the plate only shows half of, legitimately sits just off-plate: the
 // pool it bakes is still mostly on-screen. Further out is a coordinate bug.
@@ -121,6 +163,9 @@ const ANIM_PROP_OFFPLATE_MARGIN = 24;
  * wall, and the engine then quietly snaps them somewhere else.
  */
 const CONTACT_OFFSET_NATIVE = 15;
+
+/** Half the night watchman's body, NATIVE px. Matches NightWatchSystem. */
+const GUARD_HALF_WIDTH_NATIVE = 3;
 
 const SCENES_DIR = path.join(ROOT, 'assets', 'scenes');
 const MASKS_DIR = path.join(SCENES_DIR, 'masks');
@@ -476,6 +521,63 @@ for (const [id, loc] of Object.entries(locations)) {
     }
   });
 
+  // --- Stage 5: residents -------------------------------------------------
+  // Residents are the tier that is ALWAYS there, so a resident standing in a
+  // wall is a permanent defect rather than a transient one.
+  const residentIds = new Set();
+  (loc.residents || residentsData[id] || []).forEach((r, i) => {
+    const label = `residents[${i}] (${r.id || '?'})`;
+    if (!r.id) fail(where(`${label}: missing id`));
+    else if (residentIds.has(r.id)) fail(where(`${label}: duplicate resident id`));
+    residentIds.add(r.id);
+
+    if (!r.sprite || !CROWD_SPRITE_KEYS.has(r.sprite)) {
+      fail(where(`${label}: sprite "${r.sprite}" is not a registered crowd sheet`));
+    }
+    checkSpawn(`${label}.station`, r.station);
+    (r.route || []).forEach((p, w) => checkSpawn(`${label}.route[${w}]`, p));
+
+    if (!Array.isArray(r.hours) || r.hours.length !== 2) {
+      fail(where(`${label}: hours must be [startHour, endHour]`));
+    }
+    if (!Array.isArray(r.barks) || r.barks.length === 0) {
+      fail(where(`${label}: a resident with no barks is a statue`));
+    }
+  });
+
+  // --- Stage 5: openables -------------------------------------------------
+  const openableIds = new Set();
+  const plateKeys = new Set((loc.plateProps || []).map((p) => p.key));
+  const loreKeys = new Set((loc.loreObjects || []).map((o) => o.id));
+  (loc.openables || openablesData[id] || []).forEach((o, i) => {
+    const label = `openables[${i}] (${o.id || '?'})`;
+    if (!o.id) fail(where(`${label}: missing id`));
+    else if (openableIds.has(o.id)) fail(where(`${label}: duplicate openable id`));
+    openableIds.add(o.id);
+
+    // The design rule: an openable is NOT a new prop. It hangs on something
+    // already painted, so the prop it names has to exist.
+    if (!plateKeys.has(o.prop) && !loreKeys.has(o.prop)) {
+      fail(where(`${label}: prop "${o.prop}" is neither a plateProps key nor a loreObjects id`));
+    }
+    checkPoint(`${label}.anchor`, o.anchor);
+    checkSpawn(`${label}.approach`, o.approach);
+
+    (o.contents || []).forEach((c, k) => {
+      if (c.itemId && itemIds.size > 0 && !itemIds.has(c.itemId)) {
+        fail(where(`${label}.contents[${k}]: itemId "${c.itemId}" has no ITEM_DEFINITIONS entry`));
+      }
+    });
+    if (o.lock?.needs && itemIds.size > 0 && !itemIds.has(o.lock.needs)) {
+      fail(where(`${label}.lock.needs: "${o.lock.needs}" has no ITEM_DEFINITIONS entry`));
+    }
+    // `emptyText` is the line the player reads most often. It is the writing
+    // that matters, and it is never allowed to be "It is empty."
+    if (!o.emptyText || /^it is empty\.?$/i.test(o.emptyText.trim())) {
+      fail(where(`${label}: emptyText is missing or is the forbidden "It is empty."`));
+    }
+  });
+
   // --- lore objects -------------------------------------------------------
   (loc.loreObjects || []).forEach((o, i) => {
     checkPoint(`loreObjects[${i}] (${o.id})`, o);
@@ -488,6 +590,212 @@ for (const [id, loc] of Object.entries(locations)) {
     }
   });
 }
+
+// --- crowd pacing ----------------------------------------------------------
+// The authored numbers must name real locations and real crowd types, or a
+// silent typo turns into a location that quietly keeps the compositor's cap.
+for (const [id, entry] of Object.entries(crowdPacing)) {
+  if (id.startsWith('_')) continue;
+  if (!locations[id]) {
+    fail(`crowd-pacing.json: unknown location "${id}"`);
+    continue;
+  }
+  if (entry.maxCrowd !== undefined && (!Number.isFinite(entry.maxCrowd) || entry.maxCrowd < 1)) {
+    fail(`crowd-pacing.json ${id}.maxCrowd: must be a positive number`);
+  }
+  if (entry.density !== undefined && (!Number.isFinite(entry.density) || entry.density <= 0)) {
+    fail(`crowd-pacing.json ${id}.density: must be a positive number`);
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Stage 5 cross-file coordinates: schedules, patrol, factions
+//
+// Spec assertion A1: the feet-walkability test (`mask(x, y + 15)`) runs over
+// EVERY schedule station, route waypoint, resident station, patrol waypoint and
+// openable approach, and fails the build on any miss. Residents and openables
+// are checked per-location above; these three live outside the location files.
+// ---------------------------------------------------------------------------
+
+/** Feet-walkable check against a named location's mask. */
+function checkOnFoot(locationId, what, p) {
+  const loc = locations[locationId];
+  if (!loc) {
+    fail(`${what}: unknown location "${locationId}"`);
+    return;
+  }
+  if (!p || typeof p.x !== 'number' || typeof p.y !== 'number') {
+    fail(`${what}: not a {x, y} point`);
+    return;
+  }
+  const W = loc.world.nativeWidth;
+  const H = loc.world.nativeHeight;
+  if (p.x < 0 || p.y < 0 || p.x > W || p.y > H) {
+    fail(`${what}: (${p.x}, ${p.y}) is off the native ${W}x${H} ${locationId} plate`);
+    return;
+  }
+  const mask = walkMaskFor(loc);
+  if (!mask) return;
+  if (!mask(p.x, p.y + CONTACT_OFFSET_NATIVE)) {
+    fail(`${what}: feet at (${p.x}, ${p.y + CONTACT_OFFSET_NATIVE}) are not on walkable `
+      + `ground in ${locationId}'s walk mask`);
+  }
+}
+
+// --- NPC schedules ---------------------------------------------------------
+for (const [npcId, npc] of Object.entries(npcs.npcs || npcs)) {
+  (npc.schedule || []).forEach((slot, i) => {
+    const label = `npcs.json ${npcId}.schedule[${i}]`;
+    // `location` may name a fiction that has no plate ("home", "ship",
+    // "barracks", "elsewhere") — those slots are a fade at a door and carry no
+    // station, so there is nothing on a plate to check.
+    const onPlate = Boolean(locations[slot.location]);
+
+    if (slot.station) {
+      // A slot whose `location` is a fiction ("elsewhere", "home", "ship") can
+      // still carry a station: Lin Mei's 18:00 slot is authored as `elsewhere`
+      // because she has gone in for the night, but the station is where she
+      // stands on the QUAY to lock the door — the most important four seconds
+      // in the theft path. Those validate against the NPC's home plate.
+      const stationLocation = onPlate ? slot.location : npc.location;
+      if (locations[stationLocation]) {
+        checkOnFoot(stationLocation, `${label}.station`, slot.station);
+      } else {
+        fail(`${label}: has a station but neither "${slot.location}" nor the NPC's home `
+          + `"${npc.location}" has a plate`);
+      }
+    }
+    if (onPlate) {
+      (slot.route || []).forEach((p, w) => checkOnFoot(slot.location, `${label}.route[${w}]`, p));
+    }
+    // Doors are approached on foot, so their anchors are walkable points too.
+    // `exit` belongs to the location the NPC is LEAVING, which for a normal
+    // slot is the slot's own location; `exitFrom` names its own.
+    if (slot.exit && onPlate) {
+      checkOnFoot(slot.location, `${label}.exit (${slot.exit.door})`, slot.exit);
+    }
+    if (slot.enter && onPlate) {
+      checkOnFoot(slot.location, `${label}.enter (${slot.enter.door})`, slot.enter);
+    }
+    if (slot.exitFrom) {
+      checkOnFoot(slot.exitFrom.location, `${label}.exitFrom (${slot.exitFrom.door})`, slot.exitFrom);
+    }
+    if (typeof slot.arriveBy === 'number' && (slot.arriveBy < 0 || slot.arriveBy > 23)) {
+      fail(`${label}.arriveBy: ${slot.arriveBy} is not an hour`);
+    }
+  });
+
+  (npc.beats || []).forEach((beat, i) => {
+    const label = `npcs.json ${npcId}.beats[${i}]`;
+    if (!/^\d{1,2}:\d{2}$/.test(beat.at || '')) {
+      fail(`${label}.at: "${beat.at}" is not HH:MM`);
+    }
+    // A beat that carries its own station moves the NPC, so it is a spawn.
+    if (beat.station) {
+      const slot = (npc.schedule || []).find((s) => {
+        const hour = Number(String(beat.at).split(':')[0]);
+        return s.startHour === s.endHour
+          || (s.startHour < s.endHour ? hour >= s.startHour && hour < s.endHour
+            : hour >= s.startHour || hour < s.endHour);
+      });
+      if (slot && locations[slot.location]) {
+        checkOnFoot(slot.location, `${label}.station`, beat.station);
+      }
+    }
+    // `face` is a look-at point, NOT a stand-on point: the qibla beats face off
+    // the west edge of the plate on purpose, so it is deliberately unchecked.
+  });
+}
+
+// --- night watch -----------------------------------------------------------
+const nightWatchPath = path.join(ROOT, 'src', 'data', 'night-watch.json');
+if (fs.existsSync(nightWatchPath)) {
+  const watch = readJSON(nightWatchPath);
+  const locId = watch.locationId;
+  const watchMask = locations[locId] ? walkMaskFor(locations[locId]) : null;
+  (watch.nightWatch?.patrol || []).forEach((wp, i) => {
+    const label = `night-watch.json patrol[${i}] (${wp.id})`;
+    checkOnFoot(locId, label, wp);
+    // The patrol is walked by a BODY, not a point. A waypoint that is walkable
+    // as a single pixel but not across the guard's shoulders makes his own
+    // route unreachable: A* cannot stand at the goal, so he grinds against the
+    // geometry and the loop never closes. Six of the eighteen were exactly that.
+    if (watchMask) {
+      for (let d = -GUARD_HALF_WIDTH_NATIVE; d <= GUARD_HALF_WIDTH_NATIVE; d++) {
+        if (!watchMask(wp.x + d, wp.y + CONTACT_OFFSET_NATIVE)) {
+          fail(`${label}: walkable as a point but not for a body `
+            + `${GUARD_HALF_WIDTH_NATIVE * 2 + 1}px wide — the watchman cannot stand here`);
+          break;
+        }
+      }
+    }
+  });
+  (watch.dousableLights || []).forEach((lamp, i) => {
+    checkOnFoot(locId, `night-watch.json dousableLights[${i}] (${lamp.prop}).approach`, lamp.approach);
+    // The whole point of dousing being legible with zero new art: the light
+    // pool sits directly above its post. (The draft claims exactly 42px for all
+    // four; lantern-post-97 is actually 40, which is fine — but if a plate
+    // rebuild moves a pool off its post entirely, the player can no longer tell
+    // which lamp they just put out, and that IS a failure.)
+    if (lamp.light && lamp.propXY) {
+      const dy = lamp.propXY.y - lamp.light.y;
+      if (lamp.light.x !== lamp.propXY.x || dy < 34 || dy > 50) {
+        fail(`night-watch.json dousableLights[${i}] (${lamp.prop}): light at `
+          + `(${lamp.light.x}, ${lamp.light.y}) is no longer sitting on its post at `
+          + `(${lamp.propXY.x}, ${lamp.propXY.y}) — dousing is not legible any more`);
+      }
+    }
+    // `lightIndex` is 1-based in the authored data (light 1 is lights[0]).
+    const light = (locations[locId]?.lights || [])[lamp.lightIndex - 1];
+    if (!light) {
+      fail(`night-watch.json dousableLights[${i}]: lightIndex ${lamp.lightIndex} `
+        + `does not exist in ${locId}.lights (1-based)`);
+    } else if (light.x !== lamp.light.x || light.y !== lamp.light.y) {
+      fail(`night-watch.json dousableLights[${i}]: lightIndex ${lamp.lightIndex} is at `
+        + `(${light.x}, ${light.y}), not the authored (${lamp.light.x}, ${lamp.light.y})`);
+    }
+  });
+  if (!locations[locId]) fail(`night-watch.json: unknown locationId "${locId}"`);
+}
+
+// --- quest hotspots --------------------------------------------------------
+const hotspotPath = path.join(ROOT, 'src', 'data', 'quest-hotspots.json');
+if (fs.existsSync(hotspotPath)) {
+  (readJSON(hotspotPath).hotspots || []).forEach((h) => {
+    checkOnFoot(h.locationId, `quest-hotspots.json ${h.id}`, h);
+  });
+}
+
+// --- reputation faction keys (dependency D6) -------------------------------
+(function checkFactionKeys() {
+  const QUEST_DIR = path.join(ROOT, 'src', 'data', 'quests');
+  const sources = [{ label: 'npcs.json', data: npcs }];
+  if (fs.existsSync(QUEST_DIR)) {
+    for (const f of fs.readdirSync(QUEST_DIR).filter((n) => n.endsWith('.json'))) {
+      sources.push({ label: `quests/${f}`, data: readJSON(path.join(QUEST_DIR, f)) });
+    }
+  }
+  for (const { label, data } of sources) {
+    const walk = (node, trail) => {
+      if (Array.isArray(node)) return node.forEach((v, i) => walk(v, `${trail}[${i}]`));
+      if (!node || typeof node !== 'object') return;
+      for (const [key, value] of Object.entries(node)) {
+        if (key === 'reputation' && value && typeof value === 'object' && !Array.isArray(value)) {
+          for (const faction of Object.keys(value)) {
+            if (REPUTATION_BANNED.has(faction)) {
+              fail(`${label} ${trail}.reputation: "${faction}" is the retired alias for `
+                + '"chinese-merchants" — migrate it (dependency D6)');
+            } else if (!REPUTATION_FACTIONS.has(faction) && !REPUTATION_ALIASES.has(faction)) {
+              fail(`${label} ${trail}.reputation: "${faction}" is not a known faction`);
+            }
+          }
+        }
+        walk(value, `${trail}.${key}`);
+      }
+    };
+    walk(data, '');
+  }
+})();
 
 // ---------------------------------------------------------------------------
 // Report

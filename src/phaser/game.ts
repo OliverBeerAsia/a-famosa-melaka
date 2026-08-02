@@ -8,6 +8,7 @@ import Phaser from 'phaser';
 import { eventBridge, emitGameEvent } from './eventBridge';
 import { BootScene } from './scenes/BootScene';
 import { GameScene } from './scenes/GameScene';
+import { ensureMelakaPostFX } from './pipelines/MelakaPostFX';
 
 // Base game resolution - 16:9 widescreen
 export const GAME_WIDTH = 960;
@@ -73,11 +74,29 @@ export function createGameConfig(parent: HTMLElement): Phaser.Types.Core.GameCon
 }
 
 /**
+ * Register the screen-space grade once, on the renderer.
+ *
+ * `Phaser.AUTO` can and does select Canvas (blocklisted GPUs, some Linux/VM
+ * setups, `--disable-gpu`), which has no pipeline manager at all — hence the
+ * guard. `AtmosphereSystem` falls back to two static objects in that case, and
+ * `?fx=off` forces the same path for the A/B parity screenshots.
+ *
+ * Registration is deferred to a `ready` listener because the WebGL renderer's
+ * pipeline manager is not booted at the moment `new Phaser.Game()` returns.
+ */
+function registerPostPipelines(game: Phaser.Game) {
+  if ((game as Phaser.Game & { isBooted?: boolean }).isBooted) ensureMelakaPostFX(game);
+  else game.events.once('ready', () => ensureMelakaPostFX(game));
+}
+
+/**
  * Create and initialize the Phaser game
  */
 export function createGame(parent: HTMLElement): Phaser.Game {
   const config = createGameConfig(parent);
   const game = new Phaser.Game(config);
+
+  registerPostPipelines(game);
 
   // Register with event bridge
   eventBridge.setGame(game);
