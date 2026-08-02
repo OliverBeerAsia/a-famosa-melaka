@@ -35,6 +35,19 @@ export const DEPTH_UI_FLOOR = 1001;
 export const DEPTH_FX_SEAGULL = 900;
 
 /**
+ * Named slots inside the UI band, so the handful of screen-space overlays stop
+ * carrying bare numbers around. Values are exactly what they have always been.
+ */
+/** Interaction indicators pinned over an NPC's head. */
+export const DEPTH_UI_INDICATOR = 1001;
+/** The location name card shown on arrival. */
+export const DEPTH_UI_NAME_CARD = 1001;
+/** Toasts and the interaction prompt — one step above the name card. */
+export const DEPTH_UI_NOTIFICATION = 1002;
+/** The interaction prompt strip along the bottom of the screen. */
+export const DEPTH_UI_PROMPT = 1002;
+
+/**
  * Sprites are anchored above their feet, so a character standing at the very
  * bottom of the world sorts at y + this much. The depth scale has to leave room
  * for it or the last row of the world would clamp flat.
