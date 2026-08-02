@@ -102,18 +102,27 @@ const SWEEP_MS = 3000;
 /** Seconds of quiet before a suspicious guard settles back to unaware. */
 const CALM_TO_UNAWARE = 12;
 /**
- * Half the guard's body, world px.
+ * Half the guard's body for PATHING, world px — one native pixel each side.
  *
- * A real width, not a point — but only because the data now supports one. Six
- * of the eighteen waypoints (W3, W6, W8, W13, W16 and above all W18, a
- * two-pixel sliver against the customs shed) cleared the POINT walkability test
- * the validator and the draft both applied, and failed the body test, which
- * made the guard's own route unreachable and deadlocked him at W18 having
- * walked seventeen-eighteenths of a perfect loop. They have each been nudged
- * 1-2 native px; `validate-location-data.cjs` now asserts the body test so the
- * next plate rebuild cannot quietly reintroduce it.
+ * Deliberately narrower than the player's 18px stance, and the reason is the
+ * patrol line rather than the man. The eighteen waypoints are authored to make
+ * a *readable* circuit — down the dark south quay, along the lit upper one —
+ * and A* exists here only to get him round the geometry that circuit clips, not
+ * to plan a route of its own. Widening the search body makes it detour further
+ * from the authored line at every prop: measured at 3 native px the loop ran
+ * 68s against a 40-50s acceptance band, and the shape stopped reading as the
+ * line the designer drew. At one native px he follows it, and the per-axis
+ * `resolveMove` below still keeps him off actual wall pixels.
+ *
+ * Separately, six waypoints (W3, W6, W8, W13, W16 and above all W18, a
+ * two-pixel sliver against the customs shed) were walkable as POINTS but not as
+ * a body at all, which made his own route unreachable and deadlocked him at W18
+ * having walked seventeen-eighteenths of a perfect loop. Those have been nudged
+ * 1-2px and `validate-location-data.cjs` now asserts a 3-native-px body test —
+ * a deliberate margin over what pathing needs — so a plate rebuild cannot
+ * quietly reintroduce it.
  */
-const GUARD_HALF_WIDTH = 9;
+const GUARD_HALF_WIDTH = 3;
 /**
  * Sprite origin to feet, world px — the SAME convention as every other
  * character and as the patrol data itself.
@@ -127,8 +136,15 @@ const GUARD_HALF_WIDTH = 9;
  * and he stood in the dark shuffling for the rest of the night.
  */
 const GUARD_FOOT_OFFSET = 45;
-/** No progress for this long means the route is lying about the ground. */
-const STUCK_RECOMPUTE_MS = 2000;
+/**
+ * No progress for this long means the route is lying about the ground.
+ *
+ * 900ms, not 2s: the recovery itself is invisible (he skips a leg point or
+ * steps onto the waypoint) but the WAIT is not — a watchman standing still for
+ * two seconds in the middle of an empty quay reads as a scripted post, and the
+ * player re-plans the whole approach around a pause that was a glitch.
+ */
+const STUCK_RECOMPUTE_MS = 900;
 /**
  * Player sprite origin to feet, world px.
  *
