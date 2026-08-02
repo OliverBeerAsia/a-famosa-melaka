@@ -2813,6 +2813,79 @@
             "reviewDate": "2026-06-27",
             "notes": ""
           }
+        },
+        "crucifix": {
+          "assetClass": "static-object",
+          "runtimePath": "assets/sprites/objects/crucifix.png",
+          "u8References": [
+            "u8-barrel-crate",
+            "u8-stone-floor"
+          ],
+          "historicalNotes": "Jesuit processional crucifix at the west door of Nossa Senhora da Anunciada: dark tropical hardwood, pale corpus, brass INRI plate on a stepped stone foot.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": "pass",
+            "historicalAccuracy": null,
+            "densityMatch": "pass",
+            "overallGrade": "pass",
+            "reviewer": "forge/lore-objects.cjs",
+            "reviewDate": "2026-08-02",
+            "notes": "Authored on the Forge canon (50 colours), NW key, selective outline, zero partial alpha. Generated, not hand-edited: re-run the tool rather than repainting the PNG."
+          }
+        },
+        "stone-ruins": {
+          "assetClass": "static-object",
+          "runtimePath": "assets/sprites/objects/stone-ruins.png",
+          "u8References": [
+            "u8-wall-tile",
+            "u8-stone-floor",
+            "u8-vegetation"
+          ],
+          "historicalNotes": "Robbed-out coursing of the pre-1511 Sultanate palace on the summit: two wall stubs, a notch where the stone was carried off, a fallen block and lalang in the joints.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": "pass",
+            "historicalAccuracy": null,
+            "densityMatch": "pass",
+            "overallGrade": "pass",
+            "reviewer": "forge/lore-objects.cjs",
+            "reviewDate": "2026-08-02",
+            "notes": "Authored on the Forge canon (50 colours), NW key, selective outline, zero partial alpha. Generated, not hand-edited: re-run the tool rather than repainting the PNG."
+          }
+        },
+        "stone-tomb": {
+          "assetClass": "static-object",
+          "runtimePath": "assets/sprites/objects/stone-tomb.png",
+          "u8References": [
+            "u8-stone-floor",
+            "u8-wall-tile"
+          ],
+          "historicalNotes": "The ledger/chest tomb kept on the hill for Francis Xavier — moulded plinth, oversailing slab, an incised cross cut along the slab axes.",
+          "status": "keep",
+          "wave": 2,
+          "gradeCard": {
+            "silhouetteClarity": "pass",
+            "paletteCompliance": "pass",
+            "outlineWeight": "pass",
+            "ditherQuality": "pass",
+            "shadowConsistency": "pass",
+            "historicalAccuracy": null,
+            "densityMatch": "pass",
+            "overallGrade": "pass",
+            "reviewer": "forge/lore-objects.cjs",
+            "reviewDate": "2026-08-02",
+            "notes": "Authored on the Forge canon (50 colours), NW key, selective outline, zero partial alpha. Generated, not hand-edited: re-run the tool rather than repainting the PNG."
+          }
         }
       },
       "animatedSheets": {

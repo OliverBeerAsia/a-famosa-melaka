@@ -18,6 +18,58 @@ const { paintVolume } = require('./shade.cjs');
 const { addMod } = require('./anatomy.cjs');
 const { mat, skinRamp } = require('./ramps.cjs');
 
+/**
+ * A CLOTH FOLD, drawn as clustered dabs along its crest.
+ *
+ * THE DEFECT THIS REPLACES. Every fold used to be `pic.paint(arc, hex)` — an
+ * unbroken 1px stroke running the whole height of the torso. At 80px native
+ * that is a 40-pixel hairline, and a 40-pixel hairline over a flat field does
+ * not read as a fold in cloth; it reads as a SCRATCH ON THE IMAGE. Half the
+ * cast had two of them.
+ *
+ * What real cloth does, and what pixel art has always drawn, is a fold that
+ * catches the light in BROKEN CLUSTERS: three or four pixels together where the
+ * crest turns into the key, then nothing where it turns away, then another
+ * cluster. So the arc is still the geometry — the fold goes exactly where it
+ * went before — but only the lit runs of it are painted, they are 1-2px wide
+ * instead of always 1, and the fold FADES OUT before the bottom of the frame
+ * rather than running off the edge like a ruled line.
+ *
+ *   dir     which way the cluster thickens (toward the fold's lit side)
+ *   period  cluster pitch down the fold
+ *   run     how many rows of each period are painted
+ *   fade    fraction of the fold's length after which it dies out
+ */
+function foldCluster(pic, bodyMask, arc, hex, opts) {
+  const o = opts || {};
+  const rows = new Map();
+  arc.forEach((x, y) => {
+    if (!rows.has(y)) rows.set(y, []);
+    rows.get(y).push(x);
+  });
+  const ys = [...rows.keys()].sort((a, b) => a - b);
+  const n = ys.length;
+  if (!n) return;
+  const period = o.period == null ? 7 : o.period;
+  const run = o.run == null ? 4 : o.run;
+  const fade = o.fade == null ? 0.84 : o.fade;
+  const dir = o.dir == null ? 1 : o.dir;
+  const seed = o.seed == null ? 0 : o.seed;
+  ys.forEach((y, i) => {
+    if (i / Math.max(1, n - 1) > fade) return;         // the fold dies out
+    const phase = (i + seed) % period;
+    if (phase >= run) return;                          // the gap between clusters
+    // fat in the middle of a cluster, single-pixel at its ends: a highlight
+    // that starts and stops at full width is a dash, which is the same defect
+    // one size up.
+    const wide = phase > 0 && phase < run - 1;
+    rows.get(y).forEach((x) => {
+      pic.set(x, y, hex);
+      if (wide && bodyMask.get(x + dir, y)) pic.set(x + dir, y, hex);
+    });
+  });
+}
+
 function buildTorso(m, spec) {
   const W = m.W, H = m.H;
   const g = spec.body || {};
@@ -195,11 +247,12 @@ const COLLARS = {
       [t.cxT - side * t.shoulderHalf * 0.74, m.H - 1],
     ]).and(band);
     paintVolume(pic, border, B, { axis: 'flat', bias: 0.6 });
-    // fold lines in the drape
+    // Fold lines in the drape — clustered, not ruled. See foldCluster().
     for (let i = 0; i < 3; i++) {
-      pic.paint(arcMask(m.W, m.H,
+      const arc = arcMask(m.W, m.H,
         t.cxT + side * t.shoulderHalf * (0.9 - i * 0.22), y0 + 2 + i,
-        t.cxT - side * t.shoulderHalf * (0.3 + i * 0.2), m.H - 1, side * 2, 1).and(band), R[0]);
+        t.cxT - side * t.shoulderHalf * (0.3 + i * 0.2), m.H - 1, side * 2, 1).and(band);
+      foldCluster(pic, band, arc, R[0], { dir: -side, period: 7 + i, run: 4, seed: i * 3, fade: 0.9 });
     }
   },
 
@@ -215,9 +268,10 @@ const COLLARS = {
     ]).and(t.mask);
     paintVolume(pic, band, R, { axis: 'cylY', bias: 0.2, rimDark: true });
     for (let i = 0; i < 3; i++) {
-      pic.paint(arcMask(m.W, m.H,
+      const arc = arcMask(m.W, m.H,
         t.cxT + side * t.shoulderHalf * (1.05 - i * 0.2), t.y0 + 3 + i * 2,
-        t.cxT + side * t.shoulderHalf * (0.36 + i * 0.12), m.H - 1, -side * 1.6, 1).and(band), R[0]);
+        t.cxT + side * t.shoulderHalf * (0.36 + i * 0.12), m.H - 1, -side * 1.6, 1).and(band);
+      foldCluster(pic, band, arc, R[0], { dir: side, period: 6 + i, run: 4, seed: i * 4, fade: 0.9 });
     }
   },
 };
@@ -310,11 +364,12 @@ function drawGarment(pic, m, spec, mods) {
     paintVolume(pic, t.mask, [skin[0], skin[1], skin[2], skin[3]], { axis: 'cylY', bias: -0.35, rimDark: true });
   } else {
     paintVolume(pic, t.mask, base, { axis: 'cylY', bias: g.bias == null ? -0.1 : g.bias, rimDark: true });
-    // shoulder seams so cloth reads as cloth
+    // Shoulder folds, so cloth reads as cloth. Drawn as CLUSTERED dabs along
+    // the fold, never as one continuous 1px stroke — see foldCluster().
     const seamL = arcMask(m.W, m.H, t.cxT - t.shoulderHalf * 0.66, t.y0 + 2, t.cxT - t.shoulderHalf * 0.44, m.H - 6, -1.2, 1).and(t.mask);
     const seamR = arcMask(m.W, m.H, t.cxT + t.shoulderHalf * 0.70, t.y0 + 3, t.cxT + t.shoulderHalf * 0.52, m.H - 8, 1.2, 1).and(t.mask);
-    pic.paint(seamL, base[Math.max(0, 1)]);
-    pic.paint(seamR, base[Math.min(base.length - 1, 3)]);
+    foldCluster(pic, t.mask, seamL, base[Math.max(0, 1)], { dir: -1, period: 8, run: 5, seed: 3 });
+    foldCluster(pic, t.mask, seamR, base[Math.min(base.length - 1, 3)], { dir: 1, period: 7, run: 4, seed: 11 });
   }
 
   const collar = COLLARS[g.collar || 'none'];
@@ -333,4 +388,4 @@ function drawGarment(pic, m, spec, mods) {
   return t.mask;
 }
 
-module.exports = { buildTorso, COLLARS, ACCESSORIES, drawGarment };
+module.exports = { buildTorso, COLLARS, ACCESSORIES, drawGarment, foldCluster };

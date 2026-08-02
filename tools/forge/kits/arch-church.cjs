@@ -490,4 +490,149 @@ def('terrace-wall', { collide: false, examine: 'The churchyard wall. Below it th
   }
 });
 
+/**
+ * THE BURIAL-PLOT KERB — the seam dressing.
+ *
+ * THE DEFECT. The graveyard's dirt sat inside a perfect screen rhombus against
+ * the churchyard grass, and the eye read the straight edge as a rendering
+ * artefact rather than as a place. The hard edge itself is CORRECT and stays:
+ * ground regions are cut by point-in-polygon with no feathering, because a
+ * feathered edge on a 640x360 plate is anti-aliasing by another name and it is
+ * exactly what makes pixel art look like a downscaled photograph.
+ *
+ * So the fix is the one a real churchyard uses. A burial plot is not a colour
+ * change in the turf, it is a plot with a BUILT EDGE — a low rubble kerb, half
+ * of it robbed out for somebody's wall, loose stones lying where it went, and
+ * lalang growing through the gaps. Draw that and the boundary stops being a
+ * seam and becomes the reason the ground changes.
+ *
+ * `poly` arrives from the compositor via the layout's `edgeOf`, so the kerb is
+ * derived from the very polygon that cut the ground and cannot drift off it.
+ * Author the ground as an IRREGULAR poly and the kerb wanders with it for free.
+ */
+def('plot-kerb', { collide: false, examine: false }, (s, iso, o) => {
+  const seed = o.seed || 31;
+  const poly = o.poly || [];
+  if (poly.length < 3) return;
+  const stone = P.RAMPS.stone;
+  const fol = P.RAMPS.foliage;
+  const earth = P.RAMPS.earth;
+  const H = o.h === undefined ? 4 : o.h;
+  const blk = o.block === undefined ? 11 : o.block;     // rubble course length
+  const robbed = o.robbed === undefined ? 0.16 : o.robbed;
+
+  // --- 1. resample the outline into screen pixels, carrying arclength -------
+  const pts = poly.map((p) => iso.toScreen(p.tx, p.ty, 0));
+  const cen = pts.reduce((a, p) => ({ x: a.x + p.x / pts.length, y: a.y + p.y / pts.length }), { x: 0, y: 0 });
+  const samples = [];
+  let arc = 0;
+  for (let e = 0; e < pts.length; e++) {
+    const a = pts[e], b = pts[(e + 1) % pts.length];
+    const dx = b.x - a.x, dy = b.y - a.y;
+    const len = Math.hypot(dx, dy);
+    const n = Math.max(1, Math.ceil(len * 2));
+    // A (1,1) tile edge projects to a PURE VERTICAL on screen, so iso.face()
+    // (which indexes by screen x) cannot draw it at all. Walking the projected
+    // segment handles every orientation, and `steep` picks the profile: a
+    // near-horizontal run shows the kerb's face, a near-vertical one shows it
+    // end-on as a 3px-wide band.
+    const steep = Math.abs(dy) > Math.abs(dx);
+    for (let i = 0; i < n; i++) {
+      const f = i / n;
+      samples.push({
+        x: Math.round(a.x + dx * f), y: Math.round(a.y + dy * f),
+        t: arc + len * f, steep,
+      });
+    }
+    arc += len;
+  }
+
+  const outward = (sm) => {
+    const vx = sm.x - cen.x, vy = sm.y - cen.y;
+    const m = Math.hypot(vx, vy) || 1;
+    return { x: vx / m, y: vy / m };
+  };
+
+  // --- 2. the kerb run ------------------------------------------------------
+  samples.forEach((sm) => {
+    const bi = Math.floor(sm.t / blk);
+    const gone = hash2(bi, 7, seed) < robbed;
+    if (gone) {
+      // Robbed out: the plot's dirt spills a pixel or two over the line, which
+      // is what breaks the straight edge even where there is no stone left.
+      const nrm = outward(sm);
+      for (let k = 0; k <= 2; k++) {
+        const x = sm.x + Math.round(nrm.x * k), y = sm.y + Math.round(nrm.y * k);
+        if (hash2(x, y, seed + 5) < 0.42 - k * 0.11) s.setHex(x, y, step(earth, 1 + (k & 1)));
+      }
+      return;
+    }
+    const joint = (sm.t % blk) < 1.2;
+    const wob = hash2(bi, 3, seed) < 0.3 ? -1 : 0;        // a settled course
+    // The cap is the only bright value in the run, and a CONSTANT bright cap
+    // is what turned the first pass into a white pipe laid round the plot —
+    // an unbroken 1px highlight tracks the eye exactly as well as the hard
+    // colour edge it was meant to hide. Per-block, so half the stones catch
+    // the sun and half do not.
+    const cap = 3 + (hash2(bi, 5, seed) > 0.52 ? 1 : 0) + wob;
+    if (sm.steep) {
+      for (let k = 0; k < 3; k++) {
+        let idx = (k === 0 ? cap : k === 1 ? 2 : 0) + (joint ? -2 : 0);
+        s.setHex(sm.x - 1 + k, sm.y, step(stone, clamp(idx, 0, 4)));
+      }
+      T.shadePixel(s, sm.x + 2, sm.y, 0.30);
+    } else {
+      const h = H + wob;
+      for (let v = 0; v < h; v++) {
+        let idx = v === h - 1 ? cap : v === h - 2 ? 3 : v === 0 ? 0 : 2;
+        if (joint && v < h - 1) idx -= 2;
+        s.setHex(sm.x, sm.y - v, step(stone, clamp(idx, 0, 4)));
+      }
+      T.shadePixel(s, sm.x + 1, sm.y + 1, 0.32);          // cast, down-right
+    }
+  });
+
+  // --- 3. loose stones where the kerb went ---------------------------------
+  const period = o.stoneEvery === undefined ? 23 : o.stoneEvery;
+  samples.forEach((sm) => {
+    if (Math.abs(sm.t % period) > 0.6) return;
+    const i = Math.floor(sm.t / period);
+    if (hash2(i, 11, seed) > 0.62) return;
+    const nrm = outward(sm);
+    const off = 3 + Math.round(hash2(i, 13, seed) * 4);
+    const cx = Math.round(sm.x + nrm.x * off), cy = Math.round(sm.y + nrm.y * off * 0.6);
+    const rx = 2 + Math.round(hash2(i, 17, seed) * 2), ry = 1 + Math.round(hash2(i, 19, seed));
+    T.shadePixel(s, cx + 1, cy + ry, 0.34);
+    for (let dy = -ry; dy <= ry; dy++) {
+      for (let dx = -rx; dx <= rx; dx++) {
+        if ((dx * dx) / (rx * rx) + (dy * dy) / (ry * ry) > 1.05) continue;
+        s.setHex(cx + dx, cy + dy, step(stone, dy < 0 ? 4 : dx < 0 ? 3 : 1));
+      }
+    }
+  });
+
+  // --- 4. the scrub line ----------------------------------------------------
+  // Lalang straddling the kerb. Foliage crossing the boundary is what stops the
+  // eye tracking the line, and it is also just what an unswept plot looks like.
+  const tuft = o.tuftEvery === undefined ? 14 : o.tuftEvery;
+  samples.forEach((sm) => {
+    if (Math.abs(sm.t % tuft) > 0.6) return;
+    const i = Math.floor(sm.t / tuft);
+    if (hash2(i, 23, seed) > 0.70) return;
+    const n = 5 + Math.round(hash2(i, 29, seed) * 5);
+    for (let k = 0; k < n; k++) {
+      const bx = Math.round(sm.x + (hash2(i, k + 31, seed) - 0.5) * 11);
+      const by = Math.round(sm.y + (hash2(i, k + 37, seed) - 0.5) * 4);
+      const bh = 3 + Math.round(hash2(i, k + 41, seed) * 5);
+      const curl = hash2(i, k + 43, seed) < 0.5 ? -1 : 1;
+      const lit = curl < 0;
+      for (let v = 0; v < bh; v++) {
+        const gx = bx + Math.round(curl * (v / bh) * (v / bh) * 2);
+        s.setHex(gx, by - v, step(fol, lit ? 3 : 1));
+        s.setHex(gx + 1, by - v, step(fol, lit ? 4 : 2));
+      }
+    }
+  });
+});
+
 module.exports = { C, lancet, buttress };

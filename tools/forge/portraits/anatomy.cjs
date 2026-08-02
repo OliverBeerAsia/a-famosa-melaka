@@ -201,12 +201,31 @@ function skinField(m, opts = {}) {
   return f;
 }
 
-/** Paint a skin region from a shade field + modifier map. */
+/**
+ * Paint a skin region from a shade field + modifier map.
+ *
+ * STEP 0 IS A PIT, NOT A SHADE. The field floors at 0.80 on the far side of a
+ * turned head, and every painted modifier then subtracts from that floor — so
+ * on a strongly-turned face (Aminah is at turn -0.74) the mild, broad mods
+ * that describe a jaw and a nasolabial fold were enough to collapse the whole
+ * lower cheek and chin onto the ramp's darkest step at once. The result read
+ * as a DARK PATCH STUCK ON THE CHIN rather than as a shaded jaw, because a
+ * flat block of one value has no form in it.
+ *
+ * The ramp's bottom step belongs to the places light genuinely does not reach —
+ * a nostril, the corner of a closed mouth, under an ear — and those all carry a
+ * strong local modifier. So step 0 is now earned: a pixel reaches it only if
+ * its own modifier is at least `PIT`. Everything else bottoms out at step 1,
+ * which still reads as shadow and still has the step below it in reserve.
+ */
+const PIT = -0.95;
 function paintSkin(pic, mask, field, mods, skin) {
   const W = pic.w;
   mask.forEach((x, y) => {
     const i = y * W + x;
-    const v = clamp(field[i] + (mods ? mods[i] : 0), 0, 4);
+    const mod = mods ? mods[i] : 0;
+    let v = clamp(field[i] + mod, 0, 4);
+    if (v < 1 && mod > PIT) v = 1;
     pic.set(x, y, skin[Math.min(4, Math.round(v))]);
   });
 }

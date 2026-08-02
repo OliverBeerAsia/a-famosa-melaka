@@ -2,7 +2,7 @@
   "id": "st-pauls-church",
   "name": "St. Paul's Church Hill",
   "generatedBy": "tools/forge/compose-plate.cjs",
-  "layoutHash": "ea5adaa4f9bc",
+  "layoutHash": "eedb05e16012",
   "world": {
     "scale": 3,
     "nativeWidth": 640,
@@ -221,6 +221,15 @@
       "y": 158,
       "label": "The churchyard wall",
       "examineText": "You can see the whole roadstead from here: the quay, the river mouth, and every sail between the hill and Sumatra. It is the reason the fortress is where it is.",
+      "interactive": false
+    },
+    {
+      "key": "plot-kerb",
+      "type": "plot-kerb",
+      "x": 104,
+      "y": 266,
+      "label": "The kerb of the burial plot",
+      "examineText": "Someone once set a low wall of hill-stone around the graves. Half of it has gone into the wall of a house down the hill, and the lalang has taken the rest.",
       "interactive": false
     },
     {

@@ -116,7 +116,12 @@ const MATS = {
   'hair-silver':   [R.stone[1], R.stone[2], R.stone[3], R.whitewash[3]],
   'hair-saltpep':  [R.timber[0], R.timber[1], R.timber[2], R.stone[3]],
   // --- hard materials ----------------------------------------------------
-  'steel':         [R.stone[0], R.stone[1], R.stone[3], R.whitewash[4]],
+  // Polished steel is a MID-VALUE material with a small specular, not a bright
+  // one. Topping the ramp at whitewash[4] (#FCECCC, a cream) meant every lit
+  // face of the morion resolved to near-white and the helmet read as a sailor's
+  // cap. The ramp now tops out at stone[4] and the cream survives only as the
+  // one-pixel crest hit the morion paints by hand.
+  'steel':         [R.stone[0], R.stone[1], R.stone[2], R.stone[4]],
   'brass':         [R.timber[1], R.terracotta[2], ACCENTS['brass-gold'], R.earth[4]],
   'leather':       [R.timber[0], R.timber[1], R.timber[2], R.earth[2]],
   'stone-wall':    [R.stone[1], R.stone[2], R.stone[3], R.stone[4]],

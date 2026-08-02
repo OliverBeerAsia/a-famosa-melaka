@@ -23,6 +23,22 @@ const RUNTIME_ASSET_MANIFEST = path.join(__dirname, '..', 'src', 'data', 'runtim
 const CHARACTER_SHEETS_DIR = path.join(__dirname, '..', 'assets', 'sprites', 'characters');
 const CROWD_SPRITES_DIR = path.join(__dirname, '..', 'assets', 'sprites', 'crowd');
 const GAME_SCENE_FILE = path.join(__dirname, '..', 'src', 'phaser', 'scenes', 'GameScene.ts');
+const BACKDROP_SYSTEM_FILE = path.join(__dirname, '..', 'src', 'phaser', 'systems', 'BackdropSystem.ts');
+
+/**
+ * The scene's own source plus the systems it delegates world-building to.
+ *
+ * These checks are about what the ENGINE does, not about which file holds the
+ * line, so they read the scene and BackdropSystem together — the plate, walk
+ * mask, colliders and iso tileset registry moved into the latter during the
+ * v0.12 decomposition.
+ */
+function readSceneSources() {
+  return [GAME_SCENE_FILE, BACKDROP_SYSTEM_FILE]
+    .filter((file) => fs.existsSync(file))
+    .map((file) => fs.readFileSync(file, 'utf8'))
+    .join('\n');
+}
 const ISOMETRIC_RENDERER_FILE = path.join(__dirname, '..', 'src', 'phaser', 'systems', 'IsometricRenderer.ts');
 const TITLE_SCREEN_FILE = path.join(__dirname, '..', 'src', 'components', 'screens', 'TitleScreen.tsx');
 const LOADING_SCREEN_FILE = path.join(__dirname, '..', 'src', 'components', 'screens', 'LoadingScreen.tsx');
@@ -125,7 +141,7 @@ describe('Visual polish integrity', () => {
 
   test('isometric movement keeps visual wall art out of physics collision', () => {
     const rendererSource = fs.readFileSync(ISOMETRIC_RENDERER_FILE, 'utf8');
-    const gameSceneSource = fs.readFileSync(GAME_SCENE_FILE, 'utf8');
+    const gameSceneSource = readSceneSources();
     const failures = [];
 
     ISO_MAPS.forEach((mapPath) => {
@@ -193,7 +209,7 @@ describe('Visual polish integrity', () => {
   test('isometric map tiles are loaded and mapped before rendering', () => {
     const manifest = loadJson(RUNTIME_ASSET_MANIFEST);
     const registeredIsoTiles = new Set(manifest.tiles?.isometric || []);
-    const gameSceneSource = fs.readFileSync(GAME_SCENE_FILE, 'utf8');
+    const gameSceneSource = readSceneSources();
     const failures = [];
 
     ISO_MAPS.forEach((mapPath) => {
@@ -216,7 +232,7 @@ describe('Visual polish integrity', () => {
           failures.push(`${tilesetName} is registered by map but missing ${path.relative(process.cwd(), assetPath)}`);
         }
         if (!gameSceneSource.includes(`name: '${tilesetName}'`)) {
-          failures.push(`${tilesetName} is missing from GameScene tilesetMappings`);
+          failures.push(`${tilesetName} is missing from the engine iso tileset mapping`);
         }
       });
     });

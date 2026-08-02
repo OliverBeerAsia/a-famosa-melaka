@@ -1,6 +1,6 @@
 {
   "id": "st-pauls-church",
-  "name": "St. Paul's Church Hill",
+  "name": "Madre de Deus \u2014 the Church Hill",
   "notes": [
     "THE FLOATING ISLAND IS THE DEFECT THIS PLATE EXISTS TO KILL. The shipping",
     "plate is a diamond of ground in a void, and its church is about 80 native px",
@@ -207,10 +207,36 @@
     {
       "id": "grave-ground",
       "shape": {
-        "sFrom": 24,
-        "sTo": 42,
-        "ddFrom": -22,
-        "ddTo": -5
+        "poly": [
+          { "s": 23.4, "dd": -22.6 },
+          { "s": 24.1, "dd": -19.8 },
+          { "s": 23.0, "dd": -17.2 },
+          { "s": 23.8, "dd": -14.0 },
+          { "s": 22.9, "dd": -11.4 },
+          { "s": 23.9, "dd": -8.6 },
+          { "s": 23.3, "dd": -6.2 },
+          { "s": 24.2, "dd": -4.6 },
+          { "s": 26.8, "dd": -5.4 },
+          { "s": 29.2, "dd": -4.4 },
+          { "s": 31.6, "dd": -5.6 },
+          { "s": 34.4, "dd": -4.6 },
+          { "s": 37.2, "dd": -5.9 },
+          { "s": 39.8, "dd": -4.5 },
+          { "s": 42.6, "dd": -5.2 },
+          { "s": 43.6, "dd": -7.8 },
+          { "s": 42.4, "dd": -10.6 },
+          { "s": 43.9, "dd": -13.6 },
+          { "s": 44.3, "dd": -17.0 },
+          { "s": 42.8, "dd": -19.4 },
+          { "s": 43.4, "dd": -21.6 },
+          { "s": 41.2, "dd": -22.4 },
+          { "s": 38.4, "dd": -21.9 },
+          { "s": 35.6, "dd": -23.2 },
+          { "s": 32.8, "dd": -22.0 },
+          { "s": 30.2, "dd": -23.0 },
+          { "s": 27.6, "dd": -21.9 },
+          { "s": 25.4, "dd": -22.8 }
+        ]
       },
       "texture": "trodden",
       "material": "earth",
@@ -460,7 +486,7 @@
       "seed": 7,
       "key": "ledger-slab",
       "label": "A ledger slab",
-      "examineText": "A Portuguese name, and cut straight across it a Dutch one. The stone was too good to waste on only one family."
+      "examineText": "A Portuguese name, and cut straight across it a second Portuguese name in a fresher hand. Good stone does not come out to Melaka often enough to spend it on one family."
     },
     {
       "type": "tomb-slab",
@@ -590,7 +616,7 @@
       "seed": 43,
       "key": "grave-recent",
       "label": "A new headstone",
-      "examineText": "The cut is still sharp. A factor of the Casa da India, dead of the flux nine weeks ago, aged twenty-six."
+      "examineText": "The cut is still sharp. A factor of the feitoria, dead of the flux nine weeks ago, aged twenty-six."
     },
     {
       "type": "gravestone",
@@ -896,6 +922,23 @@
       "dd": -3.0,
       "seed": 123,
       "examine": false
+    },
+    {
+      "type": "plot-kerb",
+      "edgeOf": "grave-ground",
+      "s": 33.0,
+      "dd": -13.5,
+      "depthAt": 23,
+      "h": 4,
+      "block": 9,
+      "robbed": 0.26,
+      "tuftEvery": 11,
+      "stoneEvery": 19,
+      "seed": 127,
+      "collide": false,
+      "key": "plot-kerb",
+      "label": "The kerb of the burial plot",
+      "examineText": "Someone once set a low wall of hill-stone around the graves. Half of it has gone into the wall of a house down the hill, and the lalang has taken the rest."
     }
   ],
   "blocked": [],

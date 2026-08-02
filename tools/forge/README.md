@@ -30,6 +30,33 @@ npm run forge:remap      # crowd + character sheets -> canon
 npm run validate:canon   # the CI gate (also runs in pretest / prebuild)
 ```
 
+### v0.12 additions
+
+Four more generators, all on the same contract (canon hexes only, alpha 0 or
+255, one NW sun, deterministic, own gates, non-zero exit on failure):
+
+```bash
+npm run forge:title            # title-panorama.json -> opening-screen.png
+                               #   + scene-loading-ribeira.png (dusk / night LUT)
+npm run forge:item-icons       # the 27 inventory icons, 16x16 native x3
+npm run forge:lore-objects     # crucifix / stone-tomb / stone-ruins
+npm run forge:contact-shadows  # the benchmark-13 shadow sheet (data only)
+```
+
+| file | writes | notes |
+|---|---|---|
+| `title-screen.cjs` | `assets/scenes/opening-screen.png`, `scene-loading-ribeira.png` | one composed panorama, two LUTs. **No baked text** — that is what let `.ui-screen-scrim` go back to an even veil |
+| `item-icons.cjs` | `assets/sprites/ui/items/*.png` | 27 icons; documents are separated by FITTING, never by ruling |
+| `lore-objects.cjs` | `assets/sprites/objects/{crucifix,stone-tomb,stone-ruins}.png` | the three St Paul's lore objects that resolved to `debug-prop-missing` |
+| `contact-shadows.cjs` | `assets/sprites/effects/contact-shadows.png` | 3 frames; see `docs/art-bible/forge/contact-shadows.md` for the engine contract |
+
+`compose-plate.cjs` gained a `--screen` mode (picture only — no walk mask, no
+derived engine data) and a `bastion` background type, both for the panorama.
+
+**LEGACY_ALLOWLIST went 7 -> 4** in v0.12: the title screen, the loading screen
+and the 27 item icons all came off it, and in every case the exemption was
+replaced by real coverage in `gateMembership` rather than simply deleted.
+
 Every one exits non-zero if a gate fails, so all are CI-ready as-is, and every
 one is **deterministic** — no `Math.random`, no `Date.now`; same inputs, same
 bytes. `validate-canon.cjs` enforces that last property by re-rendering all 20

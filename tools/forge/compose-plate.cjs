@@ -57,9 +57,20 @@ function groundShader(spec) {
   }
 }
 
+/**
+ * A poly point may be authored in raw tile space `{tx,ty}` or — far more
+ * usefully — in the screen-meaningful `{s,dd}` pair the rest of the layout
+ * language uses (see AUTHORING COORDINATES below). An irregular region outline
+ * is the one place where a band is not enough, and hand-writing tx/ty for a
+ * wandering boundary is unreadable.
+ */
+function polyPoints(poly) {
+  return poly.map((p) => (p.tx !== undefined ? p : sdd(p.s, p.dd)));
+}
+
 function shapePolys(shape) {
   if (!shape) return [];
-  if (shape.poly) return [shape.poly];
+  if (shape.poly) return [polyPoints(shape.poly)];
   if (Array.isArray(shape)) return shape.map((s) => shapePolys(s)[0]);
   if (shape.sFrom !== undefined) return [bandPoly(shape)];
   return [ISO.rectPoly(shape.tx, shape.ty, shape.w, shape.d)];
@@ -153,6 +164,8 @@ function compose(rawLayout, opts) {
       drawHill(plate, b);
     } else if (b.type === 'tower') {
       drawTower(plate, b);
+    } else if (b.type === 'bastion') {
+      drawBastion(plate, b);
     }
   });
 
@@ -254,7 +267,20 @@ function compose(rawLayout, opts) {
     items.push({
       depth, layer: p.layer || 'plate', label: `${p.type}#${i}`,
       draw: (surf, out) => {
-        def.draw(surf, iso, Object.assign({ seed: 500 + i * 13 }, p));
+        const spec = Object.assign({ seed: 500 + i * 13 }, p);
+        // BOUNDARY DRESSING. A ground region's edge is a hard point-in-polygon
+        // cut by design (no feathering — that is what would turn pixel art into
+        // a scaled photograph). The way a hard edge is made to READ as a real
+        // boundary is by DRESSING it: a kerb, loose stones, a scrub line. So a
+        // prop can name a ground region and receive its outline, and the
+        // dressing can never drift off the seam it exists to hide, because it
+        // is derived from the same polygon that cut it.
+        if (p.edgeOf) {
+          const g = (layout.ground || []).find((gg) => gg.id === p.edgeOf);
+          if (!g) throw new Error(`edgeOf: no ground region "${p.edgeOf}"`);
+          spec.poly = shapePolys(g.shape)[0];
+        }
+        def.draw(surf, iso, spec);
         if (p.collide !== false && c > 0) {
           out.blocked.push({ tx: p.tx - c * 0.2, ty: p.ty - c * 0.2, w: c, d: c });
         }
@@ -442,6 +468,55 @@ function drawHill(surface, spec) {
   }
 }
 
+/**
+ * A Famosa, seen from across the water: a battlemented laterite block with a
+ * gate arch. A BACKGROUND SILHOUETTE, not a kit piece.
+ *
+ * The fortress kit (`fortress-wall`) draws the real thing — coursed ashlar,
+ * pilasters, a rampart walk with thickness — and at 20px tall on a 320px frame
+ * all of that resolves to a brown crate. A distant mass needs three features
+ * and no more: a flat top, merlons, and one dark opening. Same reason
+ * `drawTower` exists rather than placing the church kit on the horizon.
+ */
+function drawBastion(surface, spec) {
+  const haze = spec.haze === undefined ? 0.4 : spec.haze;
+  const x0 = spec.x, w = spec.w, base = spec.baseY, h = spec.h;
+  const lit = T.hazed(P.RAMPS.terracotta[3], haze);
+  const body = T.hazed(P.RAMPS.terracotta[2], haze);
+  const dark = T.hazed(P.RAMPS.terracotta[1], haze);
+  const cap = T.hazed(P.RAMPS.earth[3], haze);
+  const hole = T.hazed(P.ANCHORS['shadow-violet'], haze * 0.5);
+  for (let x = x0; x < x0 + w; x++) {
+    const t = (x - x0) / w;
+    for (let y = base - h; y < base; y++) {
+      // one string course, and the lit face is the left third (NW key)
+      const course = ((base - y) % 7) === 0;
+      surface.setHex(x, y, course ? dark : t < 0.34 ? lit : t < 0.72 ? body : dark);
+    }
+  }
+  // merlons: alternating blocks standing above the wall head
+  const merlon = spec.merlon || 3;
+  for (let x = x0; x < x0 + w; x++) {
+    if (Math.floor((x - x0) / merlon) % 2) continue;
+    for (let k = 1; k <= 2; k++) surface.setHex(x, base - h - k, ((x - x0) % merlon) === 0 ? lit : body);
+    surface.setHex(x, base - h - 3, cap);
+  }
+  // the gate: a dark arched opening, always on the frame-facing third
+  const gw = Math.max(3, Math.round(w * 0.22));
+  const gx = x0 + Math.round(w * (spec.gateAt === undefined ? 0.5 : spec.gateAt)) - (gw >> 1);
+  const gh = Math.max(4, Math.round(h * 0.52));
+  for (let x = gx; x < gx + gw; x++) {
+    const dxc = (x + 0.5) - (gx + gw / 2);
+    const arch = Math.round(Math.sqrt(Math.max(0, (gw / 2) * (gw / 2) - dxc * dxc)));
+    for (let y = base - gh - arch; y < base; y++) surface.setHex(x, y, hole);
+  }
+  // a flagstaff on the seaward shoulder
+  if (spec.flag !== false) {
+    const fx = x0 + Math.round(w * 0.14);
+    for (let k = 0; k < Math.max(3, Math.round(h * 0.34)); k++) surface.setHex(fx, base - h - 3 - k, cap);
+  }
+}
+
 function drawTower(surface, spec) {
   const haze = spec.haze === undefined ? 0.34 : spec.haze;
   const wall = T.hazed(P.RAMPS.whitewash[3], haze);
@@ -529,9 +604,23 @@ function run(argv) {
 
   const id = layout.id;
   res.plate.writePNG(path.join(outDir, `${id}.png`));
-  res.walk.writePNG(path.join(outDir, `${id}-walk.png`));
-  if (argv.includes('--scale') || argv.includes('--3x')) {
+  // SCREEN MODE. A title/loading panorama is composed from the same kits as a
+  // world plate and must be, or it would not belong to the same game — but it
+  // is not somewhere you can stand. There is nothing to walk on, nothing to
+  // collide with, nothing to spawn at, and emitting a walk mask and a derived
+  // engine document for it would put a fictional location into the tree for
+  // validate-location-data.cjs to find. So screen mode writes the picture and
+  // stops.
+  const screen = argv.includes('--screen');
+  if (!screen) res.walk.writePNG(path.join(outDir, `${id}-walk.png`));
+  if (screen || argv.includes('--scale') || argv.includes('--3x')) {
     res.plate.scaleNearest(3).writePNG(path.join(outDir, `${id}@3x.png`));
+  }
+  if (screen) {
+    console.log(`screen     ${id}.png            ${res.plate.width}x${res.plate.height} (+ @3x)`);
+    console.log(`palette    ${res.used.size} canon colours used (budget 40)`);
+    console.log(`took       ${Date.now() - t0}ms   layoutHash ${res.engine.layoutHash}`);
+    return res;
   }
 
   res.overlayEntries.forEach((oe, i) => {

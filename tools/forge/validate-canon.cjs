@@ -53,10 +53,7 @@ const SCENES = path.join(REPO, 'assets', 'scenes');
  * exemption. Nothing may be ADDED to it without a matching stage that removes it.
  */
 const LEGACY_ALLOWLIST = [
-  { glob: 'assets/scenes/opening-screen.png', stage: 6, why: 'title screen — Stage 6 (UI/portraits pass)' },
-  { glob: 'assets/scenes/scene-loading-ribeira.png', stage: 6, why: 'loading screen — Stage 6 (UI/portraits pass)' },
   { glob: 'assets/sprites/portraits/', stage: 6, why: 'VGA portraits — Stage 6 rebuilds all 14' },
-  { glob: 'assets/sprites/ui/items/', stage: 6, why: 'item icons — Stage 6 (the UI CHROME is migrated; the 27 item icons are not yet)' },
   { glob: 'assets/sprites/objects/', stage: 3, why: 'props — Stage 3 plate compositor re-emits these from the Forge kits' },
   { glob: 'assets/sprites/tiles/', stage: 3, why: 'iso tiles — not the shipping path; Stage 3 decides their fate' },
   { glob: 'assets/sprites/effects/', stage: 5, why: 'particles — Stage 5' },
@@ -139,14 +136,29 @@ async function gateMembership(problems, opts) {
     });
   });
 
+  // The title and loading panoramas (tools/forge/title-screen.cjs). They are
+  // composed from the kits like any plate and then relit through the LUT, so
+  // they answer to the same derived palette as a plate at that hour — NOT to
+  // the raw canon. Both came off LEGACY_ALLOWLIST in v0.12 and this is what
+  // replaced the exemption; deleting the entry without adding the check would
+  // have retired the exemption and the coverage in the same commit.
+  [
+    { file: path.join(SCENES, 'opening-screen.png'), tod: 'dusk', what: 'title screen' },
+    { file: path.join(SCENES, 'scene-loading-ribeira.png'), tod: 'night', what: 'loading screen' },
+  ].forEach((s) => targets.push({ file: s.file, allowed: RP.derivedPalette(s.tod), what: s.what }));
+
   [...listPngs('assets/sprites/crowd'), ...listPngs('assets/sprites/characters', /-sheet\.png$/)]
     .forEach((f) => targets.push({ file: f, allowed: CANON_SET, what: 'sprite' }));
 
-  // UI chrome (tools/forge/ui.cjs). listPngs is non-recursive, so the not-yet-
-  // migrated `items/` icons are naturally out of scope — they stay on the
-  // allowlist above until Stage 6 redraws them.
+  // UI chrome (tools/forge/ui.cjs) and, since v0.12, the 27 inventory item
+  // icons (tools/forge/item-icons.cjs). listPngs is non-recursive, so `items/`
+  // has to be named explicitly — dropping it off LEGACY_ALLOWLIST without
+  // adding it here would have retired the exemption and the coverage together,
+  // which is the one way an allowlist entry can be deleted dishonestly.
   listPngs('assets/sprites/ui')
     .forEach((f) => targets.push({ file: f, allowed: CANON_SET, what: 'UI chrome' }));
+  listPngs('assets/sprites/ui/items')
+    .forEach((f) => targets.push({ file: f, allowed: CANON_SET, what: 'item icon' }));
 
   for (const t of targets) {
     if (!fs.existsSync(t.file)) { problems.push(`missing: ${rel(t.file)}`); continue; }

@@ -14,50 +14,109 @@
 const { Mask, spanMask, ellipseMask, rectMask, polyMask, arcMask, lineMask, clamp } = require('./raster.cjs');
 const { paintVolume } = require('./shade.cjs');
 const { addMod } = require('./anatomy.cjs');
-const { mat } = require('./ramps.cjs');
+const { mat, RAMPS } = require('./ramps.cjs');
 
 function crownWidth(m, y) { return m.halfW(clamp(y, m.top + 1, m.chinY)); }
+
+/** The single topmost pixel of each column of a mask — a crest, not a band. */
+function topEdge(mask) {
+  const out = new Mask(mask.w, mask.h);
+  for (let x = 0; x < mask.w; x++) {
+    for (let y = 0; y < mask.h; y++) {
+      if (mask.get(x, y)) { out.set(x, y); break; }
+    }
+  }
+  return out;
+}
 
 const BUILDERS = {
   none: () => ({ layers: [] }),
 
-  /** Portuguese infantry morion: comb crest + up-swept peaked brim. */
+  /**
+   * Portuguese infantry morion: comb crest + up-swept peaked brim.
+   *
+   * THE DEFECT THIS REPLACES. The first version read as a WHITE SAILOR CAP,
+   * and for three separable reasons:
+   *
+   *  1. The comb was unioned with the bowl and shaded as ONE sphere, so there
+   *     was no value step between them and the fin vanished. A morion IS its
+   *     comb; without it the helmet is a bowler. The comb is now its own
+   *     volume, on its own axis, with a dark seam cut where it meets the bowl.
+   *  2. The brim was a flat lens. The whole point of a morion brim is that it
+   *     sweeps UP into a point fore and aft, so the silhouette has two spikes
+   *     well above the bowl's waist. Those peaks are now explicit vertices.
+   *  3. The steel sat at the top of its ramp everywhere, which is what made it
+   *     read WHITE. Polished steel is mostly mid-value with one small specular;
+   *     the bowl is biased down and the highlight is a short crest run.
+   */
   morion(m, o) {
     const W = m.W, H = m.H;
     const R = mat(o.mat || 'steel');
     const cy = m.top + 1;
-    const bowlR = m.U * 1.16, bowlH = m.hh * 0.40;
-    const bowl = ellipseMask(W, H, m.cx + m.turnPx * 0.15, cy + 1.5, bowlR, bowlH)
-      .and(rectMask(W, H, 0, 0, W - 1, cy + 3));
-    // comb: a raised fin along the crown, seen slightly from the side
-    const comb = polyMask(W, H, [
-      [m.cx - bowlR * 0.86, cy + 1.5],
-      [m.cx - bowlR * 0.30, cy - m.hh * 0.16],
-      [m.cx + bowlR * 0.34, cy - m.hh * 0.15],
-      [m.cx + bowlR * 0.88, cy + 2.0],
-      [m.cx + bowlR * 0.60, cy + 2.6],
-      [m.cx - bowlR * 0.60, cy + 2.6],
+    // EVERYTHING HERE IS MEASURED OFF `m.top`, THE HEADROOM, not off m.hh.
+    // m.hh is the head's FULL height (47px on this skull), so the original
+    // `combTop = cy - m.hh * 0.26` put the crest at y = -2 — off the top of an
+    // 80px frame. The comb was silently clipped to a flat band across the
+    // crown, which is the single biggest reason the helmet read as a cap.
+    // There are only `m.top` rows above the skull; the whole helmet lives in
+    // them, so they are budgeted explicitly.
+    const bowlR = m.U * 1.02;
+    const bowlTop = Math.max(2, m.top - 5);
+    const bowlCy = m.top + 4;
+    const bowl = ellipseMask(W, H, m.cx + m.turnPx * 0.15, bowlCy, bowlR, bowlCy - bowlTop)
+      .and(rectMask(W, H, 0, 0, W - 1, m.top + 4));
+    // The comb: a CRESCENT FIN, ~4px thick, standing proud of the crown. Drawn
+    // as an outer arc and an inner arc so it stays a sliver — a filled wedge
+    // this size covers the whole crown and turns back into a cap band.
+    const combTop = Math.max(0, m.top - 9);
+    const lean = m.turnPx * 0.10;
+    const cxc = m.cx + lean;
+    const cw = bowlR * 0.58;                 // the fin is NARROW: it is seen
+    const comb = polyMask(W, H, [            // almost edge-on at this head turn
+      [cxc - cw, bowlTop + 3.6],
+      [cxc - cw * 0.62, combTop + 1.4],
+      [cxc - cw * 0.06, combTop],
+      [cxc + cw * 0.60, combTop + 1.6],
+      [cxc + cw, bowlTop + 4.0],
+      [cxc + cw * 0.70, bowlTop + 4.4],
+      [cxc + cw * 0.44, combTop + 5.2],
+      [cxc - cw * 0.04, combTop + 3.8],
+      [cxc - cw * 0.50, combTop + 5.0],
+      [cxc - cw * 0.72, bowlTop + 4.2],
     ]);
-    // brim: sweeps out and up on both sides
+    // The brim: two real peaks, fore and aft, rising ABOVE the bowl's waist,
+    // with the near side dipping so the underside shows.
     const brim = polyMask(W, H, [
-      [m.cx - bowlR - 5.2, cy + 1.0],
-      [m.cx - bowlR * 0.7, cy + 3.6],
-      [m.cx + bowlR * 0.7, cy + 3.8],
-      [m.cx + bowlR + 5.0, cy + 1.6],
-      [m.cx + bowlR + 3.6, cy + 3.4],
-      [m.cx, cy + 5.4],
-      [m.cx - bowlR - 3.8, cy + 3.0],
+      [m.cx - bowlR - 6.0, m.top + 0.6],              // rear peak
+      [m.cx - bowlR - 2.2, m.top + 5.0],
+      [m.cx - bowlR * 0.5, m.top + 7.0],
+      [m.cx + bowlR * 0.5, m.top + 7.2],
+      [m.cx + bowlR + 2.0, m.top + 5.2],
+      [m.cx + bowlR + 5.6, m.top + 1.2],              // fore peak
+      [m.cx + bowlR + 4.0, m.top + 6.6],
+      [m.cx, m.top + 10.4],                           // the dipped near edge
+      [m.cx - bowlR - 4.4, m.top + 7.0],
     ]);
     const mask = bowl.union(comb).or(brim);
     return {
       layers: [
-        { mask: bowl.union(comb), ramp: R, opts: { axis: 'sphere', bias: 0.2, spec: 0.7, rimDark: true } },
-        { mask: brim, ramp: R, opts: { axis: 'cylX', bias: -0.3, rimDark: true } },
+        { mask: bowl, ramp: R, opts: { axis: 'sphere', bias: -0.05, spec: 0.18, rimDark: true } },
+        { mask: brim, ramp: R, opts: { axis: 'cylX', bias: -0.25, rimDark: true } },
+        { mask: comb, ramp: R, opts: { axis: 'cylX', bias: -0.10, rimDark: true } },
       ],
       mask,
       after(pic) {
-        pic.paint(comb.rim(1).and(comb), R[3]);
-        pic.paint(lineMask(W, H, m.cx - bowlR * 0.5, cy + 4.2, m.cx + bowlR * 0.5, cy + 4.4, 1).and(bowl), R[0]);
+        // The crest catches the key along its TOPMOST PIXEL PER COLUMN and
+        // nowhere else. Using the comb's rim instead painted two thirds of a
+        // 3px-thick fin at the ramp's brightest step, which is a white cap with
+        // extra steps — the exact defect this rewrite exists to remove.
+        pic.paint(topEdge(comb), RAMPS.whitewash[4]);   // the one true specular
+        // the seam where the comb is riveted into the bowl: this dark line is
+        // what separates the two volumes and makes the fin read as a fin
+        pic.paint(comb.dilate(1).andNot(comb).and(bowl), R[0]);
+        // the brim's dark underside, and the rivet band round the bowl's waist
+        pic.paint(brim.minus(brim.erode(1)).and(rectMask(W, H, 0, m.top + 5, W - 1, H - 1)), R[0]);
+        pic.paint(lineMask(W, H, m.cx - bowlR * 0.8, m.top + 2.4, m.cx + bowlR * 0.8, m.top + 3.0, 1).and(bowl), R[0]);
       },
     };
   },
@@ -177,7 +236,26 @@ const BUILDERS = {
     };
   },
 
-  /** Malay tudung: cloth over the crown, framing the face, falling to the shoulders. */
+  /**
+   * Malay tudung: cloth over the crown, framing the face, falling to the
+   * shoulders.
+   *
+   * THE DEFECT THIS REPLACES. The first version's cloth mass read as HAIR, for
+   * two reasons that compound:
+   *
+   *  1. It had no FOLD. A tudung is a rectangle of cloth folded over the crown
+   *     and pinned under the chin; the folded hem is a bright edge that runs
+   *     round the face, and it is the single feature that says "cloth" rather
+   *     than "hairline". There wasn't one, so the mass had nothing but a
+   *     smooth sphere shade — exactly what the hair builder produces.
+   *  2. Its only surface detail was three arcs running from the crown to the
+   *     shoulders in the DARKEST cloth step. Long dark strokes down a rounded
+   *     mass over a head are parted hair. They are now gone: the crown carries
+   *     the fold, and the folds live on the drape, below the brow, broken.
+   *
+   * The chin artefact that came with it was not from this builder at all — see
+   * the cast-shadow note in drawHeadwear().
+   */
   tudung(m, o) {
     const W = m.W, H = m.H;
     const R = mat(o.mat || 'cotton-ochre');
@@ -189,11 +267,19 @@ const BUILDERS = {
       return [m.left(yy) - grow, m.right(yy) + grow];
     });
     cap.or(ellipseMask(W, H, m.centreX(m.top) + m.turnPx * 0.2, m.top + 1.2, m.U * 1.04, m.hh * 0.19));
-    // the face opening: an oval seated on the brow, so the cloth reads as a
-    // frame around the face rather than a band across the forehead
-    const oy = m.yBrow + (m.chinY - m.yBrow) * 0.56;
-    const open = ellipseMask(W, H, m.axisAt(oy) - m.turnDir * 0.4, oy,
-      m.U * 0.74, (m.chinY - m.yBrow) * 0.68 + 3);
+    // The face opening. It now HUGS THE FACE CONTOUR instead of being one
+    // oval: an oval leaves a wedge of cloth over each cheekbone, which is what
+    // put a brown mass down the side of her face. Following m.left/m.right
+    // brings the hem in against the cheek, so the cloth frames the face and
+    // the jawline stays hers.
+    const openTop = m.yBrow - 2.2;
+    const open = spanMask(W, H, openTop, m.chinY + 3, (y) => {
+      const yy = clamp(y, m.top, m.chinY);
+      const t = clamp((y - openTop) / Math.max(1, m.chinY - openTop), 0, 1);
+      // widest at the cheekbones, drawing back in toward the chin
+      const k = 0.88 + 0.14 * Math.sin(t * Math.PI);
+      return [m.centreX(yy) - m.halfW(yy) * k, m.centreX(yy) + m.halfW(yy) * k];
+    });
     const mask = cap.minus(open);
     const crown = mask.intersect(rectMask(W, H, 0, 0, W - 1, m.yBrow));
     const drape = mask.minus(crown);
@@ -204,8 +290,34 @@ const BUILDERS = {
         { mask: drape, ramp: R, opts: { axis: 'cylX', bias: 0.30, rimDark: true } },
       ],
       after(pic) {
-        for (let i = -1; i <= 1; i++) {
-          pic.paint(arcMask(W, H, m.cx + i * m.U * 0.7, m.top + 2, m.cx + i * m.U * 1.5, m.chinY + 13, i * 1.5, 1).and(mask), R[0]);
+        // 1. THE FOLDED HEM round the face opening — two pixels of the cloth's
+        //    light step, with its own shadow a pixel further in. This is the
+        //    whole "it is cloth, and it is folded over her head" read.
+        const hem = mask.minus(mask.erode(2)).and(open.dilate(3));
+        pic.paint(hem, R[R.length - 1]);
+        pic.paint(hem.dilate(1).andNot(hem).and(mask), R[1]);
+        // 2. THE CROWN FOLD — where the cloth turns over the top of the head.
+        //    A single lit ridge with the shade under it, across the crown only.
+        const ridge = arcMask(W, H, m.cx - m.U * 0.92, m.top + 5.0,
+          m.cx + m.U * 0.86, m.top + 3.4, -1.6, 1).and(crown);
+        pic.paint(ridge, R[R.length - 1]);
+        // the shade UNDER the ridge, explicitly two rows down: an unbroken
+        // dilate ring wrapped over the crest as well and cancelled it out
+        ridge.forEach((x, y) => {
+          for (let k = 1; k <= 2; k++) if (crown.get(x, y + k)) pic.set(x, y + k, R[k === 1 ? 1 : 2]);
+        });
+        // 3. DRAPE FOLDS — on the fall of the cloth, below the brow, and broken
+        //    so they never read as strands of hair.
+        for (let i = 0; i < 2; i++) {
+          const arc = arcMask(W, H,
+            m.cx + (i ? 1 : -1) * m.U * 0.86, m.yBrow + 2,
+            m.cx + (i ? 1 : -1) * m.U * 1.5, m.chinY + 13, (i ? 1 : -1) * 1.4, 1).and(drape);
+          const rows = new Map();
+          arc.forEach((x, y) => { if (!rows.has(y)) rows.set(y, []); rows.get(y).push(x); });
+          [...rows.keys()].sort((a, b) => a - b).forEach((y, k) => {
+            if ((k + i * 2) % 7 >= 4) return;
+            rows.get(y).forEach((x) => pic.set(x, y, R[0]));
+          });
         }
       },
     };
@@ -330,8 +442,26 @@ function drawHeadwear(pic, m, spec, mods) {
   (built.layers || []).forEach((l) => paintVolume(pic, l.mask, l.ramp, l.opts || {}));
   if (built.after) built.after(pic);
   const mask = built.mask || new Mask(m.W, m.H);
-  // headwear casts a shadow onto the brow
-  addMod(mods, m.W, mask.dilate(2).andNot(mask).and(m.headMask), -1.15);
+  // Headwear casts a shadow onto the brow — and ONLY onto the brow.
+  //
+  // This used to be the whole 2px ring of the headwear mask intersected with
+  // the head. That is right for a hat, whose mass is entirely ABOVE the face,
+  // and badly wrong for anything that surrounds it: a tudung's ring runs down
+  // both cheeks and under the jaw, so it stamped a dark band across Aminah's
+  // chin that read as a shadow with no object casting it. A cast shadow needs
+  // something overhead, so the ring is kept only where the cloth is literally
+  // above the pixel.
+  // Two conditions, both necessary: the cloth has to be OVERHEAD (not merely
+  // beside), and the pixel has to be in the brow band. The second is what a
+  // face-hugging tudung needs — its hem runs a couple of pixels above half the
+  // cheek, so the overhead test alone still painted a shadow all down the face.
+  const ring = mask.dilate(2).andNot(mask).and(m.headMask)
+    .and(rectMask(m.W, m.H, 0, 0, m.W - 1, m.yBrow + 3));
+  const lit = new Mask(m.W, m.H);
+  ring.forEach((x, y) => {
+    for (let dy = 1; dy <= 4; dy++) if (mask.get(x, y - dy)) { lit.set(x, y); return; }
+  });
+  addMod(mods, m.W, lit, -1.15);
   return mask;
 }
 

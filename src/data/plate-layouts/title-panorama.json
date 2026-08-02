@@ -1,0 +1,112 @@
+{
+  "id": "title-panorama",
+  "name": "A Famosa — title panorama",
+  "notes": [
+    "THE TITLE SCREEN, AND THE LOADING SCREEN DERIVED FROM IT.",
+    "",
+    "This is a SCREEN, not a world: no walk mask, no spawns, no transitions, no",
+    "collision. tools/forge/title-screen.cjs composes it, runs it through the",
+    "dusk LUT (and the night LUT for the calmer loading variant), bakes the lamp",
+    "pass, and installs the x3 upscales over assets/scenes/opening-screen.png and",
+    "assets/scenes/scene-loading-ribeira.png.",
+    "",
+    "AUTHORED AT 320x180, the original spec resolution, shipped at an exact x3 to",
+    "960x540. The world plates run 640x360 native because the camera scrolls over",
+    "them; a title screen is one static frame filling the viewport exactly, so the",
+    "chunkier grid is the right one — and 640x360 would need a 1.5x upscale, which",
+    "is not an integer and would smear the pixel grid the whole game is built on.",
+    "",
+    "NO TEXT IS BAKED IN. The old plate had 'A FAMOSA' and 'MELAKA 1580' painted",
+    "into it, which is why .ui-screen-scrim had to be fully OPAQUE in a band top",
+    "and bottom — otherwise the baked type ghosted through behind the real React",
+    "chrome. With the type gone the scrim goes back to an even veil and the whole",
+    "panorama reads.",
+    "",
+    "THE COMPOSITION, left to right: St Paul's hill with the church tower on the",
+    "crest; the town's roofs going down to the water; A Famosa's keep on the right",
+    "shoulder; the roadstead with a Fujian junk, a Gujarati dhow and the lighters",
+    "working between them; the quay in the near foreground with its lamps lit."
+  ],
+  "canvas": { "width": 320, "height": 180 },
+  "iso": { "tileWidth": 32, "tileHeight": 16, "originX": 160, "originY": 0 },
+  "horizon": { "skyTo": 84, "skyTop": 0, "skyBottom": 3, "groundFrom": 84 },
+
+  "background": [
+    { "type": "hill", "cx": 46, "baseY": 88, "rx": 84, "ry": 34, "haze": 0.44 },
+    { "type": "hill", "cx": 252, "baseY": 88, "rx": 92, "ry": 22, "haze": 0.6 },
+    { "type": "hill", "cx": 152, "baseY": 84, "rx": 138, "ry": 6, "haze": 0.82 },
+    { "type": "distant-roofline", "baseY": 86, "minH": 5, "maxH": 13, "haze": 0.24, "seed": 61, "x0": 70, "x1": 276 },
+    { "type": "distant-roofline", "baseY": 81, "minH": 4, "maxH": 9, "haze": 0.46, "seed": 73, "x0": 88, "x1": 262 },
+    { "type": "tower", "x": 36, "w": 13, "baseY": 66, "h": 34, "cap": 11, "haze": 0.16 },
+    { "type": "tower", "x": 152, "w": 8, "baseY": 80, "h": 13, "cap": 5, "haze": 0.5 },
+    { "type": "bastion", "x": 236, "w": 44, "baseY": 87, "h": 17, "merlon": 4, "gateAt": 0.62, "haze": 0.3 },
+    { "type": "bastion", "x": 276, "w": 22, "baseY": 88, "h": 11, "merlon": 3, "gateAt": 0.5, "flag": false, "haze": 0.42 }
+  ],
+
+  "ground": [
+    {
+      "id": "quay",
+      "shape": { "sFrom": 19.6, "sTo": 48, "ddFrom": -36, "ddTo": 36 },
+      "texture": "deck",
+      "material": "timber",
+      "light": 2,
+      "plank": 6,
+      "seed": 17,
+      "surface": "wood"
+    }
+  ],
+  "shade": [],
+  "buildings": [],
+  "blocked": [],
+
+  "props": [
+    {
+      "type": "water-field",
+      "x0": 0, "x1": 320, "y0": 84, "y1": 158,
+      "horizonY": 86, "nearY": 156,
+      "topStep": 3.4, "botStep": 2.0,
+      "glintX": 198, "glintW": 40, "chop": 0.9,
+      "seed": 79, "depthAt": -900, "examine": false
+    },
+    {
+      "type": "distant-sails", "depthAt": -880, "haze": 0.74, "seed": 51,
+      "ships": [
+        { "x": 128, "y": 92, "scale": 0.2 },
+        { "x": 286, "y": 91, "scale": 0.17 }
+      ],
+      "examine": false
+    },
+
+    { "type": "dhow", "x": 44, "y": 112, "len": 30, "facing": 1, "mastH": 20, "yard": 25, "seed": 33, "depthAt": -840, "examine": false },
+    { "type": "junk", "x": 258, "y": 116, "len": 40, "facing": -1, "mastH": 24, "sailW": 11, "topsides": 6, "sternRise": 6, "seed": 23, "depthAt": -830, "examine": false },
+    { "type": "junk", "x": 108, "y": 138, "len": 68, "facing": 1, "mastH": 42, "sailW": 19, "topsides": 10, "sternRise": 10, "seed": 21, "depthAt": -800, "examine": false },
+    { "type": "dhow", "x": 222, "y": 148, "len": 52, "facing": -1, "mastH": 34, "yard": 42, "seed": 31, "depthAt": -780, "examine": false },
+    { "type": "sampan", "x": 74, "y": 160, "len": 18, "facing": -1, "seed": 41, "depthAt": -700, "examine": false },
+    { "type": "sampan", "x": 164, "y": 166, "len": 15, "facing": 1, "awning": false, "seed": 43, "depthAt": -690, "examine": false },
+
+    { "type": "piling-row", "x": 14, "y": 152, "count": 4, "stepTx": 0.45, "stepTy": 0.45, "seed": 8, "depthAt": -620, "examine": false },
+    { "type": "piling-row", "x": 296, "y": 150, "count": 3, "stepTx": 0.45, "stepTy": 0.45, "seed": 12, "depthAt": -618, "examine": false },
+
+    { "type": "quay-edge", "x": 24, "y": 158, "len": 10, "axis": "h", "orientation": "far", "pilings": 10, "drop": 8, "seed": 4, "depthAt": -650, "examine": false },
+
+    { "type": "bollard", "x": 58, "y": 170, "seed": 51, "depthAt": 452, "examine": false },
+    { "type": "rope-coil", "x": 136, "y": 174, "seed": 53, "depthAt": 454, "examine": false },
+    { "type": "crate-stack", "x": 274, "y": 176, "seed": 55, "depthAt": 456, "examine": false },
+    { "type": "barrel", "x": 208, "y": 172, "seed": 57, "depthAt": 455, "examine": false },
+    { "type": "lantern-post", "x": 88, "y": 174, "h": 24, "seed": 63, "depthAt": 470, "examine": false },
+    { "type": "lantern-post", "x": 244, "y": 178, "h": 22, "seed": 65, "depthAt": 472, "examine": false },
+
+    { "type": "palm", "x": 8, "y": 180, "h": 46, "lean": -9, "seed": 75, "depthAt": 500, "examine": false },
+    { "type": "palm", "x": 314, "y": 182, "h": 42, "lean": 8, "seed": 81, "depthAt": 502, "examine": false }
+  ],
+
+  "lights": [
+    {"x": 88, "y": 151, "type": "lantern", "radius": 8},
+    {"x": 244, "y": 157, "type": "lantern", "radius": 8},
+    {"x": 100, "y": 83, "type": "window", "radius": 3},
+    {"x": 140, "y": 81, "type": "window", "radius": 3},
+    {"x": 186, "y": 83, "type": "window", "radius": 3},
+    {"x": 232, "y": 82, "type": "window", "radius": 3},
+    {"x": 42, "y": 58, "type": "window", "radius": 4}
+  ]
+}
