@@ -522,12 +522,18 @@ def('plot-kerb', { collide: false, examine: false }, (s, iso, o) => {
   const robbed = o.robbed === undefined ? 0.16 : o.robbed;
 
   // --- 1. resample the outline into screen pixels, carrying arclength -------
+  // `edgeFrom`/`edgeTo` dress only PART of the outline. A burial plot is kerbed
+  // all the way round; a five-foot-way is kerbed on the street side and runs
+  // off the plate on the other three, and putting a kerb along an edge the
+  // player can never reach draws a line across the middle of nothing.
   const pts = poly.map((p) => iso.toScreen(p.tx, p.ty, 0));
   const cen = pts.reduce((a, p) => ({ x: a.x + p.x / pts.length, y: a.y + p.y / pts.length }), { x: 0, y: 0 });
+  const eFrom = o.edgeFrom === undefined ? 0 : o.edgeFrom;
+  const eTo = o.edgeTo === undefined ? pts.length - 1 : o.edgeTo;
   const samples = [];
   let arc = 0;
-  for (let e = 0; e < pts.length; e++) {
-    const a = pts[e], b = pts[(e + 1) % pts.length];
+  for (let e = eFrom; e <= eTo; e++) {
+    const a = pts[e % pts.length], b = pts[(e + 1) % pts.length];
     const dx = b.x - a.x, dy = b.y - a.y;
     const len = Math.hypot(dx, dy);
     const n = Math.max(1, Math.ceil(len * 2));
@@ -594,7 +600,7 @@ def('plot-kerb', { collide: false, examine: false }, (s, iso, o) => {
 
   // --- 3. loose stones where the kerb went ---------------------------------
   const period = o.stoneEvery === undefined ? 23 : o.stoneEvery;
-  samples.forEach((sm) => {
+  if (period > 0) samples.forEach((sm) => {
     if (Math.abs(sm.t % period) > 0.6) return;
     const i = Math.floor(sm.t / period);
     if (hash2(i, 11, seed) > 0.62) return;
@@ -615,7 +621,7 @@ def('plot-kerb', { collide: false, examine: false }, (s, iso, o) => {
   // Lalang straddling the kerb. Foliage crossing the boundary is what stops the
   // eye tracking the line, and it is also just what an unswept plot looks like.
   const tuft = o.tuftEvery === undefined ? 14 : o.tuftEvery;
-  samples.forEach((sm) => {
+  if (tuft > 0) samples.forEach((sm) => {
     if (Math.abs(sm.t % tuft) > 0.6) return;
     const i = Math.floor(sm.t / tuft);
     if (hash2(i, 23, seed) > 0.70) return;
@@ -633,6 +639,35 @@ def('plot-kerb', { collide: false, examine: false }, (s, iso, o) => {
       }
     }
   });
+
+  // --- 5. the gutter, and the wear that crosses the line -------------------
+  // A KERB ALONE IS STILL A LINE. What stops a paving/street boundary reading
+  // as a cut is that the two materials INTERPENETRATE at it: grit and mud off
+  // the roadway wash up against the kerb and get trodden a few pixels onto the
+  // pavement, and the gutter beside it stays permanently damp. Both are
+  // authored as sparse, clustered incident — never a feathered blend, which on
+  // a 640x360 plate is anti-aliasing wearing a hat.
+  if (o.gutter) {
+    samples.forEach((sm) => {
+      const nrm = outward(sm);
+      const gx = Math.round(sm.x + nrm.x * 1.6), gy = Math.round(sm.y + nrm.y * 1.2) + 1;
+      if (hash2(gx, gy, seed + 61) < 0.72) T.shadePixel(s, gx, gy, 0.30);
+    });
+  }
+  const scatter = o.scatter === undefined ? 0 : o.scatter;
+  if (scatter > 0) {
+    const mat = P.RAMPS[o.scatterMat || 'earth'];
+    samples.forEach((sm) => {
+      const nrm = outward(sm);
+      for (let k = -3; k <= 3; k++) {
+        const x = Math.round(sm.x - nrm.x * k), y = Math.round(sm.y - nrm.y * k * 0.6) - (k > 0 ? 1 : 0);
+        // density falls off away from the kerb on BOTH sides, so the wear
+        // straddles the boundary instead of stopping dead at it
+        const d = 1 - Math.abs(k) / 3.6;
+        if (hash2(x, y, seed + 67) < scatter * d) s.setHex(x, y, step(mat, k < 0 ? 2 : 1));
+      }
+    });
+  }
 });
 
 module.exports = { C, lancet, buttress };

@@ -1,13 +1,13 @@
 {
   "id": "rua-direita",
   "name": "Rua Direita",
-  "coordVersion": 6,
+  "coordVersion": 7,
   "world": {
     "scale": 3,
     "nativeWidth": 640,
     "nativeHeight": 360
   },
-  "layoutHash": "41a23a5ca966",
+  "layoutHash": "464daa73d665",
   "generatedBy": "tools/forge/compose-plate.cjs",
   "sun": {
     "azimuthDeg": 315,
@@ -887,7 +887,7 @@
       "x": 221,
       "y": 196,
       "label": "step stone",
-      "examineText": "A mounting block, hollowed by seventy years of boots.",
+      "examineText": "A mounting block, hollowed by two centuries of boots.",
       "interactive": false
     },
     {
@@ -923,7 +923,7 @@
       "x": 582,
       "y": 207,
       "label": "step stone",
-      "examineText": "A mounting block, hollowed by seventy years of boots.",
+      "examineText": "A mounting block, hollowed by two centuries of boots.",
       "interactive": false
     },
     {
@@ -967,9 +967,9 @@
       "type": "crate-stack",
       "x": 678,
       "y": 216,
-      "label": "warehouse crates",
-      "examineText": "Four men are unloading, and two of them are working the way men work when they will not be paid at the end of it — steadily, without hurry, without once looking up at the man counting.\n\n*Half the hands on this street are owned. Not most of the Malays, who came in from the kampung this morning and will go home tonight. The ones from Bengal, from Coromandel, from Mozambique — brought here in a hold and entered in a household book, the same book that lists the furniture.*\n\n*Nobody remarks on it. That is what it looks like when a thing is normal.*",
-      "interactive": true
+      "label": "crate stack",
+      "examineText": "Crates stacked two high, roped against the rain.",
+      "interactive": false
     },
     {
       "key": "banana-clump-27",

@@ -1,8 +1,8 @@
 {
   "id": "st-pauls-church",
-  "name": "St. Paul's Church Hill",
+  "name": "Madre de Deus — the Church Hill",
   "generatedBy": "tools/forge/compose-plate.cjs",
-  "layoutHash": "eedb05e16012",
+  "layoutHash": "a30c2c80f261",
   "world": {
     "scale": 3,
     "nativeWidth": 640,
@@ -274,7 +274,7 @@
       "x": 48,
       "y": 224,
       "label": "A ledger slab",
-      "examineText": "A Portuguese name, and cut straight across it a Dutch one. The stone was too good to waste on only one family.",
+      "examineText": "A Portuguese name, and cut straight across it a second Portuguese name in a fresher hand. Good stone does not come out to Melaka often enough to spend it on one family.",
       "interactive": false
     },
     {
@@ -319,7 +319,7 @@
       "x": 160,
       "y": 298,
       "label": "A new headstone",
-      "examineText": "The cut is still sharp. A factor of the Casa da India, dead of the flux nine weeks ago, aged twenty-six.",
+      "examineText": "The cut is still sharp. A factor of the feitoria, dead of the flux nine weeks ago, aged twenty-six.",
       "interactive": false
     },
     {

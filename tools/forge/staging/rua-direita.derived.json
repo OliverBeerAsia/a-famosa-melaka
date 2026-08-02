@@ -2,7 +2,7 @@
   "id": "rua-direita",
   "name": "Rua Direita",
   "generatedBy": "tools/forge/compose-plate.cjs",
-  "layoutHash": "41a23a5ca966",
+  "layoutHash": "464daa73d665",
   "world": {
     "scale": 3,
     "nativeWidth": 640,
@@ -664,7 +664,7 @@
     },
     {
       "targetLocation": "st-pauls-church",
-      "label": "Climb to St. Paul's",
+      "label": "Climb to the Church Hill",
       "triggerArea": {
         "x": 484,
         "y": 126,
@@ -724,7 +724,7 @@
       "x": 518,
       "y": 142,
       "label": "padrao",
-      "examineText": "A padrão cut with the Cross of the Order of Christ, set where the lane climbs to St Paul's.",
+      "examineText": "A padrão cut with the Cross of the Order of Christ, set where the lane climbs to the church on the hill.",
       "interactive": true
     },
     {
@@ -958,7 +958,7 @@
       "x": 394,
       "y": 214,
       "label": "signboard chinese",
-      "examineText": "A guild board: the Melaka Chinese kongsi, gilt characters flaking in the salt air.",
+      "examineText": "A board in gilt characters, flaking in the salt air. The names are the Fujian houses; the seal at the foot is the Kapitan's, which the fortress recognises and which therefore, in this street, is the only signature that settles anything.",
       "interactive": true
     },
     {

@@ -346,23 +346,64 @@ function halfTimber(opts) {
  * Courses every 6px. This is the single most identity-carrying texture in the
  * game — it is what makes a roof read as Melaka and not as a brown triangle.
  */
+/**
+ * Canal-tiled roof.
+ *
+ * THE TARTAN. The first version modulated value on the PAN lattice (across the
+ * slope) and on the COURSE lattice (up the slope) at the same amplitude — a
+ * groove and a crown on every pan, a line on every course — and two equal
+ * crossed rhythms is the definition of a plaid. On a small roof it passed; on a
+ * big foreground span at close camera range it read as a tartan blanket, which
+ * is what the play session caught.
+ *
+ * A real tiled roof is NOT symmetric. It is a strong HORIZONTAL rhythm — you
+ * see the butt of every course catch the light and the shadow the course above
+ * laps over it — carrying a much weaker vertical one. So:
+ *
+ *  · courses dominate: a lit butt line, then the body, then a 2-step lap
+ *    shadow under the course above. That is the structure the eye reads.
+ *  · the pan rhythm drops to a single groove, and the crown highlight now
+ *    appears on only about a third of pans instead of all of them. Removing
+ *    the other two thirds is most of what kills the crosshatch.
+ *  · weathering moved from PER-PAN (constant down a whole pan, i.e. a vertical
+ *    stripe reinforcing the plaid) to PER-TILE, so an old tile is one tile.
+ *  · incidents: about one tile in thirty has SLIPPED a pixel or two down the
+ *    slope, and about one in eighty is broken through to the batten. Both are
+ *    what stops a large plane reading as a pattern swatch.
+ *  · an eave shadow band along the bottom rows, so the plane has a near edge.
+ */
 function roofTile(opts) {
   const o = opts || {};
   const ramp = P.RAMPS[o.material || 'terracotta'];
   const L = (o.light === undefined ? 3 : o.light);
   const seed = o.seed || 13;
-  const pan = o.pan || 5, course = o.course || 6;
+  const pan = o.pan || 5, course = o.course || 5;
+  const eave = o.eave === undefined ? 3 : o.eave;
   return (u, v, x, y) => {
-    const p = Math.floor(u / pan), fu = u - p * pan;
-    const c = Math.floor(v / course), fv = v - c * course;
-    // per-pan weathering, constant down the whole pan = clustered, not noise
-    const h = hash2(p, Math.floor(c / 3), seed);
-    let s = L + (h < 0.20 ? -1 : h > 0.84 ? 1 : 0);
-    if (fu < 1) s -= 2;                 // groove between pans
-    else if (fu === 2) s += 1;          // crown catches the sun
-    else if (fu >= pan - 1) s -= 1;
-    if (fv < 1) s -= 1;                 // course overlap line
-    else if (fv === 1) s += (fu >= 1 && fu <= 3) ? 1 : 0;
+    const p = Math.floor(u / pan);
+    const fu = u - p * pan;
+    // a slipped tile moves BEFORE the lattice, so the whole tile travels
+    const c0 = Math.floor(v / course);
+    const slip = hash2(p, c0, seed + 31) < 0.030 ? (hash2(p, c0, seed + 37) < 0.4 ? 2 : 1) : 0;
+    const vv = v - slip;
+    const c = Math.floor(vv / course), fv = vv - c * course;
+
+    let s = L;
+    // --- the course rhythm: this is the structure ------------------------
+    if (fv === 0) s += 1;                       // the lit butt of the course
+    else if (fv === course - 1) s -= 2;         // the lap shadow above it
+    else if (fv === course - 2) s -= 1;
+    // --- the pan rhythm: secondary, and deliberately incomplete ----------
+    if (fu === 0) s -= 1;                                             // groove
+    else if (fu === 2 && hash2(p, c, seed + 7) > 0.62) s += 1;        // crown
+    // --- per-TILE weathering, never a stripe -----------------------------
+    const h = hash2(p, c, seed);
+    if (h < 0.10) s -= 1; else if (h > 0.93) s += 1;
+    // --- incidents --------------------------------------------------------
+    if (slip) s -= 1;
+    if (hash2(p, c, seed + 53) < 0.012) s -= 2; // broken through to the batten
+    // --- eave shadow band -------------------------------------------------
+    if (v < eave) s -= (v < 1 ? 2 : 1);
     return step(ramp, s);
   };
 }

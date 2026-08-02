@@ -524,20 +524,63 @@ def('chicken-coop', { collide: 0.7, examine: 'A rattan coop; the birds are aslee
   }
 });
 
+/**
+ * A ROPE, drawn so it survives at native resolution.
+ *
+ * THE DEFECT THIS FIXES. A rope used to be one pixel of `earth[1]` per column.
+ * One native pixel is BELOW the minimum feature size of this art — every other
+ * detail in the game is at least 3px — so a 60px run of it does not read as a
+ * cord slung between two buildings, it reads as a SCRATCH ON THE IMAGE. At
+ * night, when the plate around it goes dark and the line does not, it is the
+ * most conspicuous thing on the screen.
+ *
+ * Two fixes, and both are needed:
+ *
+ *  1. TWO PIXELS OF WEIGHT — a strand and its own shade underneath. That is
+ *     the minimum that reads as a round thing rather than as a hairline.
+ *  2. IT PICKS ITS VALUE OFF WHAT IT CROSSES. A rope runs from a wall, over
+ *     the sky, onto another wall, and no single colour reads against all of
+ *     them: dark on sky, and it vanishes against the shadowed façade; light
+ *     enough for the façade, and it stripes the sky. So each column samples
+ *     the pixel it is about to cover and takes the dark treatment over a
+ *     bright background and the light one over a dark background. Both
+ *     treatments are canon and hue-shifted (timber over sky, earth over
+ *     masonry), never a grey.
+ */
+function ropeSpan(s, ax, ay, bx, by, opts) {
+  const o = opts || {};
+  const x0 = Math.round(Math.min(ax, bx)), x1 = Math.round(Math.max(ax, bx));
+  const span = Math.max(1, x1 - x0);
+  const sag = o.sag === undefined ? Math.max(3, span * 0.10) : o.sag;
+  const yAt = (x) => {
+    const t = (x - x0) / span;
+    return Math.round(ay + (by - ay) * t + Math.sin(Math.PI * t) * sag);
+  };
+  const T = P.RAMPS.timber, E = P.RAMPS.earth;
+  for (let x = x0; x <= x1; x++) {
+    const y = yAt(x);
+    const u = s.get(x, y);
+    // treat empty (nothing painted yet) as sky — it is, on a plate
+    const bright = !u || u.a !== 255 || (0.299 * u.r + 0.587 * u.g + 0.114 * u.b) > 96;
+    s.setHex(x, y, bright ? step(T, 1) : step(E, 3));
+    s.setHex(x, y + 1, bright ? step(T, 0) : step(E, 2));
+  }
+  return yAt;
+}
+
 def('laundry-line', { collide: 0, examine: 'Washing strung between the upper storeys.' }, (s, iso, o) => {
   const a = iso.toScreen(o.tx, o.ty, o.z || 60);
   const b = iso.toScreen(o.tx + (o.len || 2), o.ty - (o.len || 2), o.z || 60);
   const x0 = Math.round(Math.min(a.x, b.x)), x1 = Math.round(Math.max(a.x, b.x));
-  for (let x = x0; x <= x1; x++) {
-    const t = (x - x0) / Math.max(1, x1 - x0);
-    const y = Math.round(a.y + (b.y - a.y) * t + Math.sin(Math.PI * t) * 4);
-    s.setHex(x, y, step(P.RAMPS.earth, 1));
-  }
+  const sag = Math.max(3, (x1 - x0) * 0.10);
+  ropeSpan(s, a.x, a.y, b.x, b.y, { sag });
   const ramps = [P.RAMPS.whitewash, P.RAMPS.water, P.RAMPS.whitewash, P.RAMPS.foliage];
   for (let i = 0; i < 4; i++) {
     const t = 0.16 + i * 0.22;
     const x = Math.round(x0 + (x1 - x0) * t);
-    const y = Math.round(a.y + (b.y - a.y) * t + Math.sin(Math.PI * t) * 4);
+    // hang off the ROPE's own curve, not off a hard-coded sag of 4 —
+    // otherwise the garments float a pixel or two clear of the line
+    const y = Math.round(a.y + (b.y - a.y) * t + Math.sin(Math.PI * t) * sag) + 1;
     const wdt = 5 + (i % 2) * 2, hh = 12 + (i % 3) * 4;
     for (let dx = 0; dx < wdt; dx++) {
       for (let v = 1; v < hh; v++) {

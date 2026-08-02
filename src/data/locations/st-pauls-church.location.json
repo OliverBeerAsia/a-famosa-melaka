@@ -1,13 +1,13 @@
 {
   "id": "st-pauls-church",
   "name": "Igreja Madre de Deus",
-  "coordVersion": 5,
+  "coordVersion": 6,
   "world": {
     "scale": 3,
     "nativeWidth": 640,
     "nativeHeight": 360
   },
-  "layoutHash": "eedb05e16012",
+  "layoutHash": "a30c2c80f261",
   "generatedBy": "tools/forge/compose-plate.cjs",
   "sun": {
     "azimuthDeg": 315,

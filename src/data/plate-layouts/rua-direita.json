@@ -7,7 +7,7 @@
     "{sFrom, sTo, ddFrom, ddTo}. Buildings give frontS (the s of their street-facing",
     "corner) + dd; a terrace is a chain of buildings whose dd spans [dd-w, dd+d] abut.",
     "Changing frontS moves a building UP/DOWN the screen without changing its screen",
-    "x span \u2014 that is how the terrace is staggered without breaking the packing.",
+    "x span — that is how the terrace is staggered without breaking the packing.",
     "VERTICAL BUDGET (640x360 native): sky 0-84 | distant town 58-112 |",
     "far terrace 24-190 | five-foot way 155-190 | STREET 190-308 |",
     "near pavement 308-364 | near roofs 262-360 (the foreground occluder plane).",
@@ -76,8 +76,8 @@
     {
       "id": "street",
       "shape": {
-        "sFrom": 23.8,
-        "sTo": 38.5,
+        "sFrom": 22.8,
+        "sTo": 39.8,
         "ddFrom": -28,
         "ddTo": 29
       },
@@ -161,10 +161,64 @@
     {
       "id": "largo",
       "shape": {
-        "sFrom": 30.5,
-        "sTo": 35.5,
-        "ddFrom": -14.5,
-        "ddTo": -7.5
+        "poly": [
+          {
+            "s": 30.81,
+            "dd": -14.5
+          },
+          {
+            "s": 30.03,
+            "dd": -12.4
+          },
+          {
+            "s": 30.15,
+            "dd": -10.2
+          },
+          {
+            "s": 30.79,
+            "dd": -8.1
+          },
+          {
+            "s": 31.6,
+            "dd": -7.15
+          },
+          {
+            "s": 32.9,
+            "dd": -7.06
+          },
+          {
+            "s": 34.2,
+            "dd": -7.86
+          },
+          {
+            "s": 35.2,
+            "dd": -8.0
+          },
+          {
+            "s": 35.0,
+            "dd": -10.1
+          },
+          {
+            "s": 35.8,
+            "dd": -12.3
+          },
+          {
+            "s": 35.73,
+            "dd": -14.4
+          },
+          {
+            "s": 34.4,
+            "dd": -14.06
+          },
+          {
+            "s": 33.0,
+            "dd": -14.79
+          },
+          {
+            "s": 31.7,
+            "dd": -14.98
+          }
+        ]
       },
       "texture": "flagstone",
       "material": "stone",
@@ -176,10 +230,60 @@
     {
       "id": "five-foot-way",
       "shape": {
-        "sFrom": 19.4,
-        "sTo": 23.8,
-        "ddFrom": -28,
-        "ddTo": 29
+        "poly": [
+          {
+            "s": 19.4,
+            "dd": -28
+          },
+          {
+            "s": 19.4,
+            "dd": 29
+          },
+          {
+            "s": 24.07,
+            "dd": 29
+          },
+          {
+            "s": 24.64,
+            "dd": 23
+          },
+          {
+            "s": 23.54,
+            "dd": 17
+          },
+          {
+            "s": 23.39,
+            "dd": 11
+          },
+          {
+            "s": 24.17,
+            "dd": 5
+          },
+          {
+            "s": 23.48,
+            "dd": -1
+          },
+          {
+            "s": 23.03,
+            "dd": -7
+          },
+          {
+            "s": 24.19,
+            "dd": -13
+          },
+          {
+            "s": 24.26,
+            "dd": -19
+          },
+          {
+            "s": 23.46,
+            "dd": -24
+          },
+          {
+            "s": 24.14,
+            "dd": -28
+          }
+        ]
       },
       "texture": "flagstone",
       "material": "stone",
@@ -191,10 +295,60 @@
     {
       "id": "near-pavement",
       "shape": {
-        "sFrom": 38.5,
-        "sTo": 45.5,
-        "ddFrom": -28,
-        "ddTo": 29
+        "poly": [
+          {
+            "s": 39.23,
+            "dd": -28
+          },
+          {
+            "s": 38.88,
+            "dd": -23
+          },
+          {
+            "s": 37.74,
+            "dd": -17
+          },
+          {
+            "s": 38.38,
+            "dd": -11
+          },
+          {
+            "s": 38.77,
+            "dd": -5
+          },
+          {
+            "s": 37.81,
+            "dd": 1
+          },
+          {
+            "s": 38.27,
+            "dd": 7
+          },
+          {
+            "s": 39.35,
+            "dd": 13
+          },
+          {
+            "s": 38.6,
+            "dd": 19
+          },
+          {
+            "s": 38.22,
+            "dd": 24
+          },
+          {
+            "s": 39.13,
+            "dd": 29
+          },
+          {
+            "s": 45.5,
+            "dd": 29
+          },
+          {
+            "s": 45.5,
+            "dd": -28
+          }
+        ]
       },
       "texture": "flagstone",
       "material": "stone",
@@ -781,7 +935,7 @@
       "s": 32.6,
       "dd": -16,
       "interactive": true,
-      "examineText": "Gujarati cottons on a bamboo rack \u2014 Rudra's stock, unsold since the monsoon."
+      "examineText": "Gujarati cottons on a bamboo rack — Rudra's stock, unsold since the monsoon."
     },
     {
       "type": "basket",
@@ -848,7 +1002,7 @@
       "s": 26.6,
       "dd": 4.6,
       "interactive": true,
-      "examineText": "A guild board: the Melaka Chinese kongsi, gilt characters flaking in the salt air."
+      "examineText": "A board in gilt characters, flaking in the salt air. The names are the Fujian houses; the seal at the foot is the Kapitan's, which the fortress recognises and which therefore, in this street, is the only signature that settles anything."
     },
     {
       "type": "lantern-post",
@@ -865,7 +1019,7 @@
       "s": 17.5,
       "dd": 12.4,
       "interactive": true,
-      "examineText": "A padr\u00e3o cut with the Cross of the Order of Christ, set where the lane climbs to St Paul's."
+      "examineText": "A padrão cut with the Cross of the Order of Christ, set where the lane climbs to the church on the hill."
     },
     {
       "type": "bollard",
@@ -1134,6 +1288,64 @@
       "len": 2,
       "z": 46,
       "collide": false
+    },
+    {
+      "type": "plot-kerb",
+      "edgeOf": "five-foot-way",
+      "edgeFrom": 2,
+      "edgeTo": 11,
+      "s": 23.8,
+      "dd": 0,
+      "depthAt": 23.7,
+      "h": 3,
+      "block": 15,
+      "robbed": 0.05,
+      "tuftEvery": 0,
+      "stoneEvery": 0,
+      "gutter": true,
+      "scatter": 0.3,
+      "scatterMat": "earth",
+      "seed": 211,
+      "collide": false,
+      "examine": false
+    },
+    {
+      "type": "plot-kerb",
+      "edgeOf": "near-pavement",
+      "edgeFrom": 0,
+      "edgeTo": 9,
+      "s": 38.5,
+      "dd": 0,
+      "depthAt": 38.4,
+      "h": 3,
+      "block": 15,
+      "robbed": 0.05,
+      "tuftEvery": 0,
+      "stoneEvery": 0,
+      "gutter": true,
+      "scatter": 0.3,
+      "scatterMat": "earth",
+      "seed": 213,
+      "collide": false,
+      "examine": false
+    },
+    {
+      "type": "plot-kerb",
+      "edgeOf": "largo",
+      "s": 33,
+      "dd": -11,
+      "depthAt": 30.2,
+      "h": 3,
+      "block": 13,
+      "robbed": 0.1,
+      "tuftEvery": 26,
+      "stoneEvery": 34,
+      "gutter": true,
+      "scatter": 0.24,
+      "scatterMat": "earth",
+      "seed": 215,
+      "collide": false,
+      "examine": false
     }
   ],
   "lights": [
@@ -1342,7 +1554,7 @@
     },
     {
       "targetLocation": "st-pauls-church",
-      "label": "Climb to St. Paul's",
+      "label": "Climb to the Church Hill",
       "s": 17.5,
       "dd": 12.4,
       "triggerArea": {

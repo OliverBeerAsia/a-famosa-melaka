@@ -2,7 +2,7 @@
   "id": "a-famosa-gate",
   "name": "A Famosa Fortress Gate",
   "generatedBy": "tools/forge/compose-plate.cjs",
-  "layoutHash": "eed9fcbd8f3a",
+  "layoutHash": "c5ece6b730c3",
   "world": {
     "scale": 3,
     "nativeWidth": 640,
@@ -508,7 +508,7 @@
       "x": 278,
       "y": 274,
       "label": "The padrão",
-      "examineText": "A stone pillar cut with the Cross of the Order of Christ. Every governor since Albuquerque has been sworn in beside it, and every one of them has had the same complaint: too few men, too little powder, and a wall too long to hold.",
+      "examineText": "A stone pillar cut with the Cross of the Order of Christ. Every captain since Albuquerque has been sworn in beside it, and every one of them has had the same complaint: too few men, too little powder, and a wall too long to hold.",
       "interactive": false
     },
     {
