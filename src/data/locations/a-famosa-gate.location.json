@@ -1,7 +1,7 @@
 {
   "id": "a-famosa-gate",
   "name": "A Famosa Fortress Gate",
-  "coordVersion": 5,
+  "coordVersion": 6,
   "world": {
     "scale": 3,
     "nativeWidth": 640,
@@ -854,11 +854,13 @@
   },
   "crowd": {
     "maxCrowd": 12,
-    "density": 0.5,
+    "density": 4.4,
     "crowdTypes": [
       "portuguese_soldier",
       "portuguese_merchant",
-      "malay_local"
+      "malay_local",
+      "arab_trader",
+      "chinese_merchant"
     ],
     "paths": [
       {

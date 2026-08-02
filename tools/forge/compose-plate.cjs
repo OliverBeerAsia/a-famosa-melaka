@@ -239,6 +239,11 @@ function compose(rawLayout, opts) {
     });
   });
 
+  // The plate as it looks with ONLY the ground on it. `contactDefinition` needs
+  // this: see the note there about why the walk mask alone is not enough to
+  // tell whether a pixel is showing ground.
+  const groundOnly = plate.clone();
+
   // ---- 3. renderables, sorted back-to-front ------------------------------
   const items = [];
 
@@ -341,6 +346,11 @@ function compose(rawLayout, opts) {
     const pts = shapePolys(b).flat().length ? shapePolys(b)[0].map((p) => iso.toScreen(p.tx, p.ty, 0)) : null;
     if (pts) walk.fillPoly(pts, (u, v, x, y) => { walk.setRGBA(x, y, 0, walkSurfaceAt(walk, x, y), 0, 255); return null; });
   });
+
+  // ---- 4c. CONTACT DEFINITION (benchmark #17) --------------------------
+  if (layout.contactDefinition !== false) {
+    contactDefinition(plate, walk, groundOnly, layout.contactDefinition || {});
+  }
 
   // ---- 5. quantize to canon, then INDEX THE SCREEN ----------------------
   // Benchmark #14: the canon is 50 colours but any one screen may use <= 40.
@@ -451,6 +461,138 @@ function mapValues(obj, fn) {
   const out = {};
   Object.keys(obj).forEach((k) => { out[k] = fn(obj[k]); });
   return out;
+}
+
+
+/**
+ * BENCHMARK #17 — CONTACT DEFINITION WHERE A MASS MEETS WALKABLE GROUND.
+ *
+ * The metric samples every walkable pixel that touches a blocked one and asks
+ * how far apart they are in luminance: can the player SEE where the ground
+ * stops? All five plates scored 44-51% against a 60% gate, and by eye the
+ * symptom is the classic one — the buildings do not sit on the street, they are
+ * pasted onto it.
+ *
+ * WHY THIS LIVES IN THE COMPOSITOR AND NOT IN THREE KITS. The brief was to add
+ * a plinth band to arch-portuguese, arch-fortress and arch-church. Doing it per
+ * kit means three implementations that can disagree, and it silently misses the
+ * dock, malay and prop kits — which between them own most of the boundary
+ * pixels on the waterfront and the kampung. More importantly, a kit does not
+ * know what is walkable: it knows its own footprint, but not whether the ground
+ * outside it is street, water, or another building. The COMPOSITOR knows,
+ * because it just built the walk mask, and it can use the very same
+ * walkable/blocked test the benchmark uses. One implementation, no kit can be
+ * forgotten, and it is measuring what the gate measures.
+ *
+ * ADAPTIVE POLARITY. A shadow at the foot of a wall is right for a limewashed
+ * façade and wrong for a dark laterite plinth — against dark masonry a dark
+ * ground band REDUCES separation, which is the trap that makes naive AO score
+ * worse. So the polarity is chosen per pixel from the mass it touches:
+ *
+ *   bright mass  -> darken the ground   (the shadow it actually casts)
+ *   dark mass    -> lift the ground     (dust, grit and lime-wash scurf collect
+ *                                        against a wall foot, and they catch
+ *                                        the light that the wall does not)
+ *
+ * Both are real; the pass simply picks whichever one the wall in front of it
+ * calls for. Same rule as the rope in props.cjs, for the same reason.
+ *
+ * AND IT ONLY TOUCHES WHAT IS FAILING. A boundary already clearing the 25% bar
+ * is left completely alone. This is a fix for the pixels that read as pasted,
+ * not a global darkening pass — dropping AO on every boundary in the game would
+ * muddy the plates and flatten the contacts that already work.
+ */
+function contactDefinition(plate, walk, groundOnly, opts) {
+  const o = opts || {};
+  const depth = o.depth === undefined ? 2 : o.depth;
+  const target = o.target === undefined ? 0.36 : o.target;   // stop once clear of this
+  const strength = o.strength === undefined ? 0.66 : o.strength;
+  const W = plate.width, H = plate.height;
+  const wd = walk.data, pd = plate.data;
+  const lumaAt = (i) => 0.299 * pd[i * 4] + 0.587 * pd[i * 4 + 1] + 0.114 * pd[i * 4 + 2];
+  // A pixel only counts as MASS if the walk mask was actually written there.
+  // Untouched mask = sky, and the horizon is not a contact.
+  const isMass = (i) => wd[i * 4 + 3] === 255 && wd[i * 4] < 128;
+  /**
+   * THE WALK MASK IS NOT ENOUGH, and this is the trap in the whole pass.
+   *
+   * The mask is a GROUND-PLANE occupancy map; the plate is a 2.5D projection.
+   * A tall prop blocks only the small diamond of mask under its feet, so every
+   * pixel of its BODY — a signboard's face, the top two thirds of a barrel —
+   * sits over mask cells that are still perfectly walkable. Blending those
+   * "because the mask says ground" desaturated the signboards, the barrels and
+   * the awnings across the whole street on the first attempt.
+   *
+   * The benchmark reads the same mask, so it cheerfully scored that render
+   * HIGHER while the art got worse. That is the metric and the picture
+   * disagreeing, and when they disagree the picture wins.
+   *
+   * So a pixel is only ground if the mask says walkable AND the plate still
+   * holds exactly what the ground pass put there — nothing has been drawn over
+   * it since.
+   */
+  const gd = groundOnly.data;
+  const isGround = (i) => wd[i * 4 + 3] === 255 && wd[i * 4] >= 128
+    && pd[i * 4] === gd[i * 4] && pd[i * 4 + 1] === gd[i * 4 + 1] && pd[i * 4 + 2] === gd[i * 4 + 2];
+
+  // BFS out of the mass into walkable ground, carrying which mass pixel seeded
+  // each ring so the polarity is decided against the thing actually touched.
+  const dist = new Int16Array(W * H).fill(-1);
+  const seed = new Int32Array(W * H).fill(-1);
+  let frontier = [];
+  for (let y = 0; y < H; y++) {
+    for (let x = 0; x < W; x++) {
+      const i = y * W + x;
+      if (!isMass(i)) continue;
+      for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+        const nx = x + dx, ny = y + dy;
+        if (nx < 0 || ny < 0 || nx >= W || ny >= H) continue;
+        const j = ny * W + nx;
+        if (!isGround(j) || dist[j] !== -1) continue;
+        dist[j] = 1; seed[j] = i; frontier.push(j);
+      }
+    }
+  }
+  for (let d = 2; d <= depth && frontier.length; d++) {
+    const next = [];
+    for (const i of frontier) {
+      const x = i % W, y = (i / W) | 0;
+      for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+        const nx = x + dx, ny = y + dy;
+        if (nx < 0 || ny < 0 || nx >= W || ny >= H) continue;
+        const j = ny * W + nx;
+        if (!isGround(j) || dist[j] !== -1) continue;
+        dist[j] = d; seed[j] = i; next.push(j);
+      }
+    }
+    frontier = next;
+  }
+
+  const PALE = P.RAMPS.earth[4];
+  const VIOLET = P.ANCHORS['shadow-violet'];
+  for (let i = 0; i < W * H; i++) {
+    const d = dist[i];
+    if (d < 1) continue;
+    const src = seed[i];
+    // for rings past the first, judge against the ORIGINAL mass, not the ring
+    const massI = d === 1 ? src : (seed[src] >= 0 ? seed[src] : src);
+    const massL = lumaAt(massI), groundL = lumaAt(i);
+    if (Math.abs(massL - groundL) / 255 >= target) continue;   // already reads
+    const x = i % W, y = (i / W) | 0;
+    const dark = massL > groundL;
+    // THE FIRST RING IS SOLID. It is also the only ring the benchmark samples
+    // — the metric compares a walkable pixel with the blocked pixel it TOUCHES —
+    // so this is both the honest way to draw a contact occlusion (the last
+    // millimetre before two surfaces meet gets no bounce light at all) and the
+    // only ring that can move the number. Dithering it, as the first pass did,
+    // put a 2px checkerboard along every arcade foot in the game: it scored
+    // well and looked like noise, which is the failure mode this note exists
+    // to stop anyone repeating.
+    let t;
+    if (d === 1) t = strength * (dark ? 1 : 0.72);
+    else t = strength * 0.34 * (T.checker2(x, y) ? 1 : 0.45);
+    plate.blendHex(x, y, dark ? VIOLET : PALE, t);
+  }
 }
 
 function drawHill(surface, spec) {

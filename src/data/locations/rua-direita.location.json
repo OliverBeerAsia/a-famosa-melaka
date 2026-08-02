@@ -1,7 +1,7 @@
 {
   "id": "rua-direita",
   "name": "Rua Direita",
-  "coordVersion": 8,
+  "coordVersion": 9,
   "world": {
     "scale": 3,
     "nativeWidth": 640,
@@ -1866,7 +1866,7 @@
   },
   "crowd": {
     "maxCrowd": 14,
-    "density": 1,
+    "density": 5,
     "crowdTypes": [
       "portuguese_merchant",
       "malay_local",

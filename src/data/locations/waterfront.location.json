@@ -1,7 +1,7 @@
 {
   "id": "waterfront",
   "name": "The Waterfront",
-  "coordVersion": 5,
+  "coordVersion": 6,
   "world": {
     "scale": 3,
     "nativeWidth": 640,
@@ -1609,7 +1609,7 @@
   },
   "crowd": {
     "maxCrowd": 14,
-    "density": 0.8,
+    "density": 5.3,
     "crowdTypes": [
       "dock_worker",
       "chinese_merchant",

@@ -1,7 +1,7 @@
 {
   "id": "st-pauls-church",
   "name": "Igreja Madre de Deus",
-  "coordVersion": 6,
+  "coordVersion": 7,
   "world": {
     "scale": 3,
     "nativeWidth": 640,
@@ -588,7 +588,7 @@
   },
   "crowd": {
     "maxCrowd": 8,
-    "density": 0.3,
+    "density": 1.7,
     "crowdTypes": [
       "priest",
       "portuguese_merchant",
