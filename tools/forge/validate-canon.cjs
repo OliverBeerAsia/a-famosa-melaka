@@ -20,9 +20,12 @@
  *
  *  (b) RELIGHT PROVENANCE / DETERMINISM
  *      relight-plates.cjs is re-run into a scratch directory and every plate is
- *      compared byte-for-byte with what is checked in. If they differ, the
- *      shipping plates were hand-edited or the tool drifted — either way the
- *      "one authored day master, everything else derived" contract is broken.
+ *      compared by decoded dimensions and exact RGBA pixels with what is
+ *      checked in. PNG container bytes are deliberately not compared: libpng
+ *      compression details vary between supported build platforms. If pixels
+ *      differ, the shipping plates were hand-edited or the tool drifted —
+ *      either way the "one authored day master, everything else derived"
+ *      contract is broken.
  *      Skipped with --fast (it re-renders 20 plates; ~10s).
  *
  *  (c) ZERO ANTI-ALIASING
@@ -82,6 +85,34 @@ async function readPixels(file) {
   ctx.imageSmoothingEnabled = false;
   ctx.drawImage(img, 0, 0);
   return ctx.getImageData(0, 0, img.width, img.height);
+}
+
+/**
+ * Compare PNG render results, not their compressed containers. This remains an
+ * exact comparison: each image must have the same dimensions and every RGBA
+ * channel must equal its counterpart. There is intentionally no tolerance.
+ */
+async function compareDecodedPngs(expectedFile, actualFile) {
+  const expected = await readPixels(expectedFile);
+  const actual = await readPixels(actualFile);
+  if (expected.width !== actual.width || expected.height !== actual.height) {
+    return {
+      equal: false,
+      reason: `dimensions differ (${expected.width}x${expected.height} vs ${actual.width}x${actual.height})`,
+    };
+  }
+  for (let i = 0; i < expected.data.length; i++) {
+    if (expected.data[i] !== actual.data[i]) {
+      const pixel = Math.floor(i / 4);
+      const channel = ['red', 'green', 'blue', 'alpha'][i % 4];
+      return {
+        equal: false,
+        reason: `decoded RGBA differs at pixel ${pixel % expected.width},${Math.floor(pixel / expected.width)} ` +
+          `(${channel}: ${expected.data[i]} vs ${actual.data[i]})`,
+      };
+    }
+  }
+  return { equal: true };
 }
 
 /** { offenders: Map<packed,count>, partialAlpha: n, total: n } */
@@ -199,9 +230,18 @@ async function gateDeterminism(problems) {
         const a = path.join(SCENES, n);
         const b = path.join(tmp, n);
         if (!fs.existsSync(a) || !fs.existsSync(b)) { problems.push(`determinism: cannot compare ${n}`); continue; }
-        if (!fs.readFileSync(a).equals(fs.readFileSync(b))) {
+        let comparison;
+        try {
+          // eslint-disable-next-line no-await-in-loop
+          comparison = await compareDecodedPngs(a, b);
+        } catch (error) {
+          problems.push(`determinism: cannot decode ${n}: ${error.message}`);
+          checked++;
+          continue;
+        }
+        if (!comparison.equal) {
           problems.push(
-            `determinism: assets/scenes/${n} differs from a fresh relight — the plate was hand-edited, ` +
+            `determinism: assets/scenes/${n} ${comparison.reason} from a fresh relight — the plate was hand-edited, ` +
             'or relight-plates.cjs changed without regenerating. Run `npm run forge:relight`.'
           );
         }
@@ -246,7 +286,7 @@ async function main() {
   if (!opts.fast) det = await gateDeterminism(problems);
 
   console.log(`Forge canon gate — ${P.CANON.length} colours, ${n} migrated asset(s) checked` +
-    (opts.fast ? ', determinism skipped (--fast)' : `, ${det} plate(s) byte-compared`));
+    (opts.fast ? ', determinism skipped (--fast)' : `, ${det} plate(s) pixel-compared`));
   console.log(`  legacy allowlist: ${LEGACY_ALLOWLIST.length} entr${LEGACY_ALLOWLIST.length === 1 ? 'y' : 'ies'} ` +
     `(stages ${[...new Set(LEGACY_ALLOWLIST.map((e) => e.stage))].sort().join(', ')})`);
 
@@ -262,4 +302,4 @@ if (require.main === module) {
   main().catch((e) => { console.error(e); process.exit(1); });
 }
 
-module.exports = { LEGACY_ALLOWLIST, isAllowed, inspect };
+module.exports = { LEGACY_ALLOWLIST, isAllowed, inspect, readPixels, compareDecodedPngs };
